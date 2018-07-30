@@ -1,4 +1,3 @@
-
 lazy val companySettings = Seq(
   name := "spark-exasol-connector",
   description := "A Spark Exasol Connector",
@@ -12,11 +11,34 @@ lazy val buildSettings = Seq(
   cancelable in Global := true,
   parallelExecution in Test := false,
   compileOrder in Compile := CompileOrder.JavaThenScala,
+  scalafmtOnCompile := true,
+  coverageMinimum := 50,
+  coverageOutputHTML := true,
+  coverageOutputXML := false,
+  coverageFailOnMinimum := false,
+  coverageOutputCobertura := false
 )
 
-lazy val sparkExasolSettings =
-  companySettings ++ buildSettings
+lazy val scalaStyleSettings = {
+  // Creates a Scalastyle task that runs with tests
+  lazy val mainScalastyle = taskKey[Unit]("mainScalastyle")
+  lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
+  Seq(
+    scalastyleFailOnError := true,
+    (scalastyleConfig in Compile) := baseDirectory.value / "project" / "scalastyle-config.xml",
+    (scalastyleConfig in Test) := baseDirectory.value / "project" / "scalastyle-config.xml",
+    mainScalastyle := scalastyle.in(Compile).toTask("").value,
+    testScalastyle := scalastyle.in(Test).toTask("").value,
+    (test in Test) := ((test in Test) dependsOn testScalastyle).value,
+    (test in Test) := ((test in Test) dependsOn mainScalastyle).value
+  )
+}
+
+lazy val sparkExasolSettings =
+  companySettings ++ buildSettings ++ scalaStyleSettings
+
+// format: off
 lazy val versions = new {
   // core dependency versions
   val spark       = "2.3.1"
@@ -27,16 +49,18 @@ lazy val versions = new {
 }
 
 lazy val dependencySettings = Seq(
-  "org.apache.spark" %% "spark-core"                  % versions.spark % "provided",
-  "org.apache.spark" %% "spark-sql"                   % versions.spark % "provided"
+  "org.apache.spark" %% "spark-core" % versions.spark % "provided",
+  "org.apache.spark" %% "spark-sql"  % versions.spark % "provided"
 ) ++ Seq(
-  "org.scalatest"    %% "scalatest"                   % versions.scalatest,
-  "org.scalacheck"   %% "scalacheck"                  % versions.scalacheck
+  "org.scalatest"    %% "scalatest"  % versions.scalatest,
+  "org.scalacheck"   %% "scalacheck" % versions.scalacheck
 ).map(_ % Test)
+// format: on
 
 lazy val root =
-  project.in(file("."))
-  .settings(sparkExasolSettings)
-  .settings(libraryDependencies ++= dependencySettings)
+  project
+    .in(file("."))
+    .settings(sparkExasolSettings)
+    .settings(libraryDependencies ++= dependencySettings)
 
 addCommandAlias("pluginUpdates", ";reload plugins;dependencyUpdates;reload return")
