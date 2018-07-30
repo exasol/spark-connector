@@ -36,13 +36,14 @@ df = df
      ...
 ```
 
-Another crucial parameters are username and password, so they should be
+Another crucial parameters are url, username and password, so they should be
 definitely required in options.
 
 ```scala
 df = sparkSession
      .read
      .format("exasol")
+     .options("url", "connectionStr")
      .options("username", "myusername")
      .options("password", "mYpassworD")
      .options("query", "SELECT ...") // an exasol query syntax
@@ -77,7 +78,9 @@ resultDF.show()
 ```
 
 with above Spark code, even though user specified to read a Exasol table, the
-connector should send the correct query to Exasol with selects and filters:
+connector should send the correct query to Exasol with selects and filters.
+
+For example a query sent to Exasol can be something:
 
 ```sql
 SELECT country_name
