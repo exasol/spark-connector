@@ -1,0 +1,9 @@
+.DS_Store
+.sbtopts
+NOTICE
+data
+build
+output
+target
+project/target
+derby.log
