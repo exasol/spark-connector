@@ -5,7 +5,9 @@ import org.apache.spark.sql.sources.BaseRelation
 import org.apache.spark.sql.sources.DataSourceRegister
 import org.apache.spark.sql.sources.RelationProvider
 
-class ExasolDataSource extends RelationProvider {
+class ExasolDataSource extends RelationProvider with DataSourceRegister {
+  override def shortName(): String = "exasol"
+
   override def createRelation(
     sqlContext: SQLContext,
     parameters: Map[String, String]
