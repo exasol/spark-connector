@@ -4,7 +4,7 @@ import java.sql.DriverManager
 import java.sql.SQLException
 import org.scalatest.FunSuite
 
-class ExasolDockerContainerSpec extends FunSuite with BaseSuite {
+class ExasolDockerContainerSuite extends FunSuite with BaseSuite {
 
   test("exasol/docker-db container should be started") {
     Class.forName(container.driverClassName)
