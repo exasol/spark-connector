@@ -13,6 +13,7 @@ lazy val buildSettings = Seq(
   cancelable in Global := true,
   parallelExecution in Test := false,
   compileOrder in Compile := CompileOrder.JavaThenScala,
+  resolvers += "Exasol Releases" at "https://maven.exasol.com/artifactory/exasol-releases",
   scalafmtOnCompile := true,
   coverageMinimum := 50,
   coverageOutputHTML := true,
@@ -47,6 +48,9 @@ lazy val versions = new {
   // testing dependency versions
   val scalatest = "3.0.5"
   val scalacheck = "1.14.0"
+  val exasol_jdbc = "6.0.8"
+  val containers_jdbc = "1.8.3"
+  val containers_scala = "0.19.0"
 }
 
 lazy val dependencySettings = Seq(
@@ -55,6 +59,9 @@ lazy val dependencySettings = Seq(
 ) ++ Seq(
   "org.scalatest" %% "scalatest" % versions.scalatest,
   "org.scalacheck" %% "scalacheck" % versions.scalacheck,
+  "com.exasol" % "exasol-jdbc" % versions.exasol_jdbc,
+  "org.testcontainers" % "jdbc" % versions.containers_jdbc,
+  "com.dimafeng" %% "testcontainers-scala" % versions.containers_scala
 ).map(_ % Test)
 
 lazy val root =
