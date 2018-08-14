@@ -51,6 +51,7 @@ lazy val versions = new {
   val exasol_jdbc = "6.0.8"
   val containers_jdbc = "1.8.3"
   val containers_scala = "0.19.0"
+  val spark_testing_base = s"${spark}_0.10.0"
 }
 
 lazy val dependencySettings = Seq(
@@ -61,7 +62,9 @@ lazy val dependencySettings = Seq(
   "org.scalacheck" %% "scalacheck" % versions.scalacheck,
   "com.exasol" % "exasol-jdbc" % versions.exasol_jdbc,
   "org.testcontainers" % "jdbc" % versions.containers_jdbc,
-  "com.dimafeng" %% "testcontainers-scala" % versions.containers_scala
+  "com.dimafeng" %% "testcontainers-scala" % versions.containers_scala,
+  "org.apache.spark" %% "spark-hive" % versions.spark,
+  "com.holdenkarau" %% "spark-testing-base" % versions.spark_testing_base
 ).map(_ % Test)
 
 lazy val root =
