@@ -1,3 +1,5 @@
+import com.exasol.spark.sbt.IntegrationTestPlugin
+
 lazy val companySettings = Seq(
   name := "spark-exasol-connector",
   description := "A Spark Exasol Connector",
@@ -38,29 +40,28 @@ lazy val scalaStyleSettings = {
 lazy val sparkExasolSettings =
   companySettings ++ buildSettings ++ scalaStyleSettings
 
-// format: off
 lazy val versions = new {
   // core dependency versions
-  val spark       = "2.3.1"
+  val spark = "2.3.1"
 
   // testing dependency versions
-  val scalatest   = "3.0.5"
-  val scalacheck  = "1.14.0"
+  val scalatest = "3.0.5"
+  val scalacheck = "1.14.0"
 }
 
 lazy val dependencySettings = Seq(
   "org.apache.spark" %% "spark-core" % versions.spark % "provided",
-  "org.apache.spark" %% "spark-sql"  % versions.spark % "provided"
+  "org.apache.spark" %% "spark-sql" % versions.spark % "provided"
 ) ++ Seq(
-  "org.scalatest"    %% "scalatest"  % versions.scalatest,
-  "org.scalacheck"   %% "scalacheck" % versions.scalacheck
+  "org.scalatest" %% "scalatest" % versions.scalatest,
+  "org.scalacheck" %% "scalacheck" % versions.scalacheck,
 ).map(_ % Test)
-// format: on
 
 lazy val root =
   project
     .in(file("."))
     .settings(sparkExasolSettings)
     .settings(libraryDependencies ++= dependencySettings)
+    .enablePlugins(IntegrationTestPlugin)
 
 addCommandAlias("pluginUpdates", ";reload plugins;dependencyUpdates;reload return")
