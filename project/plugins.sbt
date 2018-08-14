@@ -4,11 +4,11 @@ addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.3")
 
 // Adds a `wartremover` a flexible Scala code linting tool
 // http://github.com/puffnfresh/wartremover
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.1")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.3")
 
 // Adds Contrib Warts
 // http://github.com/wartremover/wartremover-contrib/
-addSbtPlugin("org.wartremover" % "sbt-wartremover-contrib" % "1.2.1")
+addSbtPlugin("org.wartremover" % "sbt-wartremover-contrib" % "1.2.2")
 
 // Adds Extra Warts
 // http://github.com/danielnixon/extrawarts
