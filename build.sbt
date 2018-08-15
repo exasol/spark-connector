@@ -34,7 +34,9 @@ lazy val scalaStyleSettings = {
     mainScalastyle := scalastyle.in(Compile).toTask("").value,
     testScalastyle := scalastyle.in(Test).toTask("").value,
     (test in Test) := ((test in Test) dependsOn testScalastyle).value,
-    (test in Test) := ((test in Test) dependsOn mainScalastyle).value
+    (test in Test) := ((test in Test) dependsOn mainScalastyle).value,
+    (test in IntegrationTest) := ((test in IntegrationTest) dependsOn testScalastyle).value,
+    (test in IntegrationTest) := ((test in IntegrationTest) dependsOn mainScalastyle).value
   )
 }
 

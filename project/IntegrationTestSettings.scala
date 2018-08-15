@@ -26,13 +26,7 @@ object IntegrationTestSettings {
         scalaSource := baseDirectory.value / "src/it/scala"
       )
 
-    Seq.concat(
-      Defaults.itSettings,
-      inConfig(IntegrationTest)(itSettings),
-      // `sbt test` will not trigger integration tests. Integration tests should be specifically
-      // specified with `sbt it:test` or `sbt it:testOnly testFile`
-      Seq(test := {})
-    )
+    Seq.concat(Defaults.itSettings, inConfig(IntegrationTest)(itSettings))
   }
 
 }
