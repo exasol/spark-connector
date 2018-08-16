@@ -236,7 +236,7 @@
   </check>
 
   <!-- Custom Check: 'Class.forName' should not be used -->
-  <check customId="classforName"
+  <check customId="classForName"
     level="error" class="org.scalastyle.file.RegexChecker" enabled="true">
     <parameters>
       <parameter name="regex">Class\.forName</parameter>
@@ -246,9 +246,9 @@
       In most cases, you should use Utils.classForName instead.
 
       If you must use Class.forName, wrap the code block with
-      // scalastyle:off classforname
+      // scalastyle:off classForName
       Class.forName(...)
-      // scalastyle:on classforname]]>
+      // scalastyle:on classForName]]>
     </customMessage>
   </check>
 

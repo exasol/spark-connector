@@ -67,11 +67,12 @@ lazy val sparkExasolSettings =
 lazy val versions = new {
   // core dependency versions
   val spark = "2.3.1"
+  val exasol_jdbc = "6.0.8"
 
   // testing dependency versions
   val scalatest = "3.0.5"
   val scalacheck = "1.14.0"
-  val exasol_jdbc = "6.0.8"
+  val mockito = "2.21.0"
   val containers_jdbc = "1.8.3"
   val containers_scala = "0.19.0"
   val spark_testing_base = s"${spark}_0.10.0"
@@ -79,10 +80,12 @@ lazy val versions = new {
 
 lazy val dependencySettings = Seq(
   "org.apache.spark" %% "spark-core" % versions.spark % "provided",
-  "org.apache.spark" %% "spark-sql" % versions.spark % "provided"
+  "org.apache.spark" %% "spark-sql" % versions.spark % "provided",
+  "com.exasol" % "exasol-jdbc" % versions.exasol_jdbc
 ) ++ Seq(
   "org.scalatest" %% "scalatest" % versions.scalatest,
   "org.scalacheck" %% "scalacheck" % versions.scalacheck,
+  "org.mockito" % "mockito-core" % versions.mockito,
   "com.exasol" % "exasol-jdbc" % versions.exasol_jdbc,
   "org.testcontainers" % "jdbc" % versions.containers_jdbc,
   "com.dimafeng" %% "testcontainers-scala" % versions.containers_scala,
