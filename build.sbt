@@ -22,6 +22,27 @@ lazy val buildSettings = Seq(
   coverageOutputCobertura := false
 )
 
+lazy val assemblySettings = Seq(
+  test in assembly := {},
+  logLevel in assembly := Level.Info,
+  // The Scala library is provided by Spark execution environment
+  assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false),
+  assemblyMergeStrategy in assembly := {
+    // Add data source register to assembly jar
+    case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" =>
+      MergeStrategy.concat
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case x                             => MergeStrategy.first
+  },
+  assemblyExcludedJars in assembly := {
+    val cp = (fullClasspath in assembly).value
+    val exludeSet = Set.empty[String]
+    cp.filter { jar =>
+      exludeSet(jar.data.getName)
+    }
+  }
+)
+
 lazy val scalaStyleSettings = {
   // Creates a Scalastyle task that runs with tests
   lazy val mainScalastyle = taskKey[Unit]("mainScalastyle")
@@ -41,7 +62,7 @@ lazy val scalaStyleSettings = {
 }
 
 lazy val sparkExasolSettings =
-  companySettings ++ buildSettings ++ scalaStyleSettings
+  companySettings ++ buildSettings ++ assemblySettings ++ scalaStyleSettings
 
 lazy val versions = new {
   // core dependency versions
