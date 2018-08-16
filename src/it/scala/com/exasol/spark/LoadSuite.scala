@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 
 /** Tests for loading data from Exasol query as dataframes using short and long source formats */
-class QuerySuite extends FunSuite with DataFrameSuiteBase with BaseSuite {
+class LoadSuite extends FunSuite with DataFrameSuiteBase with BaseSuite {
 
   val exa_schema = "test_schema"
   val exa_table = "test_table"
