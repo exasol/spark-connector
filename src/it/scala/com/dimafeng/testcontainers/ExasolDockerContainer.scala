@@ -15,15 +15,19 @@ class ExasolDockerContainer(imageName: Option[String] = None)
     case None            => new OTCExasolDockerContainer()
   }
 
-  def driverClassName: String = container.getDriverClassName()
+  def driverClassName(): String = container.getDriverClassName()
 
-  def jdbcUrl: String = container.getJdbcUrl()
+  def jdbcUrl(): String = container.getJdbcUrl()
 
-  def username: String = container.getUsername()
+  def username(): String = container.getUsername()
 
-  def password: String = container.getPassword()
+  def password(): String = container.getPassword()
 
-  def testQueryString: String = container.getTestQueryString()
+  def host(): String = container.getHost()
+
+  def port(): Int = container.getPort()
+
+  def testQueryString(): String = container.getTestQueryString()
 }
 
 object ExasolDockerContainer {

@@ -70,4 +70,13 @@ JdbcDatabaseContainer<SELF> {
     return self();
   }
 
+  public String getHost() {
+    return getContainerIpAddress();
+  }
+
+  public Integer getPort() {
+    return getMappedPort(EXASOL_PORT);
+  }
+
+
 }
