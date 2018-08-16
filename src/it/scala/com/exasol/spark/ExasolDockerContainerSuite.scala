@@ -9,7 +9,9 @@ class ExasolDockerContainerSuite extends FunSuite with BaseSuite {
   test("exasol/docker-db container should be started") {
     Class.forName(container.driverClassName)
 
-    val connection = DriverManager.getConnection(container.jdbcUrl);
+    val connectionStr =
+      s"${container.jdbcUrl};user=${container.username};password=${container.password}"
+    val connection = DriverManager.getConnection(connectionStr)
     val prepareStatement = connection.prepareStatement(container.testQueryString)
 
     try {

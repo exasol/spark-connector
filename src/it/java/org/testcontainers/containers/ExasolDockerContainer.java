@@ -39,8 +39,7 @@ JdbcDatabaseContainer<SELF> {
 
   @Override
   public String getJdbcUrl() {
-    return "jdbc:exa:" + getContainerIpAddress() + ":" +
-      getMappedPort(EXASOL_PORT) + ";user=" + username + ";password=" + password;
+    return "jdbc:exa:" + getContainerIpAddress() + ":" + getMappedPort(EXASOL_PORT);
   }
 
   @Override
