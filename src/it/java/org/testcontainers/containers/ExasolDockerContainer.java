@@ -27,7 +27,7 @@ JdbcDatabaseContainer<SELF> {
   @Override
   protected void configure() {
     super.configure();
-    addExposedPort(EXASOL_PORT);
+    withNetworkMode("host");
     withPrivilegedMode(true);
     withStartupTimeout(Duration.of(EXASOL_STARTUP_TIME, SECONDS));
   }
@@ -39,7 +39,7 @@ JdbcDatabaseContainer<SELF> {
 
   @Override
   public String getJdbcUrl() {
-    return "jdbc:exa:" + getContainerIpAddress() + ":" + getMappedPort(EXASOL_PORT);
+    return "jdbc:exa:" + getContainerIpAddress() + ":" + EXASOL_PORT;
   }
 
   @Override
@@ -74,7 +74,7 @@ JdbcDatabaseContainer<SELF> {
   }
 
   public Integer getPort() {
-    return getMappedPort(EXASOL_PORT);
+    return EXASOL_PORT;
   }
 
 
