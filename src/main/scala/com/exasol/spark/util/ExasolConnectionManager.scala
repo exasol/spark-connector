@@ -25,7 +25,7 @@ case class ExasolConnectionManager(config: ExasolConfiguration) {
       .zipWithIndex
       .map {
         case ((host, port), idx) =>
-          s"jdbc:exa-slave:$host:$port;slaveID=$idx;slaveToken=${mainConn.GetSlaveToken()}"
+          s"jdbc:exa-slave:$host:$port;slaveID=$idx;slavetoken=${mainConn.GetSlaveToken()}"
       }
   }
 
