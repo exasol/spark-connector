@@ -79,8 +79,7 @@ class ExasolRDD[T: ClassTag](
             resultSet.close()
           }
         } catch {
-          case e: Exception =>
-            logger.warn("Received an exception closing sub resultSet", e)
+          case e: Exception => logger.warn("Received an exception closing sub resultSet", e)
         }
 
         try {
@@ -88,8 +87,7 @@ class ExasolRDD[T: ClassTag](
             stmt.close()
           }
         } catch {
-          case e: Exception =>
-            logger.warn("Received an exception closing sub statement", e)
+          case e: Exception => logger.warn("Received an exception closing sub statement", e)
         }
 
         try {
@@ -105,8 +103,7 @@ class ExasolRDD[T: ClassTag](
           }
           logger.info("Closed a sub connection")
         } catch {
-          case e: Exception =>
-            logger.warn("Received an exception closing sub connection", e)
+          case e: Exception => logger.warn("Received an exception closing sub connection", e)
         }
       }
     }
