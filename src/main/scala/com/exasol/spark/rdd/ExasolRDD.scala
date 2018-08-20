@@ -13,6 +13,8 @@ import com.exasol.jdbc.EXAConnection
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.NextIterator
 
+import com.typesafe.scalalogging.LazyLogging
+
 /**
  * An [[org.apache.spark.rdd.RDD]] reads / writes data from an Exasol tables
  *
@@ -23,12 +25,14 @@ class ExasolRDD[T: ClassTag](
   @transient val sc: SparkContext,
   queryString: String,
   manager: ExasolConnectionManager
-) extends RDD[T](sc, Nil) {
+) extends RDD[T](sc, Nil)
+    with LazyLogging {
 
   @transient lazy val mainExaConnection: EXAConnection = {
     val conn = manager.mainConnection()
 
     manager.initParallel(conn)
+    logger.info("Initiated parallel exasol (sub) connections")
 
     // Close Exasol main connection when SparkContext finishes. This is a lifetime of a Spark
     // application.
@@ -45,6 +49,8 @@ class ExasolRDD[T: ClassTag](
       .zipWithIndex
       .map { case (url, idx) => ExasolRDDPartition(idx, url) }
 
+    logger.debug(s"The number of partitions is ${partitions.size}")
+
     partitions.toArray
   }
 
@@ -54,13 +60,46 @@ class ExasolRDD[T: ClassTag](
 
       val partition: ExasolRDDPartition = split.asInstanceOf[ExasolRDDPartition]
 
-      override def getNext(): T = {
-        finished = true
-        null.asInstanceOf[T] // scalastyle:off null
-      }
+      val conn: EXAConnection = manager.subConnection(partition.connectionUrl)
+      val stmt = conn.createStatement()
+      val resultSet = stmt.executeQuery(queryString)
+
+      override def getNext(): T =
+        if (resultSet.next()) {
+          null.asInstanceOf[T] // scalastyle:off null
+        } else {
+          finished = true
+          null.asInstanceOf[T] // scalastyle:off null
+        }
 
       override def close(): Unit = {
-        // close a connection
+        try {
+          if (resultSet != null && !resultSet.isClosed) {
+            resultSet.close()
+          }
+        } catch {
+          case e: Exception =>
+            logger.warn("Received an exception closing sub resultSet", e)
+        }
+
+        try {
+          if (stmt != null && !stmt.isClosed) {
+            stmt.close()
+          }
+        } catch {
+          case e: Exception =>
+            logger.warn("Received an exception closing sub statement", e)
+        }
+
+        try {
+          if (conn != null && !conn.isClosed) {
+            conn.close()
+          }
+          logger.info("Closed a sub connection")
+        } catch {
+          case e: Exception =>
+            logger.warn("Received an exception closing sub connection", e)
+        }
       }
     }
 

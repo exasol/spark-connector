@@ -68,6 +68,7 @@ lazy val versions = new {
   // core dependency versions
   val spark = "2.3.1"
   val exasol_jdbc = "6.0.8"
+  val typesafe_logging = "3.7.2"
 
   // testing dependency versions
   val scalatest = "3.0.5"
@@ -81,6 +82,7 @@ lazy val versions = new {
 lazy val dependencySettings = Seq(
   "org.apache.spark" %% "spark-core" % versions.spark % "provided",
   "org.apache.spark" %% "spark-sql" % versions.spark % "provided",
+  "com.typesafe.scala-logging" %% "scala-logging" % versions.typesafe_logging,
   "com.exasol" % "exasol-jdbc" % versions.exasol_jdbc
 ) ++ Seq(
   "org.scalatest" %% "scalatest" % versions.scalatest,
