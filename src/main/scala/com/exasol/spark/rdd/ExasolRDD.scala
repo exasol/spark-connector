@@ -1,6 +1,7 @@
 package com.exasol.spark.rdd
 
 import scala.reflect.ClassTag
+import scala.util.control.NonFatal
 
 import org.apache.spark.Partition
 import org.apache.spark.SparkContext
@@ -92,7 +93,14 @@ class ExasolRDD[T: ClassTag](
         }
 
         try {
-          if (conn != null && !conn.isClosed) {
+          if (conn != null) {
+            if (!conn.isClosed && !conn.getAutoCommit) {
+              try {
+                conn.commit()
+              } catch {
+                case NonFatal(e) => logger.warn("Received exception committing sub connection", e)
+              }
+            }
             conn.close()
           }
           logger.info("Closed a sub connection")
