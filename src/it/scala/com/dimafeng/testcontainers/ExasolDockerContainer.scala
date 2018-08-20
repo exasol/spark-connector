@@ -28,6 +28,14 @@ class ExasolDockerContainer(imageName: Option[String] = None)
   def port(): Int = container.getPort()
 
   def testQueryString(): String = container.getTestQueryString()
+
+  def configs(): Map[String, String] = Map(
+    "host" -> host(),
+    "port" -> s"${port()}",
+    "username" -> username(),
+    "password" -> password(),
+    "max_nodes" -> "200"
+  )
 }
 
 object ExasolDockerContainer {
