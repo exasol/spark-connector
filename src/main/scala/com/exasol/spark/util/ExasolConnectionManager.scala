@@ -32,6 +32,10 @@ case class ExasolConnectionManager(config: ExasolConfiguration) {
   def subConnection(subConnectionUrl: String): EXAConnection =
     ExasolConnectionManager.makeConnection(subConnectionUrl, config.username, config.password)
 
+  def withConnection[T](handle: EXAConnection => T): T =
+    ExasolConnectionManager
+      .withConnection(mainConnectionUrl, config.username, config.password)(handle)
+
 }
 
 object ExasolConnectionManager {
@@ -58,5 +62,17 @@ object ExasolConnectionManager {
     }
     connections.get(url)
   }
+
+  def withConnection[T](url: String, username: String, password: String)(
+    handle: EXAConnection => T
+  ): T =
+    using(createConnection(url, username, password))(handle)
+
+  def using[A <: AutoCloseable, T](resource: A)(fn: A => T): T =
+    try {
+      fn(resource)
+    } finally {
+      resource.close()
+    }
 
 }

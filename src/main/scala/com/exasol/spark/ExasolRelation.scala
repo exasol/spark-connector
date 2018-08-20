@@ -10,6 +10,7 @@ import org.apache.spark.sql.types.StructType
 
 import com.exasol.spark.rdd.ExasolRDD
 import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.Types
 
 class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolConnectionManager)
     extends BaseRelation
@@ -17,7 +18,17 @@ class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolCo
 
   override def sqlContext: SQLContext = context
 
-  override def schema: StructType = StructType(Nil)
+  private[this] lazy val querySchema: StructType = {
+    val queryStringLimit = s"SELECT * FROM ($queryString) A LIMIT 1"
+    manager.withConnection[StructType] { conn =>
+      val stmt = conn.createStatement()
+      val resultSet = stmt.executeQuery(queryStringLimit)
+      val metadata = resultSet.getMetaData
+      Types.createSparkStructType(metadata)
+    }
+  }
+
+  override def schema: StructType = querySchema
 
   def buildScan(): RDD[Row] =
     new ExasolRDD(sqlContext.sparkContext, queryString, manager)
