@@ -149,7 +149,7 @@
     class="org.scalastyle.scalariform.EnsureSingleSpaceBeforeTokenChecker"
     enabled="true">
     <parameters>
-      <parameter name="tokens">ARROW, EQUALS, ELSE, TRY, CATCH, FINALLY, LARROW, RARROW</parameter>
+      <parameter name="tokens">EQUALS, ELSE, TRY, CATCH, FINALLY, LARROW, RARROW</parameter>
     </parameters>
   </check>
 
