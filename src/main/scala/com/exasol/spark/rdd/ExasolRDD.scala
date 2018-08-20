@@ -75,7 +75,7 @@ class ExasolRDD[T: ClassTag](
 
       override def close(): Unit = {
         try {
-          if (resultSet != null && !resultSet.isClosed) {
+          if (resultSet != null) { // && !resultSet.isClosed) {
             resultSet.close()
           }
         } catch {
