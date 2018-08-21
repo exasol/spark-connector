@@ -31,12 +31,17 @@ class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolCo
   override def schema: StructType = querySchema
 
   def buildScan(): RDD[Row] =
-    new ExasolRDD(sqlContext.sparkContext, queryString, manager)
+    buildScan(Array.empty, Array.empty)
 
   def buildScan(requiredColumns: Array[String]): RDD[Row] =
     buildScan(requiredColumns, Array.empty)
 
   def buildScan(requiredColumns: Array[String], filters: Array[Filter]): RDD[Row] =
-    new ExasolRDD(sqlContext.sparkContext, queryString, manager)
+    new ExasolRDD(
+      sqlContext.sparkContext,
+      queryString,
+      Types.selectColumns(requiredColumns, schema),
+      manager
+    )
 
 }

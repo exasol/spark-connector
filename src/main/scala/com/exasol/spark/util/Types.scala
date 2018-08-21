@@ -5,14 +5,20 @@ import java.sql.ResultSetMetaData
 
 import org.apache.spark.sql.types._
 
-object Types {
+import com.typesafe.scalalogging.LazyLogging
 
-  val BIGINT_DECIMAL_PRECISION: Int = 20
-  val BIGINT_DECIMAL_SCALE: Int = 0
+/** A helper class with mapping functions from Exasol JDBC types to/from Spark SQL types */
+object Types extends LazyLogging {
 
-  val SPARK_DECIMAL_PRECISION: Int = 38
-  val SPARK_DECIMAL_SCALE: Int = 18
+  val LongDecimal: DecimalType = DecimalType(20, 0) // scalastyle:ignore magic.number
 
+  /**
+   * Given a [[java.sql.ResultSetMetaData]] returns a Spark
+   * [[org.apache.spark.sql.types.StructType]] schema
+   *
+   * @param rsmd A result set metadata
+   * @return A StructType matching result set types
+   */
   def createSparkStructType(rsmd: ResultSetMetaData): StructType = {
     val columnCnt = rsmd.getColumnCount
     val fields = new Array[StructField](columnCnt)
@@ -34,6 +40,15 @@ object Types {
     new StructType(fields)
   }
 
+  /**
+   * Maps a JDBC type [[java.sql.Types$]] to a Spark SQL [[org.apache.spark.sql.types.DataType]]
+   *
+   * @param sqlType A JDBC type from [[java.sql.ResultSetMetaData]] column type
+   * @param precision A precision value obtained from ResultSetMetaData, rsmd.getPrecision(index)
+   * @param scale A scale value obtained from ResultSetMetaData, rsmd.getScale(index)
+   * @param isSigned A isSigned value obtained from ResultSetMetaData, rsmd.isSigned(index)
+   * @return A Spark SQL DataType corresponding to JDBC SQL type
+   */
   def createSparkTypeFromSQLType(
     sqlType: Int,
     precision: Int,
@@ -53,19 +68,19 @@ object Types {
       if (isSigned) {
         LongType
       } else {
-        DecimalType(BIGINT_DECIMAL_PRECISION, BIGINT_DECIMAL_SCALE)
+        LongDecimal
       }
     case java.sql.Types.DECIMAL =>
       if (precision != 0 || scale != 0) {
-        DecimalType(precision, scale)
+        boundedDecimal(precision, scale)
       } else {
-        DecimalType(SPARK_DECIMAL_PRECISION, SPARK_DECIMAL_SCALE)
+        DecimalType.SYSTEM_DEFAULT
       }
     case java.sql.Types.NUMERIC =>
       if (precision != 0 || scale != 0) {
-        DecimalType(precision, scale)
+        boundedDecimal(precision, scale)
       } else {
-        DecimalType(SPARK_DECIMAL_PRECISION, SPARK_DECIMAL_SCALE)
+        DecimalType.SYSTEM_DEFAULT
       }
     case java.sql.Types.DOUBLE => DoubleType
     case java.sql.Types.FLOAT  => DoubleType
@@ -97,7 +112,33 @@ object Types {
     case java.sql.Types.ROWID  => LongType
     case java.sql.Types.STRUCT => StringType
     case _ =>
-      throw new IllegalArgumentException("Received an unsupported type " + sqlType)
+      throw new IllegalArgumentException("Received an unsupported SQL type " + sqlType)
+  }
+
+  /**
+   * Bound DecimalType within Spark [[DecimalType.MAX_PRECISION]] and [[DecimalType.MAX_SCALE]]
+   * values
+   */
+  private[this] def boundedDecimal(precision: Int, scale: Int): DecimalType =
+    DecimalType(
+      math.min(precision, DecimalType.MAX_PRECISION),
+      math.min(scale, DecimalType.MAX_SCALE)
+    )
+
+  /**
+   * Select only required columns from Spark SQL schema
+   *
+   * Adapted from Spark JDBCRDD private function `pruneSchema`.
+   *
+   * @param schema A Spark SQL schema
+   * @param columns A list of required columns
+   * @return A Spark SQL schema with only columns in the given order
+   */
+  def selectColumns(columns: Array[String], schema: StructType): StructType = {
+    val fieldMap = Map(schema.fields.map(x => x.name -> x): _*)
+    val newFields = columns.map(name => fieldMap(name))
+    logger.debug(s"A new pruned columns obtained ${newFields.mkString(",")}")
+    StructType(newFields)
   }
 
 }

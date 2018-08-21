@@ -1,5 +1,8 @@
 package com.exasol.spark.rdd
 
+import java.sql.ResultSet
+import java.sql.Statement
+
 import scala.reflect.ClassTag
 import scala.util.control.NonFatal
 
@@ -9,8 +12,11 @@ import org.apache.spark.TaskContext
 import org.apache.spark.rdd.RDD
 import org.apache.spark.scheduler.SparkListener
 import org.apache.spark.scheduler.SparkListenerApplicationEnd
+import org.apache.spark.sql.Row
+import org.apache.spark.sql.types.StructType
 
 import com.exasol.jdbc.EXAConnection
+import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.NextIterator
 
@@ -22,11 +28,12 @@ import com.typesafe.scalalogging.LazyLogging
  * The [[com.exasol.spark.rdd.ExasolRDD]] holds data in parallel from each Exasol physical nodes.
  *
  */
-class ExasolRDD[T: ClassTag](
+class ExasolRDD(
   @transient val sc: SparkContext,
   queryString: String,
+  querySchema: StructType,
   manager: ExasolConnectionManager
-) extends RDD[T](sc, Nil)
+) extends RDD[Row](sc, Nil)
     with LazyLogging {
 
   @transient lazy val mainExaConnection: EXAConnection = {
@@ -55,57 +62,65 @@ class ExasolRDD[T: ClassTag](
     partitions.toArray
   }
 
-  override def compute(split: Partition, context: TaskContext): Iterator[T] =
-    new NextIterator[T] {
-      context.addTaskCompletionListener(context => closeIfNeeded())
+  // scalastyle:off null return
+  override def compute(split: Partition, context: TaskContext): Iterator[Row] = {
+    var closed = false
+    var resultSet: ResultSet = null
+    var stmt: Statement = null
+    var conn: EXAConnection = null
 
-      val partition: ExasolRDDPartition = split.asInstanceOf[ExasolRDDPartition]
-
-      val conn: EXAConnection = manager.subConnection(partition.connectionUrl)
-      val stmt = conn.createStatement()
-      val resultSet = stmt.executeQuery(queryString)
-
-      override def getNext(): T =
-        if (resultSet.next()) {
-          null.asInstanceOf[T] // scalastyle:off null
-        } else {
-          finished = true
-          null.asInstanceOf[T] // scalastyle:off null
-        }
-
-      override def close(): Unit = {
-        try {
-          if (resultSet != null) { // && !resultSet.isClosed) {
-            resultSet.close()
-          }
-        } catch {
-          case e: Exception => logger.warn("Received an exception closing sub resultSet", e)
-        }
-
-        try {
-          if (stmt != null && !stmt.isClosed) {
-            stmt.close()
-          }
-        } catch {
-          case e: Exception => logger.warn("Received an exception closing sub statement", e)
-        }
-
-        try {
-          if (conn != null) {
-            if (!conn.isClosed && !conn.getAutoCommit) {
-              try {
-                conn.commit()
-              } catch {
-                case NonFatal(e) => logger.warn("Received exception committing sub connection", e)
-              }
-            }
-            conn.close()
-          }
-          logger.info("Closed a sub connection")
-        } catch {
-          case e: Exception => logger.warn("Received an exception closing sub connection", e)
-        }
+    def close(): Unit = {
+      if (closed) {
+        return
       }
+
+      try {
+        if (resultSet != null) { // && !resultSet.isClosed) {
+          resultSet.close()
+        }
+      } catch {
+        case e: Exception => logger.warn("Received an exception closing sub resultSet", e)
+      }
+
+      try {
+        if (stmt != null && !stmt.isClosed) {
+          stmt.close()
+        }
+      } catch {
+        case e: Exception => logger.warn("Received an exception closing sub statement", e)
+      }
+
+      try {
+        if (conn != null) {
+          if (!conn.isClosed && !conn.getAutoCommit) {
+            try {
+              conn.commit()
+            } catch {
+              case NonFatal(e) => logger.warn("Received exception committing sub connection", e)
+            }
+          }
+          conn.close()
+        }
+        logger.info("Closed a sub connection")
+      } catch {
+        case e: Exception => logger.warn("Received an exception closing sub connection", e)
+      }
+
+      closed = true
     }
+
+    context.addTaskCompletionListener { context =>
+      close()
+    }
+
+    val partition: ExasolRDDPartition = split.asInstanceOf[ExasolRDDPartition]
+
+    conn = manager.subConnection(partition.connectionUrl)
+    stmt = conn.createStatement()
+    resultSet = stmt.executeQuery(queryString)
+
+    Converter.resultSetToRows(resultSet, querySchema)
+  }
+  // scalastyle:on null return
 
 }

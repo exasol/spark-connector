@@ -22,6 +22,8 @@ class LoadSuite extends FunSuite with DataFrameSuiteBase with BaseSuite {
       .load()
 
     val cnt1 = df1.count
+    val cities = df1.collect().map(x => x(2)).toSet
+    assert(cities === Set("Berlin", "Paris", "Lisbon"))
 
     val df2 = spark.read
       .format("exasol")
@@ -31,7 +33,7 @@ class LoadSuite extends FunSuite with DataFrameSuiteBase with BaseSuite {
       .load()
 
     assert(cnt1 == 3)
-    assert(df2.count == 3)
+    assert(df2.count == cnt1)
 
     val schema = df2.schema
     assert(schema.exists(f => f.name == "NAME"))

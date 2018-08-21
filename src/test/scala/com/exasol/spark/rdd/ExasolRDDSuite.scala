@@ -1,6 +1,7 @@
 package com.exasol.spark.rdd
 
 import org.apache.spark.SparkContext
+import org.apache.spark.sql.types.StructType
 
 import com.exasol.jdbc.EXAConnection
 import com.exasol.spark.util.ExasolConnectionManager
@@ -20,7 +21,7 @@ class ExasolRDDSuite extends FunSuite with Matchers with MockitoSugar {
     when(manager.mainConnection).thenReturn(mainConnection)
     when(manager.subConnections(mainConnection)).thenReturn(Seq("url1", "url2"))
 
-    val rdd = new ExasolRDD(sparkContext, "", manager)
+    val rdd = new ExasolRDD(sparkContext, "", StructType(Nil), manager)
     val partitions = rdd.getPartitions
 
     assert(partitions.size == 2)

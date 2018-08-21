@@ -50,7 +50,7 @@ object ExasolConnectionManager {
     username: String,
     password: String
   ): EXAConnection = {
-    Class.forName("com.exasol.jdbc.EXADriver") // scalastyle:off classForName
+    Class.forName("com.exasol.jdbc.EXADriver") // scalastyle:ignore classForName
     DriverManager.setLoginTimeout(JDBC_LOGIN_TIMEOUT)
     val conn = DriverManager.getConnection(url, username, password)
     conn.asInstanceOf[EXAConnection]

@@ -424,7 +424,7 @@
   <!-- Checks that methods do not exceed a maximum length -->
   <check level="warn" class="org.scalastyle.scalariform.MethodLengthChecker" enabled="true">
     <parameters>
-      <parameter name="maxLength"><![CDATA[50]]></parameter>
+      <parameter name="maxLength"><![CDATA[120]]></parameter>
     </parameters>
   </check>
 
@@ -442,7 +442,7 @@
   <check level="warn"
     class="org.scalastyle.scalariform.CyclomaticComplexityChecker" enabled="true">
     <parameters>
-      <parameter name="maximum"><![CDATA[15]]></parameter>
+      <parameter name="maximum"><![CDATA[100]]></parameter>
     </parameters>
   </check>
 
