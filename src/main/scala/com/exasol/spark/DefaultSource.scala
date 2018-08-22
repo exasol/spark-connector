@@ -9,6 +9,7 @@ import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
 
 class DefaultSource extends RelationProvider with DataSourceRegister {
+
   override def shortName(): String = "exasol"
 
   override def createRelation(
@@ -28,4 +29,5 @@ class DefaultSource extends RelationProvider with DataSourceRegister {
 
     new ExasolRelation(sqlContext, queryString, manager)
   }
+
 }

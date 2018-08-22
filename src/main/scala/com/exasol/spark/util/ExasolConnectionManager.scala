@@ -6,7 +6,9 @@ import java.util.concurrent.ConcurrentHashMap
 
 import com.exasol.jdbc.EXAConnection
 
-case class ExasolConnectionManager(config: ExasolConfiguration) {
+import com.typesafe.scalalogging.LazyLogging
+
+final case class ExasolConnectionManager(config: ExasolConfiguration) {
 
   def mainConnectionUrl(): String =
     s"jdbc:exa:${config.host}:${config.port}"
@@ -14,7 +16,7 @@ case class ExasolConnectionManager(config: ExasolConfiguration) {
   def mainConnection(): EXAConnection =
     ExasolConnectionManager.makeConnection(mainConnectionUrl, config.username, config.password)
 
-  def initParallel(mainConn: EXAConnection): Unit =
+  def initParallel(mainConn: EXAConnection): Int =
     mainConn.EnterParallel(config.max_nodes)
 
   def subConnections(mainConn: EXAConnection): Seq[String] = {
@@ -38,28 +40,28 @@ case class ExasolConnectionManager(config: ExasolConfiguration) {
 
 }
 
-object ExasolConnectionManager {
+object ExasolConnectionManager extends LazyLogging {
 
   private[this] val JDBC_LOGIN_TIMEOUT: Int = 30
 
   private[this] val connections: ConcurrentHashMap[String, EXAConnection] =
     new ConcurrentHashMap()
 
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   private[this] def createConnection(
     url: String,
     username: String,
     password: String
   ): EXAConnection = {
-    Class.forName("com.exasol.jdbc.EXADriver") // scalastyle:ignore classForName
+    val _ = Class.forName("com.exasol.jdbc.EXADriver") // scalastyle:ignore classForName
     DriverManager.setLoginTimeout(JDBC_LOGIN_TIMEOUT)
     val conn = DriverManager.getConnection(url, username, password)
     conn.asInstanceOf[EXAConnection]
   }
 
   def makeConnection(url: String, username: String, password: String): EXAConnection = {
-    if (!connections.containsKey(url)) {
-      connections.putIfAbsent(url, createConnection(url, username, password))
-    }
+    logger.debug(s"Making a connection using $url")
+    val _ = connections.putIfAbsent(url, createConnection(url, username, password))
     connections.get(url)
   }
 

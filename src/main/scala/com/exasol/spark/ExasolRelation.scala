@@ -6,6 +6,8 @@ import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.sources.BaseRelation
 import org.apache.spark.sql.sources.Filter
 import org.apache.spark.sql.sources.PrunedFilteredScan
+import org.apache.spark.sql.sources.PrunedScan
+import org.apache.spark.sql.sources.TableScan
 import org.apache.spark.sql.types.StructType
 
 import com.exasol.spark.rdd.ExasolRDD
@@ -14,7 +16,9 @@ import com.exasol.spark.util.Types
 
 class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolConnectionManager)
     extends BaseRelation
-    with PrunedFilteredScan {
+    with PrunedFilteredScan
+    with PrunedScan
+    with TableScan {
 
   override def sqlContext: SQLContext = context
 
@@ -30,13 +34,13 @@ class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolCo
 
   override def schema: StructType = querySchema
 
-  def buildScan(): RDD[Row] =
+  override def buildScan(): RDD[Row] =
     buildScan(Array.empty, Array.empty)
 
-  def buildScan(requiredColumns: Array[String]): RDD[Row] =
+  override def buildScan(requiredColumns: Array[String]): RDD[Row] =
     buildScan(requiredColumns, Array.empty)
 
-  def buildScan(requiredColumns: Array[String], filters: Array[Filter]): RDD[Row] =
+  override def buildScan(requiredColumns: Array[String], filters: Array[Filter]): RDD[Row] =
     new ExasolRDD(
       sqlContext.sparkContext,
       queryString,

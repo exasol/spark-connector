@@ -39,7 +39,7 @@ import java.net.InetAddress
  * used.
  *
  */
-case class ExasolConfiguration(
+final case class ExasolConfiguration(
   host: String,
   port: Int,
   username: String,
@@ -51,6 +51,9 @@ object ExasolConfiguration {
 
   def getLocalHost(): String = InetAddress.getLocalHost.getHostAddress
 
+  @SuppressWarnings(
+    Array("org.wartremover.warts.Overloading", "org.danielnixon.extrawarts.StringOpsPartial")
+  )
   def apply(opts: Map[String, String]): ExasolConfiguration =
     ExasolConfiguration(
       host = opts.getOrElse("host", getLocalHost()),

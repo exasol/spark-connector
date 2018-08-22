@@ -30,6 +30,7 @@ object Converter extends LazyLogging {
     internalRows.map(encoder.fromRow)
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   def resultSetToSparkInternalRows(
     resultSet: ResultSet,
     schema: StructType

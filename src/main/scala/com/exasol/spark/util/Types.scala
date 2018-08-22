@@ -112,7 +112,7 @@ object Types extends LazyLogging {
     case java.sql.Types.ROWID  => LongType
     case java.sql.Types.STRUCT => StringType
     case _ =>
-      throw new IllegalArgumentException("Received an unsupported SQL type " + sqlType)
+      throw new IllegalArgumentException(s"Received an unsupported SQL type $sqlType")
   }
 
   /**
@@ -135,8 +135,8 @@ object Types extends LazyLogging {
    * @return A Spark SQL schema with only columns in the given order
    */
   def selectColumns(columns: Array[String], schema: StructType): StructType = {
-    val fieldMap = Map(schema.fields.map(x => x.name -> x): _*)
-    val newFields = columns.map(name => fieldMap(name))
+    val columnNames = columns.toSet
+    val newFields = schema.fields.filter(f => columnNames.contains(f.name))
     logger.debug(s"A new pruned columns obtained ${newFields.mkString(",")}")
     StructType(newFields)
   }

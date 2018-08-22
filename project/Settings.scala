@@ -9,24 +9,16 @@ import sbtassembly.AssemblyPlugin.autoImport._
 
 import scoverage.ScoverageSbtPlugin.autoImport._
 import org.scalastyle.sbt.ScalastylePlugin.autoImport._
+import wartremover.WartRemover.autoImport.wartremoverErrors
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
-/** A list (boilerplate) settings for build process */
+/** A list of (boilerplate) settings for build process */
 object Settings {
 
-  def buildSettings(): Seq[Setting[_]] = Seq(
-    scalaVersion := Dependencies.ScalaVersion,
-
-    // Compiler settings
-    crossScalaVersions := Dependencies.CrossScalaVersions,
-    compileOrder in Compile := CompileOrder.JavaThenScala,
-
-    // Dependency settings
-    resolvers ++= Dependencies.Resolvers,
-    libraryDependencies ++= Dependencies.AllDependencies
-  )
-
   def miscSettings(): Seq[Setting[_]] = Seq(
+    // Wartremover settings
+    wartremoverErrors in (Compile, compile) := Compilation.WartremoverFlags,
+    wartremoverErrors in (Test, compile) := Compilation.WartremoverTestFlags,
     // General settings
     cancelable in Global := true,
 
@@ -81,6 +73,6 @@ object Settings {
   }
 
   lazy val projectSettings: Seq[Setting[_]] =
-    buildSettings ++ miscSettings ++ assemblySettings ++ scalaStyleSettings
+    miscSettings ++ assemblySettings ++ scalaStyleSettings
 
 }

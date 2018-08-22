@@ -38,9 +38,13 @@ class ExasolRDD(
 
   @transient lazy val mainExaConnection: EXAConnection = {
     val conn = manager.mainConnection()
+    if (conn == null) {
+      logger.info("WTF!!!")
+      throw new RuntimeException("Why?!")
+    }
 
-    manager.initParallel(conn)
-    logger.info("Initiated parallel exasol (sub) connections")
+    val cnt = manager.initParallel(conn)
+    logger.info(s"Initiated $cnt parallel exasol (sub) connections")
 
     // Close Exasol main connection when SparkContext finishes. This is a lifetime of a Spark
     // application.
@@ -51,7 +55,7 @@ class ExasolRDD(
     conn
   }
 
-  override def getPartitions(): Array[Partition] = {
+  override def getPartitions: Array[Partition] = {
     val partitions = manager
       .subConnections(mainExaConnection)
       .zipWithIndex
@@ -63,6 +67,7 @@ class ExasolRDD(
   }
 
   // scalastyle:off null return
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf", "org.wartremover.warts.Return"))
   override def compute(split: Partition, context: TaskContext): Iterator[Row] = {
     var closed = false
     var resultSet: ResultSet = null
@@ -109,9 +114,7 @@ class ExasolRDD(
       closed = true
     }
 
-    context.addTaskCompletionListener { context =>
-      close()
-    }
+    val _ = context.addTaskCompletionListener(_ => close())
 
     val partition: ExasolRDDPartition = split.asInstanceOf[ExasolRDDPartition]
 

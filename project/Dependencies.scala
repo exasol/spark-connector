@@ -6,9 +6,6 @@ import sbt._
 object Dependencies {
 
   // Versions
-  val ScalaVersion = "2.11.11"
-  val CrossScalaVersions = Seq("2.10.7", ScalaVersion)
-
   private val SparkVersion = "2.3.1"
   private val ExasolJdbcVersion = "6.0.8"
   private val TypesafeLoggingVersion = "3.7.2"
