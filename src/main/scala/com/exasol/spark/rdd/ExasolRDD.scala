@@ -39,8 +39,8 @@ class ExasolRDD(
   @transient lazy val mainExaConnection: EXAConnection = {
     val conn = manager.mainConnection()
     if (conn == null) {
-      logger.info("WTF!!!")
-      throw new RuntimeException("Why?!")
+      logger.error("Main EXAConnection is null!")
+      throw new RuntimeException("Could not establish main connection to Exasol!")
     }
 
     val cnt = manager.initParallel(conn)

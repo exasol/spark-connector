@@ -11,8 +11,8 @@ lazy val orgSettings = Seq(
 )
 
 lazy val buildSettings = Seq(
-  scalaVersion := "2.11.11",
-  crossScalaVersions := Seq("2.10.7", "2.11.11"),
+  scalaVersion := "2.11.12",
+  crossScalaVersions := Seq("2.10.5", "2.11.12"),
   // Compiler settings
   scalacOptions ++= Compilation.compilerFlagsFn(scalaVersion.value),
   scalacOptions in (Compile, console) := Compilation.consoleFlagsFn(scalaVersion.value),

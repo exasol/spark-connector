@@ -1,9 +1,56 @@
-.DS_Store
-.sbtopts
-NOTICE
-data
-build
-output
-target
+# .gitignore
+
+# sbt
+project/project
 project/target
-derby.log
+target/
+.history
+
+# Java
+*.class
+
+# Logs
+*.log
+log/
+logs/
+
+# Temporary files
+*~
+*.bak
+*.old
+*.tmp
+nohup.out
+tmp/
+
+# vim
+.*.sw[a-z]
+
+# IntelliJ
+.idea/
+.idea_modules/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.cache
+.classpath
+.project
+.scala_dependencies
+.settings/
+*.sc
+
+# Ensime
+.ensime
+.ensime_cache/
+
+# Mac OS X
+._*
+.DS_Store
+
+# Windows
+Desktop.ini
+Thumbs.db
+
+# Test output directory
+test/

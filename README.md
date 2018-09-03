@@ -1,5 +1,8 @@
 # Spark Exasol Connector
 
+[![Build Status](https://travis-ci.org/morazow/spark-exasol-connector.svg?branch=master)](https://travis-ci.org/morazow/spark-exasol-connector)
+[![codecov](https://codecov.io/gh/morazow/spark-exasol-connector/branch/master/graph/badge.svg)](https://codecov.io/gh/morazow/spark-exasol-connector)
+
 This is a connector library that supports an integration between
 [Exasol][exasol] and [Apache Spark][spark]. Using this connector, users can
 read/write data from/to Exasol using Spark.
@@ -56,7 +59,13 @@ Run unit tests,
 ./sbtx test
 ```
 
-Run integration tests,
+To run integration tests, a separate docker network should be created first,
+
+```bash
+docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
+```
+
+then run,
 
 ```bash
 ./sbtx it:test

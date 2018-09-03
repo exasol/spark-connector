@@ -9,9 +9,10 @@ import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy;
 public class ExasolDockerContainer<SELF extends ExasolDockerContainer<SELF>> extends
 JdbcDatabaseContainer<SELF> {
   public static final String EXASOL_IMAGE = "exasol/docker-db";
+  public static final String EXASOL_HOST = "192.168.0.2";
   public static final Integer EXASOL_PORT = 8888;
   // wait for 5 minutes to startup
-  public static final Integer EXASOL_STARTUP_TIME = 5 * 60;
+  public static final Integer EXASOL_STARTUP_TIME = 15 * 60;
 
   private String username = "sys";
   private String password = "exasol";
@@ -27,9 +28,10 @@ JdbcDatabaseContainer<SELF> {
   @Override
   protected void configure() {
     super.configure();
-    withNetworkMode("host");
+    withNetworkMode("dockernet");
     withPrivilegedMode(true);
     withStartupTimeout(Duration.of(EXASOL_STARTUP_TIME, SECONDS));
+    withCreateContainerCmdModifier(cmd -> cmd.withIpv4Address(EXASOL_HOST));
   }
 
   @Override
@@ -39,7 +41,7 @@ JdbcDatabaseContainer<SELF> {
 
   @Override
   public String getJdbcUrl() {
-    return "jdbc:exa:" + getContainerIpAddress() + ":" + EXASOL_PORT;
+    return "jdbc:exa:" + getHost() + ":" + EXASOL_PORT;
   }
 
   @Override
@@ -70,7 +72,7 @@ JdbcDatabaseContainer<SELF> {
   }
 
   public String getHost() {
-    return getContainerIpAddress();
+    return EXASOL_HOST;
   }
 
   public Integer getPort() {
