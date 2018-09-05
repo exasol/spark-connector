@@ -28,7 +28,7 @@ object Settings {
     // Scoverage settings
     coverageMinimum := 50,
     coverageOutputHTML := true,
-    coverageOutputXML := false,
+    coverageOutputXML := true,
     coverageFailOnMinimum := false,
     coverageOutputCobertura := false
   )
