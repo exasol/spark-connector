@@ -10,11 +10,18 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 cd "$BASE_DIR"
 
 MAIN_SCALA_VERSION=2.11.12
+MAIN_SPARK_VERSION=2.3.1
 
 if [[ -z "${TRAVIS_SCALA_VERSION:-}" ]]; then
   echo "Environment variable TRAVIS_SCALA_VERSION is not set"
   echo "Using MAIN_SCALA_VERSION: $MAIN_SCALA_VERSION"
   TRAVIS_SCALA_VERSION=$MAIN_SCALA_VERSION
+fi
+
+if [[ -z "${SPARK_VERSION:-}" ]]; then
+  echo "Environment variable SPARK_VERSION is not set"
+  echo "Using MAIN_SPARK_VERSION: $MAIN_SPARK_VERSION"
+  SPARK_VERSION=$MAIN_SPARK_VERSION
 fi
 
 run_self_check () {
@@ -34,7 +41,10 @@ run_cleaning () {
   echo "#        Cleaning                          #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx ++$TRAVIS_SCALA_VERSION clean
+  ./sbtx \
+    -Dspark.currentVersion=$SPARK_VERSION \
+    ++$TRAVIS_SCALA_VERSION \
+    clean
 }
 
 run_unit_tests () {
@@ -43,7 +53,10 @@ run_unit_tests () {
   echo "#        Unit testing                      #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx ++$TRAVIS_SCALA_VERSION coverage test
+  ./sbtx \
+    -Dspark.currentVersion=$SPARK_VERSION \
+    ++$TRAVIS_SCALA_VERSION \
+    coverage test
 }
 
 run_integration_tests () {
@@ -52,7 +65,10 @@ run_integration_tests () {
   echo "#        Integration testing               #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx ++$TRAVIS_SCALA_VERSION coverage it:test
+  ./sbtx \
+    -Dspark.currentVersion=$SPARK_VERSION \
+    ++$TRAVIS_SCALA_VERSION \
+    coverage it:test
 }
 
 run_coverage_report () {
@@ -61,7 +77,10 @@ run_coverage_report () {
   echo "#        Coverage report                   #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx ++$TRAVIS_SCALA_VERSION coverageReport
+  ./sbtx \
+    -Dspark.currentVersion=$SPARK_VERSION \
+    ++$TRAVIS_SCALA_VERSION \
+    coverageReport
 }
 
 run_api_doc () {
@@ -70,7 +89,10 @@ run_api_doc () {
   echo "#        Generating API documentaion       #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx ++$TRAVIS_SCALA_VERSION doc
+  ./sbtx \
+    -Dspark.currentVersion=$SPARK_VERSION \
+    ++$TRAVIS_SCALA_VERSION \
+    doc
 }
 
 run_dependency_info () {
@@ -79,7 +101,10 @@ run_dependency_info () {
   echo "#        Dependency information            #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx ++$TRAVIS_SCALA_VERSION dependencyUpdates pluginUpdates coursierDependencyTree
+  ./sbtx \
+    -Dspark.currentVersion=$SPARK_VERSION \
+    ++$TRAVIS_SCALA_VERSION \
+    dependencyUpdates pluginUpdates coursierDependencyTree
 }
 
 run_shell_check () {
@@ -97,7 +122,10 @@ run_assembly () {
   echo "#        Assembling binary artifact        #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx ++$TRAVIS_SCALA_VERSION assembly
+  ./sbtx \
+    -Dspark.currentVersion=$SPARK_VERSION \
+    ++$TRAVIS_SCALA_VERSION \
+    assembly
 }
 
 run_clean_worktree_check () {

@@ -14,7 +14,11 @@ object Dependencies {
   private val MockitoVersion = "2.21.0"
   private val ContainersJdbcVersion = "1.8.3"
   private val ContainersScalaVersion = "0.19.0"
-  private val SparkTestingBaseVersion = s"${SparkVersion}_0.10.0"
+
+  private val sparkCurrentVersion =
+    sys.props.get("spark.currentVersion").getOrElse(SparkVersion)
+
+  private val SparkTestingBaseVersion = s"${sparkCurrentVersion}_0.10.0"
 
   val Resolvers: Seq[Resolver] = Seq(
     "Exasol Releases" at "https://maven.exasol.com/artifactory/exasol-releases"
@@ -22,8 +26,8 @@ object Dependencies {
 
   /** Core dependencies needed for connector */
   private val CoreDependencies: Seq[ModuleID] = Seq(
-    "org.apache.spark" %% "spark-core" % SparkVersion % "provided",
-    "org.apache.spark" %% "spark-sql" % SparkVersion % "provided",
+    "org.apache.spark" %% "spark-core" % sparkCurrentVersion % "provided",
+    "org.apache.spark" %% "spark-sql" % sparkCurrentVersion % "provided",
     "com.typesafe.scala-logging" %% "scala-logging" % TypesafeLoggingVersion,
     "com.exasol" % "exasol-jdbc" % ExasolJdbcVersion
   )
@@ -34,7 +38,7 @@ object Dependencies {
     "org.mockito" % "mockito-core" % MockitoVersion,
     "org.testcontainers" % "jdbc" % ContainersJdbcVersion,
     "com.dimafeng" %% "testcontainers-scala" % ContainersScalaVersion,
-    "org.apache.spark" %% "spark-hive" % SparkVersion,
+    "org.apache.spark" %% "spark-hive" % sparkCurrentVersion,
     "com.holdenkarau" %% "spark-testing-base" % SparkTestingBaseVersion
   ).map(_ % Test)
 

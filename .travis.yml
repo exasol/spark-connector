@@ -5,21 +5,32 @@ sudo: required
 dist: trusty
 services: docker
 
-scala:
-  - 2.11.12
-
 addons:
   apt:
     packages:
       - shellcheck
 
-jdk:
-  - openjdk8
-  - oraclejdk8
-
 before_install:
   - docker pull exasol/docker-db:latest
   - docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
+
+matrix:
+  include:
+    - jdk: openjdk8
+      scala: 2.11.12
+      env: SPARK_VERSION="2.1.0"
+
+    - jdk: oraclejdk8
+      scala: 2.11.12
+      env: SPARK_VERSION="2.1.0"
+
+    - jdk: openjdk8
+      scala: 2.11.12
+      env: SPARK_VERSION="2.3.1"
+
+    - jdk: oraclejdk8
+      scala: 2.11.12
+      env: SPARK_VERSION="2.3.1"
 
 script:
   - travis_wait 30 ./scripts/ci.sh
@@ -29,12 +40,12 @@ after_success:
 
 cache:
   directories:
-  - $HOME/.sbt/1.0
-  - $HOME/.sbt/boot/scala*
-  - $HOME/.sbt/cache
-  - $HOME/.sbt/launchers
-  - $HOME/.ivy2
-  - $HOME/.coursier
+    - $HOME/.sbt/1.0
+    - $HOME/.sbt/boot/scala*
+    - $HOME/.sbt/cache
+    - $HOME/.sbt/launchers
+    - $HOME/.ivy2
+    - $HOME/.coursier
 
 before_cache:
   - du -h -d 1 $HOME/.ivy2/
