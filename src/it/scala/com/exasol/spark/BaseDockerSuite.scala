@@ -1,6 +1,7 @@
 package com.exasol.spark
 
 import org.scalatest.Suite
+
 import com.dimafeng.testcontainers.Container
 import com.dimafeng.testcontainers.ExasolDockerContainer
 import com.dimafeng.testcontainers.ForAllTestContainer
@@ -8,8 +9,8 @@ import com.dimafeng.testcontainers.ForAllTestContainer
 import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
 
-/** A Base Testing Suite with Exasol DB Docker Container */
-trait BaseSuite extends ForAllTestContainer { self: Suite =>
+/** A Base Integration Suite with Exasol DB Docker Container Setup */
+trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
 
   override val container = ExasolDockerContainer()
 
