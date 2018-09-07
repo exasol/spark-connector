@@ -58,17 +58,21 @@ object Settings {
     // Creates a Scalastyle task that runs with tests
     lazy val mainScalastyle = taskKey[Unit]("mainScalastyle")
     lazy val testScalastyle = taskKey[Unit]("testScalastyle")
+    lazy val itTestScalastyle = taskKey[Unit]("itTestScalastyle")
 
     Seq(
       scalastyleFailOnError := true,
       (scalastyleConfig in Compile) := baseDirectory.value / "project" / "scalastyle-config.xml",
-      (scalastyleConfig in Test) := baseDirectory.value / "project" / "scalastyle-config.xml",
+      (scalastyleConfig in Test) := baseDirectory.value / "project" / "scalastyle-test-config.xml",
+      (scalastyleConfig in IntegrationTest) := (scalastyleConfig in Test).value,
+      (scalastyleSources in IntegrationTest) := Seq((scalaSource in IntegrationTest).value),
       mainScalastyle := scalastyle.in(Compile).toTask("").value,
       testScalastyle := scalastyle.in(Test).toTask("").value,
-      (test in Test) := ((test in Test) dependsOn testScalastyle).value,
+      itTestScalastyle := scalastyle.in(IntegrationTest).toTask("").value,
       (test in Test) := ((test in Test) dependsOn mainScalastyle).value,
-      (test in IntegrationTest) := ((test in IntegrationTest) dependsOn testScalastyle).value,
-      (test in IntegrationTest) := ((test in IntegrationTest) dependsOn mainScalastyle).value
+      (test in Test) := ((test in Test) dependsOn testScalastyle).value,
+      (test in IntegrationTest) := ((test in IntegrationTest) dependsOn mainScalastyle).value,
+      (test in IntegrationTest) := ((test in IntegrationTest) dependsOn itTestScalastyle).value
     )
   }
 

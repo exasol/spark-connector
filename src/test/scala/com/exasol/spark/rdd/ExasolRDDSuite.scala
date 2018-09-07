@@ -39,7 +39,7 @@ class ExasolRDDSuite extends FunSuite with Matchers with MockitoSugar {
     val sparkContext = mock[SparkContext]
     val manager = mock[ExasolConnectionManager]
 
-    when(manager.mainConnection).thenReturn(null) // scalastyle:ignore null
+    when(manager.mainConnection).thenReturn(null)
 
     val thrown = intercept[RuntimeException] {
       new ExasolRDD(sparkContext, "", StructType(Nil), manager).getPartitions

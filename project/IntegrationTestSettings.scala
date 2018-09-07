@@ -3,6 +3,7 @@ package com.exasol.spark.sbt
 import sbt._
 import sbt.Keys._
 import sbt.Def.Setting
+import org.scalastyle.sbt.ScalastylePlugin
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin
 
 /** Settings for running integration tests */
@@ -20,7 +21,9 @@ object IntegrationTestSettings {
   /** Integration test settings to add to the projects */
   lazy val settings: Seq[Setting[_]] = {
     val itSettings =
-      ScalafmtCorePlugin.autoImport.scalafmtSettings ++ Seq(
+      ScalastylePlugin.rawScalastyleSettings ++
+      ScalafmtCorePlugin.autoImport.scalafmtSettings ++
+      Seq(
         fork := true,
         parallelExecution := false,
         scalaSource := baseDirectory.value / "src/it/scala"
