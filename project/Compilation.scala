@@ -126,7 +126,8 @@ object Compilation {
     Wart.AsInstanceOf,
     Wart.Equals,
     Wart.IsInstanceOf,
-    Wart.NonUnitStatements
+    Wart.NonUnitStatements,
+    Wart.Null
   )
 
 }
