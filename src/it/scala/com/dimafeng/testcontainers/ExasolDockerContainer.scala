@@ -1,14 +1,17 @@
 package com.dimafeng.testcontainers
 
 import scala.language.existentials
+
 import org.testcontainers.containers.{ExasolDockerContainer => OTCExasolDockerContainer}
 
 class ExasolDockerContainer(imageName: Option[String] = None)
     extends SingleContainer[OTCExasolDockerContainer[_]] {
 
+  // scalastyle:off structural.type
   type OTCContainer = OTCExasolDockerContainer[T] forSome {
     type T <: OTCExasolDockerContainer[T]
   }
+  // scalastyle:on
 
   override val container: OTCContainer = imageName match {
     case Some(imageName) => new OTCExasolDockerContainer(imageName)

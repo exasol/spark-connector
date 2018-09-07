@@ -1,13 +1,12 @@
 package com.exasol.spark
 
-import org.scalatest.Suite
+import com.exasol.spark.util.ExasolConfiguration
+import com.exasol.spark.util.ExasolConnectionManager
 
 import com.dimafeng.testcontainers.Container
 import com.dimafeng.testcontainers.ExasolDockerContainer
 import com.dimafeng.testcontainers.ForAllTestContainer
-
-import com.exasol.spark.util.ExasolConfiguration
-import com.exasol.spark.util.ExasolConnectionManager
+import org.scalatest.Suite
 
 /** A Base Integration Suite with Exasol DB Docker Container Setup */
 trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
