@@ -59,8 +59,17 @@ object ExasolConnectionManager extends LazyLogging {
     conn.asInstanceOf[EXAConnection]
   }
 
+  private[this] def removeIfClosed(url: String): Unit = {
+    val conn = connections.get(url)
+    if (conn != null && conn.isClosed) {
+      logger.info(s"Connection $url is closed, removing it from the pool")
+      val _ = connections.remove(url)
+    }
+  }
+
   def makeConnection(url: String, username: String, password: String): EXAConnection = {
-    logger.debug(s"Making a connection using $url")
+    logger.debug(s"Making a connection using url = $url")
+    removeIfClosed(url)
     val _ = connections.putIfAbsent(url, createConnection(url, username, password))
     connections.get(url)
   }

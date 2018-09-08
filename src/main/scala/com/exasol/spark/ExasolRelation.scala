@@ -43,9 +43,14 @@ class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolCo
   override def buildScan(requiredColumns: Array[String], filters: Array[Filter]): RDD[Row] =
     new ExasolRDD(
       sqlContext.sparkContext,
-      queryString,
+      enrichQuery(requiredColumns, filters),
       Types.selectColumns(requiredColumns, schema),
       manager
     )
+
+  private[this] def enrichQuery(columns: Array[String], filters: Array[Filter]): String = {
+    val columnStr = if (columns.isEmpty) "*" else columns.mkString(", ")
+    s"SELECT $columnStr FROM ($queryString)"
+  }
 
 }
