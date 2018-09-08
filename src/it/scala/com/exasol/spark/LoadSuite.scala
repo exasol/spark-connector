@@ -4,14 +4,13 @@ import org.apache.spark.sql.types.LongType
 import org.apache.spark.sql.types.StringType
 import org.apache.spark.sql.types.TimestampType
 
-import org.scalatest.FunSuite
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
+import org.scalatest.FunSuite
 
 /** Tests for loading data from Exasol query as dataframes using short and long source formats */
-class LoadSuite extends FunSuite with DataFrameSuiteBase with BaseSuite {
+class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
   test("creates dataframe from user query") {
-
     createDummyTable()
 
     val df1 = spark.read
@@ -39,6 +38,19 @@ class LoadSuite extends FunSuite with DataFrameSuiteBase with BaseSuite {
     assert(schema.exists(f => f.name == "NAME"))
     assert(schema.map(_.name).toSet === Set("ID", "NAME", "CITY", "UPDATED_AT"))
     assert(schema.map(_.dataType).toSet === Set(LongType, StringType, StringType, TimestampType))
+  }
+
+  test("throw exception when query string is not provided") {
+    val thrown = intercept[UnsupportedOperationException] {
+      spark.read
+        .format("com.exasol.spark")
+        .option("host", container.host)
+        .option("port", s"${container.port}")
+        .load()
+    }
+    assert(
+      thrown.getMessage === "A sql query string should be specified when loading from Exasol"
+    )
   }
 
 }
