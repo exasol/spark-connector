@@ -1,7 +1,9 @@
-# Spark Exasol Connector
+# [WIP] Spark Exasol Connector
 
 [![Build Status](https://travis-ci.org/EXASOL/spark-exasol-connector.svg?branch=master)](https://travis-ci.org/EXASOL/spark-exasol-connector)
 [![codecov](https://codecov.io/gh/EXASOL/spark-exasol-connector/branch/master/graph/badge.svg)](https://codecov.io/gh/EXASOL/spark-exasol-connector)
+
+###### Please note that this is an open source project which is *not officially supported* by Exasol. We will try to help you as much as possible, but can't guarantee anything since this is not an official Exasol product.
 
 This is a connector library that supports an integration between
 [Exasol][exasol] and [Apache Spark][spark]. Using this connector, users can
