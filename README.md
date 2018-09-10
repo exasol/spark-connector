@@ -1,4 +1,4 @@
-# Spark Exasol Connector
+# [WIP] Spark Exasol Connector
 
 [![Build Status](https://travis-ci.org/EXASOL/spark-exasol-connector.svg?branch=master)](https://travis-ci.org/EXASOL/spark-exasol-connector)
 [![codecov](https://codecov.io/gh/EXASOL/spark-exasol-connector/branch/master/graph/badge.svg)](https://codecov.io/gh/EXASOL/spark-exasol-connector)
