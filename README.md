@@ -1,15 +1,15 @@
 # Spark Exasol Connector
 
-[![Build Status](https://travis-ci.org/morazow/spark-exasol-connector.svg?branch=master)](https://travis-ci.org/morazow/spark-exasol-connector)
-[![codecov](https://codecov.io/gh/morazow/spark-exasol-connector/branch/master/graph/badge.svg)](https://codecov.io/gh/morazow/spark-exasol-connector)
+[![Build Status](https://travis-ci.org/EXASOL/spark-exasol-connector.svg?branch=master)](https://travis-ci.org/EXASOL/spark-exasol-connector)
+[![codecov](https://codecov.io/gh/EXASOL/spark-exasol-connector/branch/master/graph/badge.svg)](https://codecov.io/gh/EXASOL/spark-exasol-connector)
 
 This is a connector library that supports an integration between
 [Exasol][exasol] and [Apache Spark][spark]. Using this connector, users can
 read/write data from/to Exasol using Spark.
 
 * [Quick Start](#quick-start)
-* [Build and Testing](#building-and-testing)
 * [Usage](#usage)
+* [Building and Testing](#building-and-testing)
 * [Configuration](#configuration)
 
 ## Quick Start
@@ -25,17 +25,22 @@ val exasolQueryString = "SELECT * FROM MY_SCHEMA.MY_TABLE"
 val df = sparkSession
      .read
      .format("exasol")
-     .options("host", "localhost")
-     .options("port", "8888")
-     .options("username", "sys")
-     .options("password", "exasol")
-     .options("query", exasolQueryString)
+     .option("host", "localhost")
+     .option("port", "8888")
+     .option("username", "sys")
+     .option("password", "exasol")
+     .option("query", exasolQueryString)
      .load()
 
 df.show(10, false)
 ```
 
 For more examples you can check [docs/examples](docs/examples.md).
+
+## Usage
+
+*TODO*: Add short description on how to use jar files via maven and sbt once the
+publishing setup is decided.
 
 ## Building and Testing
 
@@ -72,7 +77,8 @@ then run,
 ```
 
 The integration tests requires [docker][docker],
-[exasol/docker-db][exa-docker-db] and [testcontainers][testcontainers].
+[exasol/docker-db][exa-docker-db], [testcontainers][testcontainers] and
+[spark-testing-base][spark-testing-base].
 
 In order to create a bundled jar,
 
@@ -80,17 +86,12 @@ In order to create a bundled jar,
 ./sbtx assembly
 ```
 
-This create a jar file under `target/` folder. The jar file can be used with
+This creates a jar file under `target/` folder. The jar file can be used with
 `spark-submit`, `spark-shell` or `pyspark` commands. For example,
 
 ```shell
-spark-shell --jars /path/to/spark-exasol-connector.jar
+spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
 ```
-
-## Usage
-
-*TODO*: Add short description on how to use jar files via maven and sbt once the
-publishing setup is decided.
 
 ## Configuration
 
@@ -102,3 +103,4 @@ what they mean.
 [docker]: https://www.docker.com/
 [exa-docker-db]: https://hub.docker.com/r/exasol/docker-db/
 [testcontainers]: https://www.testcontainers.org/
+[spark-testing-base]: https://github.com/holdenk/spark-testing-base
