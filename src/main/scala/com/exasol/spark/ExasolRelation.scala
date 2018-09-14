@@ -49,8 +49,8 @@ class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolCo
     )
 
   private[this] def enrichQuery(columns: Array[String], filters: Array[Filter]): String = {
-    val columnStr = if (columns.isEmpty) "*" else columns.mkString(", ")
-    s"SELECT $columnStr FROM ($queryString)"
+    val columnStr = if (columns.isEmpty) "*" else columns.map(c => s"A.$c").mkString(", ")
+    s"SELECT $columnStr FROM ($queryString) A"
   }
 
 }
