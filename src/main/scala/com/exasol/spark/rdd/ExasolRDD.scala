@@ -18,7 +18,6 @@ import org.apache.spark.sql.types.StructType
 import com.exasol.jdbc.EXAConnection
 import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
-import com.exasol.spark.util.NextIterator
 
 import com.typesafe.scalalogging.LazyLogging
 
@@ -61,7 +60,7 @@ class ExasolRDD(
       .zipWithIndex
       .map { case (url, idx) => ExasolRDDPartition(idx, url) }
 
-    logger.debug(s"The number of partitions is ${partitions.size}")
+    logger.info(s"The number of partitions is ${partitions.size}")
 
     partitions.toArray
   }
@@ -114,10 +113,13 @@ class ExasolRDD(
       closed = true
     }
 
-    val _ = context.addTaskCompletionListener(_ => close())
+    val _ = context.addTaskCompletionListener { context =>
+      close()
+    }
 
     val partition: ExasolRDDPartition = split.asInstanceOf[ExasolRDDPartition]
 
+    logger.info(s"Connecting to the partition sub connection: ${partition.connectionUrl}")
     conn = manager.subConnection(partition.connectionUrl)
     stmt = conn.createStatement()
     resultSet = stmt.executeQuery(queryString)
