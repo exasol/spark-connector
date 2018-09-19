@@ -12,13 +12,17 @@ import org.apache.spark.sql.types.StructType
 
 import com.exasol.spark.rdd.ExasolRDD
 import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.Filters
 import com.exasol.spark.util.Types
+
+import com.typesafe.scalalogging.LazyLogging
 
 class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolConnectionManager)
     extends BaseRelation
     with PrunedFilteredScan
     with PrunedScan
-    with TableScan {
+    with TableScan
+    with LazyLogging {
 
   override def sqlContext: SQLContext = context
 
@@ -50,7 +54,11 @@ class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolCo
 
   private[this] def enrichQuery(columns: Array[String], filters: Array[Filter]): String = {
     val columnStr = if (columns.isEmpty) "*" else columns.map(c => s"A.$c").mkString(", ")
-    s"SELECT $columnStr FROM ($queryString) A"
+    val filterStr = Filters.createWhereClause(schema, filters)
+    val whereClause = if (filterStr.trim.isEmpty) "" else s"WHERE $filterStr"
+    val enrichedQuery = s"SELECT $columnStr FROM ($queryString) A $whereClause"
+    logger.info(s"Running with enriched query: $enrichedQuery")
+    enrichedQuery
   }
 
 }
