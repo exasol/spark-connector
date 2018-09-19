@@ -12,16 +12,19 @@ object Compilation {
     CrossVersion.partialVersion(scalaVersion) match {
       case Some((2, 12)) => CompilerFlags ++ Scala12CompilerFlags
       case Some((2, 11)) => CompilerFlags
-      case _ => CompilerFlags
+      case _             => CompilerFlags
     }
 
   def consoleFlagsFn(scalaVersion: String): Seq[String] =
-    compilerFlagsFn(scalaVersion).filterNot(Set(
-      "-Xfatal-warnings",
-      "-Ywarn-unused-import",
-      "-Ywarn-unused:imports"
-    ))
+    compilerFlagsFn(scalaVersion).filterNot(
+      Set(
+        "-Xfatal-warnings",
+        "-Ywarn-unused-import",
+        "-Ywarn-unused:imports"
+      )
+    )
 
+  // format: off
   /** Compiler flags specific to Scala version 2.12.x */
   private val Scala12CompilerFlags: Seq[String] = Seq(
     "-Xlint:constant",                  // Evaluation of a constant arithmetic expression results in an error.
@@ -78,17 +81,18 @@ object Compilation {
     "-Ywarn-numeric-widen",             // Warn when numerics are widened.
     "-Ywarn-value-discard"              // Warn when non-Unit expression results are unused.
   )
+  // format: on
 
   val JavacCompilerFlags: Seq[String] = Seq(
-    "-encoding", "UTF-8",
+    "-encoding",
+    "UTF-8",
     "-deprecation",
     "-parameters",
     "-Xlint:all"
   )
 
-  private def contribWart(name: String) = {
+  private def contribWart(name: String) =
     Wart.custom(s"org.wartremover.contrib.warts.$name")
-  }
 
   private val ExtraWartremoverFlags = Seq(
     contribWart("Apply"),
@@ -100,7 +104,6 @@ object Compilation {
     contribWart("SomeApply"),
     contribWart("SymbolicName"),
     // contribWart("UnsafeInheritance"), // Not possible with Spark classes / traits
-
     ExtraWart.EnumerationPartial,
     ExtraWart.FutureObject,
     ExtraWart.GenMapLikePartial,

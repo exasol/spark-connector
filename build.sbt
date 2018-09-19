@@ -1,5 +1,3 @@
-import com.exasol.spark.sbt.Compilation
-import com.exasol.spark.sbt.Dependencies
 import com.exasol.spark.sbt.Settings
 import com.exasol.spark.sbt.IntegrationTestPlugin
 
@@ -12,15 +10,7 @@ lazy val orgSettings = Seq(
 
 lazy val buildSettings = Seq(
   scalaVersion := "2.11.12",
-  crossScalaVersions := Seq("2.10.5", "2.11.12"),
-  // Compiler settings
-  scalacOptions ++= Compilation.compilerFlagsFn(scalaVersion.value),
-  scalacOptions in (Compile, console) := Compilation.consoleFlagsFn(scalaVersion.value),
-  javacOptions ++= Compilation.JavacCompilerFlags,
-  compileOrder in Compile := CompileOrder.JavaThenScala,
-  // Dependency settings
-  resolvers ++= Dependencies.Resolvers,
-  libraryDependencies ++= Dependencies.AllDependencies
+  crossScalaVersions := Seq("2.10.5", "2.11.12")
 )
 
 lazy val root =
@@ -28,7 +18,8 @@ lazy val root =
     .in(file("."))
     .settings(orgSettings)
     .settings(buildSettings)
-    .settings(Settings.projectSettings)
+    .settings(Settings.projectSettings(scalaVersion))
     .enablePlugins(IntegrationTestPlugin)
 
+addCommandAlias("ci-release", ";reload;clean;release with-defaults")
 addCommandAlias("pluginUpdates", ";reload plugins;dependencyUpdates;reload return")
