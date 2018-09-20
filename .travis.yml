@@ -1,6 +1,5 @@
 language: scala
 
-# Because exasol/docker-db requires privileged mode
 sudo: required
 dist: trusty
 services: docker
@@ -11,11 +10,33 @@ addons:
       - shellcheck
 
 env:
-  - RELEASE=false
+  matrix:
+    - RELEASE=false
+
+  global:
+    # PGP_PASSPHRASE
+    - secure: |-
+        SCeA8EtpdixpGCW7j6iiQq9iNxQdyV8eq6M0/BZtAY9DfH5Eojn2MVyihdHvRdXP/u1gp2AsvRxBlZWUIBAgaYKN3
+        U2d6Sg2acQ0lmT+z06CcN9K5kKROpxbwGg/Dn4caPORMHgCTbThsmBUDmq5WVGrbVxz82M8i//Cu21chdgJ7lsfOy
+        R1Owp/JZjwpNZlykSZY/lhE6mttwgEYvJD2x57JXhAiVuSj7EpZVMjQnJK8Ja65XnS0qURbNQQx/zo2V7BXFqWmRn
+        S42VbmObkcM2jh8jFrRqpJnyupu2/1ZDSSXWDA9sg2DCWwwfyI71kZHwHN/EaLdjLG9Y9it84p6fwSPuAkLoNesNP
+        StVA7jUfS6DbNPRJphdiRGqmUderRrT5oIvo1DJZMP0VZ68U4GljocDDEPWImr2LfFh9VoxGdSBjHmjKgnnq9oK53
+        eN/jwNFyVMyqV5fT2VmK3gKWxmGfCGSbm0NefuGY9X1UHXrS32aYa6rxhWiYKpVGPZRbCyoKUEUheecSue0B2PU0h
+        tPBbSp1+WA6hYUM6OtP01yAk1vaj/KgZnF7BWsXFlcidh7RlJ3cQZDfUB2Cxv0wmihibgPFg9YQF1/7MvCKEbU0O1
+        Q1Ws/6IA3dwrhb0gcfTREdIjy1AZaejRnCTYNXzpQxJYFpVoC1cfoz5rXCOg=
 
 before_install:
   - docker pull exasol/docker-db:latest
   - docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" = "false" ]
+    then
+      openssl aes-256-cbc -K $encrypted_9ca81b5594f5_key -iv $encrypted_9ca81b5594f5_iv \
+        -in project/.gnupg/secrets.tar.enc \
+        -out project/.gnupg/local.secrets.tar -d;
+
+      tar xv -C project/.gnupg/ -f project/.gnupg/local.secrets.tar;
+    fi
 
 matrix:
   include:
@@ -39,21 +60,17 @@ script:
   - travis_wait 30 ./scripts/ci.sh
 
 after_success:
-  - |
-    if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a "$RELEASE" = "true" ];
-    then
-      ./scripts/publish.sh
-    fi
+  - if [ "$RELEASE" = "true" ]; then ./scripts/publish.sh; fi
   - bash <(curl -s https://codecov.io/bash)
 
 cache:
   directories:
-    - $HOME/.sbt/1.0
-    - $HOME/.sbt/boot/scala*
-    - $HOME/.sbt/cache
-    - $HOME/.sbt/launchers
-    - $HOME/.ivy2
-    - $HOME/.coursier
+    - "$HOME/.sbt/1.0"
+    - "$HOME/.sbt/boot/scala*"
+    - "$HOME/.sbt/cache"
+    - "$HOME/.sbt/launchers"
+    - "$HOME/.ivy2"
+    - "$HOME/.coursier"
 
 before_cache:
   - du -h -d 1 $HOME/.ivy2/
