@@ -1,5 +1,8 @@
 # .gitignore
 
+# credentials
+project/.gnupg/local*
+
 # sbt
 project/project
 project/target
