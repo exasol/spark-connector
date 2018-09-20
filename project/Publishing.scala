@@ -52,11 +52,12 @@ object Publishing {
     // https://github.com/scoverage/sbt-scoverage/issues/153
     // This code was copied from https://github.com/http4s/http4s
     pomPostProcess := { (node: xml.Node) =>
+      val depsToRemove = Set("org.scoverage", "org.wartremover", "org.danielnixon")
       new RuleTransformer(new RewriteRule {
         override def transform(node: xml.Node): Seq[xml.Node] = node match {
           case e: xml.Elem
               if e.label == "dependency" && e.child
-                .exists(child => child.label == "groupId" && child.text == "org.scoverage") =>
+                .exists(child => child.label == "groupId" && depsToRemove.contains(child.text)) =>
             Nil
           case _ => Seq(node)
         }
