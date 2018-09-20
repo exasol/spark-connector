@@ -74,7 +74,7 @@ object Publishing {
         s"Setting version to ${version.value} for release"
       }
     },
-    releaseTagName := s"${name.value}-${version.value}",
+    releaseTagName := s"v${version.value}",
     releaseTagComment := s"Releasing ${version.value} of module: ${name.value}",
     releaseVersionBump := sbtrelease.Version.Bump.Minor,
     releasePublishArtifactsAction := PgpKeys.publishSigned.value,
