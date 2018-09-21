@@ -11,7 +11,7 @@ object Dependencies {
   private val TypesafeLoggingVersion = "3.7.2"
 
   private val ScalaTestVersion = "3.0.5"
-  private val MockitoVersion = "2.21.0"
+  private val MockitoVersion = "2.22.0"
   private val ContainersJdbcVersion = "1.8.3"
   private val ContainersScalaVersion = "0.19.0"
 

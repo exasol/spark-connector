@@ -4,7 +4,7 @@ addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.3")
 
 // Adds a `wartremover` a flexible Scala code linting tool
 // http://github.com/puffnfresh/wartremover
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.5")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.7")
 
 // Adds Contrib Warts
 // http://github.com/wartremover/wartremover-contrib/
@@ -45,3 +45,20 @@ addSbtPlugin("org.scalastyle" % "scalastyle-sbt-plugin" % "1.0.0")
 // Adds a `dependencyUpdates` task to check for dependency updates
 // http://github.com/rtimush/sbt-updates
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.1")
+
+// Adds a `release` plugin
+// https://github.com/sbt/sbt-release
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.9")
+
+// Adds a `gnu-pgp` plugin
+// https://github.com/sbt/sbt-pgp
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
+
+// Setup this and project/project/plugins.sbt for formatting project/*.scala files with scalafmt
+inThisBuild(
+  Seq(
+    scalafmtOnCompile := true,
+    // Use the scalafmt config in the root directory
+    scalafmtConfig := baseDirectory(_.getParentFile / ".scalafmt.conf").value
+  )
+)
