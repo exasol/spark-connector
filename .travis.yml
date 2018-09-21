@@ -14,6 +14,17 @@ env:
     - RELEASE=false
 
   global:
+    # ENCRYPTION_KEY
+    - secure: |-
+        U2Wq/BE2sKZBuQOacZGjS9iF7EKDC0AQkbgm+jBffdClJMF0H1KdDywpAafcNPQWS04R7oPLUu/HizqCpwciUCrom
+        2LWU8qngatyqDV8olH8NG9Y3z+ZlyvNwojG8cE9W0naAFGG+WO1daNhUHIzoKzijNrPAo4coWimnXUOSy/ApqC/qE
+        D1UfBJf72hydR0KWXNcUad0sugX0r53ynI+YYEFLe8HQLRA+1+2Y+Lrq+50t/J4P5ROE4SCltwXs6GhIRK74GGg4o
+        Lph/z3WV4ZzP6dgAjCGoh6bkKNXS6pAbZLI4O3CTGUpoRSgxPjaksuPE23B082Z25c5AWUknqSYdpURKqoIhDnXI4
+        aU04YsaAAr/bnOJPhEqdSpTyBM8oX+Pj1gcUBtKUlSlkFiev3NveAA+pRqyqcZl2Y/0iB4FJUqjYnjS62VW+cLKjg
+        /Xyu6fTpYmQ4pdzA1iHHfAPNdEcXDleNOabAR3z2veWMp+RdUAP4ZJE1puh07FBfx+aBXUkvZ8VgHuNNFtv9JsJ1J
+        YKBplqXAIto9PwqWOsHmWih5bD5Js+JUa4w77rU0tDIc6FRzR0EfmePJzlko+oQrbrsw3qr1uah//MIbSSRkK6EQ8
+        hMBFgmUjIKqPVKKHxkX+hXzZu8VT4FxBvWA4HMydfPNlg2KXg9on9XtO3P1g=
+
     # PGP_PASSPHRASE
     - secure: |-
         SCeA8EtpdixpGCW7j6iiQq9iNxQdyV8eq6M0/BZtAY9DfH5Eojn2MVyihdHvRdXP/u1gp2AsvRxBlZWUIBAgaYKN3
@@ -31,11 +42,13 @@ before_install:
   - |
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]
     then
-      openssl aes-256-cbc -K $encrypted_9ca81b5594f5_key -iv $encrypted_9ca81b5594f5_iv \
-        -in project/.gnupg/secrets.tar.enc \
-        -out project/.gnupg/local.secrets.tar -d;
+      openssl aes-256-cbc \
+      -k "$ENCRYPTION_KEY" \
+      -in project/.gnupg/rings.tar.enc \
+      -out project/.gnupg/local.rings.tar \
+      -d
 
-      tar xv -C project/.gnupg/ -f project/.gnupg/local.secrets.tar;
+      tar xv -C project/.gnupg/ -f project/.gnupg/local.rings.tar
     fi
 
 matrix:
