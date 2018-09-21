@@ -16,13 +16,14 @@ object Filters extends LazyLogging {
    * [[org.apache.spark.sql.sources.Filter]]-s. Then these set of predicates will be pushed to
    * Exasol for evaluation.
    *
+   * @param schema A user provided or inferred schema of the query
    * @param filters A sequence of Spark source filters
    * @return A created Exasol where clause
    */
   @SuppressWarnings(Array("org.wartremover.warts.Option2Iterable"))
   def createWhereClause(schema: StructType, filters: Seq[Filter]): String = {
     val dataTypes = schema.map(field => field.name -> field.dataType).toMap
-    filters.flatMap(f => filterExpr(f, dataTypes)).mkString(" AND ")
+    filters.flatMap(filterExpr(_, dataTypes)).mkString(" AND ")
   }
 
   /**
