@@ -4,7 +4,7 @@ addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.3")
 
 // Adds a `wartremover` a flexible Scala code linting tool
 // http://github.com/puffnfresh/wartremover
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.5")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.7")
 
 // Adds Contrib Warts
 // http://github.com/wartremover/wartremover-contrib/
@@ -52,7 +52,7 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.9")
 
 // Adds a `gnu-pgp` plugin
 // https://github.com/sbt/sbt-pgp
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.1")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
 
 // Setup this and project/project/plugins.sbt for formatting project/*.scala files with scalafmt
 inThisBuild(
