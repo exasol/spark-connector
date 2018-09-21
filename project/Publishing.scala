@@ -60,6 +60,8 @@ object Publishing {
         }
       }).transform(node).head
     },
+    // Do not include scala-library as dependency since it provided with Spark runtime
+    autoScalaLibrary := false,
     // Gnupg related settings
     // Global scope somehow needed here; otherwise publishLocalSigned looks for these credentials
     // in default path of ~/.sbt/gpg/
