@@ -38,6 +38,22 @@ class ReservedKeywordsSuite extends FunSuite with BaseDockerSuite with DataFrame
     assert(df2.collect().map(x => x(0)).toSet === expected)
   }
 
+  // TODO: make reserved keywords work with generated where clauses
+  ignore("queries a table with reserved keyword using where clause") {
+    createTable()
+
+    val df = spark.read
+      .format("com.exasol.spark")
+      .option("host", container.host)
+      .option("port", s"${container.port}")
+      .option("query", s"SELECT * FROM $SCHEMA.$TABLE")
+      .load()
+      .select(s""""CONDITION"""")
+      .where(s""""CONDITION" LIKE '%Check%'""")
+
+    assert(df.collect().map(x => x(0)).toSet === Set("Checked"))
+  }
+
   def createTable(): Unit = {
     runExaQuery(s"DROP SCHEMA IF EXISTS $SCHEMA CASCADE")
     runExaQuery(s"CREATE SCHEMA $SCHEMA")
