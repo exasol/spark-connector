@@ -22,12 +22,12 @@ object IntegrationTestSettings {
   lazy val settings: Seq[Setting[_]] = {
     val itSettings =
       ScalastylePlugin.rawScalastyleSettings ++
-      ScalafmtCorePlugin.autoImport.scalafmtSettings ++
-      Seq(
-        fork := true,
-        parallelExecution := false,
-        scalaSource := baseDirectory.value / "src/it/scala"
-      )
+        ScalafmtCorePlugin.autoImport.scalafmtSettings ++
+        Seq(
+          fork := true,
+          parallelExecution := false,
+          scalaSource := baseDirectory.value / "src/it/scala"
+        )
 
     Seq.concat(Defaults.itSettings, inConfig(IntegrationTest)(itSettings))
   }

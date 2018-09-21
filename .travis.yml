@@ -1,6 +1,5 @@
 language: scala
 
-# Because exasol/docker-db requires privileged mode
 sudo: required
 dist: trusty
 services: docker
@@ -10,9 +9,47 @@ addons:
     packages:
       - shellcheck
 
+env:
+  matrix:
+    - RELEASE=false
+
+  global:
+    # ENCRYPTION_KEY
+    - secure: |-
+        U2Wq/BE2sKZBuQOacZGjS9iF7EKDC0AQkbgm+jBffdClJMF0H1KdDywpAafcNPQWS04R7oPLUu/HizqCpwciUCrom
+        2LWU8qngatyqDV8olH8NG9Y3z+ZlyvNwojG8cE9W0naAFGG+WO1daNhUHIzoKzijNrPAo4coWimnXUOSy/ApqC/qE
+        D1UfBJf72hydR0KWXNcUad0sugX0r53ynI+YYEFLe8HQLRA+1+2Y+Lrq+50t/J4P5ROE4SCltwXs6GhIRK74GGg4o
+        Lph/z3WV4ZzP6dgAjCGoh6bkKNXS6pAbZLI4O3CTGUpoRSgxPjaksuPE23B082Z25c5AWUknqSYdpURKqoIhDnXI4
+        aU04YsaAAr/bnOJPhEqdSpTyBM8oX+Pj1gcUBtKUlSlkFiev3NveAA+pRqyqcZl2Y/0iB4FJUqjYnjS62VW+cLKjg
+        /Xyu6fTpYmQ4pdzA1iHHfAPNdEcXDleNOabAR3z2veWMp+RdUAP4ZJE1puh07FBfx+aBXUkvZ8VgHuNNFtv9JsJ1J
+        YKBplqXAIto9PwqWOsHmWih5bD5Js+JUa4w77rU0tDIc6FRzR0EfmePJzlko+oQrbrsw3qr1uah//MIbSSRkK6EQ8
+        hMBFgmUjIKqPVKKHxkX+hXzZu8VT4FxBvWA4HMydfPNlg2KXg9on9XtO3P1g=
+
+    # PGP_PASSPHRASE
+    - secure: |-
+        SCeA8EtpdixpGCW7j6iiQq9iNxQdyV8eq6M0/BZtAY9DfH5Eojn2MVyihdHvRdXP/u1gp2AsvRxBlZWUIBAgaYKN3
+        U2d6Sg2acQ0lmT+z06CcN9K5kKROpxbwGg/Dn4caPORMHgCTbThsmBUDmq5WVGrbVxz82M8i//Cu21chdgJ7lsfOy
+        R1Owp/JZjwpNZlykSZY/lhE6mttwgEYvJD2x57JXhAiVuSj7EpZVMjQnJK8Ja65XnS0qURbNQQx/zo2V7BXFqWmRn
+        S42VbmObkcM2jh8jFrRqpJnyupu2/1ZDSSXWDA9sg2DCWwwfyI71kZHwHN/EaLdjLG9Y9it84p6fwSPuAkLoNesNP
+        StVA7jUfS6DbNPRJphdiRGqmUderRrT5oIvo1DJZMP0VZ68U4GljocDDEPWImr2LfFh9VoxGdSBjHmjKgnnq9oK53
+        eN/jwNFyVMyqV5fT2VmK3gKWxmGfCGSbm0NefuGY9X1UHXrS32aYa6rxhWiYKpVGPZRbCyoKUEUheecSue0B2PU0h
+        tPBbSp1+WA6hYUM6OtP01yAk1vaj/KgZnF7BWsXFlcidh7RlJ3cQZDfUB2Cxv0wmihibgPFg9YQF1/7MvCKEbU0O1
+        Q1Ws/6IA3dwrhb0gcfTREdIjy1AZaejRnCTYNXzpQxJYFpVoC1cfoz5rXCOg=
+
 before_install:
   - docker pull exasol/docker-db:latest
   - docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" = "false" ]
+    then
+      openssl aes-256-cbc \
+      -k "$ENCRYPTION_KEY" \
+      -in project/.gnupg/rings.tar.enc \
+      -out project/.gnupg/local.rings.tar \
+      -d
+
+      tar xv -C project/.gnupg/ -f project/.gnupg/local.rings.tar
+    fi
 
 matrix:
   include:
@@ -30,22 +67,23 @@ matrix:
 
     - jdk: oraclejdk8
       scala: 2.11.12
-      env: SPARK_VERSION="2.3.1"
+      env: SPARK_VERSION="2.3.1" RELEASE=true
 
 script:
   - travis_wait 30 ./scripts/ci.sh
 
 after_success:
+  - if [ "$RELEASE" = "true" ]; then ./scripts/publish.sh; fi
   - bash <(curl -s https://codecov.io/bash)
 
 cache:
   directories:
-    - $HOME/.sbt/1.0
-    - $HOME/.sbt/boot/scala*
-    - $HOME/.sbt/cache
-    - $HOME/.sbt/launchers
-    - $HOME/.ivy2
-    - $HOME/.coursier
+    - "$HOME/.sbt/1.0"
+    - "$HOME/.sbt/boot/scala*"
+    - "$HOME/.sbt/cache"
+    - "$HOME/.sbt/launchers"
+    - "$HOME/.ivy2"
+    - "$HOME/.coursier"
 
 before_cache:
   - du -h -d 1 $HOME/.ivy2/

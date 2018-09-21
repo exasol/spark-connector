@@ -15,16 +15,32 @@ import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 /** A list of (boilerplate) settings for build process */
 object Settings {
 
+  def projectSettings(scalaVersion: SettingKey[String]): Seq[Setting[_]] =
+    buildSettings(scalaVersion) ++
+      miscSettings ++
+      assemblySettings ++
+      scalaStyleSettings ++
+      Publishing.publishSettings()
+
+  def buildSettings(scalaVersion: SettingKey[String]): Seq[Setting[_]] = Seq(
+    // Compiler settings
+    scalacOptions ++= Compilation.compilerFlagsFn(scalaVersion.value),
+    scalacOptions in (Compile, console) := Compilation.consoleFlagsFn(scalaVersion.value),
+    javacOptions ++= Compilation.JavacCompilerFlags,
+    compileOrder in Compile := CompileOrder.JavaThenScala,
+    // Dependency settings
+    resolvers ++= Dependencies.Resolvers,
+    libraryDependencies ++= Dependencies.AllDependencies
+  )
+
   def miscSettings(): Seq[Setting[_]] = Seq(
     // Wartremover settings
     wartremoverErrors in (Compile, compile) := Compilation.WartremoverFlags,
     wartremoverErrors in (Test, compile) := Compilation.WartremoverTestFlags,
     // General settings
     cancelable in Global := true,
-
     // ScalaFmt settings
     scalafmtOnCompile := true,
-
     // Scoverage settings
     coverageMinimum := 50,
     coverageOutputHTML := true,
@@ -75,8 +91,5 @@ object Settings {
       (test in IntegrationTest) := ((test in IntegrationTest) dependsOn itTestScalastyle).value
     )
   }
-
-  lazy val projectSettings: Seq[Setting[_]] =
-    miscSettings ++ assemblySettings ++ scalaStyleSettings
 
 }
