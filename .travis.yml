@@ -16,25 +16,25 @@ env:
   global:
     # ENCRYPTION_KEY
     - secure: |-
-        U2Wq/BE2sKZBuQOacZGjS9iF7EKDC0AQkbgm+jBffdClJMF0H1KdDywpAafcNPQWS04R7oPLUu/HizqCpwciUCrom
-        2LWU8qngatyqDV8olH8NG9Y3z+ZlyvNwojG8cE9W0naAFGG+WO1daNhUHIzoKzijNrPAo4coWimnXUOSy/ApqC/qE
-        D1UfBJf72hydR0KWXNcUad0sugX0r53ynI+YYEFLe8HQLRA+1+2Y+Lrq+50t/J4P5ROE4SCltwXs6GhIRK74GGg4o
-        Lph/z3WV4ZzP6dgAjCGoh6bkKNXS6pAbZLI4O3CTGUpoRSgxPjaksuPE23B082Z25c5AWUknqSYdpURKqoIhDnXI4
-        aU04YsaAAr/bnOJPhEqdSpTyBM8oX+Pj1gcUBtKUlSlkFiev3NveAA+pRqyqcZl2Y/0iB4FJUqjYnjS62VW+cLKjg
-        /Xyu6fTpYmQ4pdzA1iHHfAPNdEcXDleNOabAR3z2veWMp+RdUAP4ZJE1puh07FBfx+aBXUkvZ8VgHuNNFtv9JsJ1J
-        YKBplqXAIto9PwqWOsHmWih5bD5Js+JUa4w77rU0tDIc6FRzR0EfmePJzlko+oQrbrsw3qr1uah//MIbSSRkK6EQ8
-        hMBFgmUjIKqPVKKHxkX+hXzZu8VT4FxBvWA4HMydfPNlg2KXg9on9XtO3P1g=
+        PFjAMiewDaHDYt9gwtjv+EKCt864T3UwIutZVSmtZABP/DRcRSsDHEs0sY9WMTE0EvFN4XjwkzpkYv5IM5C3/f83O
+        CP4BsHsQ+3s8VmakQDhB3BSFnuz0g/Ot3cA3e54Xu8BhlTeeX5m0Y4tHYrFojDMUVGrLQ24WViqaCxGpr0ojn0ytr
+        gBMD11cdtcQwe3q2tjdkYnEKiLjdtaLIPdO9bv9n/HH2wIC1VliMngyTqL0UI+AjdmIa0Yrmb7HPtEsDJR5gDLlOd
+        agq8aQ2vXUigBGH9oIoDCE/s0aRwUiMRWlIj+vkTJBgbrnzC2UcO4qkx4qodNuiRagqVnscwe13wVPmQEkXqJ22Tk
+        j338jEiV7sVGIb4RdmMhlrvDQ1rHjRo270sTVCqww6YieRvkB/UhRkrXs1x8r6ZaSHhLLf4A7jR/EvS5dNLQ0LLxC
+        X/g2Mi/zRCRMTdwzPipN437D8LOwj7q+WEkVzsd9QasZncYpBaFgCfoNWiyuKeQF1c2hFYoPNRMFGFUER+sgJ6NYI
+        XmmtM/vJeok6N1Re+c5+iGACT30CL/yF8BmgBF7Xfu1jJH9LzQH6Dd0wH/G7XN7Kb0IzsvTw1nckgvFMo/4hSbT7P
+        nglwKzxWg3kPhRPaJshiZyRbtP0PWFDzPoRP3HrleYTSuS33OuesSJC5vVqQ=
 
     # PGP_PASSPHRASE
     - secure: |-
-        SCeA8EtpdixpGCW7j6iiQq9iNxQdyV8eq6M0/BZtAY9DfH5Eojn2MVyihdHvRdXP/u1gp2AsvRxBlZWUIBAgaYKN3
-        U2d6Sg2acQ0lmT+z06CcN9K5kKROpxbwGg/Dn4caPORMHgCTbThsmBUDmq5WVGrbVxz82M8i//Cu21chdgJ7lsfOy
-        R1Owp/JZjwpNZlykSZY/lhE6mttwgEYvJD2x57JXhAiVuSj7EpZVMjQnJK8Ja65XnS0qURbNQQx/zo2V7BXFqWmRn
-        S42VbmObkcM2jh8jFrRqpJnyupu2/1ZDSSXWDA9sg2DCWwwfyI71kZHwHN/EaLdjLG9Y9it84p6fwSPuAkLoNesNP
-        StVA7jUfS6DbNPRJphdiRGqmUderRrT5oIvo1DJZMP0VZ68U4GljocDDEPWImr2LfFh9VoxGdSBjHmjKgnnq9oK53
-        eN/jwNFyVMyqV5fT2VmK3gKWxmGfCGSbm0NefuGY9X1UHXrS32aYa6rxhWiYKpVGPZRbCyoKUEUheecSue0B2PU0h
-        tPBbSp1+WA6hYUM6OtP01yAk1vaj/KgZnF7BWsXFlcidh7RlJ3cQZDfUB2Cxv0wmihibgPFg9YQF1/7MvCKEbU0O1
-        Q1Ws/6IA3dwrhb0gcfTREdIjy1AZaejRnCTYNXzpQxJYFpVoC1cfoz5rXCOg=
+        AzxFI14cBnjxDFqm3Kq/SoEZLsTm4u5x7JWrch09WUBDwIFOLTp6CHdAcMzMYZ2LOqjLXVxqKs7gK0ZcK9oFsx0Wz
+        APxKvzKkjBZ/Fe6eLMCjtGGSgnHtOg1F2gTEChuXZf/pIsgFAx8N9pb3sJWfWQVzTBxr5CdW3uNcekiatq1zhLRYc
+        VGMOsCk+HftklUoO5Qjknsju3Kug7WZTpW86ULWBllQ3ZALMLyTAVuP65IFcN11DghGF69SojL7XuWNWjU6VL30N3
+        IOKKI2nwIm++EMkK0zIzX7qxJGoj1WYr2hiy16RrBLFvG1Gd6hKlvGZoT5CWB3QdXN7QB6OsHmq/XcXUF9LA/a5vN
+        fR5uIpqsJmcjc14TF+U8/J3blJDc5PkD8v0TAJRaz7RcE6tKBYl2V0+aIkMBUlcCSs2ukjjO1jHcq7iJcY5edJL0g
+        ijwpmAHrxb/GJk3ZtvWRTCDvyQPw+8RyxGVWjo8MNrrxjYr34AXjDiCLJh2dRiMZkmPWCP8FIG65wBLa2JmB5l9eT
+        TE0+3vsd+7GULh5II/fTIc+jc0KrP28gOBmSEdK/zHcbsDFmYcicP16zTh1bXZ0+6CMs6NAS//jc/0N5YwkGYMz5C
+        gXwtqIW9ynF9CYK8ftX4GUbmPVAY9BhZrxsU5qPXXqqZKSmOIVynZujcVydw=
 
 before_install:
   - docker pull exasol/docker-db:latest
