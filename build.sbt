@@ -16,6 +16,7 @@ lazy val buildSettings = Seq(
 lazy val root =
   project
     .in(file("."))
+    .settings(moduleName := "spark-connector")
     .settings(orgSettings)
     .settings(buildSettings)
     .settings(Settings.projectSettings(scalaVersion))
