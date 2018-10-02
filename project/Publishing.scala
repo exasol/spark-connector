@@ -3,16 +3,10 @@ package com.exasol.spark.sbt
 import sbt._
 import sbt.Keys._
 import com.typesafe.sbt.pgp.PgpKeys._
-import sbtrelease.ReleasePlugin.autoImport._
-import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import scala.xml.transform.RewriteRule
 import scala.xml.transform.RuleTransformer
 
 object Publishing {
-
-  // Useful tasks to show what versions would be used if a release was performed
-  private val showReleaseVersion = taskKey[String]("Show current release version")
-  private val showNextVersion = taskKey[String]("Show next release version")
 
   def publishSettings(): Seq[Setting[_]] = Seq(
     homepage := Some(url("https://github.com/EXASOL/spark-exasol-connector")),
@@ -72,38 +66,7 @@ object Publishing {
     credentials ++= (for {
       username <- sys.env.get("ARTIFACTORY_USERNAME")
       password <- sys.env.get("ARTIFACTORY_PASSWORD")
-    } yield Credentials("Artifactory Realm", "maven.exasol.com", username, password)).toSeq,
-    releaseCrossBuild := false,
-    releaseCommitMessage := {
-      if (isSnapshot.value) {
-        s"Setting version to ${version.value} for next development iteration\n\n[skip ci]"
-      } else {
-        s"Setting version to ${version.value} for release\n\n[skip ci]"
-      }
-    },
-    releaseTagName := s"v${version.value}",
-    releaseTagComment := s"Releasing ${version.value} of module: ${name.value}",
-    releaseVersionBump := sbtrelease.Version.Bump.Minor,
-    releasePublishArtifactsAction := publishSigned.value,
-    releaseProcess := Seq[ReleaseStep](
-      checkSnapshotDependencies,
-      releaseStepCommand(sbtrelease.ExtraReleaseCommands.initialVcsChecksCommand),
-      inquireVersions,
-      setReleaseVersion,
-      runClean,
-      runTest,
-      commitReleaseVersion,
-      tagRelease,
-      publishArtifacts,
-      pushChanges,
-      releaseStepCommand("git checkout develop"),
-      releaseStepCommand("git merge master"),
-      setNextVersion,
-      commitNextVersion,
-      pushChanges
-    ),
-    showReleaseVersion := { val rV = releaseVersion.value.apply(version.value); println(rV); rV },
-    showNextVersion := { val nV = releaseNextVersion.value.apply(version.value); println(nV); nV }
+    } yield Credentials("Artifactory Realm", "maven.exasol.com", username, password)).toSeq
   )
 
   def noPublishSettings: Seq[Setting[_]] = Seq(
