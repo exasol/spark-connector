@@ -20,7 +20,7 @@ lazy val root =
     .settings(orgSettings)
     .settings(buildSettings)
     .settings(Settings.projectSettings(scalaVersion))
-    .enablePlugins(IntegrationTestPlugin)
+    .enablePlugins(IntegrationTestPlugin, GitVersioning)
 
 addCommandAlias("ci-release", ";reload;clean;release with-defaults")
 addCommandAlias("pluginUpdates", ";reload plugins;dependencyUpdates;reload return")
