@@ -37,6 +37,7 @@ env:
         gXwtqIW9ynF9CYK8ftX4GUbmPVAY9BhZrxsU5qPXXqqZKSmOIVynZujcVydw=
 
 before_install:
+  - git fetch --tags
   - docker pull exasol/docker-db:latest
   - docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
 
@@ -56,14 +57,14 @@ matrix:
 
     - jdk: oraclejdk8
       scala: 2.11.12
-      env: SPARK_VERSION="2.3.1" RELEASE=true
+      env: SPARK_VERSION="2.3.1" RELEASE=false
 
 script:
   - travis_wait 30 ./scripts/ci.sh
 
 after_success:
-  - if [ "$RELEASE" = "true" ]; then ./scripts/publish.sh; fi
   - bash <(curl -s https://codecov.io/bash)
+  - ./scripts/publish.sh
 
 cache:
   directories:
