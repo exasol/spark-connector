@@ -76,9 +76,9 @@ object Publishing {
     releaseCrossBuild := false,
     releaseCommitMessage := {
       if (isSnapshot.value) {
-        s"Setting version to ${version.value} for next development iteration"
+        s"Setting version to ${version.value} for next development iteration\n\n[skip ci]"
       } else {
-        s"Setting version to ${version.value} for release"
+        s"Setting version to ${version.value} for release\n\n[skip ci]"
       }
     },
     releaseTagName := s"v${version.value}",
@@ -95,6 +95,9 @@ object Publishing {
       commitReleaseVersion,
       tagRelease,
       publishArtifacts,
+      pushChanges,
+      releaseStepCommand("git checkout develop"),
+      releaseStepCommand("git merge master"),
       setNextVersion,
       commitNextVersion,
       pushChanges

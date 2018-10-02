@@ -54,6 +54,10 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.9")
 // https://github.com/sbt/sbt-pgp
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
 
+// Adds a `git` plugin
+// https://github.com/sbt/sbt-git
+addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "1.0.0")
+
 // Setup this and project/project/plugins.sbt for formatting project/*.scala files with scalafmt
 inThisBuild(
   Seq(
