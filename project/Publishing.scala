@@ -2,6 +2,7 @@ package com.exasol.spark.sbt
 
 import sbt._
 import sbt.Keys._
+import com.typesafe.sbt.SbtGit.git
 import com.typesafe.sbt.pgp.PgpKeys._
 import scala.xml.transform.RewriteRule
 import scala.xml.transform.RuleTransformer
@@ -72,7 +73,25 @@ object Publishing {
         "oss.sonatype.org",
         username,
         password
-      )).toSeq
+      )).toSeq,
+    // Git versioning settings
+    git.useGitDescribe := true,
+    git.baseVersion := "0.0.0",
+    git.gitTagToVersionNumber := {
+      case VersionRegex(v, "")         => Some(v)
+      case VersionRegex(v, "SNAPSHOT") => Some(s"$v-SNAPSHOT")
+      case VersionRegex(v, s)          => Some(s"$v-$s-SNAPSHOT")
+      case _                           => None
+    },
+    git.formattedShaVersion := {
+      val suffix = git.makeUncommittedSignifierSuffix(
+        git.gitUncommittedChanges.value,
+        git.uncommittedSignifier.value
+      )
+      git.gitHeadCommit.value map { _.substring(0, 7) } map { sha =>
+        git.baseVersion.value + "-" + sha + suffix
+      }
+    }
   )
 
   def noPublishSettings: Seq[Setting[_]] = Seq(
