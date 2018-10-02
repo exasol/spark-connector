@@ -8,6 +8,8 @@ import scala.xml.transform.RuleTransformer
 
 object Publishing {
 
+  val VersionRegex = "v([0-9]+.[0-9]+.[0-9]+)-?(.*)?".r
+
   def publishSettings(): Seq[Setting[_]] = Seq(
     homepage := Some(url("https://github.com/EXASOL/spark-exasol-connector")),
     licenses := Seq(
@@ -17,13 +19,11 @@ object Publishing {
     publishArtifact in Test := false,
     pomIncludeRepository := Function.const(false),
     publishTo := {
-      val realm = "https://maven.exasol.com/artifactory/"
-      if (isSnapshot.value) {
-        val timestamp = new java.util.Date().getTime
-        Some("Artifactory Realm" at s"$realm/exasol-snapshots;build.timestamp=$timestamp")
-      } else {
-        Some("Artifactory Realm" at s"$realm/exasol-releases")
-      }
+      val nexus = "https://oss.sonatype.org/"
+      if (isSnapshot.value)
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases" at nexus + "service/local/staging/deploy/maven2")
     },
     scmInfo := Some(
       ScmInfo(
@@ -64,9 +64,15 @@ object Publishing {
     pgpSecretRing in Global := baseDirectory.value / "project" / ".gnupg" / "local.secring.asc",
     pgpPassphrase in Global := sys.env.get("PGP_PASSPHRASE").map(_.toArray),
     credentials ++= (for {
-      username <- sys.env.get("ARTIFACTORY_USERNAME")
-      password <- sys.env.get("ARTIFACTORY_PASSWORD")
-    } yield Credentials("Artifactory Realm", "maven.exasol.com", username, password)).toSeq
+      username <- sys.env.get("SONATYPE_USERNAME")
+      password <- sys.env.get("SONATYPE_PASSWORD")
+    } yield
+      Credentials(
+        "Sonatype Nexus Repository Manager",
+        "oss.sonatype.org",
+        username,
+        password
+      )).toSeq
   )
 
   def noPublishSettings: Seq[Setting[_]] = Seq(
