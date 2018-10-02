@@ -46,9 +46,9 @@ addSbtPlugin("org.scalastyle" % "scalastyle-sbt-plugin" % "1.0.0")
 // http://github.com/rtimush/sbt-updates
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.1")
 
-// Adds a `release` plugin
-// https://github.com/sbt/sbt-release
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.9")
+// Adds a `sonatype` release tasks
+// https://github.com/xerial/sbt-sonatype
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
 
 // Adds a `gnu-pgp` plugin
 // https://github.com/sbt/sbt-pgp

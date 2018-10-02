@@ -37,19 +37,9 @@ env:
         gXwtqIW9ynF9CYK8ftX4GUbmPVAY9BhZrxsU5qPXXqqZKSmOIVynZujcVydw=
 
 before_install:
+  - git fetch --tags
   - docker pull exasol/docker-db:latest
   - docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
-  - |
-    if [ "$TRAVIS_PULL_REQUEST" = "false" ]
-    then
-      openssl aes-256-cbc \
-      -k "$ENCRYPTION_KEY" \
-      -in project/.gnupg/rings.tar.enc \
-      -out project/.gnupg/local.rings.tar \
-      -d
-
-      tar xv -C project/.gnupg/ -f project/.gnupg/local.rings.tar
-    fi
 
 matrix:
   include:
@@ -67,14 +57,14 @@ matrix:
 
     - jdk: oraclejdk8
       scala: 2.11.12
-      env: SPARK_VERSION="2.3.1" RELEASE=true
+      env: SPARK_VERSION="2.3.1" RELEASE=false
 
 script:
   - travis_wait 30 ./scripts/ci.sh
 
 after_success:
-  - if [ "$RELEASE" = "true" ]; then ./scripts/publish.sh; fi
   - bash <(curl -s https://codecov.io/bash)
+  - ./scripts/publish.sh
 
 cache:
   directories:
