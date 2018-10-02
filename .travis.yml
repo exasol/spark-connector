@@ -39,17 +39,6 @@ env:
 before_install:
   - docker pull exasol/docker-db:latest
   - docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
-  - |
-    if [ "$TRAVIS_PULL_REQUEST" = "false" ]
-    then
-      openssl aes-256-cbc \
-      -k "$ENCRYPTION_KEY" \
-      -in project/.gnupg/rings.tar.enc \
-      -out project/.gnupg/local.rings.tar \
-      -d
-
-      tar xv -C project/.gnupg/ -f project/.gnupg/local.rings.tar
-    fi
 
 matrix:
   include:
