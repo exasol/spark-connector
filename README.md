@@ -1,7 +1,8 @@
 # [WIP] Spark Exasol Connector
 
-[![Build Status](https://travis-ci.org/EXASOL/spark-exasol-connector.svg?branch=master)](https://travis-ci.org/EXASOL/spark-exasol-connector)
-[![codecov](https://codecov.io/gh/EXASOL/spark-exasol-connector/branch/master/graph/badge.svg)](https://codecov.io/gh/EXASOL/spark-exasol-connector)
+[![Build Status][travis-badge]][travis-link]
+[![Codecov][codecov-badge]][codecov-link]
+[![Maven Central][maven-badge]][maven-link]
 
 ###### Please note that this is an open source project which is *not officially supported* by Exasol. We will try to help you as much as possible, but can't guarantee anything since this is not an official Exasol product.
 
@@ -43,8 +44,23 @@ For more examples you can check [docs/examples](docs/examples.md).
 
 ## Usage
 
-*TODO*: Add short description on how to use jar files via maven and sbt once the
-publishing setup is decided.
+You can include the connector as a dependency in your projects.
+
+Using SBT:
+
+```scala
+libraryDependencies += "com.exasol" %% "spark-connector" % "<latest-version>"
+```
+
+Using Maven:
+
+```xml
+<dependency>
+    <groupId>com.exasol</groupId>
+    <artifactId>spark-connector_2.11</artifactId>
+    <version>latest-version</version>
+</dependency>
+```
 
 ## Building and Testing
 
@@ -111,6 +127,12 @@ connection to Exasol cluster.
 | ``password``  | ``exasol``    | An Exasol password for logging in
 | ``max_nodes`` | ``200``       | The number of data nodes in Exasol cluster
 
+[travis-badge]: https://travis-ci.org/EXASOL/spark-exasol-connector.svg?branch=master
+[travis-link]: https://travis-ci.org/EXASOL/spark-exasol-connector
+[codecov-badge]: https://codecov.io/gh/EXASOL/spark-exasol-connector/branch/master/graph/badge.svg
+[codecov-link]: https://codecov.io/gh/EXASOL/spark-exasol-connector
+[maven-badge]: https://img.shields.io/maven-central/v/com.exasol/spark-connector_2.11.svg
+[maven-link]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.11
 [exasol]: https://www.exasol.com/en/
 [spark]: https://spark.apache.org/
 [docker]: https://www.docker.com/
