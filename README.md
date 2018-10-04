@@ -5,6 +5,8 @@
 
 ###### Please note that this is an open source project which is *not officially supported* by Exasol. We will try to help you as much as possible, but can't guarantee anything since this is not an official Exasol product.
 
+## Overview
+
 This is a connector library that supports an integration between
 [Exasol][exasol] and [Apache Spark][spark]. Using this connector, users can
 read/write data from/to Exasol using Spark.
@@ -97,8 +99,17 @@ spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
 
 ## Configuration
 
-*TODO*: Add short description on how to use or provide exasol parameters and
-what they mean.
+The following configuration parameters can be provided mainly to facilitate a
+connection to Exasol cluster.
+
+| Configuration | Default       | Description
+| :---          | :---          | :---
+| ``query``     | *<none>*      | A query string to send to Exasol
+| ``host``      | ``localhost`` | A host ip address to the **first** Exasol node (e.g. 10.0.0.11)
+| ``port``      | ``8888``      | A port number to connect to Exasol nodes (e.g.  8563)
+| ``username``  | ``sys``       | An Exasol username for logging in
+| ``password``  | ``exasol``    | An Exasol password for logging in
+| ``max_nodes`` | ``200``       | The number of data nodes in Exasol cluster
 
 [exasol]: https://www.exasol.com/en/
 [spark]: https://spark.apache.org/
