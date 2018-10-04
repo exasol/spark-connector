@@ -38,7 +38,6 @@ class ReservedKeywordsSuite extends FunSuite with BaseDockerSuite with DataFrame
     assert(df2.collect().map(x => x(0)).toSet === expected)
   }
 
-  // TODO: make reserved keywords work with generated where clauses
   ignore("queries a table with reserved keyword using where clause") {
     createTable()
 

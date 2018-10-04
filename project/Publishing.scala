@@ -76,7 +76,8 @@ object Publishing {
       )).toSeq,
     // Git versioning settings
     git.useGitDescribe := true,
-    git.baseVersion := "0.0.0",
+    // git.baseVersion setting represents previously released version
+    git.baseVersion := "0.1.0",
     git.gitTagToVersionNumber := {
       case VersionRegex(v, "")         => Some(v)
       case VersionRegex(v, "SNAPSHOT") => Some(s"$v-SNAPSHOT")
