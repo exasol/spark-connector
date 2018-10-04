@@ -81,13 +81,6 @@ class FiltersSuite extends FunSuite with Matchers {
     assert(createWhereClause(testSchema, filters) === expected)
   }
 
-  /**
-   * TODO:
-   *  - check string with unicode characters
-   *  - check string with quotes (reserved keywods), should keep quotes in where clause
-   *  - check date datatype
-   *  - check datetime datatype
-   */
   test("creates where clause from EqualTo with different data types") {
     val filters = Seq(
       EqualTo("bool_col", false),
