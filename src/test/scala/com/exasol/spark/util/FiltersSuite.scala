@@ -21,6 +21,8 @@ class FiltersSuite extends FunSuite with Matchers {
     .add("double_col", DoubleType)
     .add("null_col", StringType)
     .add("in_col", IntegerType)
+    .add("date_col", DateType)
+    .add("datetime_col", TimestampType)
 
   test("creates where clause from an empty list of filters") {
     assert(createWhereClause(StructType(Array.empty[StructField]), Seq.empty[Filter]) === "")
@@ -89,9 +91,9 @@ class FiltersSuite extends FunSuite with Matchers {
       // EqualTo("str_col", "quoted str"),
       EqualTo("int_col", 42),
       EqualTo("float_col", 13.0f),
-      EqualTo("double_col", 100.0)
-      // EqualTo("date_col", ...),
-      // EqualTo("datetime_col", ...),
+      EqualTo("double_col", 100.0),
+      EqualTo("date_col", "2018-01-01"),
+      EqualTo("datetime_col", "2018-01-01 00:00:59.123")
     )
 
     val expected =
@@ -101,6 +103,8 @@ class FiltersSuite extends FunSuite with Matchers {
         |AND int_col = 42
         |AND float_col = 13.0
         |AND double_col = 100.0
+        |AND date_col = date '2018-01-01'
+        |AND datetime_col = date '2018-01-01 00:00:59.123'
       """.stripMargin.lines.mkString(" ").trim
 
     assert(createWhereClause(testSchema, filters) === expected)
