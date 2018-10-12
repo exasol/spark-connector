@@ -1,8 +1,6 @@
 package com.exasol.spark
 
-import org.apache.spark.sql.types.LongType
-import org.apache.spark.sql.types.StringType
-import org.apache.spark.sql.types.TimestampType
+import org.apache.spark.sql.types.{DateType, LongType, StringType, TimestampType}
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.FunSuite
@@ -36,8 +34,10 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
     val schema = df2.schema
     assert(schema.exists(f => f.name == "NAME"))
-    assert(schema.map(_.name).toSet === Set("ID", "NAME", "CITY", "UPDATED_AT"))
-    assert(schema.map(_.dataType).toSet === Set(LongType, StringType, StringType, TimestampType))
+    assert(schema.map(_.name).toSet === Set("ID", "NAME", "CITY", "DATE_INFO", "UPDATED_AT"))
+
+    val typeSet = schema.map(_.dataType).toSet
+    assert(typeSet === Set(LongType, StringType, StringType, DateType, TimestampType))
   }
 
   test("throw exception when query string is not provided") {
