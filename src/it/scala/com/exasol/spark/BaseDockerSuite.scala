@@ -37,11 +37,21 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
                    |   ID INTEGER IDENTITY NOT NULL,
                    |   NAME VARCHAR(100) UTF8,
                    |   CITY VARCHAR(2000) UTF8,
+                   |   DATE_INFO DATE,
                    |   UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                    |)""".stripMargin)
-    runExaQuery(s"INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city) VALUES ('Germany', 'Berlin')")
-    runExaQuery(s"INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city) VALUES ('France', 'Paris')")
-    runExaQuery(s"INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city) VALUES ('Portugal', 'Lisbon')")
+    runExaQuery(s"""
+                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info)
+                   | VALUES ('Germany', 'Berlin', '2017-12-31')
+                   | """.stripMargin)
+    runExaQuery(s"""
+                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info)
+                   | VALUES ('France', 'Paris', '2018-01-01')
+                   | """.stripMargin)
+    runExaQuery(s"""
+                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info)
+                   | VALUES ('Portugal', 'Lisbon', '2018-10-01')
+                   | """.stripMargin)
     runExaQuery("commit")
   }
 
