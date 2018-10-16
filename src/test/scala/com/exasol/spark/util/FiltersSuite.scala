@@ -104,7 +104,7 @@ class FiltersSuite extends FunSuite with Matchers {
         |AND float_col = 13.0
         |AND double_col = 100.0
         |AND date_col = date '2018-01-01'
-        |AND datetime_col = date '2018-01-01 00:00:59.123'
+        |AND datetime_col = timestamp '2018-01-01 00:00:59.123'
       """.stripMargin.lines.mkString(" ").trim
 
     assert(createWhereClause(testSchema, filters) === expected)
