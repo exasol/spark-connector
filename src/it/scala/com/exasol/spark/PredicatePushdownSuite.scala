@@ -48,7 +48,7 @@ class PredicatePushdownSuite extends FunSuite with BaseDockerSuite with DataFram
     assert(result === Set((1, "Berlin"), (2, "Paris")))
   }
 
-  test("date and timestamp should be read correctly") {
+  test("date and timestamp should be read and filtered correctly") {
     import java.sql.Date
 
     createDummyTable()
@@ -65,8 +65,12 @@ class PredicatePushdownSuite extends FunSuite with BaseDockerSuite with DataFram
     val minTimestamp = Date.valueOf("2017-12-30")
     val resultTimestamp = df.collect().map(_.getTimestamp(1)).map(x => x.after(minTimestamp))
     assert(!resultTimestamp.contains(false))
-  }
 
+    val filteredDf = df
+      .filter(col("date_info") === "2017-12-31")
+      .filter(col("updated_at") > "2017-12-31 00:00:00.000")
+    assert(filteredDf.count() === 1)
+  }
   test("count should be performed successfully") {
     createDummyTable()
     val df = spark.read
