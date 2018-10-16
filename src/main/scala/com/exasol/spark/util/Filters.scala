@@ -54,7 +54,7 @@ object Filters extends LazyLogging {
   def isQuotedValue(dataType: DataType, value: Any): String = dataType match {
     case StringType    => s"'$value'"
     case DateType      => s"date '$value'"
-    case TimestampType => s"date '$value'"
+    case TimestampType => s"timestamp '$value'"
     case _             => s"$value"
   }
 
