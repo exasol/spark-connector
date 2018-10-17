@@ -51,9 +51,11 @@ object Filters extends LazyLogging {
       case _                        => None
     }
 
-  def isStringValue(dataType: DataType, value: Any): String = dataType match {
-    case StringType => s"'$value'"
-    case _          => s"$value"
+  def isQuotedValue(dataType: DataType, value: Any): String = dataType match {
+    case StringType    => s"'$value'"
+    case DateType      => s"date '$value'"
+    case TimestampType => s"timestamp '$value'"
+    case _             => s"$value"
   }
 
   def comparisonExpr(
@@ -63,7 +65,7 @@ object Filters extends LazyLogging {
     types: Map[String, DataType]
   ): Option[String] = types.get(name).flatMap {
     case dtype =>
-      val newValue = isStringValue(dtype, value)
+      val newValue = isQuotedValue(dtype, value)
       Option(s"$name $op $newValue")
   }
 
@@ -75,7 +77,7 @@ object Filters extends LazyLogging {
   ): Option[String] =
     types.get(name).flatMap {
       case dtype =>
-        val newValues = values.map(v => isStringValue(dtype, v))
+        val newValues = values.map(v => isQuotedValue(dtype, v))
         Option(s"($name $op (${newValues.mkString(",")}))")
     }
 

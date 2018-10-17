@@ -1,9 +1,8 @@
 package com.exasol.spark
 
+import java.sql.Timestamp
+
 import org.apache.spark.sql.functions.col
-import org.apache.spark.sql.types.LongType
-import org.apache.spark.sql.types.StringType
-import org.apache.spark.sql.types.TimestampType
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.FunSuite
@@ -51,4 +50,41 @@ class PredicatePushdownSuite extends FunSuite with BaseDockerSuite with DataFram
     assert(result === Set((1, "Berlin"), (2, "Paris")))
   }
 
+  test("date and timestamp should be read and filtered correctly") {
+    import java.sql.Date
+
+    createDummyTable()
+    val df = spark.read
+      .format("exasol")
+      .option("host", container.host)
+      .option("port", s"${container.port}")
+      .option("query", s"SELECT date_info, updated_at FROM $EXA_SCHEMA.$EXA_TABLE")
+      .load()
+    val minTimestamp = Timestamp.valueOf("2017-12-30 00:00:00.0000")
+    val testDate = Date.valueOf("2017-12-31")
+
+    val resultDate = df.collect().map(_.getDate(0))
+    assert(resultDate.contains(testDate))
+
+    val resultTimestamp = df.collect().map(_.getTimestamp(1)).map(x => x.after(minTimestamp))
+    assert(!resultTimestamp.contains(false))
+
+    val filteredByDateDF = df.filter(col("date_info") === testDate)
+    assert(filteredByDateDF.count() === 1)
+
+    val filteredByTimestampDF = df.filter(col("updated_at") < minTimestamp)
+    assert(filteredByTimestampDF.count() === 0)
+  }
+
+  test("count should be performed successfully") {
+    createDummyTable()
+    val df = spark.read
+      .format("exasol")
+      .option("host", container.host)
+      .option("port", s"${container.port}")
+      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
+      .load()
+    val result = df.count()
+    assert(result === 3)
+  }
 }
