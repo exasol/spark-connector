@@ -1,5 +1,7 @@
 package com.exasol.spark
 
+import java.sql.Timestamp
+
 import org.apache.spark.sql.functions.col
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
@@ -58,19 +60,22 @@ class PredicatePushdownSuite extends FunSuite with BaseDockerSuite with DataFram
       .option("port", s"${container.port}")
       .option("query", s"SELECT date_info, updated_at FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
+    val minTimestamp = Timestamp.valueOf("2017-12-30 00:00:00.0000")
+    val testDate = Date.valueOf("2017-12-31")
 
     val resultDate = df.collect().map(_.getDate(0))
-    assert(resultDate.contains(Date.valueOf("2017-12-31")))
+    assert(resultDate.contains(testDate))
 
-    val minTimestamp = Date.valueOf("2017-12-30")
     val resultTimestamp = df.collect().map(_.getTimestamp(1)).map(x => x.after(minTimestamp))
     assert(!resultTimestamp.contains(false))
 
-    val filteredDf = df
-      .filter(col("date_info") === "2017-12-31")
-      .filter(col("updated_at") > "2017-12-31 00:00:00.000")
-    assert(filteredDf.count() === 1)
+    val filteredByDateDF = df.filter(col("date_info") === testDate)
+    assert(filteredByDateDF.count() === 1)
+
+    val filteredByTimestampDF = df.filter(col("updated_at") < minTimestamp)
+    assert(filteredByTimestampDF.count() === 0)
   }
+
   test("count should be performed successfully") {
     createDummyTable()
     val df = spark.read
