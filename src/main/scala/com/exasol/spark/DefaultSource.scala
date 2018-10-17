@@ -1,14 +1,17 @@
 package com.exasol.spark
 
 import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.sources.BaseRelation
-import org.apache.spark.sql.sources.DataSourceRegister
-import org.apache.spark.sql.sources.RelationProvider
+import org.apache.spark.sql.sources.{
+  BaseRelation,
+  DataSourceRegister,
+  RelationProvider,
+  SchemaRelationProvider
+}
+import org.apache.spark.sql.types.StructType
 
-import com.exasol.spark.util.ExasolConfiguration
-import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.{ExasolConfiguration, ExasolConnectionManager}
 
-class DefaultSource extends RelationProvider with DataSourceRegister {
+class DefaultSource extends RelationProvider with DataSourceRegister with SchemaRelationProvider {
 
   override def shortName(): String = "exasol"
 
@@ -17,6 +20,23 @@ class DefaultSource extends RelationProvider with DataSourceRegister {
     parameters: Map[String, String]
   ): BaseRelation = {
 
+    val (queryString, manager) = fromParameters(parameters)
+    new ExasolRelation(sqlContext, queryString, None, manager)
+  }
+
+  override def createRelation(
+    sqlContext: SQLContext,
+    parameters: Map[String, String],
+    schema: StructType
+  ): BaseRelation = {
+
+    val (queryString, manager) = fromParameters(parameters)
+    new ExasolRelation(sqlContext, queryString, Option(schema), manager)
+  }
+
+  private def fromParameters(
+    parameters: Map[String, String]
+  ): (String, ExasolConnectionManager) = {
     val queryString = parameters.get("query") match {
       case Some(sql) => sql
       case None =>
@@ -26,8 +46,6 @@ class DefaultSource extends RelationProvider with DataSourceRegister {
     }
     val config = ExasolConfiguration(parameters)
     val manager = ExasolConnectionManager(config)
-
-    new ExasolRelation(sqlContext, queryString, manager)
+    (queryString, manager)
   }
-
 }

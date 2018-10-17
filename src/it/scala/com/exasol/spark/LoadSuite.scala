@@ -1,6 +1,7 @@
 package com.exasol.spark
 
-import org.apache.spark.sql.types.{DateType, LongType, StringType, TimestampType}
+import org.apache.spark.SparkException
+import org.apache.spark.sql.types._
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.FunSuite
@@ -50,6 +51,55 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
     }
     assert(
       thrown.getMessage === "A sql query string should be specified when loading from Exasol"
+    )
+  }
+
+  test("return only provided columns from .schema") {
+    createDummyTable()
+
+    val expectedSchema = new StructType()
+      .add("NAME", StringType)
+      .add("UPDATED_AT", TimestampType)
+
+    val df = spark.read
+      .format("exasol")
+      .option("host", container.host)
+      .option("port", s"${container.port}")
+      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
+      .schema(expectedSchema)
+      .load()
+
+    assert(df.schema.length === expectedSchema.length)
+    assert(df.schema.map(_.name).toSet === expectedSchema.map(_.name).toSet)
+    assert(df.schema.map(_.dataType).toSet === expectedSchema.map(_.dataType).toSet)
+    assert(df.collect().map(x => x.getString(0)).toSet === Set("Germany", "France", "Portugal"))
+  }
+
+  test("should failed when provided schema in the option is wrong") {
+    createDummyTable()
+
+    val expectedSchema = new StructType()
+      .add("NAME", StringType)
+      .add("UPDATED_AT", TimestampType)
+      .add("DATE_INFORMATION", DateType)
+
+    val df = spark.read
+      .format("exasol")
+      .option("host", container.host)
+      .option("port", s"${container.port}")
+      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
+      .schema(expectedSchema)
+      .load()
+
+    // still available for metadata
+    assert(df.count() === 3)
+
+    val thrown = intercept[SparkException] {
+      assert(df.collect().map(x => x.getDate(2)).length === 3)
+    }
+
+    assert(
+      thrown.getMessage.contains("java.sql.SQLException: object A.DATE_INFORMATION not found")
     )
   }
 
