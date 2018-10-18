@@ -9,6 +9,34 @@ import org.scalatest.FunSuite
 /** Tests for loading data from Exasol query as dataframes using short and long source formats */
 class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
+  test("runs dataframe show action successfully") {
+    createDummyTable()
+
+    val df = spark.read
+      .format("com.exasol.spark")
+      .option("host", container.host)
+      .option("port", s"${container.port}")
+      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
+      .load()
+
+    df.show(10, false)
+  }
+
+  test("runs dataframe take action successfully") {
+    createDummyTable()
+
+    val df = spark.read
+      .format("com.exasol.spark")
+      .option("host", container.host)
+      .option("port", s"${container.port}")
+      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
+      .load()
+
+    val res = df.take(2)
+    res.foreach(println)
+    assert(res.size === 2)
+  }
+
   test("creates dataframe from user query") {
     createDummyTable()
 

@@ -130,15 +130,16 @@ object Types extends LazyLogging {
    *
    * Adapted from Spark JDBCRDD private function `pruneSchema`.
    *
-   * @param schema A Spark SQL schema
    * @param columns A list of required columns
-   * @return A Spark SQL schema with only columns in the given order
+   * @param schema A Spark SQL schema
+   * @return A new Spark SQL schema with only columns in the order of column names
    */
   def selectColumns(columns: Array[String], schema: StructType): StructType = {
-    val columnNames = columns.toSet
-    val newFields = schema.fields.filter(f => columnNames.contains(f.name))
-    logger.debug(s"A new pruned columns obtained ${newFields.mkString(",")}")
-    StructType(newFields)
+    val fieldsNames = schema.fieldNames.toSet
+    val newFields = columns.filter(fieldsNames.contains(_)).map(schema(_))
+    val newSchema = StructType(newFields)
+    logger.debug(s"Using a new pruned schema $newSchema")
+    newSchema
   }
 
 }
