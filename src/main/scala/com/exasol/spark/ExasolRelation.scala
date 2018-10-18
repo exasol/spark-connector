@@ -17,8 +17,12 @@ import com.exasol.spark.util.Types
 
 import com.typesafe.scalalogging.LazyLogging
 
-class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolConnectionManager)
-    extends BaseRelation
+class ExasolRelation(
+  context: SQLContext,
+  queryString: String,
+  configSchema: Option[StructType],
+  manager: ExasolConnectionManager
+) extends BaseRelation
     with PrunedFilteredScan
     with PrunedScan
     with TableScan
@@ -26,7 +30,7 @@ class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolCo
 
   override def sqlContext: SQLContext = context
 
-  private[this] lazy val querySchema: StructType = {
+  private[this] lazy val inferSchema: StructType = {
     val queryStringLimit = s"SELECT * FROM ($queryString) A LIMIT 1"
     manager.withConnection[StructType] { conn =>
       val stmt = conn.createStatement()
@@ -36,7 +40,10 @@ class ExasolRelation(context: SQLContext, queryString: String, manager: ExasolCo
     }
   }
 
-  override def schema: StructType = querySchema
+  override def schema: StructType = configSchema.fold(inferSchema) { userSchema =>
+    logger.info(s"Using provided schema $userSchema")
+    userSchema
+  }
 
   override def buildScan(): RDD[Row] =
     buildScan(Array.empty, Array.empty)
