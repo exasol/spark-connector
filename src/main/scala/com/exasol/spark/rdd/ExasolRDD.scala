@@ -104,8 +104,8 @@ class ExasolRDD(
             }
           }
           conn.close()
+          logger.info("Closed a sub connection")
         }
-        logger.info("Closed a sub connection")
       } catch {
         case e: Exception => logger.warn("Received an exception closing sub connection", e)
       }
