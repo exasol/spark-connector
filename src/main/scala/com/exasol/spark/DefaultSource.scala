@@ -20,7 +20,7 @@ class DefaultSource extends RelationProvider with DataSourceRegister with Schema
     parameters: Map[String, String]
   ): BaseRelation = {
 
-    val (queryString, manager) = fromParameters(parameters)
+    val (queryString, manager) = fromParameters(parameters, sqlContext)
     new ExasolRelation(sqlContext, queryString, None, manager)
   }
 
@@ -30,12 +30,27 @@ class DefaultSource extends RelationProvider with DataSourceRegister with Schema
     schema: StructType
   ): BaseRelation = {
 
-    val (queryString, manager) = fromParameters(parameters)
+    val (queryString, manager) = fromParameters(parameters, sqlContext)
     new ExasolRelation(sqlContext, queryString, Option(schema), manager)
   }
 
+  private[spark] def mergeConfiguration(
+    parameters: Map[String, String],
+    sparkConf: Map[String, String]
+  ): Map[String, String] = {
+    var result: Map[String, String] = parameters
+    sparkConf.keySet
+      .filter(_.contains("spark.exasol"))
+      .foreach(key => {
+        val keySuffix: String = key.substring(key.lastIndexOf(".") + 1)
+        result += (keySuffix -> sparkConf.getOrElse(key, ""))
+      })
+    result
+  }
+
   private def fromParameters(
-    parameters: Map[String, String]
+    parameters: Map[String, String],
+    sqlContext: SQLContext
   ): (String, ExasolConnectionManager) = {
     val queryString = parameters.get("query") match {
       case Some(sql) => sql
@@ -44,7 +59,7 @@ class DefaultSource extends RelationProvider with DataSourceRegister with Schema
           "A sql query string should be specified when loading from Exasol"
         )
     }
-    val config = ExasolConfiguration(parameters)
+    val config = ExasolConfiguration(mergeConfiguration(parameters, sqlContext.getAllConfs))
     val manager = ExasolConnectionManager(config)
     (queryString, manager)
   }
