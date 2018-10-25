@@ -35,7 +35,7 @@ import java.net.InetAddress
  *      .getOrCreate()
  * }}}
  *
- * If both are defined, user properties are used. If nothing is defined, then default values are
+ * If both are defined, spark configs are used. If nothing is defined, then default values are
  * used.
  *
  */

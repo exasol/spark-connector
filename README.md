@@ -40,6 +40,31 @@ val df = sparkSession
 df.show(10, false)
 ```
 
+Or using spark configurations: (this will have higher priority)
+```scala
+// config spark session
+val sparkConf = new SparkConf()
+  .setMaster("local[*]")
+  .set("spark.exasol.host", "localhost")
+  .set("spark.exasol.port", "8563")
+  .set("spark.exasol.username", "sys")
+  .set("spark.exasol.password", "exasol")
+  .set("spark.exasol.max_nodes", "200")
+
+val sparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+
+// This is Exasol SQL Syntax
+val exasolQueryString = "SELECT * FROM MY_SCHEMA.MY_TABLE"
+
+val df = sparkSession
+     .read
+     .format("exasol")
+     .option("query", exasolQueryString)
+     .load()
+
+df.show(10, false)
+```
+
 For more examples you can check [docs/examples](docs/examples.md).
 
 ## Usage
@@ -118,14 +143,14 @@ spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
 The following configuration parameters can be provided mainly to facilitate a
 connection to Exasol cluster.
 
-| Configuration | Default       | Description
-| :---          | :---          | :---
-| ``query``     | *<none>*      | A query string to send to Exasol
-| ``host``      | ``localhost`` | A host ip address to the **first** Exasol node (e.g. 10.0.0.11)
-| ``port``      | ``8888``      | A port number to connect to Exasol nodes (e.g.  8563)
-| ``username``  | ``sys``       | An Exasol username for logging in
-| ``password``  | ``exasol``    | An Exasol password for logging in
-| ``max_nodes`` | ``200``       | The number of data nodes in Exasol cluster
+| Spark Configuration        | Configuration | Default       | Description
+| :---                       | :---          | :---          | :---
+|                            | ``query``     | *<none>*      | A query string to send to Exasol
+| ``spark.exasol.host``      | ``host``      | ``localhost`` | A host ip address to the **first** Exasol node (e.g. 10.0.0.11)
+| ``spark.exasol.port``      | ``port``      | ``8888``      | A port number to connect to Exasol nodes (e.g.  8563)
+| ``spark.exasol.username``  | ``username``  | ``sys``       | An Exasol username for logging in
+| ``spark.exasol.password``  | ``password``  | ``exasol``    | An Exasol password for logging in
+| ``spark.exasol.max_nodes`` | ``max_nodes`` | ``200``       | The number of data nodes in Exasol cluster
 
 [travis-badge]: https://travis-ci.org/EXASOL/spark-exasol-connector.svg?branch=master
 [travis-link]: https://travis-ci.org/EXASOL/spark-exasol-connector
