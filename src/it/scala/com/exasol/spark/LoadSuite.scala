@@ -139,6 +139,7 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
       .setMaster("local[*]")
       .set("spark.exasol.port", s"${container.port}")
       .set("spark.exasol.host", container.host)
+      .set("spark.exasol.max_nodes", "200")
 
     val sparkSession = SparkSession
       .builder()

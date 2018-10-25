@@ -40,6 +40,31 @@ val df = sparkSession
 df.show(10, false)
 ```
 
+Or using spark configurations: (this will have higher priority)
+```scala
+// config spark session
+val sparkConf = new SparkConf()
+  .setMaster("local[*]")
+  .set("spark.exasol.host", "localhost")
+  .set("spark.exasol.port", "8563")
+  .set("spark.exasol.username", "sys")
+  .set("spark.exasol.password", "exasol")
+  .set("spark.exasol.max_nodes", "200")
+
+val sparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+
+// This is Exasol SQL Syntax
+val exasolQueryString = "SELECT * FROM MY_SCHEMA.MY_TABLE"
+
+val df = sparkSession
+     .read
+     .format("exasol")
+     .option("query", exasolQueryString)
+     .load()
+
+df.show(10, false)
+```
+
 For more examples you can check [docs/examples](docs/examples.md).
 
 ## Usage

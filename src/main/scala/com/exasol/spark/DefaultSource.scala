@@ -37,9 +37,10 @@ class DefaultSource extends RelationProvider with DataSourceRegister with Schema
   private[spark] def mergeConfiguration(
     parameters: Map[String, String],
     sparkConf: Map[String, String]
-  ): Map[String, String] = parameters.map {
-    case (key, value) => key -> sparkConf.getOrElse(s"spark.exasol.$key", value)
-  }
+  ): Map[String, String] =
+    parameters ++ sparkConf
+      .filter { case (key, _) => key.startsWith(s"spark.exasol.") }
+      .map { case (key, value) => key.substring(s"spark.exasol.".length) -> value }
 
   private def fromParameters(
     parameters: Map[String, String],
