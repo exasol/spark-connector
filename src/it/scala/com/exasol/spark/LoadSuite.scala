@@ -1,6 +1,7 @@
 package com.exasol.spark
 
-import org.apache.spark.SparkException
+import org.apache.spark.{SparkConf, SparkException}
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
@@ -129,6 +130,31 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
     assert(
       thrown.getMessage.contains("java.sql.SQLException: object A.DATE_INFORMATION not found")
     )
+  }
+
+  test("should use provided sparkConf for loading data from exasol") {
+    createDummyTable()
+
+    val sparkConf = new SparkConf()
+      .setMaster("local[*]")
+      .set("spark.exasol.port", s"${container.port}")
+      .set("spark.exasol.host", container.host)
+      .set("spark.exasol.max_nodes", "200")
+
+    val sparkSession = SparkSession
+      .builder()
+      .config(sparkConf)
+      .getOrCreate()
+
+    val df = sparkSession.read
+      .format("exasol")
+      .option("query", s"SELECT CITY FROM $EXA_SCHEMA.$EXA_TABLE")
+      .option("port", s"falsePortNumber")
+      .option("host", s"falseHostName")
+      .load()
+
+    assert(df.count() === 3)
+    assert(df.collect().map(_(0)).toSet === Set("Berlin", "Lisbon", "Paris"))
   }
 
 }
