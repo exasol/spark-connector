@@ -1,4 +1,6 @@
-## Unreleased
+## v0.1.1
+
+> 2018 OCT 25
 
 * Use `date` and `timestamp` hints when creating where clause from Spark filters
   [#13](https://github.com/EXASOL/spark-exasol-connector/issues/13)
