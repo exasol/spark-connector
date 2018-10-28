@@ -2,6 +2,7 @@ package com.exasol.spark
 
 import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
+
 import com.dimafeng.testcontainers.Container
 import com.dimafeng.testcontainers.ExasolDockerContainer
 import com.dimafeng.testcontainers.ForAllTestContainer
@@ -59,75 +60,26 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
   def createAllTypesTable(): Unit = {
     runExaQuery(s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE")
     runExaQuery(s"CREATE SCHEMA $EXA_SCHEMA")
-    runExaQuery(s"""
-                   |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
-                   |   myID INTEGER,
-                   |   myIDsigned INTEGER,
-                   |   myTINYINT DECIMAL(3,0),
-                   |   mySMALLINT DECIMAL(9,0),
-                   |   myBIGINT DECIMAL(36,0),
-                   |   myBIGINTisSigned DECIMAL(36,0),
-                   |   myDECIMALSystemDefault DECIMAL(0,0),
-                   |   myDECIMALmax DECIMAL(""" + DecimalType.MAX_PRECISION.toString + """,""" + DecimalType.MAX_SCALE.toString + """),
-                   |   myNUMERICsysDefault DECIMAL( 0,0 ),
-                   |   myNUMERIC DECIMAL( 5,2 ),
-                   |   myDOUBLE DOUBLE PRECISION,
-                   |   myFLOAT DOUBLE PRECISION,
-                   |   myREAL DOUBLE PRECISION,
-                   |   myCHAR CHAR,
-                   |   myNCHAR CHAR(2000),
-                   |   mvLONGVARCHAR VARCHAR( 2000000),
-// in Exasol ?     |   BINARY,
-// in Exasol ?     |   VARBINARY
-// in Exasol ?     |   myLONGVARBINARY ,
-// just a boolean  |   myBIT BOOLEAN,
-                   |   myBOOLEAN BOOLEAN,
-                   |   myDATE DATE,
-                   |   myTIMESTAMP TIMESTAMP
-                   |)""".stripMargin)
-    val longString = new scala.util.Random(32).nextString(100000)
-    runExaQuery(s"""
-                   |INSERT INTO $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
-                   |   myID,
-                   |   myIDsigned,
-                   |   myTINYINT ,
-                   |   mySMALLINT,
-                   |   myBIGINT,
-                   |   myBIGINTisSigned,
-                   |   myDECIMALSystemDefault,
-                   |   myDECIMALmax,
-                   |   myNUMERIC,
-                   |   myNUMERICsysDefault,
-                   |   myDOUBLE,
-                   |   myFLOAT,
-                   |   myREAL,
-                   |   myCHAR,
-                   |   myNCHAR,
-                   |   mvLONGVARCHAR,
-                   |   myBOOLEAN,
-                   |   myDATE,
-                   |   myTIMESTAMP)
-                   | VALUES (
-                   |   1,
-                   |   -1,
-                   |   123 ,
-                   |   123456789,
-                   |   1000000000000,
-                   |   -1000000000000,
-                   |   1.1,
-                   |   1000000000000.0000000000001,
-                   |   1.1,
-                   |   1000000000000.0000000000001,
-                   |   -1.79E+308,
-                   |   1.79E+308,
-                   |   -3.40E+38,
-                   |   'a',
-                   |   'abcd',
-                   |   """ + longString + """,
-                   |   true,
-                   |   '2018-01-01',
-                   |   '2000-01-01 00:00:00')
-                   | """.stripMargin)
+    val maxDecimal = " DECIMAL(" + DecimalType.MAX_PRECISION + "," + DecimalType.MAX_SCALE + ")"
+    runExaQuery(
+      s"""
+         |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
+         |   myID INTEGER,
+         |   myTINYINT DECIMAL(3,0),
+         |   mySMALLINT DECIMAL(9,0),
+         |   myBIGINT DECIMAL(36,0),
+         |   myDECIMALSystemDefault DECIMAL,
+         |   myNUMERIC DECIMAL( 5,2 ),
+         |   myDOUBLE DOUBLE PRECISION,
+         |   myCHAR CHAR,
+         |   myNCHAR CHAR(2000),
+         |   myLONGVARCHAR VARCHAR( 2000000),
+         |   myBOOLEAN BOOLEAN,
+         |   myDATE DATE,
+         |   myTIMESTAMP TIMESTAMP)""".stripMargin
+    )
+    //   |   myDECIMALmax $maxDecimal,
+    // Types not covered : GEOMETRY, INTERVAL, TIMESTAMP WITH LOCAL TIME ZONE,
     runExaQuery("commit")
   }
 }
