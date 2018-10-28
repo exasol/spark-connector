@@ -61,19 +61,15 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
     runExaQuery(s"CREATE SCHEMA $EXA_SCHEMA")
     runExaQuery(s"""
                    |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
-                   |   ID INTEGER IDENTITY NOT NULL,
-                   |   NAME VARCHAR(100) UTF8,
-                   |   CITY VARCHAR(2000) UTF8,
-                   |   DATE_INFO DATE,
-                   |   UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                   |   myID INTEGER,
+                   |   myIDsigned INTEGER,
                    |   myTINYINT DECIMAL(3,0),
                    |   mySMALLINT DECIMAL(9,0),
                    |   myBIGINT DECIMAL(36,0),
                    |   myBIGINTisSigned DECIMAL(36,0),
                    |   myDECIMALSystemDefault DECIMAL(0,0),
-                   |   myDECIMALSystemDefault DECIMAL(""" + DecimalType.MAX_PRECISION.toString + """,""" + DecimalType.MAX_SCALE.toString + """),
-                   |   myDECIMALisSigned DECIMAL(""" + DecimalType.MAX_PRECISION.toString + """,""" + DecimalType.MAX_SCALE.toString + """),
-                   |   myNUMERIC DECIMAL( 0,0 ),
+                   |   myDECIMALmax DECIMAL(""" + DecimalType.MAX_PRECISION.toString + """,""" + DecimalType.MAX_SCALE.toString + """),
+                   |   myNUMERICsysDefault DECIMAL( 0,0 ),
                    |   myNUMERIC DECIMAL( 5,2 ),
                    |   myDOUBLE DOUBLE PRECISION,
                    |   myFLOAT DOUBLE PRECISION,
@@ -81,26 +77,56 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
                    |   myCHAR CHAR,
                    |   myNCHAR CHAR(2000),
                    |   mvLONGVARCHAR VARCHAR( 2000000),
-                   |   BINARY,
-                   |   VARBINARY,
-                   |   LONGVARBINARY
-                   |   myBIT BOOLEAN,
+// in Exasol ?     |   BINARY,
+// in Exasol ?     |   VARBINARY
+// in Exasol ?     |   myLONGVARBINARY ,
+// just a boolean  |   myBIT BOOLEAN,
                    |   myBOOLEAN BOOLEAN,
                    |   myDATE DATE,
-                   |   myTIME TIMESTAMP,
                    |   myTIMESTAMP TIMESTAMP
                    |)""".stripMargin)
+    val longString = new scala.util.Random(32).nextString(100000)
     runExaQuery(s"""
-                   |INSERT INTO $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (name, city, date_info)
-                   | VALUES ('Germany', 'Berlin', '2017-12-31')
-                   | """.stripMargin)
-    runExaQuery(s"""
-                   |INSERT INTO $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (name, city, date_info)
-                   | VALUES ('France', 'Paris', '2018-01-01')
-                   | """.stripMargin)
-    runExaQuery(s"""
-                   |INSERT INTO $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (name, city, date_info)
-                   | VALUES ('Portugal', 'Lisbon', '2018-10-01')
+                   |INSERT INTO $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
+                   |   myID,
+                   |   myIDsigned,
+                   |   myTINYINT ,
+                   |   mySMALLINT,
+                   |   myBIGINT,
+                   |   myBIGINTisSigned,
+                   |   myDECIMALSystemDefault,
+                   |   myDECIMALmax,
+                   |   myNUMERIC,
+                   |   myNUMERICsysDefault,
+                   |   myDOUBLE,
+                   |   myFLOAT,
+                   |   myREAL,
+                   |   myCHAR,
+                   |   myNCHAR,
+                   |   mvLONGVARCHAR,
+                   |   myBOOLEAN,
+                   |   myDATE,
+                   |   myTIMESTAMP)
+                   | VALUES (
+                   |   1,
+                   |   -1,
+                   |   123 ,
+                   |   123456789,
+                   |   1000000000000,
+                   |   -1000000000000,
+                   |   1.1,
+                   |   1000000000000.0000000000001,
+                   |   1.1,
+                   |   1000000000000.0000000000001,
+                   |   -1.79E+308,
+                   |   1.79E+308,
+                   |   -3.40E+38,
+                   |   'a',
+                   |   'abcd',
+                   |   """ + longString + """,
+                   |   true,
+                   |   '2018-01-01',
+                   |   '2000-01-01 00:00:00')
                    | """.stripMargin)
     runExaQuery("commit")
   }
