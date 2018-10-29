@@ -33,12 +33,12 @@ class TypesSuite extends FunSuite with Matchers {
 
     assert(
       createSparkTypeFromSQLType(java.sql.Types.DECIMAL, 39, 10, false)
-        === DecimalType(DecimalType.MAX_PRECISION, 10)
+        === DecimalType(getMaxPrecision(), 10)
     )
 
     assert(
       createSparkTypeFromSQLType(java.sql.Types.DECIMAL, 50, 50, false)
-        === DecimalType(DecimalType.MAX_PRECISION, DecimalType.MAX_SCALE)
+        === DecimalType(getMaxPrecision(), getMaxScale())
     )
 
     // NUMERIC
@@ -56,11 +56,11 @@ class TypesSuite extends FunSuite with Matchers {
     )
     assert(
       createSparkTypeFromSQLType(java.sql.Types.NUMERIC, 39, 10, false)
-        === DecimalType(DecimalType.MAX_PRECISION, 10)
+        === DecimalType(getMaxPrecision(), 10)
     )
     assert(
       createSparkTypeFromSQLType(java.sql.Types.NUMERIC, 50, 50, false)
-        === DecimalType(DecimalType.MAX_PRECISION, DecimalType.MAX_SCALE)
+        === DecimalType(getMaxPrecision(), getMaxScale())
     )
   }
 
