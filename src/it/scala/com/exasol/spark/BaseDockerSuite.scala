@@ -2,11 +2,10 @@ package com.exasol.spark
 
 import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.Types._
 
-import com.dimafeng.testcontainers.Container
 import com.dimafeng.testcontainers.ExasolDockerContainer
 import com.dimafeng.testcontainers.ForAllTestContainer
-import org.apache.spark.sql.types.DecimalType
 import org.scalatest.Suite
 
 /** A Base Integration Suite with Exasol DB Docker Container Setup */
@@ -60,7 +59,7 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
   def createAllTypesTable(): Unit = {
     runExaQuery(s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE")
     runExaQuery(s"CREATE SCHEMA $EXA_SCHEMA")
-    val maxDecimal = " DECIMAL(" + DecimalType.MAX_PRECISION + "," + DecimalType.MAX_SCALE + ")"
+    val maxDecimal = " DECIMAL(" + getMaxPrecision() + "," + getMaxScale() + ")"
     runExaQuery(
       s"""
          |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
@@ -69,6 +68,7 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
          |   mySMALLINT DECIMAL(9,0),
          |   myBIGINT DECIMAL(36,0),
          |   myDECIMALSystemDefault DECIMAL,
+         |   myDECIMALmax $maxDecimal,
          |   myNUMERIC DECIMAL( 5,2 ),
          |   myDOUBLE DOUBLE PRECISION,
          |   myCHAR CHAR,

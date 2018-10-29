@@ -23,6 +23,7 @@ class TypesSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
       "MYTINYINT" -> ShortType,
       "MYSMALLINT" -> IntegerType,
       "MYBIGINT" -> DecimalType(36, 0),
+      "MYDECIMALMAX" -> DecimalType(36, 36),
       "MYDECIMALSYSTEMDEFAULT" -> LongType,
       "MYNUMERIC" -> DecimalType(5, 2),
       "MYDOUBLE" -> DoubleType,
