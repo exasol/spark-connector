@@ -78,7 +78,6 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
          |   myDATE DATE,
          |   myTIMESTAMP TIMESTAMP)""".stripMargin
     )
-    //   |   myDECIMALmax $maxDecimal,
     // Types not covered : GEOMETRY, INTERVAL, TIMESTAMP WITH LOCAL TIME ZONE,
     runExaQuery("commit")
   }
