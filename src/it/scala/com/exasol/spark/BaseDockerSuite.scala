@@ -64,21 +64,21 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
     runExaQuery(
       s"""
          |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
-         |   myID INTEGER,
-         |   myTINYINT DECIMAL(3,0),
-         |   mySMALLINT DECIMAL(9,0),
-         |   myBIGINT DECIMAL(36,0),
-         |   myDECIMALSystemDefault DECIMAL,
-         |   myDECIMALmax $maxDecimal,
-         |   myNUMERIC DECIMAL( 5,2 ),
-         |   myDOUBLE DOUBLE PRECISION,
-         |   myCHAR CHAR,
-         |   myNCHAR CHAR(2000),
-         |   myLONGVARCHAR VARCHAR( 2000000),
-         |   myBOOLEAN BOOLEAN,
-         |   myDATE DATE,
-         |   myTIMESTAMP TIMESTAMP,
-         |   myGeometry Geometry)""".stripMargin
+         |   MYID INTEGER,
+         |   MYTINYINT DECIMAL(3,0),
+         |   MYSMALLINT DECIMAL(9,0),
+         |   MYBIGINT DECIMAL(36,0),
+         |   MYDECIMALSystemDefault DECIMAL,
+         |   MYDECIMALMAX $maxDecimal,
+         |   MYNUMERIC DECIMAL( 5,2 ),
+         |   MYDOUBLE DOUBLE PRECISION,
+         |   MYCHAR CHAR,
+         |   MYNCHAR CHAR(2000),
+         |   MYLONGVARCHAR VARCHAR( 2000000),
+         |   MYBOOLEAN BOOLEAN,
+         |   MYDATE DATE,
+         |   MYTIMESTAMP TIMESTAMP,
+         |   MYGEOMETRY Geometry)""".stripMargin
     )
     runExaQuery("commit")
   }
