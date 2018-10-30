@@ -152,6 +152,36 @@ connection to Exasol cluster.
 | ``spark.exasol.password``  | ``password``  | ``exasol``    | An Exasol password for logging in
 | ``spark.exasol.max_nodes`` | ``max_nodes`` | ``200``       | The number of data nodes in Exasol cluster
 
+## FAQ
+
+- Getting an `Connection was lost and could not be reestablished` error
+
+  For example:
+
+  ```txt
+  [error] Caused by: com.exasol.jdbc.ConnectFailed: Connection was lost and could not be reestablished.  (SessionID: 1615669509094853970)
+  [error]         at com.exasol.jdbc.AbstractEXAConnection.reconnect(AbstractEXAConnection.java:3505)
+  [error]         at com.exasol.jdbc.ServerCommunication.handle(ServerCommunication.java:98)
+  [error]         at com.exasol.jdbc.AbstractEXAConnection.communication(AbstractEXAConnection.java:2537)
+  [error]         at com.exasol.jdbc.AbstractEXAConnection.communication_resultset(AbstractEXAConnection.java:2257)
+  [error]         at com.exasol.jdbc.AbstractEXAStatement.execute(AbstractEXAStatement.java:456)
+  [error]         at com.exasol.jdbc.EXAStatement.execute(EXAStatement.java:278)
+  [error]         at com.exasol.jdbc.AbstractEXAStatement.executeQuery(AbstractEXAStatement.java:601)
+  [error]         at com.exasol.spark.rdd.ExasolRDD.compute(ExasolRDD.scala:125)
+  [error]         at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:324)
+  [error]         at org.apache.spark.rdd.RDD.iterator(RDD.scala:288)
+  ```
+
+  This is one of the known issues. This happens when Spark scheduled parallel
+  tasks are less than the number of [sub connections][sol-546]. This can be
+  mitigated by submitting Spark application with enough resources so that it can
+  start parallel tasks that are more or equal to number of parallel Exasol
+  connections.
+
+  Additionally, you can limit the Exasol parallel connections using `max_nodes`
+  parameter. However, it is not advised to limit this value in production
+  environment.
+
 [travis-badge]: https://travis-ci.org/EXASOL/spark-exasol-connector.svg?branch=master
 [travis-link]: https://travis-ci.org/EXASOL/spark-exasol-connector
 [codecov-badge]: https://codecov.io/gh/EXASOL/spark-exasol-connector/branch/master/graph/badge.svg
@@ -164,3 +194,4 @@ connection to Exasol cluster.
 [exa-docker-db]: https://hub.docker.com/r/exasol/docker-db/
 [testcontainers]: https://www.testcontainers.org/
 [spark-testing-base]: https://github.com/holdenk/spark-testing-base
+[sol-546]: https://www.exasol.com/support/browse/SOL-546

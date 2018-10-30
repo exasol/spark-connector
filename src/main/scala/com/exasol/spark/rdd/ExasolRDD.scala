@@ -16,6 +16,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
 
 import com.exasol.jdbc.EXAConnection
+import com.exasol.jdbc.EXAResultSet
 import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 
@@ -35,7 +36,25 @@ class ExasolRDD(
 ) extends RDD[Row](sc, Nil)
     with LazyLogging {
 
-  @transient lazy val mainExaConnection: EXAConnection = {
+  // scalastyle:off null
+  @transient private var mainConnection: EXAConnection = null
+  @transient private var mainStatement: Statement = null
+  @transient private var mainResultSet: EXAResultSet = null
+  // scalastyle:on
+
+  def closeMainResources(): Unit = {
+    if (mainConnection != null) {
+      mainConnection.close()
+    }
+    if (mainStatement != null) {
+      mainStatement.close()
+    }
+    if (mainResultSet != null) {
+      mainResultSet.close()
+    }
+  }
+
+  def createMainConnection(): EXAConnection = {
     val conn = manager.mainConnection()
     if (conn == null) {
       logger.error("Main EXAConnection is null!")
@@ -48,17 +67,25 @@ class ExasolRDD(
     // Close Exasol main connection when SparkContext finishes. This is a lifetime of a Spark
     // application.
     sc.addSparkListener(new SparkListener {
-      override def onApplicationEnd(appEnd: SparkListenerApplicationEnd): Unit = conn.close()
+      override def onApplicationEnd(appEnd: SparkListenerApplicationEnd): Unit =
+        closeMainResources()
     })
 
     conn
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def getPartitions: Array[Partition] = {
+    mainConnection = createMainConnection()
+    mainStatement = mainConnection.createStatement()
+    mainResultSet = mainStatement.executeQuery(queryString).asInstanceOf[EXAResultSet]
+
+    val handle = mainResultSet.GetHandle()
+
     val partitions = manager
-      .subConnections(mainExaConnection)
+      .subConnections(mainConnection)
       .zipWithIndex
-      .map { case (url, idx) => ExasolRDDPartition(idx, url) }
+      .map { case (url, idx) => ExasolRDDPartition(idx, handle, url) }
 
     logger.info(s"The number of partitions is ${partitions.size}")
 
@@ -118,11 +145,17 @@ class ExasolRDD(
     }
 
     val partition: ExasolRDDPartition = split.asInstanceOf[ExasolRDDPartition]
+    val subHandle: Int = partition.handle
 
-    logger.info(s"Connecting to the partition sub connection: ${partition.connectionUrl}")
+    logger.info(s"Sub connection with url = ${partition.connectionUrl} and handle = $subHandle")
+
+    if (subHandle == -1) {
+      logger.info("Sub connection handle is -1, no results, return empty iterator")
+      return Iterator.empty
+    }
+
     conn = manager.subConnection(partition.connectionUrl)
-    stmt = conn.createStatement()
-    resultSet = stmt.executeQuery(queryString)
+    resultSet = conn.DescribeResult(subHandle)
 
     Converter.resultSetToRows(resultSet, querySchema)
   }

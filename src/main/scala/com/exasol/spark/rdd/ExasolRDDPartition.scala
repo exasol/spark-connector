@@ -12,7 +12,8 @@ import org.apache.spark.Partition
  * @param connectionUrl An exasol jdbc (sub) connection string
  *
  */
-final case class ExasolRDDPartition(val idx: Int, val connectionUrl: String) extends Partition {
+final case class ExasolRDDPartition(val idx: Int, val handle: Int, val connectionUrl: String)
+    extends Partition {
 
   override def index: Int = idx
 
