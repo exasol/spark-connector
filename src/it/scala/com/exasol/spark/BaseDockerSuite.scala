@@ -20,6 +20,7 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
   val EXA_SCHEMA = "TEST_SCHEMA"
   val EXA_TABLE = "TEST_TABLE"
   val EXA_ALL_TYPES_TABLE = "TEST_ALL_TYPES_TABLE"
+  val EXA_TYPES_NOT_COVERED_TABLE = "TEST_TYPES_NOT_COVERED_TABLE"
 
   def runExaQuery(queries: Seq[String]): Unit =
     exaManager.withConnection[Unit] { conn =>
@@ -76,7 +77,19 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
          |   myLONGVARCHAR VARCHAR( 2000000),
          |   myBOOLEAN BOOLEAN,
          |   myDATE DATE,
-         |   myTIMESTAMP TIMESTAMP)""".stripMargin
+         |   myTIMESTAMP TIMESTAMP,
+         |   myGeometry Geometry)""".stripMargin
+    )
+    runExaQuery("commit")
+  }
+
+  def createTypesNotCoveredTable(): Unit = {
+    runExaQuery(s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE")
+    runExaQuery(s"CREATE SCHEMA $EXA_SCHEMA")
+    runExaQuery(
+      s"""
+         |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_TYPES_NOT_COVERED_TABLE (
+         |   myInterval INTERVAL YEAR TO MONTH )""".stripMargin
     )
     runExaQuery("commit")
   }
