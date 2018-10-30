@@ -44,7 +44,7 @@ object Types extends LazyLogging {
 
   /**
    * Maps a JDBC type [[java.sql.Types$]] to a Spark SQL [[org.apache.spark.sql.types.DataType]]
-   *
+   *Image stream 'atmoz-sftp' was marked for deletion.
    * @param sqlType A JDBC type from [[java.sql.ResultSetMetaData]] column type
    * @param precision A precision value obtained from ResultSetMetaData, rsmd.getPrecision(index)
    * @param scale A scale value obtained from ResultSetMetaData, rsmd.getScale(index)
@@ -118,13 +118,13 @@ object Types extends LazyLogging {
   }
 
   /**
-   * Bound DecimalType within Exasol [[Types.MAX_PRECISION_EXASOL]] and [[Types.MAX_SCALE_EXASOL]]
+   * Bound DecimalType within Spark [[DecimalType.MAX_PRECISION]] and [[DecimalType.MAX_SCALE]]
    * values
    */
   private[this] def boundedDecimal(precision: Int, scale: Int): DecimalType =
     DecimalType(
-      math.min(precision, MAX_PRECISION_EXASOL),
-      math.min(scale, MAX_SCALE_EXASOL)
+      math.min(precision, DecimalType.MAX_PRECISION),
+      math.min(scale, DecimalType.MAX_SCALE)
     )
 
   /**
@@ -144,10 +144,10 @@ object Types extends LazyLogging {
     newSchema
   }
 
-  def getMaxPrecision(): Int =
+  def getMaxPrecisionExasol(): Int =
     MAX_PRECISION_EXASOL
 
-  def getMaxScale(): Int =
+  def getMaxScaleExasol(): Int =
     MAX_SCALE_EXASOL
 
 }
