@@ -59,7 +59,7 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
   def createAllTypesTable(): Unit = {
     runExaQuery(s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE")
     runExaQuery(s"CREATE SCHEMA $EXA_SCHEMA")
-    val maxDecimal = " DECIMAL(" + getMaxPrecision() + "," + getMaxScale() + ")"
+    val maxDecimal = " DECIMAL(" + getMaxPrecisionExasol() + "," + getMaxScaleExasol() + ")"
     runExaQuery(
       s"""
          |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
@@ -78,7 +78,6 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
          |   myDATE DATE,
          |   myTIMESTAMP TIMESTAMP)""".stripMargin
     )
-    // Types not covered : GEOMETRY, INTERVAL, TIMESTAMP WITH LOCAL TIME ZONE,
     runExaQuery("commit")
   }
 }
