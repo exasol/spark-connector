@@ -123,12 +123,12 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
     // still available for metadata
     assert(df.count() === 3)
 
-    val thrown = intercept[SparkException] {
+    val thrown = intercept[java.sql.SQLException] {
       assert(df.collect().map(x => x.getDate(2)).length === 3)
     }
 
     assert(
-      thrown.getMessage.contains("java.sql.SQLException: object A.DATE_INFORMATION not found")
+      thrown.getMessage.contains("object A.DATE_INFORMATION not found")
     )
   }
 
