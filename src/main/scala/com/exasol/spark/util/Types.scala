@@ -1,6 +1,5 @@
 package com.exasol.spark.util
 
-import java.sql.ResultSet
 import java.sql.ResultSetMetaData
 
 import org.apache.spark.sql.types._
@@ -9,6 +8,9 @@ import com.typesafe.scalalogging.LazyLogging
 
 /** A helper class with mapping functions from Exasol JDBC types to/from Spark SQL types */
 object Types extends LazyLogging {
+
+  private val MAX_PRECISION_EXASOL: Int = 36
+  private val MAX_SCALE_EXASOL: Int = 36
 
   val LongDecimal: DecimalType = DecimalType(20, 0) // scalastyle:ignore magic.number
 
@@ -141,5 +143,11 @@ object Types extends LazyLogging {
     logger.debug(s"Using a new pruned schema $newSchema")
     newSchema
   }
+
+  def getMaxPrecisionExasol(): Int =
+    MAX_PRECISION_EXASOL
+
+  def getMaxScaleExasol(): Int =
+    MAX_SCALE_EXASOL
 
 }
