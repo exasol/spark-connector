@@ -44,21 +44,21 @@ class TypesSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
   test("throws Exception when Exasol Type not covnverted to Spark") {
     createTypesNotCoveredTable()
-    try {
+
+    val thrown = intercept[IllegalArgumentException] {
       val df = spark.read
         .format("com.exasol.spark")
         .option("host", container.host)
         .option("port", s"${container.port}")
         .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TYPES_NOT_COVERED_TABLE")
         .load()
-      val schemaTest = df.schema
-      val fields = schemaTest.toList
-      fields.foreach(field => {
-        val dataType = field.dataType // access DataType, which should not be mapped
-      })
-    } catch {
-      case _: IllegalArgumentException =>
+      df.schema.foreach(_.dataType)
     }
+
+    assert(
+      thrown.getMessage.contains("Received an unsupported SQL type")
+    )
+
   }
 
 }

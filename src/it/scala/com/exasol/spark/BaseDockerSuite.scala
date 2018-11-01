@@ -93,4 +93,5 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
     )
     runExaQuery("commit")
   }
+
 }
