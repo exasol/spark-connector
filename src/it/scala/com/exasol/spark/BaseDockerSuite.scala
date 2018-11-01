@@ -22,6 +22,7 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
   val EXA_ALL_TYPES_TABLE = "TEST_ALL_TYPES_TABLE"
   val EXA_TYPES_NOT_COVERED_TABLE = "TEST_TYPES_NOT_COVERED_TABLE"
 
+
   def runExaQuery(queries: Seq[String]): Unit =
     exaManager.withConnection[Unit] { conn =>
       queries.foreach(conn.createStatement.execute(_))
@@ -93,4 +94,5 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
     )
     runExaQuery("commit")
   }
+
 }
