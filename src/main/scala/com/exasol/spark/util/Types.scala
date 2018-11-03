@@ -44,7 +44,7 @@ object Types extends LazyLogging {
 
   /**
    * Maps a JDBC type [[java.sql.Types$]] to a Spark SQL [[org.apache.spark.sql.types.DataType]]
-   *Image stream 'atmoz-sftp' was marked for deletion.
+   *
    * @param sqlType A JDBC type from [[java.sql.ResultSetMetaData]] column type
    * @param precision A precision value obtained from ResultSetMetaData, rsmd.getPrecision(index)
    * @param scale A scale value obtained from ResultSetMetaData, rsmd.getScale(index)
