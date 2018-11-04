@@ -2,8 +2,8 @@ package com.exasol.spark
 
 import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.Types._
 
-import com.dimafeng.testcontainers.Container
 import com.dimafeng.testcontainers.ExasolDockerContainer
 import com.dimafeng.testcontainers.ForAllTestContainer
 import org.scalatest.Suite
@@ -19,6 +19,8 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
 
   val EXA_SCHEMA = "TEST_SCHEMA"
   val EXA_TABLE = "TEST_TABLE"
+  val EXA_ALL_TYPES_TABLE = "TEST_ALL_TYPES_TABLE"
+  val EXA_TYPES_NOT_COVERED_TABLE = "TEST_TYPES_NOT_COVERED_TABLE"
 
   def runExaQuery(queries: Seq[String]): Unit =
     exaManager.withConnection[Unit] { conn =>
@@ -52,6 +54,43 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
                    |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info)
                    | VALUES ('Portugal', 'Lisbon', '2018-10-01')
                    | """.stripMargin)
+    runExaQuery("commit")
+  }
+
+  def createAllTypesTable(): Unit = {
+    runExaQuery(s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE")
+    runExaQuery(s"CREATE SCHEMA $EXA_SCHEMA")
+    val maxDecimal = " DECIMAL(" + getMaxPrecisionExasol() + "," + getMaxScaleExasol() + ")"
+    runExaQuery(
+      s"""
+         |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE (
+         |   MYID INTEGER,
+         |   MYTINYINT DECIMAL(3,0),
+         |   MYSMALLINT DECIMAL(9,0),
+         |   MYBIGINT DECIMAL(36,0),
+         |   MYDECIMALSystemDefault DECIMAL,
+         |   MYDECIMALMAX $maxDecimal,
+         |   MYNUMERIC DECIMAL( 5,2 ),
+         |   MYDOUBLE DOUBLE PRECISION,
+         |   MYCHAR CHAR,
+         |   MYNCHAR CHAR(2000),
+         |   MYLONGVARCHAR VARCHAR( 2000000),
+         |   MYBOOLEAN BOOLEAN,
+         |   MYDATE DATE,
+         |   MYTIMESTAMP TIMESTAMP,
+         |   MYGEOMETRY Geometry)""".stripMargin
+    )
+    runExaQuery("commit")
+  }
+
+  def createTypesNotCoveredTable(): Unit = {
+    runExaQuery(s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE")
+    runExaQuery(s"CREATE SCHEMA $EXA_SCHEMA")
+    runExaQuery(
+      s"""
+         |CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_TYPES_NOT_COVERED_TABLE (
+         |   myInterval INTERVAL YEAR TO MONTH )""".stripMargin
+    )
     runExaQuery("commit")
   }
 
