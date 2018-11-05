@@ -13,4 +13,5 @@ The maintainers of the project are:
 
 These are the people whose contributions have made the project possible:
 
+* Dr. James Pizagno <[jpizagno](https://github.com/jpizagno)>
 * Tung Dang <[3cham](https://github.com/3cham)>
