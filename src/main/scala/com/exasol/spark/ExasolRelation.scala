@@ -36,7 +36,10 @@ class ExasolRelation(
       val stmt = conn.createStatement()
       val resultSet = stmt.executeQuery(queryStringLimit)
       val metadata = resultSet.getMetaData
-      Types.createSparkStructType(metadata)
+      val sparkStruct = Types.createSparkStructType(metadata)
+      resultSet.close()
+      stmt.close()
+      sparkStruct
     }
   }
 
