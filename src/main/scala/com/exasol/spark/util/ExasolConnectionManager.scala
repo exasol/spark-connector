@@ -38,6 +38,19 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     ExasolConnectionManager
       .withConnection(mainConnectionUrl, config.username, config.password)(handle)
 
+  def withCountQuery(query: String): Long = withConnection[Long] { conn =>
+    val stmt = conn.createStatement()
+    val resultSet = stmt.executeQuery(query)
+    val cnt = if (resultSet.next()) {
+      resultSet.getLong(1)
+    } else {
+      throw new IllegalStateException("Could not query the count!")
+    }
+    resultSet.close()
+    stmt.close()
+    cnt
+  }
+
 }
 
 object ExasolConnectionManager extends LazyLogging {
