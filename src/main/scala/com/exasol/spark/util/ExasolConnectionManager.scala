@@ -70,7 +70,9 @@ object ExasolConnectionManager extends LazyLogging {
   def makeConnection(url: String, username: String, password: String): EXAConnection = {
     logger.debug(s"Making a connection using url = $url")
     removeIfClosed(url)
-    val _ = connections.putIfAbsent(url, createConnection(url, username, password))
+    if (!connections.containsKey(url)) {
+      val _ = connections.put(url, createConnection(url, username, password))
+    }
     connections.get(url)
   }
 
