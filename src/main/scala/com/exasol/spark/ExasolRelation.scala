@@ -89,6 +89,8 @@ class ExasolRelation(
    * It will use provided column names to create a sub select query and similarly add where clause
    * if filters are provided.
    *
+   * Additionally, if no column names are provided it creates a 'COUNT(*)' query.
+   *
    * @param columns A list of column names
    * @param filters A list of Spark [[org.apache.spark.sql.sources.Filter]]-s
    * @return An enriched query with column selection and where clauses
