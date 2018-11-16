@@ -8,7 +8,7 @@ addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.7")
 
 // Adds Contrib Warts
 // http://github.com/wartremover/wartremover-contrib/
-addSbtPlugin("org.wartremover" % "sbt-wartremover-contrib" % "1.2.3")
+addSbtPlugin("org.wartremover" % "sbt-wartremover-contrib" % "1.2.4")
 
 // Adds Extra Warts
 // http://github.com/danielnixon/extrawarts
@@ -16,7 +16,7 @@ addSbtPlugin("org.danielnixon" % "sbt-extrawarts" % "1.0.3")
 
 // Adds a `assembly` task to create a fat JAR with all of its dependencies
 // https://github.com/sbt/sbt-assembly
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.7")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.9")
 
 // Adds a `BuildInfo` tasks
 // https://github.com/sbt/sbt-buildinfo
