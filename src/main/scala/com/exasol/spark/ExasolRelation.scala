@@ -36,7 +36,10 @@ class ExasolRelation(
       val stmt = conn.createStatement()
       val resultSet = stmt.executeQuery(queryStringLimit)
       val metadata = resultSet.getMetaData
-      Types.createSparkStructType(metadata)
+      val sparkStruct = Types.createSparkStructType(metadata)
+      resultSet.close()
+      stmt.close()
+      sparkStruct
     }
   }
 
@@ -52,15 +55,48 @@ class ExasolRelation(
     buildScan(requiredColumns, Array.empty)
 
   override def buildScan(requiredColumns: Array[String], filters: Array[Filter]): RDD[Row] =
-    new ExasolRDD(
-      sqlContext.sparkContext,
-      enrichQuery(requiredColumns, filters),
-      Types.selectColumns(requiredColumns, schema),
-      manager
-    )
+    if (requiredColumns.isEmpty) {
+      makeEmptyRDD(filters)
+    } else {
+      new ExasolRDD(
+        sqlContext.sparkContext,
+        enrichQuery(requiredColumns, filters),
+        Types.selectColumns(requiredColumns, schema),
+        manager
+      )
+    }
 
+  /**
+   * When a count action is run from Spark dataframe we do not have to read the actual data and
+   * perform all serializations through the network. Instead we can create a RDD with empty Row-s
+   * with expected number of rows from actual query.
+   *
+   * This also called count pushdown.
+   *
+   * @param filters A list of [[org.apache.spark.sql.sources.Filter]]-s that can be pushed as
+   *                where clause
+   * @return An RDD of empty Row-s which has as many elements as count(*) from enriched query
+   */
+  private[this] def makeEmptyRDD(filters: Array[Filter]): RDD[Row] = {
+    val cntQuery = enrichQuery(Array.empty[String], filters)
+    val cnt = manager.withCountQuery(cntQuery)
+    sqlContext.sparkContext.parallelize(1L to cnt, 4).map(r => Row.empty)
+  }
+
+  /**
+   * Improves the original query with column pushdown and predicate pushdown.
+   *
+   * It will use provided column names to create a sub select query and similarly add where clause
+   * if filters are provided.
+   *
+   * Additionally, if no column names are provided it creates a 'COUNT(*)' query.
+   *
+   * @param columns A list of column names
+   * @param filters A list of Spark [[org.apache.spark.sql.sources.Filter]]-s
+   * @return An enriched query with column selection and where clauses
+   */
   private[this] def enrichQuery(columns: Array[String], filters: Array[Filter]): String = {
-    val columnStr = if (columns.isEmpty) "*" else columns.map(c => s"A.$c").mkString(", ")
+    val columnStr = if (columns.isEmpty) "COUNT(*)" else columns.map(c => s"A.$c").mkString(", ")
     val filterStr = Filters.createWhereClause(schema, filters)
     val whereClause = if (filterStr.trim.isEmpty) "" else s"WHERE $filterStr"
     val enrichedQuery = s"SELECT $columnStr FROM ($queryString) A $whereClause"
