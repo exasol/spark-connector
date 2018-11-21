@@ -66,6 +66,12 @@ class ExasolRelation(
       )
     }
 
+  override def unhandledFilters(filters: Array[Filter]): Array[Filter] = {
+    val dataTypes = schema.map(field => field.name -> field.dataType).toMap
+    // remove if a filter is defined (handled)
+    filters.filterNot(Filters.filterExpr(_, dataTypes).isDefined)
+  }
+
   /**
    * When a count action is run from Spark dataframe we do not have to read the actual data and
    * perform all serializations through the network. Instead we can create a RDD with empty Row-s
