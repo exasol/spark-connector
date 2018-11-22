@@ -1,3 +1,12 @@
+## Unreleased
+
+* Spark dataframe `count` action pushdown
+  [#24](https://github.com/EXASOL/spark-exasol-connector/issues/24)
+  [#29](https://github.com/EXASOL/spark-exasol-connector/pull/29) by @morazow
+* Add `unhandledFilters` function to ExasolRelation
+  [#18](https://github.com/EXASOL/spark-exasol-connector/issues/18)
+  [#30](https://github.com/EXASOL/spark-exasol-connector/pull/30) by @morazow
+
 ## v0.1.2
 
 > 2018 NOV 05
