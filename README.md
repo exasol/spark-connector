@@ -95,7 +95,7 @@ Using Maven:
 Clone the repository,
 
 ```bash
-git clone https://github.com/EXASOL/spark-exasol-connector
+git clone https://github.com/exasol/spark-exasol-connector
 
 cd spark-exasol-connector/
 ```
@@ -185,10 +185,10 @@ connection to Exasol cluster.
   parameter. However, it is not advised to limit this value in production
   environment.
 
-[travis-badge]: https://travis-ci.org/EXASOL/spark-exasol-connector.svg?branch=master
-[travis-link]: https://travis-ci.org/EXASOL/spark-exasol-connector
-[codecov-badge]: https://codecov.io/gh/EXASOL/spark-exasol-connector/branch/master/graph/badge.svg
-[codecov-link]: https://codecov.io/gh/EXASOL/spark-exasol-connector
+[travis-badge]: https://travis-ci.org/exasol/spark-exasol-connector.svg?branch=master
+[travis-link]: https://travis-ci.org/exasol/spark-exasol-connector
+[codecov-badge]: https://codecov.io/gh/exasol/spark-exasol-connector/branch/master/graph/badge.svg
+[codecov-link]: https://codecov.io/gh/exasol/spark-exasol-connector
 [maven-badge]: https://img.shields.io/maven-central/v/com.exasol/spark-connector_2.11.svg
 [maven-link]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.11
 [exasol]: https://www.exasol.com/en/
