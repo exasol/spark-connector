@@ -31,6 +31,7 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
   def runExaQuery(queryString: String): Unit =
     runExaQuery(Seq(queryString))
 
+  // scalastyle:off
   def createDummyTable(): Unit = {
     runExaQuery(s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE")
     runExaQuery(s"CREATE SCHEMA $EXA_SCHEMA")
@@ -40,22 +41,24 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
                    |   NAME VARCHAR(100) UTF8,
                    |   CITY VARCHAR(2000) UTF8,
                    |   DATE_INFO DATE,
-                   |   UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+                   |   UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                   |   UNICODE_COL VARCHAR(100) UTF8
                    |)""".stripMargin)
     runExaQuery(s"""
-                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info)
-                   | VALUES ('Germany', 'Berlin', '2017-12-31')
+                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info, unicode_col)
+                   | VALUES ('Germany', 'Berlin', '2017-12-31', 'öäüß')
                    | """.stripMargin)
     runExaQuery(s"""
-                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info)
-                   | VALUES ('France', 'Paris', '2018-01-01')
+                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info, unicode_col)
+                   | VALUES ('France', 'Paris', '2018-01-01','\u00d6')
                    | """.stripMargin)
     runExaQuery(s"""
-                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info)
-                   | VALUES ('Portugal', 'Lisbon', '2018-10-01')
+                   |INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info, unicode_col)
+                   | VALUES ('Portugal', 'Lisbon', '2018-10-01','\u00d9')
                    | """.stripMargin)
     runExaQuery("commit")
   }
+  // scalastyle:on
 
   def createAllTypesTable(): Unit = {
     runExaQuery(s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE")
