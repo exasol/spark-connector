@@ -64,7 +64,10 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
     val schema = df2.schema
     assert(schema.exists(f => f.name == "NAME"))
-    assert(schema.map(_.name).toSet === Set("ID", "NAME", "CITY", "DATE_INFO", "UPDATED_AT"))
+    assert(
+      schema.map(_.name).toSet ===
+        Set("ID", "UNICODE_COL", "NAME", "CITY", "DATE_INFO", "UPDATED_AT")
+    )
 
     val typeSet = schema.map(_.dataType).toSet
     assert(typeSet === Set(LongType, StringType, StringType, DateType, TimestampType))
@@ -155,6 +158,37 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
     assert(df.count() === 3)
     assert(df.collect().map(_(0)).toSet === Set("Berlin", "Lisbon", "Paris"))
+  }
+
+  test("load unicode data from exasol") {
+    createDummyTable()
+
+    val sparkConf = new SparkConf()
+      .setMaster("local[*]")
+      .set("spark.exasol.port", s"${container.port}")
+      .set("spark.exasol.host", container.host)
+      .set("spark.exasol.max_nodes", "200")
+
+    val sparkSession = SparkSession
+      .builder()
+      .config(sparkConf)
+      .getOrCreate()
+
+    val df = sparkSession.read
+      .format("exasol")
+      .option(
+        "query",
+        s"SELECT UNICODE_COL FROM $EXA_SCHEMA.$EXA_TABLE " +
+          s" WHERE UNICODE_COL IS NOT NULL"
+      )
+      .option("port", s"falsePortNumber")
+      .option("host", s"falseHostName")
+      .load()
+
+    assert(df.count() === 3)
+    // scalastyle:off
+    assert(df.collect().map(_(0)).toSet === Set("öäüß", "Ö", "Ù"))
+    // scalastyle:on
   }
 
 }
