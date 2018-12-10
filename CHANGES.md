@@ -1,5 +1,10 @@
-## Unreleased
+## v0.1.3
 
+> 2018 DEC 10
+
+* Add tests for Unicode strings in predicate pushdown
+  [#12](https://github.com/exasol/spark-exasol-connector/issues/12)
+  [#34](https://github.com/exasol/spark-exasol-connector/pull/34) by @jpizagno
 * Spark dataframe `count` action pushdown
   [#24](https://github.com/EXASOL/spark-exasol-connector/issues/24)
   [#29](https://github.com/EXASOL/spark-exasol-connector/pull/29) by @morazow
