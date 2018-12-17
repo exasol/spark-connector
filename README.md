@@ -72,7 +72,7 @@ For more examples you can check [docs/examples](docs/examples.md).
 You can include the connector as a dependency in your projects. Please find the
 latest versions at [Maven Central
 Repositories](https://mvnrepository.com/artifact/com.exasol) for
-`spark-connector`
+`spark-connector`.
 
 Using SBT:
 
