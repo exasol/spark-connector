@@ -10,7 +10,7 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 cd "$BASE_DIR"
 
 MAIN_SCALA_VERSION=2.11.12
-MAIN_SPARK_VERSION=2.3.1
+MAIN_SPARK_VERSION=2.4.0
 
 if [[ -z "${TRAVIS_SCALA_VERSION:-}" ]]; then
   echo "Environment variable TRAVIS_SCALA_VERSION is not set"
