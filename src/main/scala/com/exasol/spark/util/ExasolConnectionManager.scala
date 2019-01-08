@@ -1,6 +1,5 @@
 package com.exasol.spark.util
 
-import java.sql.Connection
 import java.sql.DriverManager
 import java.util.concurrent.ConcurrentHashMap
 
