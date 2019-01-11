@@ -32,6 +32,13 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
       config.password
     )
 
+  def writerMainConnection(): EXAConnection =
+    ExasolConnectionManager.makeConnection(
+      s"$getJdbcConnectionString;autocommit=0",
+      config.username,
+      config.password
+    )
+
   /**
    * A single non-pooled [[com.exasol.jdbc.EXAConnection]] connection
    *
