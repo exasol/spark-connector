@@ -82,7 +82,7 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
         .load()
     }
     assert(
-      thrown.getMessage === "A sql query string should be specified when loading from Exasol"
+      thrown.getMessage === "A query parameter should be specified in order to run the operation"
     )
   }
 
@@ -186,9 +186,7 @@ class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
       .load()
 
     assert(df.count() === 3)
-    // scalastyle:off
-    assert(df.collect().map(_(0)).toSet === Set("öäüß", "Ö", "Ù"))
-    // scalastyle:on
+    assert(df.collect().map(_(0)).toSet === Set("öäüß", "Ö", "Ù")) // scalastyle:ignore nonascii
   }
 
 }

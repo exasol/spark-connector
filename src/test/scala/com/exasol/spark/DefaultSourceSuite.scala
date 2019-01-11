@@ -6,7 +6,8 @@ import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.mockito.MockitoSugar
 
 class DefaultSourceSuite extends FunSuite with Matchers with MockitoSugar {
-  test("fromParameters should throw Exception when no query is provided") {
+
+  test("when reading should throw an Exception if no `query` parameter is provided") {
     val sqlContext = mock[SQLContext]
 
     val thrown = intercept[UnsupportedOperationException] {
@@ -14,11 +15,11 @@ class DefaultSourceSuite extends FunSuite with Matchers with MockitoSugar {
     }
 
     assert(
-      thrown.getMessage === "A sql query string should be specified when loading from Exasol"
+      thrown.getMessage === "A query parameter should be specified in order to run the operation"
     )
   }
 
-  test("mergeConfiguration should merge runtime exasol sparkConf into user provided parameters") {
+  test("mergeConfigurations should merge runtime sparkConf into user provided parameters") {
     val sparkConf = Map[String, String](
       "spark.exasol.username" -> "newUsername",
       "spark.exasol.host" -> "hostName",
@@ -26,7 +27,7 @@ class DefaultSourceSuite extends FunSuite with Matchers with MockitoSugar {
     )
     val parameters = Map[String, String]("username" -> "oldUsername", "password" -> "oldPassword")
 
-    val newConf = new DefaultSource().mergeConfiguration(parameters, sparkConf)
+    val newConf = new DefaultSource().mergeConfigurations(parameters, sparkConf)
     // overwrite config if both are provided
     assert(newConf.getOrElse("username", "not available") === "newUsername")
 

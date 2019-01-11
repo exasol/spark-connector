@@ -32,8 +32,8 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
           |   NAME VARCHAR(100) UTF8,
           |   CITY VARCHAR(2000) UTF8,
           |   DATE_INFO DATE,
-          |   UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-          |   UNICODE_COL VARCHAR(100) UTF8
+          |   UNICODE_COL VARCHAR(100) UTF8,
+          |   UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           |)""".stripMargin,
       s"""|INSERT INTO $EXA_SCHEMA.$EXA_TABLE (name, city, date_info, unicode_col)
           | VALUES ('Germany', 'Berlin', '2017-12-31', 'öäüß')
