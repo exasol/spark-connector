@@ -3,6 +3,8 @@ package com.exasol.spark.util
 import java.sql.DriverManager
 import java.util.concurrent.ConcurrentHashMap
 
+import scala.util.Try
+
 import com.exasol.jdbc.EXAConnection
 import com.exasol.jdbc.EXAResultSet
 import com.exasol.jdbc.EXAStatement
@@ -126,6 +128,35 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
       throw new IllegalStateException("Could not query the count!")
     }
     cnt
+  }
+
+  /**
+   * Checks if table already exists, if so should return true otherwise false
+   *
+   * TODO: This should be changed to Exasol specific checks. For example, by using
+   *       EXA_USER_TABLES.
+   *
+   * @param tableName A Exasol table name including schema, e.g. `schema.tableName`
+   * @return A boolean, true if table exists
+   *
+   */
+  def tableExists(tableName: String): Boolean = withConnection[Boolean] { conn =>
+    val tryEither = Try {
+      val stmt = conn.prepareStatement(s"SELECT * FROM $tableName WHERE 1=0")
+      try {
+        stmt.executeQuery()
+      } finally {
+        stmt.close()
+      }
+    }
+
+    tryEither.isSuccess
+  }
+
+  /** Given an Exasol table name (with schema, e.g mySchema.myTable format), truncates it */
+  def truncateTable(tableName: String): Unit = withStatement[Unit] { stmt =>
+    val _ = stmt.executeUpdate(s"TRUNCATE TABLE $tableName")
+    ()
   }
 
 }
