@@ -50,13 +50,21 @@ class DefaultSourceSuite extends FunSuite with Matchers with MockitoSugar {
     assert(source.repartitionPerNode(df, 2) === df)
     assert(source.repartitionPerNode(df, 2).rdd.getNumPartitions === 2)
 
-    val reducedDF = mock[DataFrame]
-    val reducedRdd = mock[RDD[Row]]
-    when(reducedDF.rdd).thenReturn(reducedRdd)
-    when(reducedRdd.getNumPartitions).thenReturn(1)
+    val repartedDF = mock[DataFrame]
+    val repartedRdd = mock[RDD[Row]]
+    when(repartedDF.rdd).thenReturn(repartedRdd)
+    when(repartedRdd.getNumPartitions).thenReturn(3)
 
-    when(df.coalesce(1)).thenReturn(reducedDF)
-    assert(source.repartitionPerNode(df, 1) === reducedDF)
+    when(df.repartition(3)).thenReturn(repartedDF)
+    assert(source.repartitionPerNode(df, 3).rdd.getNumPartitions === 3)
+
+    val coalescedDF = mock[DataFrame]
+    val coalescedRdd = mock[RDD[Row]]
+    when(coalescedDF.rdd).thenReturn(coalescedRdd)
+    when(coalescedRdd.getNumPartitions).thenReturn(1)
+
+    when(df.coalesce(1)).thenReturn(coalescedDF)
+    assert(source.repartitionPerNode(df, 1) === coalescedDF)
     assert(source.repartitionPerNode(df, 1).rdd.getNumPartitions === 1)
   }
 

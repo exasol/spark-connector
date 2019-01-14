@@ -136,12 +136,38 @@ class DefaultSource
     newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
   }
 
-  def repartitionPerNode(df: DataFrame, nodesCnt: Int): DataFrame =
-    if (nodesCnt < df.rdd.getNumPartitions) {
+  /**
+   * Rearrange dataframe partitions into Exasol nodes number
+   *
+   * If `nodesCnt` < `df.rdd.getNumPartitions` then perform
+   *
+   * {{{
+   *   df.coalesce(nodesCnt)
+   * }}}
+   *
+   * in order to reduce the partition counts.
+   *
+   * If `nodesCnt` > `df.rdd.getNumPartitions` then perform
+   *
+   * {{{
+   *   df.repartition(nodesCnt)
+   * }}}
+   *
+   * so that there a partition for each data node.
+   *
+   * If the number of partitions and nodes are same, then do nothing.
+   *
+   */
+  def repartitionPerNode(df: DataFrame, nodesCnt: Int): DataFrame = {
+    val rddPartitionCnt = df.rdd.getNumPartitions
+    if (nodesCnt < rddPartitionCnt) {
       df.coalesce(nodesCnt)
+    } else if (nodesCnt > rddPartitionCnt) {
+      df.repartition(nodesCnt)
     } else {
       df
     }
+  }
 
   private[this] def getKValue(key: String, parameters: Map[String, String]): String =
     parameters.get(key) match {
