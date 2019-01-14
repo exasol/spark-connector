@@ -9,6 +9,7 @@ import org.apache.spark.sql.types.StructType
 
 import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.Types
 import com.exasol.spark.writer.ExasolWriter
 
 /**
@@ -85,20 +86,14 @@ class DefaultSource
     mode match {
       case SaveMode.Overwrite =>
         if (!isTableExist) {
-          // maybe createTable?
-          throw new RuntimeException(
-            s"Table $tableName does not exist when saving with 'overwrite' mode"
-          )
+          createDFTable(data, tableName, manager)
         }
         manager.truncateTable(tableName)
         saveDFTable(sqlContext, data, tableName, manager)
 
       case SaveMode.Append =>
         if (!isTableExist) {
-          // maybe createTable?
-          throw new RuntimeException(
-            s"Table $tableName does not exist when saving with 'append' mode"
-          )
+          createDFTable(data, tableName, manager)
         }
         saveDFTable(sqlContext, data, tableName, manager)
 
@@ -106,16 +101,16 @@ class DefaultSource
         if (isTableExist) {
           throw new RuntimeException(
             s"Table $tableName already exists." +
-              " Use one of other SaveMode modes: 'append', 'overwrite' or 'ignore'"
+              " Use one of other SaveMode modes: 'append', 'overwrite' or 'ignore'."
           )
         }
-      // createTable
-      // saveDFTable
+        createDFTable(data, tableName, manager)
+        saveDFTable(sqlContext, data, tableName, manager)
 
       case SaveMode.Ignore =>
         if (!isTableExist) {
-          // createTable
-          // saveDFTable
+          createDFTable(data, tableName, manager)
+          saveDFTable(sqlContext, data, tableName, manager)
         }
     }
 
@@ -135,6 +130,9 @@ class DefaultSource
 
     newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
   }
+
+  def createDFTable(df: DataFrame, tableName: String, manager: ExasolConnectionManager): Unit =
+    manager.createTable(tableName, Types.createTableSchema(df.schema))
 
   /**
    * Rearrange dataframe partitions into Exasol nodes number

@@ -5,6 +5,7 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SaveMode
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.types._
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.mockito.Mockito.when
@@ -68,7 +69,7 @@ class DefaultSourceSuite extends FunSuite with Matchers with MockitoSugar {
     assert(source.repartitionPerNode(df, 1).rdd.getNumPartitions === 1)
   }
 
-  test("mergeConfigurations should merge runtime sparkConf into user provided parameters") {
+  test("`mergeConfigurations` should merge runtime sparkConf into user provided parameters") {
     val sparkConf = Map[String, String](
       "spark.exasol.username" -> "newUsername",
       "spark.exasol.host" -> "hostName",

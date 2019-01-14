@@ -12,6 +12,7 @@ import org.apache.spark.sql.types.StructType
 import com.exasol.jdbc.EXAConnection
 import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.Types
 
 import com.typesafe.scalalogging.LazyLogging
 
@@ -74,7 +75,7 @@ class ExasolWriter(
     val stmt = subConn.prepareStatement(insertStmt)
 
     val setters = rddSchema.fields.map(f => Converter.makeSetter(f.dataType))
-    val nullTypes = rddSchema.fields.map(f => Converter.jdbcTypeFromDataType(f.dataType))
+    val nullTypes = rddSchema.fields.map(f => Types.jdbcTypeFromSparkDataType(f.dataType))
     val fieldCnt = rddSchema.fields.length
 
     // TODO: This should be from manager configs. Similarly add another parameter (used in write)

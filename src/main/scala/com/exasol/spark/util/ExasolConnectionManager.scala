@@ -166,6 +166,23 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     ()
   }
 
+  /** Given an Exasol table name (with schema, e.g mySchema.myTable format), drop it */
+  def dropTable(tableName: String): Unit = withStatement[Unit] { stmt =>
+    val _ = stmt.executeUpdate(s"DROP TABLE IF EXISTS $tableName")
+    ()
+  }
+
+  /**
+   * Creates a table in Exasol
+   *
+   * @param tableName A table name (with both schema and table, e.g. myschem.my_table)
+   * @param tabelSchema A schema string of table with column names and types
+   */
+  def createTable(tableName: String, tableSchema: String): Unit = withStatement[Unit] { stmt =>
+    val _ = stmt.executeUpdate(s"CREATE TABLE $tableName ($tableSchema)")
+    ()
+  }
+
 }
 
 /**

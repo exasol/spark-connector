@@ -213,36 +213,13 @@ object Converter extends LazyLogging {
       (stmt: PreparedStatement, row: Row, pos: Int) =>
         stmt.setDate(pos + 1, row.getAs[java.sql.Date](pos))
 
-    case t: DecimalType =>
+    case dt: DecimalType =>
       (stmt: PreparedStatement, row: Row, pos: Int) =>
         stmt.setBigDecimal(pos + 1, row.getDecimal(pos))
 
     case _ =>
       (_: PreparedStatement, _: Row, pos: Int) =>
-        throw new IllegalArgumentException(s"Can't translate non-null value for field $pos")
-  }
-
-  /**
-   * Return corresponding Jdbc [[java.sql.Types]] type given Spark
-   * [[org.apache.spark.sql.types.DataType]] type
-   *
-   * @param dataType A Spark DataType (e.g. [[org.apache.spark.sql.types.StringType]])
-   * @return A default JdbcType for this DataType
-   */
-  private[spark] def jdbcTypeFromDataType(dataType: DataType): Int = dataType match {
-    case IntegerType    => java.sql.Types.INTEGER
-    case LongType       => java.sql.Types.BIGINT
-    case DoubleType     => java.sql.Types.DOUBLE
-    case FloatType      => java.sql.Types.FLOAT
-    case ShortType      => java.sql.Types.SMALLINT
-    case ByteType       => java.sql.Types.TINYINT
-    case BooleanType    => java.sql.Types.BIT
-    case StringType     => java.sql.Types.CLOB
-    case BinaryType     => java.sql.Types.BLOB
-    case TimestampType  => java.sql.Types.TIMESTAMP
-    case DateType       => java.sql.Types.DATE
-    case t: DecimalType => java.sql.Types.DECIMAL
-    case _              => throw new RuntimeException("Unsupported jdbc type!")
+        throw new IllegalArgumentException(s"Cannot translate non-null value for field $pos")
   }
 
 }
