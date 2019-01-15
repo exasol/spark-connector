@@ -78,9 +78,7 @@ class ExasolWriter(
     val nullTypes = rddSchema.fields.map(f => Types.jdbcTypeFromSparkDataType(f.dataType))
     val fieldCnt = rddSchema.fields.length
 
-    // TODO: This should be from manager configs. Similarly add another parameter (used in write)
-    // for per node package count.
-    val batchSize = 100
+    val batchSize = manager.config.batch_size
 
     try {
       var rowCnt = 0

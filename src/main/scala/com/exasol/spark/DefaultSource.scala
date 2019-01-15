@@ -99,9 +99,11 @@ class DefaultSource
 
       case SaveMode.ErrorIfExists =>
         if (isTableExist) {
-          throw new RuntimeException(
-            s"Table $tableName already exists." +
-              " Use one of other SaveMode modes: 'append', 'overwrite' or 'ignore'."
+          throw new UnsupportedOperationException(
+            s"""|Table $tableName already exists. And DataFrame write mode is set to
+                |`errorifexists` or `default`. Please use one of other SaveMode
+                |modes: 'append', 'overwrite' or 'ignore'.
+            """.stripMargin
           )
         }
         createDFTable(data, tableName, manager)
@@ -125,14 +127,30 @@ class DefaultSource
     manager: ExasolConnectionManager
   ): Unit = {
     val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, manager)
-    val exaNodes = writer.startParallel()
-    val newDF = repartitionPerNode(df, exaNodes)
+    val exaNodesCnt = writer.startParallel()
+    val newDF = repartitionPerNode(df, exaNodesCnt)
 
     newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
   }
 
-  def createDFTable(df: DataFrame, tableName: String, manager: ExasolConnectionManager): Unit =
+  def createDFTable(df: DataFrame, tableName: String, manager: ExasolConnectionManager): Unit = {
+    if (!manager.config.create_table) {
+      throw new UnsupportedOperationException(
+        s"""
+           |Table $tableName does not exist and cannot be created. Please enable table
+           |creation by setting 'create_table' to 'true'.
+           |For example:
+           |  df.write
+           |    .mode("overwrite")
+           |    .option("table", "nonexist")
+           |    .option("create_table", "true")
+           |    .format("exasol")
+           |    .save()
+        """.stripMargin
+      )
+    }
     manager.createTable(tableName, Types.createTableSchema(df.schema))
+  }
 
   /**
    * Rearrange dataframe partitions into Exasol nodes number

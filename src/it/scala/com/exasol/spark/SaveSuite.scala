@@ -67,7 +67,7 @@ class SaveSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
     ("name2", "city1", Date.valueOf("2019-02-25"), "çigit"),
     ("name2", "city2", Date.valueOf("2019-02-25"), "okay")
   )
-  // scalastyle:on
+  // scalastyle:on nonascii
 
   def runWithSaveMode(mode: String, partitionCnt: Int, tableExists: Boolean): Long = {
     import sqlContext.implicits._
@@ -80,15 +80,22 @@ class SaveSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
       exaManager.dropTable(tableName)
     }
 
+    val defaultOpts = Map(
+      "host" -> container.host,
+      "port" -> s"${container.port}",
+      "table" -> tableName
+    )
+
+    // add permission to create table if table does not exist
+    val opts = if (tableExists) defaultOpts else defaultOpts ++ Map("create_table" -> "true")
+
     val df = sc
       .parallelize(testData, partitionCnt)
       .toDF("name", "city", "date_info", "unicode_col")
 
     df.write
       .mode(mode)
-      .option("host", container.host)
-      .option("port", s"${container.port}")
-      .option("table", tableName)
+      .options(opts)
       .format("exasol")
       .save()
 
@@ -111,13 +118,11 @@ class SaveSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
         assert(runWithSaveMode(mode, parts, true) === expected)
     }
 
-    // Error if table exists
-    val thrown = intercept[RuntimeException] {
+    // Throw if table exists
+    val thrown = intercept[UnsupportedOperationException] {
       runWithSaveMode("errorifexists", 4, true)
     }
-    val expectedMsg = s"Table $EXA_SCHEMA.$EXA_TABLE already exists. " +
-      "Use one of other SaveMode modes: 'append', 'overwrite' or 'ignore'."
-    assert(thrown.getMessage === expectedMsg)
+    assert(thrown.getMessage.contains(s"Table $EXA_SCHEMA.$EXA_TABLE already exists"))
   }
 
   test("dataframe save with different modes when Exasol table does not exist") {
@@ -134,6 +139,26 @@ class SaveSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
       case (mode, parts) =>
         assert(runWithSaveMode(mode, parts, false) === cnt)
     }
+  }
+
+  test("dataframe save should throw if 'create_table' parameter was not set") {
+    import sqlContext.implicits._
+    val df = sc
+      .parallelize(testData, 3)
+      .toDF("name", "city", "date_info", "unicode_col")
+
+    val tableName = s"$EXA_SCHEMA.not_there"
+
+    val thrown = intercept[UnsupportedOperationException] {
+      df.write
+        .mode("append")
+        .option("host", container.host)
+        .option("port", s"${container.port}")
+        .option("table", tableName)
+        .format("exasol")
+        .save()
+    }
+    assert(thrown.getMessage.contains(s"Table $tableName does not exist and cannot be created."))
   }
 
 }
