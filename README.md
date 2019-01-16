@@ -153,7 +153,7 @@ spark-submit \
     --packages com.exasol:spark-connector_2.11:$LATEST_VERSION \
     --class com.myorg.SparkExasolConnectorApp \
     --conf spark.exasol.password=exaTru3P@ss \
-    path/to/project/folder/target/scala-2.11/sparkexasolconnectorapp_2.11-0.0.1-SNAPSHOT.jar
+    path/to/project/folder/target/scala-2.11/sparkexasolconnectorapp_2.11-5.3.1.jar
 ```
 
 This deployment example also shows that you can configure the Exasol parameters

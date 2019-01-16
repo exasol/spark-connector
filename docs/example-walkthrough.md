@@ -8,6 +8,7 @@ dataframe.
 * [Spark Application Setup](#spark-application-setup)
 * [Create Spark Dataframe from Exasol Query](#create-spark-dataframe-from-exasol-query)
 * [Save Spark Dataframe into Exasol Table](#save-spark-dataframe-into-exasol-table)
+* [Deployment](#deployment)
 
 ## Create Exasol Tables
 
@@ -204,5 +205,29 @@ And finally close the Spark session:
 ```scala
 spark.stop()
 ```
+
+## Deployment
+
+You can run your Spark application with command `sbt run`. However, this will
+run it using Spark standalone mode.
+
+In order to submit your application into the Spark cluster, you can first
+package the code. Package your application by running `sbt package` on command
+line.
+
+Finally, you can use `spark-submit`:
+
+```sh
+spark-submit \
+    --master spark://spark-master-url:7077
+    --repositories https://maven.exasol.com/artifactory/exasol-releases \
+    --packages com.exasol:spark-connector_2.11:0.1.3 \
+    --class com.myorg.SparkExasolConnectorApp \
+    --conf spark.exasol.password=exaTru3P@ss \
+    path/to/project/folder/target/scala-2.11/sparkexasolconnectorapp_2.11-0.0.1-SNAPSHOT.jar
+```
+
+This deployment script example also shows that you can set the Exasol parameters
+at startup using `--conf spark.exasol.keyName=value` syntax.
 
 [sbt]: https://www.scala-sbt.org/
