@@ -21,7 +21,7 @@ class SaveSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
     assert(exaManager.tableExists("DUMMY_SCHEMA.DUMMYTABLE") === false)
   }
 
-  test("`tuncateTable` should perform table truncation") {
+  test("`truncateTable` should perform table truncation") {
     createDummyTable()
 
     assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $EXA_SCHEMA.$EXA_TABLE") > 0)
