@@ -70,7 +70,7 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
     "org.apache.spark" %% "spark-core" % "2.4.0",
     "org.apache.spark" %% "spark-sql" % "2.4.0",
-    "com.exasol" %% "spark-connector" % "0.1.3"
+    "com.exasol" %% "spark-connector" % "0.2.0"
 )
 ```
 
@@ -221,7 +221,7 @@ Finally, you can use `spark-submit`:
 spark-submit \
     --master spark://spark-master-url:7077
     --repositories https://maven.exasol.com/artifactory/exasol-releases \
-    --packages com.exasol:spark-connector_2.11:0.1.3 \
+    --packages com.exasol:spark-connector_2.11:0.2.0 \
     --class com.myorg.SparkExasolConnectorApp \
     --conf spark.exasol.password=exaTru3P@ss \
     path/to/project/folder/target/scala-2.11/sparkexasolconnectorapp_2.11-0.0.1-SNAPSHOT.jar
