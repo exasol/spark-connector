@@ -34,6 +34,12 @@ object Publishing {
     ),
     developers := List(
       Developer(
+        id = "exasol",
+        name = "Exasol AG",
+        email = "opensource@exasol.com",
+        url = url("https://github.com/exasol/")
+      ),
+      Developer(
         id = "morazow",
         name = "Muhammet Orazov",
         email = "muhammet.orazov@exasol.com",

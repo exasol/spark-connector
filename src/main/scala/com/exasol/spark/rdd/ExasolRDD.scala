@@ -3,7 +3,6 @@ package com.exasol.spark.rdd
 import java.sql.ResultSet
 import java.sql.Statement
 
-import scala.reflect.ClassTag
 import scala.util.control.NonFatal
 
 import org.apache.spark.Partition
@@ -97,7 +96,7 @@ class ExasolRDD(
   override def compute(split: Partition, context: TaskContext): Iterator[Row] = {
     var closed = false
     var resultSet: ResultSet = null
-    var stmt: Statement = null
+    val stmt: Statement = null
     var conn: EXAConnection = null
 
     def close(): Unit = {

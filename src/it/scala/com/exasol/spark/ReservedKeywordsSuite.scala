@@ -53,18 +53,20 @@ class ReservedKeywordsSuite extends FunSuite with BaseDockerSuite with DataFrame
     assert(df.collect().map(x => x(0)).toSet === Set("Checked"))
   }
 
-  def createTable(): Unit = {
-    runExaQuery(s"DROP SCHEMA IF EXISTS $SCHEMA CASCADE")
-    runExaQuery(s"CREATE SCHEMA $SCHEMA")
-    runExaQuery(s"""
-                   |CREATE OR REPLACE TABLE $SCHEMA.$TABLE (
-                   |   ID INTEGER IDENTITY NOT NULL,
-                   |   "CONDITION" VARCHAR(100) UTF8
-                   |)""".stripMargin)
-    runExaQuery(s"""INSERT INTO $SCHEMA.$TABLE ("CONDITION") VALUES ('True')""")
-    runExaQuery(s"""INSERT INTO $SCHEMA.$TABLE ("CONDITION") VALUES ('False')""")
-    runExaQuery(s"""INSERT INTO $SCHEMA.$TABLE ("CONDITION") VALUES ('Checked')""")
-    runExaQuery("commit")
-  }
+  def createTable(): Unit =
+    exaManager.withExecute(
+      Seq(
+        s"DROP SCHEMA IF EXISTS $SCHEMA CASCADE",
+        s"CREATE SCHEMA $SCHEMA",
+        s"""|CREATE OR REPLACE TABLE $SCHEMA.$TABLE (
+            |   ID INTEGER IDENTITY NOT NULL,
+            |   "CONDITION" VARCHAR(100) UTF8
+            |)""".stripMargin,
+        s"""INSERT INTO $SCHEMA.$TABLE ("CONDITION") VALUES ('True')""",
+        s"""INSERT INTO $SCHEMA.$TABLE ("CONDITION") VALUES ('False')""",
+        s"""INSERT INTO $SCHEMA.$TABLE ("CONDITION") VALUES ('Checked')""",
+        "commit"
+      )
+    )
 
 }

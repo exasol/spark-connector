@@ -44,7 +44,9 @@ final case class ExasolConfiguration(
   port: Int,
   username: String,
   password: String,
-  max_nodes: Int
+  max_nodes: Int,
+  create_table: Boolean,
+  batch_size: Int
 )
 
 object ExasolConfiguration {
@@ -60,7 +62,9 @@ object ExasolConfiguration {
       port = opts.getOrElse("port", "8888").toInt,
       username = opts.getOrElse("username", "sys"),
       password = opts.getOrElse("password", "exasol"),
-      max_nodes = opts.getOrElse("max_nodes", "200").toInt
+      max_nodes = opts.getOrElse("max_nodes", "200").toInt,
+      create_table = opts.getOrElse("create_table", "false").toBoolean,
+      batch_size = opts.getOrElse("batch_size", "1000").toInt
     )
 
 }

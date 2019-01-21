@@ -86,7 +86,7 @@ class ExasolRelation(
   private[this] def makeEmptyRDD(filters: Array[Filter]): RDD[Row] = {
     val cntQuery = enrichQuery(Array.empty[String], filters)
     val cnt = manager.withCountQuery(cntQuery)
-    sqlContext.sparkContext.parallelize(1L to cnt, 4).map(r => Row.empty)
+    sqlContext.sparkContext.parallelize(1L to cnt, 4).map(_ => Row.empty)
   }
 
   /**

@@ -9,6 +9,7 @@ import org.apache.spark.Partition
  * materializes the data of a node based on the information represented by a partition.
  *
  * @param idx A partition identifier (0 based)
+ * @param handle A Exasol sub connection query identifier handle
  * @param connectionUrl An exasol jdbc (sub) connection string
  *
  */
