@@ -1,10 +1,14 @@
-# [WIP] Spark Exasol Connector
+# Spark Exasol Connector
 
 [![Build Status][travis-badge]][travis-link]
 [![Codecov][codecov-badge]][codecov-link]
 [![Maven Central][maven-img-badge]][maven-link]
 
-###### Please note that this is an open source project which is *not officially supported* by Exasol. We will try to help you as much as possible, but can't guarantee anything since this is not an official Exasol product.
+<p style="border: 1px solid black;padding: 10px; background-color: #FFFFCC;">
+<span style="font-size:200%">&#128712;</span> Please note that this is an open
+source project which is officially supported by Exasol. For any question, you
+can contact our support team or open a [Github issue][gh-issues].
+</p>
 
 ## Overview
 
@@ -232,7 +236,7 @@ spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
 
 ## FAQ
 
-- Getting an `Connection was lost and could not be reestablished` error
+* Getting an `Connection was lost and could not be reestablished` error
 
   For example:
 
@@ -267,6 +271,7 @@ spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
 [maven-img-badge]: https://img.shields.io/maven-central/v/com.exasol/spark-connector_2.11.svg
 [maven-reg-badge]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.11/badge.svg
 [maven-link]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.11
+[gh-issues]: https://github.com/exasol/spark-exasol-connector/issues
 [exasol]: https://www.exasol.com/en/
 [spark]: https://spark.apache.org/
 [spark-ds-api]: https://databricks.com/blog/2015/01/09/spark-sql-data-sources-api-unified-data-access-for-the-spark-platform.html
