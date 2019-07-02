@@ -166,7 +166,7 @@ object Converter extends LazyLogging {
   // A `JDBCValueSetter` is responsible for setting a value from `Row` into a field for
   // `PreparedStatement`. The last argument `Int` means the index for the value to be set in the
   // SQL statement and also used for the value in `Row`.
-  private type JDBCValueSetter = (PreparedStatement, Row, Int) => Unit
+  private[spark] type JDBCValueSetter = (PreparedStatement, Row, Int) => Unit
 
   private[spark] def makeSetter(dataType: DataType): JDBCValueSetter = dataType match {
     case IntegerType =>
@@ -213,7 +213,7 @@ object Converter extends LazyLogging {
       (stmt: PreparedStatement, row: Row, pos: Int) =>
         stmt.setDate(pos + 1, row.getAs[java.sql.Date](pos))
 
-    case dt: DecimalType =>
+    case _: DecimalType =>
       (stmt: PreparedStatement, row: Row, pos: Int) =>
         stmt.setBigDecimal(pos + 1, row.getDecimal(pos))
 

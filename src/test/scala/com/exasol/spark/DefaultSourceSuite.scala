@@ -5,9 +5,7 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SaveMode
 import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.types._
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.mockito.Mockito.when
 import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.mockito.MockitoSugar

@@ -2,10 +2,6 @@ package com.exasol.spark
 
 import java.sql.Date
 
-import org.apache.spark.{SparkConf, SparkException}
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.types._
-
 import com.exasol.spark.util.Types
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase

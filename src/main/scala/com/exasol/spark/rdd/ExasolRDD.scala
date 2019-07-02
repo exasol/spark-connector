@@ -139,7 +139,7 @@ class ExasolRDD(
       closed = true
     }
 
-    val _ = context.addTaskCompletionListener { context =>
+    val _ = context.addTaskCompletionListener[Unit] { _ =>
       close()
     }
 
