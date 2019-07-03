@@ -20,10 +20,20 @@ tables.
 The implementation is based on Spark [DataSources API][spark-ds-api] and Exasol
 [Sub Connections][sol-546].
 
+* [Prerequisite](#prerequisite)
 * [Quick Start](#quick-start)
 * [Usage](#usage)
 * [Configuration](#configuration)
 * [Building and Testing](#building-and-testing)
+
+## Prerequisite
+
+* Deployed and running Spark cluster
+* Deployed and running Exasol cluster
+* Make sure that Spark cluster can connect to Exasol nodes using private ip
+  addresses, e.g, `10.0.0.11`
+* Make sure that Exasol nodes are reachable from Spark cluster on port `8563`
+  and on port range `20000-21000`
 
 ## Quick Start
 
@@ -235,6 +245,15 @@ spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
 ```
 
 ## FAQ
+
+* Getting an `com.exasol.jdbc.ConnectFailed: Connection refused` exception
+
+  This usually occurs when the Spark connector cannot reach Exasol data nodes.
+  Please make sure that the Exasol data nodes are reachable on port `8563` and
+  on port ranges `20000-21000`.
+
+  Additionally, please make sure that the `host` parameter value is set to the
+  first Exasol datanode address, for example, `10.0.0.11`.
 
 * Getting an `Connection was lost and could not be reestablished` error
 
