@@ -83,12 +83,13 @@ class FiltersSuite extends FunSuite with Matchers {
     assert(createWhereClause(testSchema, filters) === expected)
   }
 
+  // scalastyle:off nonascii
   test("creates where clause from EqualTo with different data types") {
     val filters = Seq(
       EqualTo("bool_col", false),
       EqualTo("str_col", "XYZ"),
-      // EqualTo("str_col", "unicode str"),
-      // EqualTo("str_col", "quoted str"),
+      EqualTo("str_col", "\u00d6"),
+      EqualTo("str_col", "He said 'good morning'"),
       EqualTo("int_col", 42),
       EqualTo("float_col", 13.0f),
       EqualTo("double_col", 100.0),
@@ -100,6 +101,8 @@ class FiltersSuite extends FunSuite with Matchers {
       """
         |    bool_col = false
         |AND str_col = 'XYZ'
+        |AND str_col = 'Ö'
+        |AND str_col = 'He said 'good morning''
         |AND int_col = 42
         |AND float_col = 13.0
         |AND double_col = 100.0
@@ -109,6 +112,7 @@ class FiltersSuite extends FunSuite with Matchers {
 
     assert(createWhereClause(testSchema, filters) === expected)
   }
+  // scalastyle:on nonascii
 
   test("creates where clause from a nested list of filters") {
     val filters = Seq(

@@ -26,7 +26,7 @@ can find instructions on how to install Docker [here][docker-install].
 First clone a local copy of the repository:
 
 ```bash
-git clone https://github.com/EXASOL/spark-exasol-connector.git
+git clone https://github.com/exasol/spark-exasol-connector.git
 ```
 
 Then enter into it and run:
@@ -61,7 +61,7 @@ steps below to submit your patches.
 - Fork the repository,
 
   ```bash
-  git clone git@github.com:YOUR-USERNAME/EXASOL/spark-exasol-connector.git
+  git clone git@github.com:YOUR-USERNAME/exasol/spark-exasol-connector.git
   ```
 
 - Create a new feature branch, `git checkout -b "cool-new-feature"`
@@ -86,13 +86,13 @@ Some best practices when creating a pull request:
 
 You can read more [here][do-pr1] and [here][do-pr2].
 
-[exa-issues]: https://github.com/EXASOL/spark-exasol-connector/issues
+[exa-issues]: https://github.com/exasol/spark-exasol-connector/issues
 [fork-and-pull]: https://help.github.com/articles/using-pull-requests/
-[exa-pulls]: https://github.com/EXASOL/spark-exasol-connector/pulls
+[exa-pulls]: https://github.com/exasol/spark-exasol-connector/pulls
 [docker]: https://www.docker.com/
 [docker-install]: https://docs.docker.com/install/
-[open-issues]: https://github.com/EXASOL/spark-exasol-connector/issues
-[first-issue]: https://github.com/EXASOL/spark-exasol-connector/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
-[submit-pr]: https://github.com/EXASOL/spark-exasol-connector/compare
+[open-issues]: https://github.com/exasol/spark-exasol-connector/issues
+[first-issue]: https://github.com/exasol/spark-exasol-connector/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
+[submit-pr]: https://github.com/exasol/spark-exasol-connector/compare
 [do-pr1]: https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github
 [do-pr2]: https://www.digitalocean.com/community/tutorials/how-to-rebase-and-update-a-pull-request
