@@ -8,6 +8,12 @@ import org.scalatest.{FunSuite, Matchers}
 
 class TypesSuite extends FunSuite with Matchers {
 
+  test("test of Spark Decimal types to Exasol Decimal types") {
+    assert(exasolTypeFromSparkDataType(DecimalType.apply(5, 2)) === "DECIMAL(5,2)")
+    assert(exasolTypeFromSparkDataType(DecimalType.SYSTEM_DEFAULT) === "DECIMAL(36,18)")
+    assert(exasolTypeFromSparkDataType(DecimalType.apply(38, 37)) === "DECIMAL(36,36)")
+  }
+
   test("test of Int type conversion") {
     assert(createSparkTypeFromSQLType(java.sql.Types.TINYINT, 0, 0, false) === ShortType)
     assert(createSparkTypeFromSQLType(java.sql.Types.SMALLINT, 0, 0, false) === ShortType)

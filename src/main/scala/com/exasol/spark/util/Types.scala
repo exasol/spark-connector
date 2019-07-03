@@ -167,12 +167,31 @@ object Types extends LazyLogging {
     case LongType        => "BIGINT"
     case DoubleType      => "DOUBLE"
     case FloatType       => "FLOAT"
-    case dt: DecimalType => "DECIMAL"
+    case dt: DecimalType => convertSparkPrecisionScaleToExasol(dt)
     case BooleanType     => "BOOLEAN"
     case StringType      => "CLOB"
     case DateType        => "DATE"
     case TimestampType   => "TIMESTAMP"
     case _               => throw new RuntimeException(s"Unsupported Spark data type $dataType!")
+  }
+
+  /**
+    * Convert Spark Type with Decimal precision,scale to Exasol type.
+    * Spark.DecimalType(5,2) -> "DECIMAL(5,2)"
+    *
+    * Exasol has a max scale,precision of 36. Spark precision/scale greater than 36 will be truncated.
+    *
+    * @param decimalType  A Spark DecimalType with precision and scale
+    * @return The Equivalent Exasol type
+    */
+  def convertSparkPrecisionScaleToExasol(decimalType: DecimalType): String = {
+    var precision = decimalType.precision
+    if (precision > 36) precision = 36
+
+    var scale = decimalType.scale
+    if (scale > 36) scale = 36
+
+    "DECIMAL(" + precision + "," + scale + ")"
   }
 
   /**
