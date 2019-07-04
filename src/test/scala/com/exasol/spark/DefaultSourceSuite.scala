@@ -16,14 +16,24 @@ class DefaultSourceSuite extends FunSuite with Matchers with MockitoSugar {
 
   test("when reading should throw an Exception if no `query` parameter is provided") {
     val sqlContext = mock[SQLContext]
-
     val thrown = intercept[UnsupportedOperationException] {
       new DefaultSource().createRelation(sqlContext, Map[String, String]())
     }
+    val thrownMsg = thrown.getMessage
+    assert(thrownMsg === "A query parameter should be specified in order to run the operation")
+  }
 
-    assert(
-      thrown.getMessage === "A query parameter should be specified in order to run the operation"
-    )
+  test("throws an Exception if host parameter is not an ip address") {
+    val parameters = Map("query" -> "SELECT 1", "host" -> "a.b.c.d")
+    val sqlContext = mock[SQLContext]
+    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+
+    val thrown = intercept[IllegalArgumentException] {
+      new DefaultSource().createRelation(sqlContext, parameters)
+    }
+
+    val thrownMsg = thrown.getMessage
+    assert(thrownMsg === "The host value should be an ip address of the first Exasol data node!")
   }
 
   test("when saving should throw an Exception if no `table` parameter is provided") {
