@@ -185,11 +185,9 @@ object Types extends LazyLogging {
     * @return The Equivalent Exasol type
     */
   def convertSparkPrecisionScaleToExasol(decimalType: DecimalType): String = {
-    var precision = decimalType.precision
-    if (precision > 36) precision = 36
+    val precision = math.min(decimalType.precision, MAX_PRECISION_EXASOL)
 
-    var scale = decimalType.scale
-    if (scale > 36) scale = 36
+    val scale = math.min(decimalType.scale, MAX_SCALE_EXASOL)
 
     "DECIMAL(" + precision + "," + scale + ")"
   }
