@@ -176,20 +176,21 @@ object Types extends LazyLogging {
   }
 
   /**
-    * Convert Spark Type with Decimal precision,scale to Exasol type.
-    * Spark.DecimalType(5,2) -> "DECIMAL(5,2)"
-    *
-    * Exasol has a max scale,precision of 36. Spark precision/scale greater than 36 will be truncated.
-    *
-    * @param decimalType  A Spark DecimalType with precision and scale
-    * @return The Equivalent Exasol type
-    */
+   * Convert Spark Type with Decimal precision,scale to Exasol type.
+   * Spark.DecimalType(5,2) -> "DECIMAL(5,2)"
+   *
+   * Exasol has a max scale, precision of 36.
+   * Spark precision/scale greater than 36 will be truncated.
+   *
+   * @param decimalType  A Spark DecimalType with precision and scale
+   * @return The Equivalent Exasol type
+   */
   def convertSparkPrecisionScaleToExasol(decimalType: DecimalType): String = {
     val precision = math.min(decimalType.precision, MAX_PRECISION_EXASOL)
 
     val scale = math.min(decimalType.scale, MAX_SCALE_EXASOL)
 
-    "DECIMAL(" + precision + "," + scale + ")"
+    "DECIMAL(" + precision.toString + "," + scale.toString + ")"
   }
 
   /**
