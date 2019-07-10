@@ -123,8 +123,8 @@ object Types extends LazyLogging {
    */
   private[this] def boundedDecimal(precision: Int, scale: Int): DecimalType =
     DecimalType(
-      math.min(precision, DecimalType.MAX_PRECISION),
-      math.min(scale, DecimalType.MAX_SCALE)
+      math.min(math.min(precision, DecimalType.MAX_PRECISION), MAX_PRECISION_EXASOL),
+      math.min(math.min(scale, DecimalType.MAX_SCALE), MAX_SCALE_EXASOL)
     )
 
   /**
