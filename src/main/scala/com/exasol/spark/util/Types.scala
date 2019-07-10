@@ -123,8 +123,8 @@ object Types extends LazyLogging {
    */
   private[this] def boundedDecimal(precision: Int, scale: Int): DecimalType =
     DecimalType(
-      math.min(precision, DecimalType.MAX_PRECISION),
-      math.min(scale, DecimalType.MAX_SCALE)
+      math.min(math.min(precision, DecimalType.MAX_PRECISION), MAX_PRECISION_EXASOL),
+      math.min(math.min(scale, DecimalType.MAX_SCALE), MAX_SCALE_EXASOL)
     )
 
   /**
@@ -161,18 +161,33 @@ object Types extends LazyLogging {
    * @return A default Exasol type as string for this DataType
    */
   def exasolTypeFromSparkDataType(dataType: DataType): String = dataType match {
-    case ShortType      => "SMALLINT"
-    case ByteType       => "TINYINT"
-    case IntegerType    => "INTEGER"
-    case LongType       => "BIGINT"
-    case DoubleType     => "DOUBLE"
-    case FloatType      => "FLOAT"
-    case _: DecimalType => "DECIMAL"
-    case BooleanType    => "BOOLEAN"
-    case StringType     => "CLOB"
-    case DateType       => "DATE"
-    case TimestampType  => "TIMESTAMP"
-    case _              => throw new RuntimeException(s"Unsupported Spark data type $dataType!")
+    case ShortType       => "SMALLINT"
+    case ByteType        => "TINYINT"
+    case IntegerType     => "INTEGER"
+    case LongType        => "BIGINT"
+    case DoubleType      => "DOUBLE"
+    case FloatType       => "FLOAT"
+    case dt: DecimalType => convertSparkPrecisionScaleToExasol(dt)
+    case BooleanType     => "BOOLEAN"
+    case StringType      => "CLOB"
+    case DateType        => "DATE"
+    case TimestampType   => "TIMESTAMP"
+    case _               => throw new RuntimeException(s"Unsupported Spark data type $dataType!")
+  }
+
+  /**
+   * Convert Spark Type with Decimal precision,scale to Exasol type.
+   * Spark.DecimalType(5,2) -> "DECIMAL(5,2)"
+   *
+   * Exasol has a max scale, precision of 36.
+   * Spark precision/scale greater than 36 will be truncated.
+   *
+   * @param decimalType  A Spark DecimalType with precision and scale
+   * @return The Equivalent Exasol type
+   */
+  def convertSparkPrecisionScaleToExasol(decimalType: DecimalType): String = {
+    val boundedType = boundedDecimal(decimalType.precision, decimalType.scale)
+    "DECIMAL(" + boundedType.precision.toString + "," + boundedType.scale.toString + ")"
   }
 
   /**
