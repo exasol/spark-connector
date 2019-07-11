@@ -45,19 +45,19 @@ matrix:
   include:
     - jdk: openjdk8
       scala: 2.11.12
-      env: SPARK_VERSION="2.3.2"
+      env: SPARK_VERSION="2.4.3"
 
     - jdk: oraclejdk8
       scala: 2.11.12
-      env: SPARK_VERSION="2.3.2"
+      env: SPARK_VERSION="2.4.3"
 
     - jdk: openjdk8
-      scala: 2.11.12
-      env: SPARK_VERSION="2.4.0"
+      scala: 2.12.8
+      env: SPARK_VERSION="2.4.3"
 
     - jdk: oraclejdk8
-      scala: 2.11.12
-      env: SPARK_VERSION="2.4.0" RELEASE=false
+      scala: 2.12.8
+      env: SPARK_VERSION="2.4.3" RELEASE=false
 
 script:
   - travis_wait 30 ./scripts/ci.sh

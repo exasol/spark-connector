@@ -18,7 +18,7 @@ object Dependencies {
   private val sparkCurrentVersion =
     sys.props.get("spark.currentVersion").getOrElse(SparkVersion)
 
-  private val SparkTestingBaseVersion = s"${sparkCurrentVersion}_0.11.0"
+  private val SparkTestingBaseVersion = s"${sparkCurrentVersion}_0.12.0"
 
   val Resolvers: Seq[Resolver] = Seq(
     "Exasol Releases" at "https://maven.exasol.com/artifactory/exasol-releases"

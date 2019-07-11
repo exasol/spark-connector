@@ -135,19 +135,19 @@ object Types extends LazyLogging {
    * @return A default JdbcType for this DataType
    */
   def jdbcTypeFromSparkDataType(dataType: DataType): Int = dataType match {
-    case IntegerType     => java.sql.Types.INTEGER
-    case LongType        => java.sql.Types.BIGINT
-    case DoubleType      => java.sql.Types.DOUBLE
-    case FloatType       => java.sql.Types.FLOAT
-    case ShortType       => java.sql.Types.SMALLINT
-    case ByteType        => java.sql.Types.TINYINT
-    case BooleanType     => java.sql.Types.BIT
-    case StringType      => java.sql.Types.CLOB
-    case BinaryType      => java.sql.Types.BLOB
-    case TimestampType   => java.sql.Types.TIMESTAMP
-    case DateType        => java.sql.Types.DATE
-    case dt: DecimalType => java.sql.Types.DECIMAL
-    case _               => throw new RuntimeException(s"Unsupported Spark data type $dataType!")
+    case IntegerType    => java.sql.Types.INTEGER
+    case LongType       => java.sql.Types.BIGINT
+    case DoubleType     => java.sql.Types.DOUBLE
+    case FloatType      => java.sql.Types.FLOAT
+    case ShortType      => java.sql.Types.SMALLINT
+    case ByteType       => java.sql.Types.TINYINT
+    case BooleanType    => java.sql.Types.BIT
+    case StringType     => java.sql.Types.CLOB
+    case BinaryType     => java.sql.Types.BLOB
+    case TimestampType  => java.sql.Types.TIMESTAMP
+    case DateType       => java.sql.Types.DATE
+    case _: DecimalType => java.sql.Types.DECIMAL
+    case _              => throw new RuntimeException(s"Unsupported Spark data type $dataType!")
   }
 
   /**
