@@ -30,6 +30,8 @@ The implementation is based on Spark [DataSources API][spark-ds-api] and Exasol
 
 * Deployed and running Spark cluster
 * Deployed and running Exasol cluster
+* Make sure Spark cluster has enough resources to start executors that are more
+  or equal to the number of Exasol data nodes
 * Make sure that Spark cluster can connect to Exasol nodes using private ip
   addresses, e.g, `10.0.0.11`
 * Make sure that Exasol nodes are reachable from Spark cluster on port `8563`
