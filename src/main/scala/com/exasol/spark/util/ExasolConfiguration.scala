@@ -2,6 +2,8 @@ package com.exasol.spark.util
 
 import java.net.InetAddress
 
+import scala.util.matching.Regex
+
 /**
  * The configuration parameters for Spark Exasol connector
  *
@@ -51,14 +53,25 @@ final case class ExasolConfiguration(
 
 object ExasolConfiguration {
 
+  val IPv4_DIGITS: String = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+  val IPv4_REGEX: Regex = raw"""^$IPv4_DIGITS\.$IPv4_DIGITS\.$IPv4_DIGITS\.$IPv4_DIGITS$$""".r
+
   def getLocalHost(): String = InetAddress.getLocalHost.getHostAddress
+
+  def checkHost(host: String): String = host match {
+    case IPv4_REGEX(_*) => host
+    case _ =>
+      throw new IllegalArgumentException(
+        "The host value should be an ip address of the first Exasol data node!"
+      )
+  }
 
   @SuppressWarnings(
     Array("org.wartremover.warts.Overloading", "org.danielnixon.extrawarts.StringOpsPartial")
   )
   def apply(opts: Map[String, String]): ExasolConfiguration =
     ExasolConfiguration(
-      host = opts.getOrElse("host", getLocalHost()),
+      host = checkHost(opts.getOrElse("host", getLocalHost())),
       port = opts.getOrElse("port", "8888").toInt,
       username = opts.getOrElse("username", "sys"),
       password = opts.getOrElse("password", "exasol"),
