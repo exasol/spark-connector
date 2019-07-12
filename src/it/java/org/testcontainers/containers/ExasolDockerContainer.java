@@ -31,7 +31,7 @@ JdbcDatabaseContainer<SELF> {
     super.configure();
     withNetworkMode("dockernet");
     withPrivilegedMode(true);
-    withStartupTimeout(Duration.of(EXASOL_STARTUP_TIME, SECONDS));
+    withStartupTimeoutSeconds(EXASOL_STARTUP_TIME);
     withCreateContainerCmdModifier(cmd -> cmd.withIpv4Address(EXASOL_HOST));
   }
 
