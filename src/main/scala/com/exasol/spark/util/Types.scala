@@ -142,7 +142,7 @@ object Types extends LazyLogging {
     case ShortType      => java.sql.Types.SMALLINT
     case ByteType       => java.sql.Types.TINYINT
     case BooleanType    => java.sql.Types.BIT
-    case StringType     => java.sql.Types.CLOB
+    case StringType     => java.sql.Types.VARCHAR
     case BinaryType     => java.sql.Types.BLOB
     case TimestampType  => java.sql.Types.TIMESTAMP
     case DateType       => java.sql.Types.DATE
