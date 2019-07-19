@@ -6,8 +6,8 @@ import sbt._
 object Dependencies {
 
   // Versions
-  private val SparkVersion = "2.4.0"
-  private val ExasolJdbcVersion = "6.0.13"
+  private val SparkVersion = "2.4.3"
+  private val ExasolJdbcVersion = "6.1.3"
 
   private val ScalaTestVersion = "3.0.5"
   private val MockitoVersion = "2.23.4"
