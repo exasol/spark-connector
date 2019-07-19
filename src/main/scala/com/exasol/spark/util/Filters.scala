@@ -3,13 +3,11 @@ package com.exasol.spark.util
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types._
 
-import com.typesafe.scalalogging.LazyLogging
-
 /**
  * A helper class with functions to create Exasol where clauses from Spark
  * [[org.apache.spark.sql.sources.Filter]]-s
  */
-object Filters extends LazyLogging {
+object Filters {
 
   /**
    * Creates an Exasol SQL where clause from given list of

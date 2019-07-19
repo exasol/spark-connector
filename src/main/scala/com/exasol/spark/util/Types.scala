@@ -2,12 +2,11 @@ package com.exasol.spark.util
 
 import java.sql.ResultSetMetaData
 
+import org.apache.spark.internal.Logging
 import org.apache.spark.sql.types._
 
-import com.typesafe.scalalogging.LazyLogging
-
 /** A helper class with mapping functions from Exasol JDBC types to/from Spark SQL types */
-object Types extends LazyLogging {
+object Types extends Logging {
 
   private val MAX_PRECISION_EXASOL: Int = 36
   private val MAX_SCALE_EXASOL: Int = 36
@@ -203,7 +202,7 @@ object Types extends LazyLogging {
     val fieldsNames = schema.fieldNames.toSet
     val newFields = columns.filter(fieldsNames.contains(_)).map(schema(_))
     val newSchema = StructType(newFields)
-    logger.debug(s"Using a new pruned schema $newSchema")
+    logDebug(s"Using a new pruned schema $newSchema")
     newSchema
   }
 

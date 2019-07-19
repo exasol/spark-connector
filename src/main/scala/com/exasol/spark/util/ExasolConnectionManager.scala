@@ -5,11 +5,11 @@ import java.util.concurrent.ConcurrentHashMap
 
 import scala.util.Try
 
+import org.apache.spark.internal.Logging
+
 import com.exasol.jdbc.EXAConnection
 import com.exasol.jdbc.EXAResultSet
 import com.exasol.jdbc.EXAStatement
-
-import com.typesafe.scalalogging.LazyLogging
 
 /**
  * A class that provides and manages Exasol connections
@@ -189,7 +189,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
  * The companion object to [[ExasolConnectionManager]]
  *
  */
-object ExasolConnectionManager extends LazyLogging {
+object ExasolConnectionManager extends Logging {
 
   private[this] val JDBC_LOGIN_TIMEOUT: Int = 30
 
@@ -211,13 +211,13 @@ object ExasolConnectionManager extends LazyLogging {
   private[this] def removeIfClosed(url: String): Unit = {
     val conn = connections.get(url)
     if (conn != null && conn.isClosed) {
-      logger.info(s"Connection $url is closed, removing it from the pool")
+      logInfo(s"Connection $url is closed, removing it from the pool")
       val _ = connections.remove(url)
     }
   }
 
   def makeConnection(url: String, username: String, password: String): EXAConnection = {
-    logger.debug(s"Making a connection using url = $url")
+    logDebug(s"Making a connection using url = $url")
     removeIfClosed(url)
     if (!connections.containsKey(url)) {
       val _ = connections.put(url, createConnection(url, username, password))

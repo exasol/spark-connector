@@ -1,5 +1,6 @@
 package com.exasol.spark
 
+import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SQLContext
@@ -15,8 +16,6 @@ import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Filters
 import com.exasol.spark.util.Types
 
-import com.typesafe.scalalogging.LazyLogging
-
 class ExasolRelation(
   context: SQLContext,
   queryString: String,
@@ -26,7 +25,7 @@ class ExasolRelation(
     with PrunedFilteredScan
     with PrunedScan
     with TableScan
-    with LazyLogging {
+    with Logging {
 
   override def sqlContext: SQLContext = context
 
@@ -44,7 +43,7 @@ class ExasolRelation(
   }
 
   override def schema: StructType = configSchema.fold(inferSchema) { userSchema =>
-    logger.info(s"Using provided schema $userSchema")
+    logInfo(s"Using provided schema $userSchema")
     userSchema
   }
 
@@ -106,7 +105,7 @@ class ExasolRelation(
     val filterStr = Filters.createWhereClause(schema, filters)
     val whereClause = if (filterStr.trim.isEmpty) "" else s"WHERE $filterStr"
     val enrichedQuery = s"SELECT $columnStr FROM ($queryString) A $whereClause"
-    logger.info(s"Running with enriched query: $enrichedQuery")
+    logInfo(s"Running with enriched query: $enrichedQuery")
     enrichedQuery
   }
 

@@ -3,6 +3,7 @@ package com.exasol.spark.util
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 
+import org.apache.spark.internal.Logging
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
@@ -11,8 +12,6 @@ import org.apache.spark.sql.catalyst.util.DateTimeUtils
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.UTF8String
 
-import com.typesafe.scalalogging.LazyLogging
-
 /**
  * A helper class with functions to convert JDBC ResultSet to/from Spark Row
  *
@@ -20,7 +19,7 @@ import com.typesafe.scalalogging.LazyLogging
  *  - org/apache/spark/sql/execution/datasources/jdbc/JdbcUtils.scala
  *
  */
-object Converter extends LazyLogging {
+object Converter extends Logging {
 
   /**
    * Converts a [[java.sql.ResultSet]] into an iterator of [[org.apache.spark.sql.Row]]-s
@@ -44,7 +43,7 @@ object Converter extends LazyLogging {
       try {
         rs.close()
       } catch {
-        case e: Exception => logger.warn("Exception closing resultset", e)
+        case e: Exception => logWarning("Exception closing resultset", e)
       }
 
     override protected def getNext(): InternalRow =
