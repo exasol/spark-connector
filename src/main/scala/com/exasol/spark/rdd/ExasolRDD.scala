@@ -21,10 +21,10 @@ import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 
 /**
- * An [[org.apache.spark.rdd.RDD]] reads / writes data from an Exasol tables
+ * An [[org.apache.spark.rdd.RDD]] reads / writes data from an Exasol tables.
  *
- * The [[com.exasol.spark.rdd.ExasolRDD]] holds data in parallel from each Exasol physical nodes.
- *
+ * The [[com.exasol.spark.rdd.ExasolRDD]] holds data in parallel from each
+ * Exasol physical nodes.
  */
 class ExasolRDD(
   @transient val sc: SparkContext,
@@ -62,8 +62,8 @@ class ExasolRDD(
     val cnt = manager.initParallel(conn)
     logInfo(s"Initiated $cnt parallel exasol (sub) connections")
 
-    // Close Exasol main connection when SparkContext finishes. This is a lifetime of a Spark
-    // application.
+    // Close Exasol main connection when SparkContext finishes. This is a
+    // lifetime of a Spark application.
     sc.addSparkListener(new SparkListener {
       override def onApplicationEnd(appEnd: SparkListenerApplicationEnd): Unit =
         closeMainResources()

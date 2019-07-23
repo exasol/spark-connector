@@ -5,14 +5,14 @@ import org.apache.spark.sql.types._
 
 /**
  * A helper class with functions to create Exasol where clauses from Spark
- * [[org.apache.spark.sql.sources.Filter]]-s
+ * [[org.apache.spark.sql.sources.Filter]]-s.
  */
 object Filters {
 
   /**
    * Creates an Exasol SQL where clause from given list of
-   * [[org.apache.spark.sql.sources.Filter]]-s. Then these set of predicates will be pushed to
-   * Exasol for evaluation.
+   * [[org.apache.spark.sql.sources.Filter]]-s. Then these set of predicates
+   * will be pushed to Exasol for evaluation.
    *
    * @param schema A user provided or inferred schema of the query
    * @param filters A sequence of Spark source filters
@@ -25,8 +25,11 @@ object Filters {
   }
 
   /**
-   * Given a Spark source [[org.apache.spark.sql.sources.Filter]], create a Exasol SQL expression.
-   * Returns [[scala.None]] if an expression could not be created from the filter.
+   * Given a Spark source [[org.apache.spark.sql.sources.Filter]], create a
+   * Exasol SQL expression.
+   *
+   * Returns [[scala.None]] if an expression could not be created from the
+   * filter.
    */
   def filterExpr(filter: Filter, dataTypes: Map[String, DataType]): Option[String] =
     filter match {
