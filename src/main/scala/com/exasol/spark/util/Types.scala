@@ -2,12 +2,14 @@ package com.exasol.spark.util
 
 import java.sql.ResultSetMetaData
 
+import org.apache.spark.internal.Logging
 import org.apache.spark.sql.types._
 
-import com.typesafe.scalalogging.LazyLogging
-
-/** A helper class with mapping functions from Exasol JDBC types to/from Spark SQL types */
-object Types extends LazyLogging {
+/**
+ * A helper class with mapping functions between Exasol JDBC types and Spark SQL
+ * types.
+ */
+object Types extends Logging {
 
   private val MAX_PRECISION_EXASOL: Int = 36
   private val MAX_SCALE_EXASOL: Int = 36
@@ -16,7 +18,7 @@ object Types extends LazyLogging {
 
   /**
    * Given a [[java.sql.ResultSetMetaData]] returns a Spark
-   * [[org.apache.spark.sql.types.StructType]] schema
+   * [[org.apache.spark.sql.types.StructType]] schema.
    *
    * @param rsmd A result set metadata
    * @return A StructType matching result set types
@@ -43,12 +45,16 @@ object Types extends LazyLogging {
   }
 
   /**
-   * Maps a JDBC type [[java.sql.Types$]] to a Spark SQL [[org.apache.spark.sql.types.DataType]]
+   * Maps a JDBC type [[java.sql.Types$]] to a Spark SQL
+   * [[org.apache.spark.sql.types.DataType]].
    *
    * @param sqlType A JDBC type from [[java.sql.ResultSetMetaData]] column type
-   * @param precision A precision value obtained from ResultSetMetaData, rsmd.getPrecision(index)
-   * @param scale A scale value obtained from ResultSetMetaData, rsmd.getScale(index)
-   * @param isSigned A isSigned value obtained from ResultSetMetaData, rsmd.isSigned(index)
+   * @param precision A precision value obtained from ResultSetMetaData,
+   *        `rsmd.getPrecision(index)`
+   * @param scale A scale value obtained from ResultSetMetaData,
+   *        `rsmd.getScale(index)`
+   * @param isSigned A isSigned value obtained from ResultSetMetaData,
+   *        `rsmd.isSigned(index)`
    * @return A Spark SQL DataType corresponding to JDBC SQL type
    */
   def createSparkTypeFromSQLType(
@@ -118,8 +124,8 @@ object Types extends LazyLogging {
   }
 
   /**
-   * Bound DecimalType within Spark [[DecimalType.MAX_PRECISION]] and [[DecimalType.MAX_SCALE]]
-   * values
+   * Bounds DecimalType within Spark [[DecimalType.MAX_PRECISION]] and
+   * [[DecimalType.MAX_SCALE]] values.
    */
   private[this] def boundedDecimal(precision: Int, scale: Int): DecimalType =
     DecimalType(
@@ -129,9 +135,10 @@ object Types extends LazyLogging {
 
   /**
    * Returns corresponding Jdbc [[java.sql.Types$]] type given Spark
-   * [[org.apache.spark.sql.types.DataType]] type
+   * [[org.apache.spark.sql.types.DataType]] type.
    *
-   * @param dataType A Spark DataType (e.g. [[org.apache.spark.sql.types.StringType$]])
+   * @param dataType A Spark DataType (e.g.
+   *        [[org.apache.spark.sql.types.StringType$]])
    * @return A default JdbcType for this DataType
    */
   def jdbcTypeFromSparkDataType(dataType: DataType): Int = dataType match {
@@ -152,12 +159,10 @@ object Types extends LazyLogging {
 
   /**
    * Returns corresponding Exasol type as a string for a given Spark
-   * [[org.apache.spark.sql.types.DataType]] type
+   * [[org.apache.spark.sql.types.DataType]] type.
    *
-   * The types are obtained from Exasol manual, from a table named 'Summary of Exasol aliases',
-   * section 2.3.3 Data Type Aliases.
-   *
-   * @param dataType A Spark DataType (e.g. [[org.apache.spark.sql.types.StringType$]])
+   * @param dataType A Spark DataType (e.g.
+   *        [[org.apache.spark.sql.types.StringType$]])
    * @return A default Exasol type as string for this DataType
    */
   def exasolTypeFromSparkDataType(dataType: DataType): String = dataType match {
@@ -177,13 +182,17 @@ object Types extends LazyLogging {
 
   /**
    * Convert Spark Type with Decimal precision,scale to Exasol type.
-   * Spark.DecimalType(5,2) -> "DECIMAL(5,2)"
    *
-   * Exasol has a max scale, precision of 36.
-   * Spark precision/scale greater than 36 will be truncated.
+   * For example:
+   * {{{
+   *    Spark.DecimalType(5,2) -> "DECIMAL(5,2)"
+   * }}}
    *
-   * @param decimalType  A Spark DecimalType with precision and scale
-   * @return The Equivalent Exasol type
+   * Exasol has a max scale, precision of 36. Spark precision/scale greater than
+   * 36 will be truncated.
+   *
+   * @param decimalType A Spark DecimalType with precision and scale
+   * @return The equivalent Exasol type
    */
   def convertSparkPrecisionScaleToExasol(decimalType: DecimalType): String = {
     val boundedType = boundedDecimal(decimalType.precision, decimalType.scale)
@@ -191,24 +200,26 @@ object Types extends LazyLogging {
   }
 
   /**
-   * Select only required columns from Spark SQL schema
+   * Select only required columns from Spark SQL schema.
    *
    * Adapted from Spark JDBCRDD private function `pruneSchema`.
    *
    * @param columns A list of required columns
    * @param schema A Spark SQL schema
-   * @return A new Spark SQL schema with only columns in the order of column names
+   * @return A new Spark SQL schema with only columns in the order of column
+   *         names
    */
   def selectColumns(columns: Array[String], schema: StructType): StructType = {
     val fieldsNames = schema.fieldNames.toSet
     val newFields = columns.filter(fieldsNames.contains(_)).map(schema(_))
     val newSchema = StructType(newFields)
-    logger.debug(s"Using a new pruned schema $newSchema")
+    logDebug(s"Using a new pruned schema $newSchema")
     newSchema
   }
 
   /**
-   * Returns comma separated column name and column types for Exasol table from Spark schema
+   * Returns comma separated column name and column types for Exasol table from
+   * Spark schema.
    *
    * @param schema A Spark [[org.apache.spark.sql.types.StructType]] schema
    * @return A comma separated column names and their types

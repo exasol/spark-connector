@@ -5,10 +5,9 @@ import java.net.InetAddress
 import scala.util.matching.Regex
 
 /**
- * The configuration parameters for Spark Exasol connector
+ * The configuration parameters for Spark Exasol connector.
  *
  * These can be user provided when loading or defined in Spark configurations.
- *
  * For example, user provided:
  *
  * {{{
@@ -37,9 +36,8 @@ import scala.util.matching.Regex
  *      .getOrCreate()
  * }}}
  *
- * If both are defined, spark configs are used. If nothing is defined, then default values are
- * used.
- *
+ * If both are defined, spark configs are used. If nothing is defined, then
+ * default values are used.
  */
 final case class ExasolConfiguration(
   host: String,

@@ -8,6 +8,7 @@ import scala.util.control.NonFatal
 import org.apache.spark.Partition
 import org.apache.spark.SparkContext
 import org.apache.spark.TaskContext
+import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.RDD
 import org.apache.spark.scheduler.SparkListener
 import org.apache.spark.scheduler.SparkListenerApplicationEnd
@@ -19,13 +20,11 @@ import com.exasol.jdbc.EXAResultSet
 import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 
-import com.typesafe.scalalogging.LazyLogging
-
 /**
- * An [[org.apache.spark.rdd.RDD]] reads / writes data from an Exasol tables
+ * An [[org.apache.spark.rdd.RDD]] reads / writes data from an Exasol tables.
  *
- * The [[com.exasol.spark.rdd.ExasolRDD]] holds data in parallel from each Exasol physical nodes.
- *
+ * The [[com.exasol.spark.rdd.ExasolRDD]] holds data in parallel from each
+ * Exasol physical nodes.
  */
 class ExasolRDD(
   @transient val sc: SparkContext,
@@ -33,7 +32,7 @@ class ExasolRDD(
   querySchema: StructType,
   manager: ExasolConnectionManager
 ) extends RDD[Row](sc, Nil)
-    with LazyLogging {
+    with Logging {
 
   // scalastyle:off null
   @transient private var mainConnection: EXAConnection = null
@@ -56,15 +55,15 @@ class ExasolRDD(
   def createMainConnection(): EXAConnection = {
     val conn = manager.mainConnection()
     if (conn == null) {
-      logger.error("Main EXAConnection is null!")
+      logError("Main EXAConnection is null!")
       throw new RuntimeException("Could not establish main connection to Exasol!")
     }
 
     val cnt = manager.initParallel(conn)
-    logger.info(s"Initiated $cnt parallel exasol (sub) connections")
+    logInfo(s"Initiated $cnt parallel exasol (sub) connections")
 
-    // Close Exasol main connection when SparkContext finishes. This is a lifetime of a Spark
-    // application.
+    // Close Exasol main connection when SparkContext finishes. This is a
+    // lifetime of a Spark application.
     sc.addSparkListener(new SparkListener {
       override def onApplicationEnd(appEnd: SparkListenerApplicationEnd): Unit =
         closeMainResources()
@@ -86,7 +85,7 @@ class ExasolRDD(
       .zipWithIndex
       .map { case (url, idx) => ExasolRDDPartition(idx, handle, url) }
 
-    logger.info(s"The number of partitions is ${partitions.size}")
+    logInfo(s"The number of partitions is ${partitions.size}")
 
     partitions.toArray
   }
@@ -109,7 +108,7 @@ class ExasolRDD(
           resultSet.close()
         }
       } catch {
-        case e: Exception => logger.warn("Received an exception closing sub resultSet", e)
+        case e: Exception => logWarning("Received an exception closing sub resultSet", e)
       }
 
       try {
@@ -117,7 +116,7 @@ class ExasolRDD(
           stmt.close()
         }
       } catch {
-        case e: Exception => logger.warn("Received an exception closing sub statement", e)
+        case e: Exception => logWarning("Received an exception closing sub statement", e)
       }
 
       try {
@@ -126,14 +125,14 @@ class ExasolRDD(
             try {
               conn.commit()
             } catch {
-              case NonFatal(e) => logger.warn("Received exception committing sub connection", e)
+              case NonFatal(e) => logWarning("Received exception committing sub connection", e)
             }
           }
           conn.close()
-          logger.info("Closed a sub connection")
+          logInfo("Closed a sub connection")
         }
       } catch {
-        case e: Exception => logger.warn("Received an exception closing sub connection", e)
+        case e: Exception => logWarning("Received an exception closing sub connection", e)
       }
 
       closed = true
@@ -146,10 +145,10 @@ class ExasolRDD(
     val partition: ExasolRDDPartition = split.asInstanceOf[ExasolRDDPartition]
     val subHandle: Int = partition.handle
 
-    logger.info(s"Sub connection with url = ${partition.connectionUrl} and handle = $subHandle")
+    logInfo(s"Sub connection with url = ${partition.connectionUrl} and handle = $subHandle")
 
     if (subHandle == -1) {
-      logger.info("Sub connection handle is -1, no results, return empty iterator")
+      logInfo("Sub connection handle is -1, no results, return empty iterator")
       return Iterator.empty
     }
 

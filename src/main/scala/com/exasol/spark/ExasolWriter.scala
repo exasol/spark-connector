@@ -14,8 +14,6 @@ import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Types
 
-import com.typesafe.scalalogging.LazyLogging
-
 /**
  *
  */
@@ -24,8 +22,7 @@ class ExasolWriter(
   tableName: String,
   rddSchema: StructType,
   manager: ExasolConnectionManager
-) extends Serializable
-    with LazyLogging {
+) extends Serializable {
 
   // scalastyle:off null
   @transient private var mainConnection: EXAConnection = null
@@ -41,12 +38,10 @@ class ExasolWriter(
     mainConnection = manager.writerMainConnection()
 
     if (mainConnection == null) {
-      logger.error("Could not create main connection!")
       throw new RuntimeException("Could not create main connection to Exasol!")
     }
 
     val cnt = manager.initParallel(mainConnection)
-    logger.info(s"Initiated $cnt parallel sub connections")
 
     // Close Exasol main connection when SparkContext finishes. This is a lifetime of a Spark
     // application.
@@ -107,15 +102,12 @@ class ExasolWriter(
         val _ = stmt.executeBatch()
         totalCnt += rowCnt
       }
-      logger.info(s"Inserted in total $totalCnt rows into table $tableName")
 
       ()
     } catch {
       case ex: SQLException =>
-        logger.error(s"Error during statement batch execution ${ex.printStackTrace()}")
         throw ex
     } finally {
-      logger.info("Closing sub connection statement and connection")
       stmt.close()
       subConn.commit()
       subConn.close()

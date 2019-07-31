@@ -1,5 +1,6 @@
 package com.exasol.spark
 
+import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SQLContext
@@ -15,8 +16,15 @@ import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Filters
 import com.exasol.spark.util.Types
 
-import com.typesafe.scalalogging.LazyLogging
-
+/**
+ * The Exasol specific implementation of Spark
+ * [[org.apache.spark.sql.sources.BaseRelation]].
+ *
+ * @param context A Spark [[org.apache.spark.sql.SQLContext]]
+ * @param queryString A user provided Exasol SQL query string
+ * @param configSchema An optional user provided '''schema''
+ * @param manager An Exasol connection manager
+ */
 class ExasolRelation(
   context: SQLContext,
   queryString: String,
@@ -26,7 +34,7 @@ class ExasolRelation(
     with PrunedFilteredScan
     with PrunedScan
     with TableScan
-    with LazyLogging {
+    with Logging {
 
   override def sqlContext: SQLContext = context
 
@@ -44,7 +52,7 @@ class ExasolRelation(
   }
 
   override def schema: StructType = configSchema.fold(inferSchema) { userSchema =>
-    logger.info(s"Using provided schema $userSchema")
+    logInfo(s"Using provided schema $userSchema")
     userSchema
   }
 
@@ -68,20 +76,21 @@ class ExasolRelation(
 
   override def unhandledFilters(filters: Array[Filter]): Array[Filter] = {
     val dataTypes = schema.map(field => field.name -> field.dataType).toMap
-    // remove if a filter is defined (handled)
     filters.filterNot(Filters.filterExpr(_, dataTypes).isDefined)
   }
 
   /**
-   * When a count action is run from Spark dataframe we do not have to read the actual data and
-   * perform all serializations through the network. Instead we can create a RDD with empty Row-s
-   * with expected number of rows from actual query.
+   * When a count action is run from Spark dataframe we do not have to read the
+   * actual data and perform all serializations through the network. Instead we
+   * can create a RDD with empty Row-s with expected number of rows from actual
+   * query.
    *
    * This also called count pushdown.
    *
-   * @param filters A list of [[org.apache.spark.sql.sources.Filter]]-s that can be pushed as
-   *                where clause
-   * @return An RDD of empty Row-s which has as many elements as count(*) from enriched query
+   * @param filters A list of [[org.apache.spark.sql.sources.Filter]]-s that can
+   *        be pushed as where clause
+   * @return An RDD of empty Row-s which has as many elements as count(*) from
+   *         enriched query
    */
   private[this] def makeEmptyRDD(filters: Array[Filter]): RDD[Row] = {
     val cntQuery = enrichQuery(Array.empty[String], filters)
@@ -92,10 +101,11 @@ class ExasolRelation(
   /**
    * Improves the original query with column pushdown and predicate pushdown.
    *
-   * It will use provided column names to create a sub select query and similarly add where clause
-   * if filters are provided.
+   * It will use provided column names to create a sub select query and
+   * similarly add where clause if filters are provided.
    *
-   * Additionally, if no column names are provided it creates a 'COUNT(*)' query.
+   * Additionally, if no column names are provided it creates a `COUNT(*)`
+   * query.
    *
    * @param columns A list of column names
    * @param filters A list of Spark [[org.apache.spark.sql.sources.Filter]]-s
@@ -106,7 +116,7 @@ class ExasolRelation(
     val filterStr = Filters.createWhereClause(schema, filters)
     val whereClause = if (filterStr.trim.isEmpty) "" else s"WHERE $filterStr"
     val enrichedQuery = s"SELECT $columnStr FROM ($queryString) A $whereClause"
-    logger.info(s"Running with enriched query: $enrichedQuery")
+    logInfo(s"Running with enriched query: $enrichedQuery")
     enrichedQuery
   }
 

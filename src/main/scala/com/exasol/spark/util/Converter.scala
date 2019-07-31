@@ -3,6 +3,7 @@ package com.exasol.spark.util
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 
+import org.apache.spark.internal.Logging
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
@@ -11,19 +12,18 @@ import org.apache.spark.sql.catalyst.util.DateTimeUtils
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.UTF8String
 
-import com.typesafe.scalalogging.LazyLogging
-
 /**
- * A helper class with functions to convert JDBC ResultSet to/from Spark Row
+ * A helper object with functions to convert JDBC [[java.sql.ResultSet]] into
+ * Spark [[org.apache.spark.sql.Row]] or vice versa.
  *
- * Most of the functions here are adapted from Spark JdbcUtils class,
- *  - org/apache/spark/sql/execution/datasources/jdbc/JdbcUtils.scala
- *
+ * Most of the functions here are adapted from
+ * `spark/sql/execution/datasources/jdbc/JdbcUtils.scala` class.
  */
-object Converter extends LazyLogging {
+object Converter extends Logging {
 
   /**
-   * Converts a [[java.sql.ResultSet]] into an iterator of [[org.apache.spark.sql.Row]]-s
+   * Converts a [[java.sql.ResultSet]] into an iterator of
+   * [[org.apache.spark.sql.Row]]-s.
    */
   def resultSetToRows(resultSet: ResultSet, schema: StructType): Iterator[Row] = {
     val encoder = RowEncoder(schema).resolveAndBind()
@@ -44,7 +44,7 @@ object Converter extends LazyLogging {
       try {
         rs.close()
       } catch {
-        case e: Exception => logger.warn("Exception closing resultset", e)
+        case e: Exception => logWarning("Exception closing resultset", e)
       }
 
     override protected def getNext(): InternalRow =
@@ -62,15 +62,16 @@ object Converter extends LazyLogging {
       }
   }
 
-  // A `JDBCValueGetter` is responsible for getting a value from `ResultSet` into a field for
-  // `MutableRow`. The last argument `Int` means the index for the value to be set in the row and
-  // also used for the value in `ResultSet`.
+  // A `JDBCValueGetter` is responsible for getting a value from `ResultSet`
+  // into a field for `MutableRow`. The last argument `Int` means the index for
+  // the value to be set in the row and also used for the value in `ResultSet`.
   private type JDBCValueGetter = (ResultSet, InternalRow, Int) => Unit
 
   /**
-   * Creates `JDBCValueGetter`s according to [[org.apache.spark.sql.types.StructType]], which can
-   * set each value from `ResultSet` to each field of
-   * [[org.apache.spark.sql.catalyst.InternalRow]] correctly.
+   * Creates `JDBCValueGetter`s according to
+   * [[org.apache.spark.sql.types.StructType]], which can set each value from
+   * `ResultSet` to each field of [[org.apache.spark.sql.catalyst.InternalRow]]
+   * correctly.
    */
   private def makeGetters(schema: StructType): Array[JDBCValueGetter] =
     schema.fields.map(sf => makeGetter(sf.dataType, sf.metadata))
@@ -83,7 +84,8 @@ object Converter extends LazyLogging {
 
     case DateType =>
       (rs: ResultSet, row: InternalRow, pos: Int) =>
-        // DateTimeUtils.fromJavaDate does not handle null value, so we need to check it.
+        // DateTimeUtils.fromJavaDate does not handle null value, so we need to
+        // check it.
         val dateVal = rs.getDate(pos + 1)
         if (dateVal != null) {
           row.setInt(pos, DateTimeUtils.fromJavaDate(dateVal))
@@ -163,9 +165,10 @@ object Converter extends LazyLogging {
     }
   // scalastyle:on null
 
-  // A `JDBCValueSetter` is responsible for setting a value from `Row` into a field for
-  // `PreparedStatement`. The last argument `Int` means the index for the value to be set in the
-  // SQL statement and also used for the value in `Row`.
+  // A `JDBCValueSetter` is responsible for setting a value from `Row` into a
+  // field for `PreparedStatement`. The last argument `Int` means the index for
+  // the value to be set in the SQL statement and also used for the value in
+  // `Row`.
   private[spark] type JDBCValueSetter = (PreparedStatement, Row, Int) => Unit
 
   private[spark] def makeSetter(dataType: DataType): JDBCValueSetter = dataType match {

@@ -5,20 +5,20 @@ import java.util.concurrent.ConcurrentHashMap
 
 import scala.util.Try
 
+import org.apache.spark.internal.Logging
+
 import com.exasol.jdbc.EXAConnection
 import com.exasol.jdbc.EXAResultSet
 import com.exasol.jdbc.EXAStatement
 
-import com.typesafe.scalalogging.LazyLogging
-
 /**
- * A class that provides and manages Exasol connections
+ * A class that provides and manages Exasol connections.
  *
- * It is okay to serialize this class to Spark workers, it will create Exasol jdbc connections
- * within each executor JVM.
+ * It is okay to serialize this class to Spark workers, it will create Exasol
+ * jdbc connections within each executor JVM.
  *
- * @param config An [[ExasolConfiguration]] with user provided or runtime configuration parameters
- *
+ * @param config An [[ExasolConfiguration]] with user provided or runtime
+ *        configuration parameters
  */
 final case class ExasolConnectionManager(config: ExasolConfiguration) {
 
@@ -40,9 +40,10 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     )
 
   /**
-   * A single non-pooled [[com.exasol.jdbc.EXAConnection]] connection
+   * A single non-pooled [[com.exasol.jdbc.EXAConnection]] connection.
    *
-   * Maintaining and gracefully closing the connection is a responsibility of the user.
+   * Maintaining and gracefully closing the connection is a responsibility of
+   * the user.
    */
   def getConnection(): EXAConnection =
     ExasolConnectionManager.createConnection(
@@ -70,27 +71,25 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     ExasolConnectionManager.makeConnection(subConnectionUrl, config.username, config.password)
 
   /**
-   * A method to run with a new connection
+   * A method to run with a new connection.
    *
    * This method closes the connection afterwards.
    *
    * @param handle A code block that needs to be run with a connection
    * @tparam T A result type of the `handle` function
    * @return A result of `handle` function
-   *
    */
   def withConnection[T](handle: EXAConnection => T): T =
     ExasolConnectionManager.using(getConnection)(handle)
 
   /**
-   * A helper method to run with a new statement
+   * A helper method to run with a new statement.
    *
    * This method closes the resources afterwards.
    *
    * @param handle A code block that needs to be run with a given statement
    * @tparam T A result type of the `handle` function
    * @return A result of `handle` function
-   *
    */
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   def withStatement[T](handle: EXAStatement => T): T = withConnection[T] { conn =>
@@ -99,11 +98,10 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
   }
 
   /**
-   * A helper method to run `stmt.execute` given a list of queries
+   * A helper method to run `stmt.execute` given a list of queries.
    *
    * @param queries A list of SQL queries to run
    * @return A [[scala.Unit]] result
-   *
    */
   def withExecute(queries: Seq[String]): Unit = withStatement[Unit] { stmt =>
     queries.foreach { query =>
@@ -113,12 +111,11 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
   }
 
   /**
-   * A helper method to run `stmt.executeQuery` given a query
+   * A helper method to run `stmt.executeQuery` given a query.
    *
    * @param query A query string to executeQuery
    * @tparam T A result type of the `handle` function
    * @return A result of `handle` function
-   *
    */
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   def withExecuteQuery[T](query: String)(handle: EXAResultSet => T): T = withStatement[T] {
@@ -127,7 +124,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
       ExasolConnectionManager.using(rs)(handle)
   }
 
-  /** Given a query with `count(*)` returns the result */
+  /** Given a query with `count(*)` returns the result. */
   def withCountQuery(query: String): Long = withExecuteQuery[Long](query) { rs =>
     val cnt = if (rs.next()) {
       rs.getLong(1)
@@ -138,14 +135,14 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
   }
 
   /**
-   * Checks if table already exists, if so should return true otherwise false
+   * Checks if table already exists, if so should return true otherwise false.
    *
-   * TODO: This should be changed to Exasol specific checks. For example, by using
-   *       EXA_USER_TABLES.
+   * TODO: This should be changed to Exasol specific checks. For example, by
+   *       using EXA_USER_TABLES.
    *
-   * @param tableName A Exasol table name including schema, e.g. `schema.tableName`
-   * @return A boolean, true if table exists
-   *
+   * @param tableName A Exasol table name including schema, e.g.
+   *        `schema.tableName`
+   * @return `true` if table exists, otherwise return `false`
    */
   def tableExists(tableName: String): Boolean = withConnection[Boolean] { conn =>
     val tryEither = Try {
@@ -160,22 +157,29 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     tryEither.isSuccess
   }
 
-  /** Given an Exasol table name (with schema, e.g mySchema.myTable format), truncates it */
+  /**
+   * Given an Exasol table name (with schema, e.g mySchema.myTable format),
+   * truncates it.
+   */
   def truncateTable(tableName: String): Unit = withStatement[Unit] { stmt =>
     val _ = stmt.executeUpdate(s"TRUNCATE TABLE $tableName")
     ()
   }
 
-  /** Given an Exasol table name (with schema, e.g mySchema.myTable format), drop it */
+  /**
+   * Given an Exasol table name (with schema, e.g mySchema.myTable format), drop
+   * it.
+   */
   def dropTable(tableName: String): Unit = withStatement[Unit] { stmt =>
     val _ = stmt.executeUpdate(s"DROP TABLE IF EXISTS $tableName")
     ()
   }
 
   /**
-   * Creates a table in Exasol
+   * Creates a table in Exasol.
    *
-   * @param tableName A table name (with both schema and table, e.g. myschem.my_table)
+   * @param tableName A table name (with both schema and table, e.g.
+   *        myschem.my_table)
    * @param tabelSchema A schema string of table with column names and types
    */
   def createTable(tableName: String, tableSchema: String): Unit = withStatement[Unit] { stmt =>
@@ -186,10 +190,9 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
 }
 
 /**
- * The companion object to [[ExasolConnectionManager]]
- *
+ * The companion object to [[ExasolConnectionManager]].
  */
-object ExasolConnectionManager extends LazyLogging {
+object ExasolConnectionManager extends Logging {
 
   private[this] val JDBC_LOGIN_TIMEOUT: Int = 30
 
@@ -211,13 +214,13 @@ object ExasolConnectionManager extends LazyLogging {
   private[this] def removeIfClosed(url: String): Unit = {
     val conn = connections.get(url)
     if (conn != null && conn.isClosed) {
-      logger.info(s"Connection $url is closed, removing it from the pool")
+      logInfo(s"Connection $url is closed, removing it from the pool")
       val _ = connections.remove(url)
     }
   }
 
   def makeConnection(url: String, username: String, password: String): EXAConnection = {
-    logger.debug(s"Making a connection using url = $url")
+    logDebug(s"Making a connection using url = $url")
     removeIfClosed(url)
     if (!connections.containsKey(url)) {
       val _ = connections.put(url, createConnection(url, username, password))

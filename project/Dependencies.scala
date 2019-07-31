@@ -6,9 +6,8 @@ import sbt._
 object Dependencies {
 
   // Versions
-  private val SparkVersion = "2.4.0"
-  private val ExasolJdbcVersion = "6.0.13"
-  private val TypesafeLoggingVersion = "3.9.0"
+  private val SparkVersion = "2.4.3"
+  private val ExasolJdbcVersion = "6.1.3"
 
   private val ScalaTestVersion = "3.0.5"
   private val MockitoVersion = "2.23.4"
@@ -28,7 +27,6 @@ object Dependencies {
   private val CoreDependencies: Seq[ModuleID] = Seq(
     "org.apache.spark" %% "spark-core" % sparkCurrentVersion % "provided",
     "org.apache.spark" %% "spark-sql" % sparkCurrentVersion % "provided",
-    "com.typesafe.scala-logging" %% "scala-logging" % TypesafeLoggingVersion,
     "com.exasol" % "exasol-jdbc" % ExasolJdbcVersion
   )
 

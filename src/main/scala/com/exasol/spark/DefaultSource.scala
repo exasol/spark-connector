@@ -12,9 +12,10 @@ import com.exasol.spark.util.Types
 import com.exasol.spark.writer.ExasolWriter
 
 /**
- * A data source for creating integration between Exasol and Spark
+ * The default entry source for creating integration between Exasol and Spark.
  *
- * It also serves as a factory class to create [[ExasolRelation]] instances for Spark application.
+ * Additionally, it serves as a factory class to create [[ExasolRelation]]
+ * instances for Spark application.
  */
 class DefaultSource
     extends RelationProvider
@@ -25,13 +26,15 @@ class DefaultSource
   override def shortName(): String = "exasol"
 
   /**
-   * Creates an [[ExasolRelation]] using provided Spark [[org.apache.spark.sql.SQLContext]] and
-   * parameters
+   * Creates an [[ExasolRelation]] using provided Spark
+   * [[org.apache.spark.sql.SQLContext]] and parameters.
    *
-   * The schema is inferred by running the Exasol query with `LIMIT 1` clause.
+   * Since the '''schema''' is not provided, it is inferred by running an Exasol
+   * query with `LIMIT 1` clause.
    *
    * @param sqlContext A Spark [[org.apache.spark.sql.SQLContext]] context
-   * @param parameters The parameters provided as options, `query` parameter is required for read
+   * @param parameters The parameters provided as options, `query` parameter is
+   *        required for read
    * @return An [[ExasolRelation]] relation
    */
   override def createRelation(
@@ -44,12 +47,14 @@ class DefaultSource
   }
 
   /**
-   * Creates an [[ExasolRelation]] using the provided Spark [[org.apache.spark.sql.SQLContext]],
-   * parameters and schema
+   * Creates an [[ExasolRelation]] using the provided Spark
+   * [[org.apache.spark.sql.SQLContext]], parameters and schema.
    *
    * @param sqlContext A Spark [[org.apache.spark.sql.SQLContext]] context
-   * @param parameters The parameters provided as options, `query` parameter is required for read
-   * @param schema A user provided schema used to select columns for the relation
+   * @param parameters The parameters provided as options, `query` parameter is
+   *        required for read
+   * @param schema A user provided schema used to select columns for the
+   *        relation
    * @return An [[ExasolRelation]] relation
    */
   override def createRelation(
@@ -63,12 +68,15 @@ class DefaultSource
   }
 
   /**
-   * Creates an [[ExasolRelation]] after saving a Spark dataframe into Exasol table
+   * Creates an [[ExasolRelation]] after saving a
+   * [[org.apache.spark.sql.DataFrame]] into Exasol table.
    *
    * @param sqlContext A Spark [[org.apache.spark.sql.SQLContext]] context
    * @param mode One of Spark save modes, [[org.apache.spark.sql.SaveMode]]
-   * @param parameters The parameters provided as options, `table` parameter is required for write
-   * @param data A Spark [[org.apache.spark.sql.DataFrame]] to save as a Exasol table
+   * @param parameters The parameters provided as options, `table` parameter is
+   *        required for write
+   * @param data A Spark [[org.apache.spark.sql.DataFrame]] to save as a Exasol
+   *        table
    * @return An [[ExasolRelation]] relation
    */
   override def createRelation(
@@ -119,7 +127,7 @@ class DefaultSource
     createRelation(sqlContext, newParams, data.schema)
   }
 
-  def saveDFTable(
+  private[this] def saveDFTable(
     sqlContext: SQLContext,
     df: DataFrame,
     tableName: String,
@@ -132,7 +140,11 @@ class DefaultSource
     newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
   }
 
-  def createDFTable(df: DataFrame, tableName: String, manager: ExasolConnectionManager): Unit = {
+  private[this] def createDFTable(
+    df: DataFrame,
+    tableName: String,
+    manager: ExasolConnectionManager
+  ): Unit = {
     if (!manager.config.create_table) {
       throw new UnsupportedOperationException(
         s"""
@@ -152,7 +164,7 @@ class DefaultSource
   }
 
   /**
-   * Rearrange dataframe partitions into Exasol nodes number
+   * Rearrange dataframe partitions into Exasol data nodes count.
    *
    * If `nodesCnt` < `df.rdd.getNumPartitions` then perform
    *
@@ -171,7 +183,6 @@ class DefaultSource
    * so that there a partition for each data node.
    *
    * If the number of partitions and nodes are same, then do nothing.
-   *
    */
   def repartitionPerNode(df: DataFrame, nodesCnt: Int): DataFrame = {
     val rddPartitionCnt = df.rdd.getNumPartitions
@@ -193,7 +204,7 @@ class DefaultSource
         )
     }
 
-  // Creates an ExasolConnectionManager with merged configuration values
+  // Creates an ExasolConnectionManager with merged configuration values.
   private[this] def createManager(
     parameters: Map[String, String],
     sqlContext: SQLContext
@@ -202,8 +213,9 @@ class DefaultSource
     ExasolConnectionManager(config)
   }
 
-  // Merges user provided parameters with `spark.exasol.*` runtime configurations. If both of them
-  // define a key=value pair, then the one provided at runtime is used.
+  // Merges user provided parameters with `spark.exasol.*` runtime
+  // configurations. If both of them define a key=value pair, then the one
+  // provided at runtime is used.
   private[spark] def mergeConfigurations(
     parameters: Map[String, String],
     sparkConf: Map[String, String]
