@@ -67,7 +67,7 @@ val df = sparkSession
 Saving a Spark dataframe as an Exasol table:
 
 ```scala
-val df = sparkSession
+df
      .write
      .mode("append")
      .option("host", "10.0.0.11")
