@@ -5,10 +5,10 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Tests for loading data from Exasol query as dataframes using short and long source formats */
-class LoadSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
+class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
   test("runs dataframe show action successfully") {
     createDummyTable()

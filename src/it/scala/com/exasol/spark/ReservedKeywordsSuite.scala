@@ -1,10 +1,10 @@
 package com.exasol.spark
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Tests for quering an Exasol tables with reserved keywords */
-class ReservedKeywordsSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
+class ReservedKeywordsSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
   val SCHEMA: String = "RESERVED_KEYWORDS"
   val TABLE: String = "TEST_TABLE"

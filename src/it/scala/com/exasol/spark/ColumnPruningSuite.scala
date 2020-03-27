@@ -1,10 +1,10 @@
 package com.exasol.spark
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test only required columns selection from queries */
-class ColumnPruningSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
+class ColumnPruningSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
   test("returns only required columns in query") {
     createDummyTable()

@@ -5,10 +5,10 @@ import java.sql.Timestamp
 import org.apache.spark.sql.functions.col
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test where clause generation for user queries */
-class PredicatePushdownSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
+class PredicatePushdownSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
   test("with where clause build from filters: filter") {
     createDummyTable()

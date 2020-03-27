@@ -4,9 +4,10 @@ import org.apache.spark.sql.types._
 
 import com.exasol.spark.util.Types._
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class TypesSuite extends FunSuite with Matchers {
+class TypesSuite extends AnyFunSuite with Matchers {
 
   test("test of Spark Decimal types to Exasol Decimal types") {
     assert(exasolTypeFromSparkDataType(DecimalType.apply(5, 2)) === "DECIMAL(5,2)")

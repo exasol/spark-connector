@@ -5,10 +5,10 @@ import java.sql.Date
 import com.exasol.spark.util.Types
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Integration tests for saving Spark dataframes into Exasol tables */
-class SaveSuite extends FunSuite with BaseDockerSuite with DataFrameSuiteBase {
+class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
   test("`tableExists` should return correct boolean result") {
     createDummyTable()

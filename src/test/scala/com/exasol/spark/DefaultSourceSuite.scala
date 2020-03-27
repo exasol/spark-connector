@@ -7,10 +7,11 @@ import org.apache.spark.sql.SaveMode
 import org.apache.spark.sql.SQLContext
 
 import org.mockito.Mockito.when
-import org.scalatest.{FunSuite, Matchers}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.mockito.MockitoSugar
 
-class DefaultSourceSuite extends FunSuite with Matchers with MockitoSugar {
+class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
   test("when reading should throw an Exception if no `query` parameter is provided") {
     val sqlContext = mock[SQLContext]

@@ -5,11 +5,11 @@ import org.apache.spark.sql.types._
 
 import com.exasol.spark.util.Filters._
 
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 @SuppressWarnings(Array("org.wartremover.warts.Any"))
-class FiltersSuite extends FunSuite with Matchers {
+class FiltersSuite extends AnyFunSuite with Matchers {
 
   val inValues: Array[Any] = Array(1, 2, 3)
 
