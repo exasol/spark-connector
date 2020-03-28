@@ -218,8 +218,11 @@ object Types extends Logging {
   }
 
   /**
-   * Returns comma separated column name and column types for Exasol table from
-   * Spark schema.
+   * Returns comma separated column name and column types for Exasol
+   * table from Spark schema.
+   *
+   * It skips the `NOT NULL` constraint if the Spark dataframe schema
+   * type is a [[org.apache.spark.sql.types.StringType$]] type.
    *
    * @param schema A Spark [[org.apache.spark.sql.types.StructType]] schema
    * @return A comma separated column names and their types
@@ -229,10 +232,10 @@ object Types extends Logging {
       .map { field =>
         val fieldType = Types.exasolTypeFromSparkDataType(field.dataType)
         val nameType = s"${field.name} $fieldType"
-        if (field.nullable) {
-          nameType
-        } else {
-          nameType + " NOT NULL"
+        field.nullable match {
+          case true                                  => nameType
+          case false if field.dataType != StringType => nameType + " NOT NULL"
+          case false                                 => nameType
         }
       }
       .mkString(", ")
