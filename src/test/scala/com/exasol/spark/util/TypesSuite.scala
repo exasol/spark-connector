@@ -156,7 +156,7 @@ class TypesSuite extends FunSuite with Matchers {
     )
   }
 
-  test("`createTableSchema` should create a comma separated column names and types") {
+  test("createTableSchema should create a comma separated column names and types") {
     val schema: StructType = StructType(
       Seq(
         StructField("bool_col", BooleanType),
@@ -174,6 +174,17 @@ class TypesSuite extends FunSuite with Matchers {
         " double_col DOUBLE, date_col DATE, timestamp_col TIMESTAMP"
 
     assert(createTableSchema(schema) === expectedStr)
+  }
+
+  test("createTableSchema returns string type without not null constraint") {
+    val schema = StructType(
+      Seq(
+        StructField("str_col", StringType),
+        StructField("text_col", StringType, false)
+      )
+    )
+    val expectedConvertedSchema = "str_col CLOB, text_col CLOB"
+    assert(createTableSchema(schema) === expectedConvertedSchema)
   }
 
 }
