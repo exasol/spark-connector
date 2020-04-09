@@ -1,9 +1,9 @@
 package com.exasol.spark.util
 
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class ExasolConfigurationSuite extends FunSuite with Matchers {
+class ExasolConfigurationSuite extends AnyFunSuite with Matchers {
 
   val validIPv4Addresses: Seq[String] = Seq(
     "1.1.1.1",

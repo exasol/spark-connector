@@ -9,8 +9,8 @@ set -o errtrace -o nounset -o pipefail -o errexit
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 cd "$BASE_DIR"
 
-MAIN_SCALA_VERSION=2.12.8
-MAIN_SPARK_VERSION=2.4.3
+MAIN_SCALA_VERSION=2.12.10
+MAIN_SPARK_VERSION=2.4.5
 
 if [[ -z "${TRAVIS_SCALA_VERSION:-}" ]]; then
   echo "Environment variable TRAVIS_SCALA_VERSION is not set"

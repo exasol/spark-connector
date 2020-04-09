@@ -3,7 +3,7 @@ package com.exasol.spark.sbt
 import sbt._
 import sbt.Keys._
 import com.typesafe.sbt.SbtGit.git
-import com.typesafe.sbt.pgp.PgpKeys._
+import com.jsuereth.sbtpgp.PgpKeys._
 import scala.xml.transform.RewriteRule
 import scala.xml.transform.RuleTransformer
 

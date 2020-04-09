@@ -6,18 +6,19 @@ import sbt._
 object Dependencies {
 
   // Versions
-  private val SparkVersion = "2.4.3"
-  private val ExasolJdbcVersion = "6.1.3"
+  private val SparkVersion = "2.4.5"
+  private val ExasolJdbcVersion = "6.2.5"
 
-  private val ScalaTestVersion = "3.0.5"
-  private val MockitoVersion = "2.23.4"
-  private val ContainersJdbcVersion = "1.10.5"
-  private val ContainersScalaVersion = "0.22.0"
+  private val ScalaTestVersion = "3.1.1"
+  private val ScalaTestMockitoVersion = "1.0.0-M2"
+  private val MockitoVersion = "3.3.3"
+  private val ContainersJdbcVersion = "1.13.0"
+  private val ContainersScalaVersion = "0.36.1"
 
   private val sparkCurrentVersion =
     sys.props.get("spark.currentVersion").getOrElse(SparkVersion)
 
-  private val SparkTestingBaseVersion = s"${sparkCurrentVersion}_0.12.0"
+  private val SparkTestingBaseVersion = s"${sparkCurrentVersion}_0.14.0"
 
   val Resolvers: Seq[Resolver] = Seq(
     "Exasol Releases" at "https://maven.exasol.com/artifactory/exasol-releases"
@@ -33,6 +34,7 @@ object Dependencies {
   /** Test dependencies only required in `test` */
   private val TestDependencies: Seq[ModuleID] = Seq(
     "org.scalatest" %% "scalatest" % ScalaTestVersion,
+    "org.scalatestplus" %% "scalatestplus-mockito" % ScalaTestMockitoVersion,
     "org.mockito" % "mockito-core" % MockitoVersion,
     "org.testcontainers" % "jdbc" % ContainersJdbcVersion,
     "com.dimafeng" %% "testcontainers-scala" % ContainersScalaVersion,

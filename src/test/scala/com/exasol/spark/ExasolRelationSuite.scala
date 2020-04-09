@@ -9,12 +9,12 @@ import com.exasol.spark.util.ExasolConnectionManager
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.mockito.Mockito._
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.mockito.MockitoSugar
 
 class ExasolRelationSuite
-    extends FunSuite
+    extends AnyFunSuite
     with Matchers
     with MockitoSugar
     with DataFrameSuiteBase {

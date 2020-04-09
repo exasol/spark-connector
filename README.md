@@ -285,13 +285,13 @@ spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
   parameter. However, it is not advised to limit this value in production
   environment.
 
-[travis-badge]: https://travis-ci.org/exasol/spark-exasol-connector.svg?branch=master
-[travis-link]: https://travis-ci.org/exasol/spark-exasol-connector
+[travis-badge]: https://travis-ci.com/exasol/spark-exasol-connector.svg?branch=master
+[travis-link]: https://travis-ci.com/exasol/spark-exasol-connector
 [codecov-badge]: https://codecov.io/gh/exasol/spark-exasol-connector/branch/master/graph/badge.svg
 [codecov-link]: https://codecov.io/gh/exasol/spark-exasol-connector
-[maven-img-badge]: https://img.shields.io/maven-central/v/com.exasol/spark-connector_2.11.svg
-[maven-reg-badge]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.11/badge.svg
-[maven-link]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.11
+[maven-img-badge]: https://img.shields.io/maven-central/v/com.exasol/spark-connector_2.12.svg
+[maven-reg-badge]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.12/badge.svg
+[maven-link]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.12
 [exasol]: https://www.exasol.com/en/
 [spark]: https://spark.apache.org/
 [spark-ds-api]: https://databricks.com/blog/2015/01/09/spark-sql-data-sources-api-unified-data-access-for-the-spark-platform.html

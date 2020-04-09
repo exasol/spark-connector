@@ -3,9 +3,9 @@ package com.exasol.spark
 import java.sql.DriverManager
 import java.sql.SQLException
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class ExasolDockerContainerSuite extends FunSuite with BaseDockerSuite {
+class ExasolDockerContainerSuite extends AnyFunSuite with BaseDockerSuite {
 
   test("exasol/docker-db container should be started") {
     Class.forName(container.driverClassName) // scalastyle:ignore classForName

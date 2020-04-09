@@ -70,23 +70,12 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
           |   MYBOOLEAN BOOLEAN,
           |   MYDATE DATE,
           |   MYTIMESTAMP TIMESTAMP,
-          |   MYGEOMETRY Geometry
+          |   MYGEOMETRY Geometry,
+          |   MYINTERVAL INTERVAL YEAR TO MONTH
           |)""".stripMargin,
       "commit"
     )
     exaManager.withExecute(queries)
   }
-
-  def createTypesNotCoveredTable(): Unit =
-    exaManager.withExecute(
-      Seq(
-        s"DROP SCHEMA IF EXISTS $EXA_SCHEMA CASCADE",
-        s"CREATE SCHEMA $EXA_SCHEMA",
-        s"""|CREATE OR REPLACE TABLE $EXA_SCHEMA.$EXA_TYPES_NOT_COVERED_TABLE (
-            |   myInterval INTERVAL YEAR TO MONTH
-            |)""".stripMargin,
-        "commit"
-      )
-    )
 
 }
