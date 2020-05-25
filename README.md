@@ -1,5 +1,7 @@
 # Spark Exasol Connector
 
+<img alt="spark-exasol-connector logo" src="docs/images/spark-exasol-connector_128x128.png" style="float:left; padding:0px 10px 10px 10px;"/>
+
 [![Build Status][travis-badge]][travis-link]
 [![Codecov][codecov-badge]][codecov-link]
 [![Maven Central][maven-img-badge]][maven-link]
