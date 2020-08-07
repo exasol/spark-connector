@@ -4,11 +4,11 @@ addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.3")
 
 // Adds a `wartremover` a flexible Scala code linting tool
 // http://github.com/puffnfresh/wartremover
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.5")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.10")
 
 // Adds Contrib Warts
 // http://github.com/wartremover/wartremover-contrib/
-addSbtPlugin("org.wartremover" % "sbt-wartremover-contrib" % "1.3.4")
+addSbtPlugin("org.wartremover" % "sbt-wartremover-contrib" % "1.3.8")
 
 // Adds Extra Warts
 // http://github.com/danielnixon/extrawarts
@@ -16,7 +16,7 @@ addSbtPlugin("org.danielnixon" % "sbt-extrawarts" % "1.0.3")
 
 // Adds a `assembly` task to create a fat JAR with all of its dependencies
 // https://github.com/sbt/sbt-assembly
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.10")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.15.0")
 
 // Adds a `BuildInfo` tasks
 // https://github.com/sbt/sbt-buildinfo
@@ -32,7 +32,7 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
 
 // Adds a `dependencyUpdates` task to check Maven repositories for dependency updates
 // http://github.com/rtimush/sbt-updates
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.0")
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.1")
 
 // Adds a `scalafmt` task for automatic source code formatting
 // https://github.com/lucidsoftware/neo-sbt-scalafmt
@@ -48,7 +48,7 @@ addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.2")
 
 // Adds a `sonatype` release tasks
 // https://github.com/xerial/sbt-sonatype
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.2")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.4")
 
 // Adds a `gnu-pgp` plugin
 // https://github.com/sbt/sbt-pgp
