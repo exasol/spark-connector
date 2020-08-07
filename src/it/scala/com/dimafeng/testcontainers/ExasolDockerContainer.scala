@@ -26,14 +26,14 @@ class ExasolDockerContainer(imageName: Option[String] = None)
 
   def password(): String = container.getPassword()
 
-  def host(): String = container.getHost()
+  override val host: String = container.getHost()
 
   def port(): Int = container.getPort()
 
   def testQueryString(): String = container.getTestQueryString()
 
   def configs(): Map[String, String] = Map(
-    "host" -> host(),
+    "host" -> host,
     "port" -> s"${port()}",
     "username" -> username(),
     "password" -> password(),

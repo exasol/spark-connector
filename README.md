@@ -1,6 +1,6 @@
 # Spark Exasol Connector
 
-<img alt="spark-exasol-connector logo" src="docs/images/spark-exasol-connector_128x128.png" style="float:left; padding:0px 10px 10px 10px;"/>
+<img alt="spark-exasol-connector logo" src="doc/images/spark-exasol-connector_128x128.png" style="float:left; padding:0px 10px 10px 10px;"/>
 
 [![Build Status][travis-badge]][travis-link]
 [![Codecov][codecov-badge]][codecov-link]
@@ -111,7 +111,7 @@ Please note that parameter values set on Spark configuration will have higher
 priority.
 
 For an example walkthrough please check
-[docs/example-walkthrough](docs/example-walkthrough.md).
+[doc/example-walkthrough](doc/example-walkthrough.md).
 
 ## Usage
 
