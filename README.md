@@ -113,6 +113,9 @@ priority.
 For an example walkthrough please check
 [doc/example-walkthrough](doc/example-walkthrough.md).
 
+Additionally, you can read about the latest changes in the
+[Changelog](doc/changes/changelog.md) file.
+
 ## Usage
 
 The latest release version ([![Maven Central][maven-reg-badge]][maven-link]) is
