@@ -1,4 +1,4 @@
-## Spark Exasol Connector v0.3.0, released 2020-08-??
+## Spark Exasol Connector v0.3.0, released 2020-08-07
 
 ### Bug Fixes
 
