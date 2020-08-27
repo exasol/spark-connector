@@ -106,7 +106,7 @@ class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
           runDataFrameSave(mode, 2)
         }
         assert(
-          thrown.getMessage.contains(s"Table $tableName does not exist and cannot be created.")
+          thrown.getMessage.contains(s"Table $tableName does not exist. Please enable")
         )
     }
   }
