@@ -10,54 +10,18 @@ import org.scalatest.funsuite.AnyFunSuite
 /** Integration tests for saving Spark dataframes into Exasol tables */
 class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
 
-  test("`tableExists` should return correct boolean result") {
-    createDummyTable()
+  private[this] val tableName = s"$EXA_SCHEMA.$EXA_TABLE"
 
-    assert(exaManager.tableExists(s"$EXA_SCHEMA.$EXA_TABLE") === true)
-    assert(exaManager.tableExists("DUMMY_SCHEMA.DUMMYTABLE") === false)
-  }
+  private[this] val saveModes = Seq("append", "errorifexists", "ignore", "overwrite")
 
-  test("`truncateTable` should perform table truncation") {
-    createDummyTable()
-
-    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $EXA_SCHEMA.$EXA_TABLE") > 0)
-
-    exaManager.truncateTable(s"$EXA_SCHEMA.$EXA_TABLE")
-    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $EXA_SCHEMA.$EXA_TABLE") === 0)
-
-    // Idempotent
-    exaManager.truncateTable(s"$EXA_SCHEMA.$EXA_TABLE")
-    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $EXA_SCHEMA.$EXA_TABLE") === 0)
-  }
-
-  test("`dropTable` should drop table") {
-    createDummyTable()
-    assert(exaManager.tableExists(s"$EXA_SCHEMA.$EXA_TABLE") === true)
-    exaManager.dropTable(s"$EXA_SCHEMA.$EXA_TABLE")
-    assert(exaManager.tableExists(s"$EXA_SCHEMA.$EXA_TABLE") === false)
-
-    // Idempotent
-    exaManager.dropTable(s"$EXA_SCHEMA.$EXA_TABLE")
-    assert(exaManager.tableExists(s"$EXA_SCHEMA.$EXA_TABLE") === false)
-  }
-
-  test("`createTable` should create a table") {
-    createDummyTable()
-    val tableName = s"$EXA_SCHEMA.new_table"
-    assert(exaManager.tableExists(tableName) === false)
-
-    import sqlContext.implicits._
-    val df = sc
-      .parallelize(Seq(("a", 103, Date.valueOf("2019-01-14"))))
-      .toDF("str_col", "int_col", "date_col")
-
-    val tableSchema = Types.createTableSchema(df.schema)
-    exaManager.createTable(tableName, tableSchema)
-    assert(exaManager.tableExists(tableName) === true)
-  }
+  private[this] val defaultOptions = Map(
+    "host" -> container.host,
+    "port" -> s"${container.port}",
+    "table" -> tableName
+  )
 
   // scalastyle:off nonascii
-  val testData: Seq[(String, String, Date, String)] = Seq(
+  private[this] val dataframeTestData: Seq[(String, String, Date, String)] = Seq(
     ("name1", "city1", Date.valueOf("2019-01-11"), "äpişge"),
     ("name1", "city2", Date.valueOf("2019-01-12"), "gül"),
     ("name2", "city1", Date.valueOf("2019-02-25"), "çigit"),
@@ -65,96 +29,123 @@ class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
   )
   // scalastyle:on nonascii
 
-  def runWithSaveMode(mode: String, partitionCnt: Int, tableExists: Boolean): Long = {
+  test("`tableExists` should return correct boolean result") {
+    createDummyTable()
+    assert(exaManager.tableExists(tableName) === true)
+    assert(exaManager.tableExists("DUMMY_SCHEMA.DUMMYTABLE") === false)
+  }
+
+  test("`truncateTable` should perform table truncation") {
+    createDummyTable()
+    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") > 0)
+    exaManager.truncateTable(tableName)
+    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
+    // Ensure it is idempotent
+    exaManager.truncateTable(tableName)
+    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
+  }
+
+  test("`dropTable` should drop table") {
+    createDummyTable()
+    assert(exaManager.tableExists(tableName) === true)
+    exaManager.dropTable(tableName)
+    assert(exaManager.tableExists(tableName) === false)
+    // Ensure it is idempotent
+    exaManager.dropTable(tableName)
+    assert(exaManager.tableExists(tableName) === false)
+  }
+
+  test("`createTable` should create a table") {
+    createDummyTable()
+    val newTableName = s"$EXA_SCHEMA.new_table"
+    assert(exaManager.tableExists(newTableName) === false)
+
     import sqlContext.implicits._
-
-    val tableName = if (tableExists) s"$EXA_SCHEMA.$EXA_TABLE" else s"$EXA_SCHEMA.NONEXIST_TABLE"
-
-    if (tableExists) {
-      createDummyTable()
-    } else {
-      exaManager.dropTable(tableName)
-    }
-
-    val defaultOpts = Map(
-      "host" -> container.host,
-      "port" -> s"${container.port}",
-      "table" -> tableName
-    )
-
-    // add permission to create table if table does not exist
-    val opts = if (tableExists) defaultOpts else defaultOpts ++ Map("create_table" -> "true")
-
     val df = sc
-      .parallelize(testData, partitionCnt)
+      .parallelize(Seq(("a", 103, Date.valueOf("2019-01-14"))))
+      .toDF("str_col", "int_col", "date_col")
+
+    val newTableSchema = Types.createTableSchema(df.schema)
+    exaManager.createTable(newTableName, newTableSchema)
+    assert(exaManager.tableExists(newTableName) === true)
+  }
+
+  test("save mode 'ignore' does not insert data if table exists") {
+    createDummyTable()
+    val initialRecordsCount =
+      exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+    assert(runDataFrameSave("ignore", 1) === initialRecordsCount)
+  }
+
+  test("save mode 'overwrite' overwrite if table exists") {
+    createDummyTable()
+    assert(runDataFrameSave("overwrite", 2) === dataframeTestData.size.toLong)
+  }
+
+  test("save mode 'append' appends data if table exists") {
+    createDummyTable()
+    val initialRecordsCount =
+      exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+    val totalRecords = initialRecordsCount + dataframeTestData.size
+    assert(runDataFrameSave("append", 3) === totalRecords)
+  }
+
+  test("save mode 'errorifexists' throws exception if table exists") {
+    createDummyTable()
+    val thrown = intercept[UnsupportedOperationException] {
+      runDataFrameSave("errorifexists", 4)
+    }
+    assert(thrown.getMessage.contains(s"Table $tableName already exists"))
+  }
+
+  test("save throws without 'create_table' or 'drop_table' option when table does not exist") {
+    exaManager.dropTable(tableName)
+    saveModes.foreach {
+      case mode =>
+        val thrown = intercept[UnsupportedOperationException] {
+          runDataFrameSave(mode, 2)
+        }
+        assert(
+          thrown.getMessage.contains(s"Table $tableName does not exist and cannot be created.")
+        )
+    }
+  }
+
+  test("save with 'create_table' option creates a new table before saving dataframe") {
+    val newOptions = defaultOptions ++ Map("create_table" -> "true")
+    saveModes.foreach {
+      case mode =>
+        exaManager.dropTable(tableName)
+        assert(runDataFrameSave(mode, 2, newOptions) === dataframeTestData.size.toLong)
+    }
+  }
+
+  test("save with 'drop_table' option drops and creates a new table before saving dataframe") {
+    val newOptions = defaultOptions ++ Map("drop_table" -> "true")
+    saveModes.foreach {
+      case mode =>
+        createDummyTable()
+        assert(runDataFrameSave(mode, 3, newOptions) === dataframeTestData.size)
+    }
+  }
+
+  private[this] def runDataFrameSave(
+    mode: String,
+    partitionCount: Int,
+    options: Map[String, String] = defaultOptions
+  ): Long = {
+    import sqlContext.implicits._
+    val df = sc
+      .parallelize(dataframeTestData, partitionCount)
       .toDF("name", "city", "date_info", "unicode_col")
 
     df.write
       .mode(mode)
-      .options(opts)
+      .options(options)
       .format("exasol")
       .save()
 
     exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
-  }
-
-  test("dataframe save with different modes when Exasol table exists") {
-    createDummyTable()
-    val initialCnt =
-      exaManager.withCountQuery(s"SELECT COUNT(*) FROM $EXA_SCHEMA.$EXA_TABLE")
-
-    val results: Map[(String, Int), Long] = Map(
-      ("ignore", 1) -> initialCnt,
-      ("overwrite", 2) -> testData.size.toLong,
-      ("append", 3) -> (initialCnt + testData.size)
-    )
-
-    results.foreach {
-      case ((mode, parts), expected) =>
-        assert(runWithSaveMode(mode, parts, true) === expected)
-    }
-
-    // Throw if table exists
-    val thrown = intercept[UnsupportedOperationException] {
-      runWithSaveMode("errorifexists", 4, true)
-    }
-    assert(thrown.getMessage.contains(s"Table $EXA_SCHEMA.$EXA_TABLE already exists"))
-  }
-
-  test("dataframe save with different modes when Exasol table does not exist") {
-    val cnt = testData.size
-
-    val results: Seq[(String, Int)] = Seq(
-      ("ignore", 1),
-      ("overwrite", 2),
-      ("append", 3),
-      ("errorifexists", 4)
-    )
-
-    results.foreach {
-      case (mode, parts) =>
-        assert(runWithSaveMode(mode, parts, false) === cnt)
-    }
-  }
-
-  test("dataframe save should throw if 'create_table' parameter was not set") {
-    import sqlContext.implicits._
-    val df = sc
-      .parallelize(testData, 3)
-      .toDF("name", "city", "date_info", "unicode_col")
-
-    val tableName = s"$EXA_SCHEMA.not_there"
-
-    val thrown = intercept[UnsupportedOperationException] {
-      df.write
-        .mode("append")
-        .option("host", container.host)
-        .option("port", s"${container.port}")
-        .option("table", tableName)
-        .format("exasol")
-        .save()
-    }
-    assert(thrown.getMessage.contains(s"Table $tableName does not exist and cannot be created."))
   }
 
 }

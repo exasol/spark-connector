@@ -41,7 +41,7 @@ class DefaultSource
     sqlContext: SQLContext,
     parameters: Map[String, String]
   ): BaseRelation = {
-    val queryString = getKValue("query", parameters)
+    val queryString = getKeyValue("query", parameters)
     val manager = createManager(parameters, sqlContext)
     new ExasolRelation(sqlContext, queryString, None, manager)
   }
@@ -62,7 +62,7 @@ class DefaultSource
     parameters: Map[String, String],
     schema: StructType
   ): BaseRelation = {
-    val queryString = getKValue("query", parameters)
+    val queryString = getKeyValue("query", parameters)
     val manager = createManager(parameters, sqlContext)
     new ExasolRelation(sqlContext, queryString, Option(schema), manager)
   }
@@ -85,24 +85,26 @@ class DefaultSource
     parameters: Map[String, String],
     data: DataFrame
   ): BaseRelation = {
-    val tableName = getKValue("table", parameters)
+    val tableName = getKeyValue("table", parameters)
     val manager = createManager(parameters, sqlContext)
-
+    if (manager.config.drop_table) {
+      manager.dropTable(tableName)
+    }
     val isTableExist = manager.tableExists(tableName)
 
     mode match {
       case SaveMode.Overwrite =>
         if (!isTableExist) {
-          createDFTable(data, tableName, manager)
+          createExasolTable(data, tableName, manager)
         }
         manager.truncateTable(tableName)
-        saveDFTable(sqlContext, data, tableName, manager)
+        saveDataFrame(sqlContext, data, tableName, manager)
 
       case SaveMode.Append =>
         if (!isTableExist) {
-          createDFTable(data, tableName, manager)
+          createExasolTable(data, tableName, manager)
         }
-        saveDFTable(sqlContext, data, tableName, manager)
+        saveDataFrame(sqlContext, data, tableName, manager)
 
       case SaveMode.ErrorIfExists =>
         if (isTableExist) {
@@ -113,13 +115,13 @@ class DefaultSource
             """.stripMargin
           )
         }
-        createDFTable(data, tableName, manager)
-        saveDFTable(sqlContext, data, tableName, manager)
+        createExasolTable(data, tableName, manager)
+        saveDataFrame(sqlContext, data, tableName, manager)
 
       case SaveMode.Ignore =>
         if (!isTableExist) {
-          createDFTable(data, tableName, manager)
-          saveDFTable(sqlContext, data, tableName, manager)
+          createExasolTable(data, tableName, manager)
+          saveDataFrame(sqlContext, data, tableName, manager)
         }
     }
 
@@ -127,7 +129,8 @@ class DefaultSource
     createRelation(sqlContext, newParams, data.schema)
   }
 
-  private[this] def saveDFTable(
+  // Saves Spark dataframe into an Exasol table
+  private[this] def saveDataFrame(
     sqlContext: SQLContext,
     df: DataFrame,
     tableName: String,
@@ -140,16 +143,20 @@ class DefaultSource
     newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
   }
 
-  private[this] def createDFTable(
+  // Creates an Exasol table that match Spark dataframe
+  private[this] def createExasolTable(
     df: DataFrame,
     tableName: String,
     manager: ExasolConnectionManager
-  ): Unit = {
-    if (!manager.config.create_table) {
+  ): Unit =
+    if (manager.config.create_table || manager.config.drop_table) {
+      manager.createTable(tableName, Types.createTableSchema(df.schema))
+    } else {
       throw new UnsupportedOperationException(
         s"""
            |Table $tableName does not exist and cannot be created. Please enable table
            |creation by setting 'create_table' to 'true'.
+           |Or drop existing table before saving by setting 'drop_table' to 'true'.
            |For example:
            |  df.write
            |    .mode("overwrite")
@@ -160,8 +167,6 @@ class DefaultSource
         """.stripMargin
       )
     }
-    manager.createTable(tableName, Types.createTableSchema(df.schema))
-  }
 
   /**
    * Rearrange dataframe partitions into Exasol data nodes count.
@@ -195,7 +200,7 @@ class DefaultSource
     }
   }
 
-  private[this] def getKValue(key: String, parameters: Map[String, String]): String =
+  private[this] def getKeyValue(key: String, parameters: Map[String, String]): String =
     parameters.get(key) match {
       case Some(str) => str
       case None =>
