@@ -4,7 +4,7 @@
 
 * [#68](https://github.com/exasol/spark-exasol-connector/issues/68): Add drop
   table option (PR
-  [#71](https://github.com/exasol/spark-exasol-connector/pull/71)).
+  [#72](https://github.com/exasol/spark-exasol-connector/pull/72)).
 
 ### Dependency Updates
 
