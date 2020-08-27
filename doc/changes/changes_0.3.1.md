@@ -13,4 +13,4 @@
 
 #### Plugin Updates
 
-* Updated ``comeed3si9n:sbt-buildinfo`` from `0.9.0` to `0.10.0`.
+* Updated ``com.eed3si9n:sbt-buildinfo`` from `0.9.0` to `0.10.0`.
