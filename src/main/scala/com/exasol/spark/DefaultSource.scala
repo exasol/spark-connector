@@ -154,9 +154,8 @@ class DefaultSource
     } else {
       throw new UnsupportedOperationException(
         s"""
-           |Table $tableName does not exist and cannot be created. Please enable table
-           |creation by setting 'create_table' to 'true'.
-           |Or drop existing table before saving by setting 'drop_table' to 'true'.
+           |Table $tableName does not exist. Please enable table creation by setting
+           |'create_table' option to 'true'.
            |For example:
            |  df.write
            |    .mode("overwrite")
