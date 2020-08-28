@@ -38,7 +38,6 @@ object Dependencies {
     "org.mockito" % "mockito-core" % MockitoVersion,
     "org.testcontainers" % "jdbc" % ContainersJdbcVersion,
     "com.dimafeng" %% "testcontainers-scala" % ContainersScalaVersion,
-    "org.apache.spark" %% "spark-hive" % sparkCurrentVersion,
     "com.holdenkarau" %% "spark-testing-base" % SparkTestingBaseVersion
   ).map(_ % Test)
 

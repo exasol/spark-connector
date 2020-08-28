@@ -3,7 +3,6 @@ package com.exasol.spark.sbt
 import sbt._
 import wartremover.Wart
 import wartremover.Warts
-import org.danielnixon.extrawarts.ExtraWart
 
 /** Compiler related settings (flags, warts, lints) */
 object Compilation {
@@ -102,18 +101,7 @@ object Compilation {
     contribWart("OldTime"),
     contribWart("SealedCaseClass"),
     contribWart("SomeApply"),
-    contribWart("SymbolicName"),
-    // contribWart("UnsafeInheritance"), // Not possible with Spark classes / traits
-    ExtraWart.EnumerationPartial,
-    ExtraWart.FutureObject,
-    ExtraWart.GenMapLikePartial,
-    ExtraWart.GenTraversableLikeOps,
-    ExtraWart.GenTraversableOnceOps,
-    ExtraWart.ScalaGlobalExecutionContext,
-    ExtraWart.StringOpsPartial,
-    ExtraWart.ThrowablePartial,
-    ExtraWart.TraversableOnceOps,
-    ExtraWart.UnsafeContains
+    contribWart("SymbolicName")
   )
 
   val WartremoverFlags: Seq[Wart] = ExtraWartremoverFlags ++ Warts.allBut(
