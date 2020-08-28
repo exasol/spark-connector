@@ -37,6 +37,6 @@
 
 * Updated ``org.wartremover:sbt-wartremover`` from `2.4.5` to `2.4.10`.
 * Updated ``org.wartremover:sbt-wartremover-contrib`` from `1.3.4` to `1.3.8`.
-* Updated ``comeed3si9n:sbt-assembly`` from `0.14.10` to `0.15.0`.
+* Updated ``com.eed3si9n:sbt-assembly`` from `0.14.10` to `0.15.0`.
 * Updated ``com.timushev.sbt:sbt-updates`` from `0.5.0` to `0.5.1`.
 * Updated ``com.xerial.sbt:sbt-sonatype`` from `3.9.2` to `3.9.4`.
