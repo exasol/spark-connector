@@ -9,9 +9,9 @@ object Dependencies {
   private val SparkVersion = "2.4.5"
   private val ExasolJdbcVersion = "6.2.5"
 
-  private val ScalaTestVersion = "3.2.0"
+  private val ScalaTestVersion = "3.2.2"
   private val ScalaTestMockitoVersion = "1.0.0-M2"
-  private val MockitoVersion = "3.4.6"
+  private val MockitoVersion = "3.5.7"
   private val ContainersJdbcVersion = "1.14.3"
   private val ContainersScalaVersion = "0.38.1"
 

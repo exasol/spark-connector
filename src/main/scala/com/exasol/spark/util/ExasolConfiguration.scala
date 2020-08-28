@@ -46,6 +46,7 @@ final case class ExasolConfiguration(
   password: String,
   max_nodes: Int,
   create_table: Boolean,
+  drop_table: Boolean,
   batch_size: Int
 )
 
@@ -75,6 +76,7 @@ object ExasolConfiguration {
       password = opts.getOrElse("password", "exasol"),
       max_nodes = opts.getOrElse("max_nodes", "200").toInt,
       create_table = opts.getOrElse("create_table", "false").toBoolean,
+      drop_table = opts.getOrElse("drop_table", "false").toBoolean,
       batch_size = opts.getOrElse("batch_size", "1000").toInt
     )
 

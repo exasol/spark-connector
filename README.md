@@ -198,7 +198,8 @@ connection to Exasol cluster.
 | ``spark.exasol.password``     | ``password``     | ``exasol``    | An Exasol password for logging in
 | ``spark.exasol.max_nodes``    | ``max_nodes``    | ``200``       | The number of data nodes in Exasol cluster
 | ``spark.exasol.batch_size``   | ``batch_size``   | ``1000``      | The number of records batched before running execute statement when saving dataframe
-| ``spark.exasol.create_table`` | ``create_table`` | ``false``     | A permission to create table if it does not exist in Exasol when saving dataframe
+| ``spark.exasol.create_table`` | ``create_table`` | ``false``     | A permission to create a table if it does not exist in Exasol when saving dataframe
+| ``spark.exasol.drop_table``   | ``drop_table``   | ``false``     | A permission to drop the table if it exists in Exasol when saving dataframe
 
 ## Building and Testing
 
