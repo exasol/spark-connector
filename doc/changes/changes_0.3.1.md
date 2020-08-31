@@ -1,4 +1,4 @@
-## Spark Exasol Connector v0.3.1, released 2020-MM-DD
+## Spark Exasol Connector v0.3.1, released 2020-08-31
 
 ### Features
 
@@ -19,4 +19,5 @@
 
 #### Plugin Updates
 
-* Updated ``com.eed3si9n:sbt-buildinfo`` from `0.9.0` to `0.10.0`.
+* Removed ``com.eed3si9n:sbt-buildinfo``. It is not used in the project.
+* Removed ``org.danielnixon:sbt-extrawarts``. It is not maintained anymore.
