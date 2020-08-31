@@ -6,6 +6,12 @@
   table option (PR
   [#72](https://github.com/exasol/spark-exasol-connector/pull/72)).
 
+### Documentation
+
+* [#59](https://github.com/exasol/spark-exasol-connector/issues/59): Add
+  dependency list to readme (PR
+  [#73](https://github.com/exasol/spark-exasol-connector/pull/73)).
+
 ### Dependency Updates
 
 * Updated ``org.scalatest:scalatest`` from `3.2.0` to `3.2.2`.
