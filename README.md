@@ -335,7 +335,7 @@ These plugins help with project development.
 | [SBT Scalastyle][sbt-style-link]            | Plugin for http://www.scalastyle.org/ Scala style checker       | Apache License 2.0   |
 | [SBT Dependency Graph][sbt-depgraph-link]   | Plugin for visualizing dependency graph of your project         | Apache License 2.0   |
 | [SBT Sonatype][sbt-sonatype-link]           | Sbt plugin for publishing Scala projects to the Maven central   | Apache License 2.0   |
-| [SBT PGP][sbt-pgp-link]                     | PGP plugin for `sbt`                                            | Typesafe License     |
+| [SBT PGP][sbt-pgp-link]                     | PGP plugin for `sbt`                                            | BSD 3-Clause License |
 | [SBT Git][sbt-git-link]                     | Plugin for Git integration, used to version the release jars    | BSD 2-Clause License |
 
 [travis-badge]: https://travis-ci.com/exasol/spark-exasol-connector.svg?branch=master
