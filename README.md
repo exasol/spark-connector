@@ -312,7 +312,7 @@ versions of Spark, we are planning to change to the newer JVM versions.
 | Dependency                                  | Purpose                                                         | License              |
 |---------------------------------------------|-----------------------------------------------------------------|----------------------|
 | [Scalatest][scalatest-link]                 | A testing tool for Scala and Java developers                    | Apache License 2.0   |
-| [Scalatest Plus][scalatestplus-link]        | An integration support between Scalatest and Mockito            | Apache License 2.0   |
+| [Scalatest Plus][scalatestplus-link]        | Integration support between Scalatest and Mockito               | Apache License 2.0   |
 | [Mockito Core][mockitocore-link]            | A mocking framework for unit tests                              | MIT License          |
 | [Testcontainers JDBC][tcont-jdbc-link]      | Testcontainers JDBC to help create JDBC based Docker containers | MIT License          |
 | [Testcontainers Scala][tcont-scala-link]    | A Scala wrapper for testcontainers-java                         | MIT License          |
@@ -329,13 +329,13 @@ These plugins help with project development.
 | [SBT Wartremover Contrib][sbt-wcontrib-link]| Community managed additional warts for wartremover              | Apache License 2.0   |
 | [SBT Assembly][sbt-assembly-link]           | Create fat jars with all project dependencies                   | MIT License          |
 | [SBT API Mappings][sbt-apimapping-link]     | A plugin that fetches API mappings for common Scala libraries   | Apache License 2.0   |
-| [SBT Scoverage][sbt-scoverage-link]         | Integrates the scoverage code coverage library                  | Apache License 2.0   |
+| [SBT Scoverage][sbt-scoverage-link]         | Integrates the `scoverage` code coverage library                | Apache License 2.0   |
 | [SBT Updates][sbt-updates-link]             | Checks Maven and Ivy repositories for dependency updates        | BSD 3-Clause License |
 | [SBT Scalafmt][sbt-scalafmt-link]           | A plugin for https://scalameta.org/scalafmt/ formatting         | Apache License 2.0   |
 | [SBT Scalastyle][sbt-style-link]            | A plugin for http://www.scalastyle.org/ Scala style checker     | Apache License 2.0   |
 | [SBT Dependency Graph][sbt-depgraph-link]   | A plugin for visualizing dependency graph of your project       | Apache License 2.0   |
 | [SBT Sonatype][sbt-sonatype-link]           | A sbt plugin for publishing Scala projects to the Maven central | Apache License 2.0   |
-| [SBT PGP][sbt-pgp-link]                     | A PGP plugin for sbt                                            | Typesafe License     |
+| [SBT PGP][sbt-pgp-link]                     | A PGP plugin for `sbt`                                          | Typesafe License     |
 | [SBT Git][sbt-git-link]                     | A plugin for Git integration, used to version the release jars  | BSD 2-Clause License |
 
 [travis-badge]: https://travis-ci.com/exasol/spark-exasol-connector.svg?branch=master
