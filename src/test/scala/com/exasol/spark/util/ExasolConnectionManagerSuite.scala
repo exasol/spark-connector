@@ -35,7 +35,7 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers {
       getECMConnectionString(incorrectOpt)
     }
     val thrownMsg = thrown.getMessage
-    assert(thrownMsg === "property invalid: debug==1 does not have key=value format")
+    assert(thrownMsg === "Invalid property: debug==1 does not have key=value format")
   }
 
   test("check exasol jdbc options start with semicolon") {
@@ -47,7 +47,7 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers {
       getECMConnectionString(incorrectOpt)
     }
     val thrownMsg = thrown.getMessage
-    assert(thrownMsg === "jdbc option should not start or end with semicolon")
+    assert(thrownMsg === "Jdbc options should not start or end with semicolon")
   }
 
 }

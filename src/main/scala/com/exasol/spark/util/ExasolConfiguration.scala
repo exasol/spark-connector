@@ -69,7 +69,7 @@ object ExasolConfiguration {
   def checkJdbcOptions(str: String): String = {
     if (str.endsWith(";") || str.startsWith(";")) {
       throw new IllegalArgumentException(
-        "jdbc option should not start or end with semicolon"
+        "Jdbc options should not start or end with semicolon"
       )
     }
 
@@ -79,7 +79,7 @@ object ExasolConfiguration {
         .foreach(kv => {
           if (kv.filter(_ == '=').length != 1) {
             throw new IllegalArgumentException(
-              s"property invalid: $kv does not have key=value format"
+              s"Invalid property: $kv does not have key=value format"
             )
           }
         })
