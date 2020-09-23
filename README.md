@@ -186,7 +186,8 @@ version number.</strong>
 ## Configuration
 
 The following configuration parameters can be provided mainly to facilitate a
-connection to Exasol cluster. You can add extra jdbc options using ```spark.exasol.jdbc_option```
+connection to Exasol cluster. You can add extra jdbc options using 
+``spark.exasol.jdbc_options`` if needed.
 
 | Spark Configuration           | Configuration    | Default       | Description
 | :---                          | :---             | :---          | :---
