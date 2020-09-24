@@ -23,7 +23,11 @@ import com.exasol.jdbc.EXAStatement
 final case class ExasolConnectionManager(config: ExasolConfiguration) {
 
   /** A regular Exasol jdbc connection string */
-  def getJdbcConnectionString(): String = s"jdbc:exa:${config.host}:${config.port}"
+  def getJdbcConnectionString(): String =
+    config.jdbc_options.length() match {
+      case 0 => s"jdbc:exa:${config.host}:${config.port}"
+      case _ => s"jdbc:exa:${config.host}:${config.port};${config.jdbc_options}"
+    }
 
   def mainConnection(): EXAConnection =
     ExasolConnectionManager.makeConnection(

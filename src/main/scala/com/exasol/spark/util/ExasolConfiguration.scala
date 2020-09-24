@@ -42,6 +42,7 @@ import scala.util.matching.Regex
 final case class ExasolConfiguration(
   host: String,
   port: Int,
+  jdbc_options: String,
   username: String,
   password: String,
   max_nodes: Int,
@@ -65,6 +66,27 @@ object ExasolConfiguration {
       )
   }
 
+  def checkJdbcOptions(str: String): String = {
+    if (str.endsWith(";") || str.startsWith(";")) {
+      throw new IllegalArgumentException(
+        "Jdbc options should not start or end with semicolon"
+      )
+    }
+
+    if (str.length > 0) {
+      str
+        .split(";")
+        .foreach(kv => {
+          if (kv.filter(_ == '=').length != 1) {
+            throw new IllegalArgumentException(
+              s"Invalid property: $kv does not have key=value format"
+            )
+          }
+        })
+    }
+    str
+  }
+
   @SuppressWarnings(
     Array("org.wartremover.warts.Overloading", "org.danielnixon.extrawarts.StringOpsPartial")
   )
@@ -72,6 +94,7 @@ object ExasolConfiguration {
     ExasolConfiguration(
       host = checkHost(opts.getOrElse("host", getLocalHost())),
       port = opts.getOrElse("port", "8888").toInt,
+      jdbc_options = checkJdbcOptions(opts.getOrElse("jdbc_options", "")),
       username = opts.getOrElse("username", "sys"),
       password = opts.getOrElse("password", "exasol"),
       max_nodes = opts.getOrElse("max_nodes", "200").toInt,
