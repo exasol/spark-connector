@@ -56,21 +56,41 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
       config.password
     )
 
-  def initParallel(mainConn: EXAConnection): Int =
-    mainConn.EnterParallel(config.max_nodes)
+  /**
+   * Starts a parallel sub-connections from the main JDBC connection.
+   *
+   * @param mainConnection the main connection
+   * @return the number of parallel connections
+   */
+  def initParallel(mainConnection: EXAConnection): Int =
+    mainConnection.EnterParallel(config.max_nodes)
 
-  def subConnections(mainConn: EXAConnection): Seq[String] = {
-    val hosts = mainConn.GetSlaveHosts()
-    val ports = mainConn.GetSlavePorts()
+  /**
+   * Returns the list of all parallel sub-connection URLs.
+   *
+   * @param mainConnection the main connection
+   * @return the list of sub-connections URLs
+   */
+  def subConnections(mainConnection: EXAConnection): Seq[String] = {
+    val hosts = mainConnection.GetWorkerHosts()
+    val ports = mainConnection.GetWorkerPorts()
+    val token = mainConnection.GetWorkerToken()
     hosts
       .zip(ports)
       .zipWithIndex
       .map {
         case ((host, port), idx) =>
-          s"jdbc:exa-slave:$host:$port;slaveID=$idx;slavetoken=${mainConn.GetSlaveToken()}"
+          s"jdbc:exa-worker:$host:$port;workerID=$idx;workertoken=$token"
       }
   }
 
+  /**
+   * Creates a JDBC connection using one of the sub-connection URL
+   * strings.
+   *
+   * @param subConnectionUrl one of the sub-connection strings
+   * @return a JDBC connection on the separate parallel connection
+   */
   def subConnection(subConnectionUrl: String): EXAConnection =
     ExasolConnectionManager.makeConnection(subConnectionUrl, config.username, config.password)
 
