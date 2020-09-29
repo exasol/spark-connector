@@ -93,8 +93,8 @@ spark-shell \
   --packages com.exasol:spark-connector_2.12:<VERSION>
 ```
 
-The `spark-shell` provide Read-Eval-Print-Loop (REPL) to interactively learn the
-API.
+The `spark-shell` provide Read-Eval-Print-Loop (REPL) to interactively learn and
+experiment with the API.
 
 ### Spark Exasol Connector With Spark Submit
 
@@ -289,7 +289,7 @@ several separate queries.
 
 Create a dataframe from the query result:
 
-```
+```scala
 val df = sparkSession
   .read
   .format("exasol")
@@ -330,7 +330,7 @@ val groupedDF = transformedDF
 
 You can also save the Spark dataframe into an Exasol table:
 
-```
+```scala
 groupedDF
   .write
   .mode("overwrite")

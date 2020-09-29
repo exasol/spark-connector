@@ -94,6 +94,7 @@ These plugins help with project development.
 [mockitocore-link]: https://site.mockito.org/
 [tcont-jdbc-link]: https://www.testcontainers.org/modules/databases/jdbc/
 [tcont-scala-link]: https://github.com/testcontainers/testcontainers-scala
+[spark-testing-base]: https://github.com/holdenk/spark-testing-base
 [sbt-coursier-link]: https://github.com/coursier/coursier
 [sbt-wartremover-link]: http://github.com/puffnfresh/wartremover
 [sbt-wcontrib-link]: http://github.com/wartremover/wartremover-contrib
