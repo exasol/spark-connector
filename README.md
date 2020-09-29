@@ -4,6 +4,7 @@
 
 [![Build Status][travis-badge]][travis-link]
 [![Codecov][codecov-badge]][codecov-link]
+[![Coveralls][coveralls-badge]][coveralls-link]
 [![Maven Central][maven-img-badge]][maven-link]
 
 ## Overview
@@ -79,6 +80,8 @@ These plugins help with project development.
 [travis-link]: https://travis-ci.com/exasol/spark-exasol-connector
 [codecov-badge]: https://codecov.io/gh/exasol/spark-exasol-connector/branch/master/graph/badge.svg
 [codecov-link]: https://codecov.io/gh/exasol/spark-exasol-connector
+[coveralls-badge]: https://coveralls.io/repos/github/exasol/spark-exasol-connector/badge.svg?branch=master
+[coveralls-link]: https://coveralls.io/github/exasol/spark-exasol-connector?branch=master
 [maven-img-badge]: https://img.shields.io/maven-central/v/com.exasol/spark-connector_2.12.svg
 [maven-reg-badge]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.12/badge.svg
 [maven-link]: https://maven-badges.herokuapp.com/maven-central/com.exasol/spark-connector_2.12

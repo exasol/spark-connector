@@ -21,3 +21,7 @@ to `7.0.0`.
 * Updated ``com.exasol:exasol-jdbc`` from `6.2.5` to `7.0.0`.
 * Updated ``org.mockito:mockito-core`` from `3.5.7` to `3.5.13`.
 * Updated ``com.dimafeng:testcontainers-scala`` from `0.38.1` to `0.38.4`.
+
+### Plugin Updates
+
+* Added ``org.scoverage:sbt-coveralls`` plugin for additional coverage report.

@@ -65,6 +65,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - ./sbtx coveralls
   - ./scripts/publish.sh
 
 cache:
