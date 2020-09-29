@@ -280,7 +280,16 @@ val exasolQueryString = """
   ON s.SALES_ID != sp.SALES_ID
   WHERE s.MARKET_ID IN (534, 678, 1019, 2277)
 """
+```
 
+Please combine your Exasol queries into a single query string and load the
+result into the Spark DataFrame. This helps to reduce the additional network
+overhead. At the moment, it is not possible to create many dataframes with
+several separate queries.
+
+Create a dataframe from the query result:
+
+```
 val df = sparkSession
   .read
   .format("exasol")
