@@ -157,7 +157,7 @@ List of required and optional parameters:
 | Spark Configuration           | Configuration    | Default       | Description
 | :---                          | :---             | :---          | :---
 |                               | ``query``        | *<none>*      | An Exasol SQL query string to send to Exasol cluster
-|                               | ``table``        | *<none>*      | A table name (with schema, e.g. <schema>.<table>) to save dataframe into
+|                               | ``table``        | *<none>*      | A table name (with schema, e.g. schema.table) to save dataframe into
 | ``spark.exasol.host``         | ``host``         | ``10.0.0.11`` | A host ip address to the **first** Exasol node
 | ``spark.exasol.port``         | ``port``         | ``8563``      | A JDBC port number to connect to Exasol database
 | ``spark.exasol.username``     | ``username``     | ``sys``       | An username for connecting to the Exasol database
