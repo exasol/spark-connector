@@ -42,6 +42,9 @@ folder.
 Please check out the [detailed manual](https://www.gnupg.org/gph/en/manual.html)
 for more information.
 
+Do not forget to save the GPG passphrase and exported files in a password
+manager.
+
 ### Publish Your GPG Public Key
 
 To publish the artifacts to the Sonatype, you need to publish your GPG public
