@@ -4,7 +4,7 @@ Please read the general [developer guide for the Scala projects][dev-guide].
 
 ## Integration Tests
 
-The integration tests are run using [Docker][docker] containers. The use
+The integration tests are run using [Docker][docker] containers. The tests use
 [exasol/docker-db][exa-docker-db], [testcontainers][testcontainers] and
 [spark-testing-base][spark-testing-base].
 

@@ -194,14 +194,18 @@ For example, to enable debugging with a log directory:
 .option("jdbc_options", "debug=1;logdir=/tmp/")
 ```
 
-Please make sure that it does not start or end with a semicolon (`;`).
+Please make sure that the `jdbc_options` value does not start or end with a
+semicolon (`;`).
 
 For more JDBC options please check the [Exasol JDBC documentation][exasol-jdbc].
 
 ### Providing Configuration Settings in DataFrame Load or Save
 
+These are required coonfiguration parameters so that the connector can
+authenticate itself with the Exasol database.
+
 Provide the configuration options when creating a dataframe from an Exasol
-query.
+query:
 
 ```scala
 val exasolDF = sparkSession
