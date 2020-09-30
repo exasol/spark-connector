@@ -13,6 +13,7 @@ to `7.0.0`.
 
 ## Documentation
 
+* [#80](https://github.com/exasol/spark-exasol-connector/issues/80): Removed auto release setup from Travis CI (PR [#83](https://github.com/exasol/spark-exasol-connector/pull/83)).
 * [#81](https://github.com/exasol/spark-exasol-connector/issues/81): Updated user and development guide (PR [#82](https://github.com/exasol/spark-exasol-connector/pull/82)).
 
 ## Dependency Updates

@@ -9,33 +9,6 @@ addons:
     packages:
       - shellcheck
 
-env:
-  matrix:
-    - RELEASE=false
-
-  global:
-    # ENCRYPTION_KEY
-    - secure: |-
-        PFjAMiewDaHDYt9gwtjv+EKCt864T3UwIutZVSmtZABP/DRcRSsDHEs0sY9WMTE0EvFN4XjwkzpkYv5IM5C3/f83O
-        CP4BsHsQ+3s8VmakQDhB3BSFnuz0g/Ot3cA3e54Xu8BhlTeeX5m0Y4tHYrFojDMUVGrLQ24WViqaCxGpr0ojn0ytr
-        gBMD11cdtcQwe3q2tjdkYnEKiLjdtaLIPdO9bv9n/HH2wIC1VliMngyTqL0UI+AjdmIa0Yrmb7HPtEsDJR5gDLlOd
-        agq8aQ2vXUigBGH9oIoDCE/s0aRwUiMRWlIj+vkTJBgbrnzC2UcO4qkx4qodNuiRagqVnscwe13wVPmQEkXqJ22Tk
-        j338jEiV7sVGIb4RdmMhlrvDQ1rHjRo270sTVCqww6YieRvkB/UhRkrXs1x8r6ZaSHhLLf4A7jR/EvS5dNLQ0LLxC
-        X/g2Mi/zRCRMTdwzPipN437D8LOwj7q+WEkVzsd9QasZncYpBaFgCfoNWiyuKeQF1c2hFYoPNRMFGFUER+sgJ6NYI
-        XmmtM/vJeok6N1Re+c5+iGACT30CL/yF8BmgBF7Xfu1jJH9LzQH6Dd0wH/G7XN7Kb0IzsvTw1nckgvFMo/4hSbT7P
-        nglwKzxWg3kPhRPaJshiZyRbtP0PWFDzPoRP3HrleYTSuS33OuesSJC5vVqQ=
-
-    # PGP_PASSPHRASE
-    - secure: |-
-        AzxFI14cBnjxDFqm3Kq/SoEZLsTm4u5x7JWrch09WUBDwIFOLTp6CHdAcMzMYZ2LOqjLXVxqKs7gK0ZcK9oFsx0Wz
-        APxKvzKkjBZ/Fe6eLMCjtGGSgnHtOg1F2gTEChuXZf/pIsgFAx8N9pb3sJWfWQVzTBxr5CdW3uNcekiatq1zhLRYc
-        VGMOsCk+HftklUoO5Qjknsju3Kug7WZTpW86ULWBllQ3ZALMLyTAVuP65IFcN11DghGF69SojL7XuWNWjU6VL30N3
-        IOKKI2nwIm++EMkK0zIzX7qxJGoj1WYr2hiy16RrBLFvG1Gd6hKlvGZoT5CWB3QdXN7QB6OsHmq/XcXUF9LA/a5vN
-        fR5uIpqsJmcjc14TF+U8/J3blJDc5PkD8v0TAJRaz7RcE6tKBYl2V0+aIkMBUlcCSs2ukjjO1jHcq7iJcY5edJL0g
-        ijwpmAHrxb/GJk3ZtvWRTCDvyQPw+8RyxGVWjo8MNrrxjYr34AXjDiCLJh2dRiMZkmPWCP8FIG65wBLa2JmB5l9eT
-        TE0+3vsd+7GULh5II/fTIc+jc0KrP28gOBmSEdK/zHcbsDFmYcicP16zTh1bXZ0+6CMs6NAS//jc/0N5YwkGYMz5C
-        gXwtqIW9ynF9CYK8ftX4GUbmPVAY9BhZrxsU5qPXXqqZKSmOIVynZujcVydw=
-
 before_install:
   - git fetch --tags
   - docker pull exasol/docker-db:7.0.2
@@ -66,7 +39,6 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - ./sbtx coveralls
-  - ./scripts/publish.sh
 
 cache:
   directories:
