@@ -44,22 +44,26 @@ projects.
 
 You can provide the connector as a dependency to your Spark Java applications.
 
-Add the artifact information to your project:
+For that add the Exasol Artifactory and the dependency itself to your project:
 
 ```xml
-<repository>
-    <id>maven.exasol.com</id>
-    <url>https://maven.exasol.com/artifactory/exasol-releases</url>
-</repository>
+<repositories>
+    <repository>
+        <id>maven.exasol.com</id>
+        <url>https://maven.exasol.com/artifactory/exasol-releases</url>
+    </repository>
+</repositories>
 
-<dependency>
-    <groupId>com.exasol</groupId>
-    <artifactId>spark-connector_2.12</artifactId>
-    <version><VERSION></version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.exasol</groupId>
+        <artifactId>spark-connector_2.12</artifactId>
+        <version><VERSION></version>
+    </dependency>
+</dependencies>
 ```
 
-The connector uses [Exasol JDBC][exasol-jdbc] as one of its dependencies. We add
+The connector uses the [Exasol JDBC driver][exasol-jdbc] as one of its dependencies. We add
 the repository identifier for the Exasol Maven Artifactory so that the Exasol
 JDBC is transitively fetched.
 
@@ -70,7 +74,7 @@ latest Spark Exasol Connector releases.
 
 ### Spark Exasol Connector as SBT Dependency
 
-To provide the connector to your Spark Scala projects, add this to your
+To provide the connector to your Spark Scala projects, add the following lines to your
 `build.sbt` file:
 
 ```scala
@@ -79,13 +83,13 @@ resolvers ++= Seq("Exasol Releases" at "https://maven.exasol.com/artifactory/exa
 libraryDependencies += "com.exasol" % "spark-connector" %% "<VERSION>"
 ```
 
-Similar to Java dependency, we add the resolver to the Exasol Artifactory so
-that Exasol JDBC can be found. 
+Similar to the Java dependency, we add the resolver to the Exasol Artifactory so
+that the Exasol JDBC driver can be found. 
 
 ### Spark Exasol Connector With Spark Shell
 
 You can also integrate the Spark Exasol Connector to the Spark Shell. Provide
-the artifact coordinates to the `--repositories` and `--packages`:
+the artifact coordinates to the `--repositories` and `--packages` parameters:
 
 ```sh
 spark-shell \
@@ -93,7 +97,7 @@ spark-shell \
   --packages com.exasol:spark-connector_2.12:<VERSION>
 ```
 
-The `spark-shell` provide Read-Eval-Print-Loop (REPL) to interactively learn and
+The `spark-shell` provides Read-Eval-Print-Loop (REPL) to interactively learn and
 experiment with the API.
 
 ### Spark Exasol Connector With Spark Submit
@@ -101,7 +105,7 @@ experiment with the API.
 Additionally, you can provide the connector when submitting a packaged
 application into the Spark cluster.
 
-Using the `spark-submit` command:
+Use the `spark-submit` command:
 
 ```sh
 spark-submit \
@@ -149,7 +153,7 @@ spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
 
 ## Configuration Options
 
-In this section, we describe configuration parameters that are used to
+In this section, we describe the configuration parameters that are used to
 facilitate the integration between Spark and Exasol clusters.
 
 List of required and optional parameters:
@@ -160,18 +164,18 @@ List of required and optional parameters:
 |                               | ``table``        | *<none>*      | A table name (with schema, e.g. schema.table) to save dataframe into
 | ``spark.exasol.host``         | ``host``         | ``10.0.0.11`` | A host ip address to the **first** Exasol node
 | ``spark.exasol.port``         | ``port``         | ``8563``      | A JDBC port number to connect to Exasol database
-| ``spark.exasol.username``     | ``username``     | ``sys``       | An username for connecting to the Exasol database
-| ``spark.exasol.password``     | ``password``     | ``exasol``    | An password for connecting to the Exasol database
+| ``spark.exasol.username``     | ``username``     | ``sys``       | A username for connecting to the Exasol database
+| ``spark.exasol.password``     | ``password``     | ``exasol``    | A password for connecting to the Exasol database
 | ``spark.exasol.max_nodes``    | ``max_nodes``    | ``200``       | The number of data nodes in the Exasol cluster
-| ``spark.exasol.batch_size``   | ``batch_size``   | ``1000``      | The number of records batched before running execute statement when saving dataframe
-| ``spark.exasol.create_table`` | ``create_table`` | ``false``     | A permission to create a table if it does not exist in Exasol database when saving dataframe
-| ``spark.exasol.drop_table``   | ``drop_table``   | ``false``     | A permission to drop the table if it exists in Exasol database when saving dataframe
-| ``spark.exasol.jdbc_options`` | ``jdbc_options`` | ``""``        | A string to specify the list of Exasol JDBC options using ``key1=value1;key2=value2`` format
+| ``spark.exasol.batch_size``   | ``batch_size``   | ``1000``      | The number of records batched before running an execute statement when saving dataframe
+| ``spark.exasol.create_table`` | ``create_table`` | ``false``     | A permission to create a table if it does not exist in the Exasol database when saving dataframe
+| ``spark.exasol.drop_table``   | ``drop_table``   | ``false``     | A permission to drop the table if it exists in the Exasol database when saving dataframe
+| ``spark.exasol.jdbc_options`` | ``jdbc_options`` | ``""``        | A string to specify the list of Exasol JDBC options using a ``key1=value1;key2=value2`` format
 
 ### Max Nodes
 
 Setting the `max_nodes` value to a large number does not increase the connector
-parallelism. The number of parallel connections will always be limited to the
+parallelism. The number of parallel connections is always limited to the
 number of Exasol data nodes.
 
 However, you can use this configuration to decrease the parallelism. This can be
@@ -181,10 +185,10 @@ the behavior changes.
 ### JDBC Options
 
 The Spark Exasol Connector uses Exasol JDBC Driver to connect to the Exasol
-cluster from Spark cluster. You can use this configuration parameter to enrich
+cluster from the Spark cluster. You can use this configuration parameter to enrich
 the JDBC connection.
 
-For example, to enable debugging with log directory:
+For example, to enable debugging with a log directory:
 
 ```
 .option("jdbc_options", "debug=1;logdir=/tmp/")
@@ -237,14 +241,14 @@ val sparkSession = SparkSession
 ```
 
 This way you can use the SparkSession with pre-configured settings when reading
-or saving a dataframe from Exasol database.
+or saving a dataframe from the Exasol database.
 
 Please note that configuration values set on SparkConf have higher precedence.
 
-### Providing Configuration Settings With spark-submit
+### Providing Configuration Settings With `spark-submit`
 
-Like SparkConf, you can configure the Exasol key-value settings from outside.
-For example, at the startup using `--conf key=value` syntax.
+Like SparkConf, you can configure the Exasol key-value settings from outside using,
+for example, `--conf key=value` syntax at startup.
 
 Provide configurations with `spark-submit`:
 
@@ -259,7 +263,7 @@ spark-submit \
 
 This allows you to avoid hardcoding the credentials in your Spark applications.
 
-Providing configurations parameters with `spark-submit` has higher precedence
+Providing configurations parameters with `spark-submit` has a higher precedence
 than the SparkConf configurations.
 
 ## Creating a Spark DataFrame From Exasol Query
@@ -267,10 +271,10 @@ than the SparkConf configurations.
 You can query the Exasol database and load the results of the query into a Spark
 dataframe. 
 
-Specify the data source format as `"exasol"` and provide the required
+For that specify the data source format as `"exasol"` and provide the required
 configurations.
 
-As an example we query two retail tables from Exasol database:
+As an example we query two retail tables from the Exasol database:
 
 ```scala
 val exasolQueryString = """
@@ -313,7 +317,7 @@ If you are only interested in some columns, you can select them:
 df.select("MARKET_ID", "AMOUNT")
 ```
 
-Run other Spark related data analytics, run transformations and aggregations on
+Run other Spark related data analytics, run transformations and aggregations on the
 dataframe:
 
 ```scala
@@ -356,7 +360,7 @@ If you set the `drop_table` configuration to `true`, then just before saving the
 Spark dataframe, the connector drops the Exasol table if it exists.
 
 If you set the `create_table` configuration to `true`, the connector will
-eagerly try to create an Exasol table from Spark dataframe schema before saving
+eagerly try to create an Exasol table from a Spark dataframe schema before saving
 the contents of the dataframe.
 
 Depending on your use case, you can provide both of these parameters at the same
@@ -366,18 +370,18 @@ Additionally, a Spark save operation takes optional `SaveMode` configurations.
 
 | Spark Save Mode     | Description
 | :---                | :---
-| `"error"` (default) | If the table exists an exception is thrown. You could drop the table via connector `drop_table` option.
-| `"append"`          | If the table exists, the contents of dataframe are appended to the existing table.
-| `"overwrite"`       | If the table exists, it is truncated first and then the contents of dataframe saved to the table.
+| `"error"` (default) | If the table exists an exception is thrown. You could drop the table via the connector `drop_table` option.
+| `"append"`          | If the table exists, the contents of the dataframe are appended to the existing table.
+| `"overwrite"`       | If the table exists, it is truncated first and then the contents of the dataframe are saved to the table.
 | `"ignore"`          | If the table exists, the save operation is skipped, and nothing is changed in the existing table.
 
-Please keep in mind that Spark Save Modes does not use any locking mechanisms,
+Please keep in mind that Spark Save Modes do not use any locking mechanisms,
 thus they are not atomic. 
 
 ## Troubleshooting
 
-In this section, we provide common issues and pitfalls when using Spark Exasol
-Connector and instructions on how to solve them.
+In this section, we explain common issues and pitfalls when using Spark Exasol
+Connector and provide instructions on how to solve them.
 
 ### Exasol JDBC Sub Connections
 
@@ -394,7 +398,7 @@ scheduled dynamically, not all at once.
 In these cases, not all of the sub-connections will be consumed, and the
 connector will throw an exception.
 
-A similar issue occurs when the number of parallel connections (the number
+A similar issue occurs when the number of parallel connections (the number of
 Exasol data nodes) is more than the Spark tasks. This can happen when the Spark
 cluster does not have enough resources to schedule parallel tasks.
 
@@ -406,13 +410,13 @@ by setting `max_nodes` parameters to a lower number.
 To resolve these issues we are waiting for the [Spark Barrier Execution
 Mode](https://issues.apache.org/jira/browse/SPARK-24374).
 
-### Spark DataFrame Show
+### Spark DataFrame `.show()` Action
 
-Spark dataframe `.show()` action is one of the operations that fail because of
+The spark dataframe `.show()` action is one of the operations that fails because of
 the problems described in the previous section.
 
-Instead, we recommend using the `collect()` operation with combination SQL
-`LIMIT` clause.
+We recommend using the `collect()` operation with combination SQL
+`LIMIT` clause instead.
 
 For example, add a limit clause to the Exasol query:
 
@@ -457,7 +461,7 @@ It can be mitigated by submitting a Spark application with enough resources so
 that it can start parallel tasks that are more or equal to the number of
 parallel Exasol connections.
 
-Additionally, you can limit the Exasol parallel connections using `max_nodes`
+Additionally, you can limit the Exasol parallel connections using the `max_nodes`
 parameter. However, we do not advise to limit this value in the production
 environment.
 

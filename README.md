@@ -9,7 +9,7 @@
 
 ## Overview
 
-Spark Exasol Connector that supports an integration between [Exasol][exasol] and
+Spark Exasol Connector supports an integration between [Exasol][exasol] and
 [Apache Spark][spark]. It allows creating Spark DataFrame from Exasol queries
 and saving Spark DataFrame as an Exasol table.
 
@@ -17,7 +17,7 @@ and saving Spark DataFrame as an Exasol table.
 
 * Creates Spark DataFrame from Exasol query results
 * Saves Spark DataFrame to an Exasol table
-* Allows to configure the Spark tasks for parallel connection
+* Allows configuring the Spark tasks for parallel connection
 * Supports Spark DataFrame column pruning and filter push down
 
 ## Information for Users
