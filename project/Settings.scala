@@ -46,7 +46,7 @@ object Settings {
     coverageOutputHTML := true,
     coverageOutputXML := true,
     coverageFailOnMinimum := false,
-    coverageOutputCobertura := false
+    coverageOutputCobertura := true
   )
 
   def assemblySettings(): Seq[Setting[_]] = Seq(
