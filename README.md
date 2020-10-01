@@ -28,7 +28,6 @@ and saving Spark DataFrame as an Exasol table.
 ## Information for Contributors
 
 * [Developer Guide](doc/development/developer_guide.md)
-* [Releasing Guide](doc/development/releasing.md)
 
 ## Dependencies
 
