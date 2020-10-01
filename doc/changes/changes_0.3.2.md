@@ -1,4 +1,4 @@
-# Spark Exasol Connector 0.3.2, released 2020-MM-DD
+# Spark Exasol Connector 0.3.2, released 2020-10-01
 
 ## Summary
 
