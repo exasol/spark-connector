@@ -41,7 +41,7 @@ class FiltersSuite extends AnyFunSuite with Matchers {
         |    str_col <= '123'
         |AND int_col > 42
         |AND (in_col NOT IN (1,2,3))
-    """.stripMargin.lines.mkString(" ").trim
+    """.stripMargin.replaceAll("\\s+", " ").trim()
 
     assert(createWhereClause(testSchema, filters) === expected)
   }
@@ -78,7 +78,7 @@ class FiltersSuite extends AnyFunSuite with Matchers {
         |AND (str_col LIKE '%inside%')
         |AND (str_col LIKE 'prefix%')
         |AND (in_col IN (1,2,3))
-      """.stripMargin.lines.mkString(" ").trim
+      """.stripMargin.replaceAll("\\s+", " ").trim()
 
     assert(createWhereClause(testSchema, filters) === expected)
   }
@@ -108,7 +108,7 @@ class FiltersSuite extends AnyFunSuite with Matchers {
         |AND double_col = 100.0
         |AND date_col = date '2018-01-01'
         |AND datetime_col = timestamp '2018-01-01 00:00:59.123'
-      """.stripMargin.lines.mkString(" ").trim
+      """.stripMargin.replaceAll("\\s+", " ").trim()
 
     assert(createWhereClause(testSchema, filters) === expected)
   }
@@ -126,7 +126,7 @@ class FiltersSuite extends AnyFunSuite with Matchers {
         |((str_col = 'abc') OR (int_col = 123))
         |AND (((NOT ((int_col IS NULL)))) OR ((str_col IS NOT NULL)))
         |AND ((str_col = 'xyz') OR (((float_col = 3.14) AND (int_col != 3))))
-    """.stripMargin.lines.mkString(" ").trim
+      """.stripMargin.replaceAll("\\s+", " ").trim()
 
     assert(createWhereClause(testSchema, filters) === expected)
   }

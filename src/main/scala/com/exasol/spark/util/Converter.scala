@@ -27,8 +27,9 @@ object Converter extends Logging {
    */
   def resultSetToRows(resultSet: ResultSet, schema: StructType): Iterator[Row] = {
     val encoder = RowEncoder(schema).resolveAndBind()
+    val fromRow = encoder.createDeserializer()
     val internalRows = resultSetToSparkInternalRows(resultSet, schema)
-    internalRows.map(encoder.fromRow)
+    internalRows.map(fromRow(_))
   }
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))

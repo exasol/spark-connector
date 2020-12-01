@@ -86,6 +86,29 @@ libraryDependencies += "com.exasol" % "spark-connector" %% "<VERSION>"
 Similar to the Java dependency, we add the resolver to the Exasol Artifactory so
 that the Exasol JDBC driver can be found. 
 
+### Spark Exasol Connector as Databricks Cluster Dependency
+
+Similar to using maven, you should provide maven artifact coordinates to the
+[Databricks Workspace Library][databricks-install].
+
+[databricks-install]: https://docs.databricks.com/libraries/workspace-libraries.html#maven-libraries
+
+<img alt="databricks-deployment" src="../images/databricks-deployment.png"/>
+
+Go to your cluster, then to `Libraries`, and click `Install New`:
+
+- Select Maven as a Library Source.
+- In the Coordinate field, enter artifact coordinates
+  `com.exasol:spark-connector_2.12:<VERSION>`. Please notice that we use the
+  Scala version 2.12, change it to 2.11 if your Databricks Runtime version
+  requires it.
+- In the Repository field, enter the Exasol Artifactory
+  `https://maven.exasol.com/artifactory/exasol-releases`.
+- Click Install.
+
+Please change the `<VERSION>` to one of the latest Spark Exasol Connector
+releases.
+
 ### Spark Exasol Connector With Spark Shell
 
 You can also integrate the Spark Exasol Connector to the Spark Shell. Provide
