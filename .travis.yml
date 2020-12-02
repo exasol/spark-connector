@@ -9,29 +9,22 @@ addons:
     packages:
       - shellcheck
 
+jdk:
+  - openjdk11
+
+scala:
+  - 2.12.12
+
+env:
+  - SPARK_VERSION="2.4.5" EXASOL_DOCKER_VERSION="6.2.12-d1"
+  - SPARK_VERSION="2.4.5" EXASOL_DOCKER_VERSION="7.0.4"
+  - SPARK_VERSION="3.0.1" EXASOL_DOCKER_VERSION="6.2.12-d1"
+  - SPARK_VERSION="3.0.1" EXASOL_DOCKER_VERSION="7.0.4"
+
 before_install:
   - git fetch --tags
-  - docker pull exasol/docker-db:7.0.4
-  - docker pull exasol/docker-db:6.2.12-d1
+  - docker pull "exasol/docker-db:$EXASOL_DOCKER_VERSION"
   - docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
-
-matrix:
-  include:
-    - jdk: openjdk11
-      scala: 2.12.12
-      env: SPARK_VERSION="2.4.5" EXASOL_DOCKER_VERSION="6.2.12-d1"
-
-    - jdk: openjdk11
-      scala: 2.12.12
-      env: SPARK_VERSION="2.4.5" EXASOL_DOCKER_VERSION="7.0.4"
-
-    - jdk: openjdk11
-      scala: 2.12.12
-      env: SPARK_VERSION="3.0.1" EXASOL_DOCKER_VERSION="6.2.12-d1"
-
-    - jdk: openjdk11
-      scala: 2.12.12
-      env: SPARK_VERSION="3.0.1" EXASOL_DOCKER_VERSION="7.0.4"
 
 script:
   - travis_wait 30 ./scripts/ci.sh
