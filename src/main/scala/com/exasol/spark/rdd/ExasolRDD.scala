@@ -13,11 +13,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.scheduler.SparkListener
 import org.apache.spark.scheduler.SparkListenerApplicationEnd
 import org.apache.spark.sql.Row
+import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.types.StructType
 
 import com.exasol.jdbc.EXAConnection
 import com.exasol.jdbc.EXAResultSet
-import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 
 /**
@@ -155,7 +155,7 @@ class ExasolRDD(
     conn = manager.subConnection(partition.connectionUrl)
     resultSet = conn.DescribeResult(subHandle)
 
-    Converter.resultSetToRows(resultSet, querySchema)
+    JdbcUtils.resultSetToRows(resultSet, querySchema)
   }
   // scalastyle:on null return
 
