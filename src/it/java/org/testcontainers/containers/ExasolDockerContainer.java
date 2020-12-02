@@ -10,7 +10,7 @@ import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy;
 
 public class ExasolDockerContainer<SELF extends ExasolDockerContainer<SELF>>
   extends JdbcDatabaseContainer<SELF> {
-  private static final String DEFAULT_EXASOL_VERSION = "7.0.2";
+  private static final String DEFAULT_EXASOL_VERSION = "7.0.4";
   // wait for 5 minutes to startup
   private static final Integer EXASOL_STARTUP_TIME = 15 * 60;
   private String username = "sys";

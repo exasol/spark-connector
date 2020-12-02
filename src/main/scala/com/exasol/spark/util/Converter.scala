@@ -6,7 +6,6 @@ import java.sql.ResultSet
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.InternalRow
-import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.catalyst.expressions.SpecificInternalRow
 import org.apache.spark.sql.catalyst.util.DateTimeUtils
 import org.apache.spark.sql.types._
@@ -20,16 +19,6 @@ import org.apache.spark.unsafe.types.UTF8String
  * `spark/sql/execution/datasources/jdbc/JdbcUtils.scala` class.
  */
 object Converter extends Logging {
-
-  /**
-   * Converts a [[java.sql.ResultSet]] into an iterator of
-   * [[org.apache.spark.sql.Row]]-s.
-   */
-  def resultSetToRows(resultSet: ResultSet, schema: StructType): Iterator[Row] = {
-    val encoder = RowEncoder(schema).resolveAndBind()
-    val internalRows = resultSetToSparkInternalRows(resultSet, schema)
-    internalRows.map(encoder.fromRow)
-  }
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   def resultSetToSparkInternalRows(

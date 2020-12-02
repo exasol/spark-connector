@@ -6,19 +6,19 @@ import sbt._
 object Dependencies {
 
   // Versions
-  private val DefaultSparkVersion = "2.4.5"
-  private val ExasolJdbcVersion = "7.0.0"
+  private val DefaultSparkVersion = "3.0.1"
+  private val ExasolJdbcVersion = "7.0.4"
 
-  private val ScalaTestVersion = "3.2.2"
+  private val ScalaTestVersion = "3.2.3"
   private val ScalaTestMockitoVersion = "1.0.0-M2"
-  private val MockitoVersion = "3.5.13"
-  private val ContainersJdbcVersion = "1.14.3"
-  private val ContainersScalaVersion = "0.38.4"
+  private val MockitoVersion = "3.6.28"
+  private val ContainersJdbcVersion = "1.15.0"
+  private val ContainersScalaVersion = "0.38.7"
 
   private val sparkCurrentVersion =
     sys.env.getOrElse("SPARK_VERSION", DefaultSparkVersion)
 
-  private val SparkTestingBaseVersion = s"${sparkCurrentVersion}_0.14.0"
+  private val SparkTestingBaseVersion = s"${sparkCurrentVersion}_1.0.0"
 
   val Resolvers: Seq[Resolver] = Seq(
     "Exasol Releases" at "https://maven.exasol.com/artifactory/exasol-releases"
