@@ -19,6 +19,7 @@ object Settings {
     buildSettings(scalaVersion) ++
       miscSettings ++
       assemblySettings ++
+      apiDocSettings ++
       scalaStyleSettings ++
       Publishing.publishSettings()
 
@@ -68,6 +69,31 @@ object Settings {
         exludeSet(jar.data.getName)
       }
     }
+  )
+
+  def apiDocSettings(): Seq[Setting[_]] = Seq(
+    autoAPIMappings := true,
+    apiMappings ++= scalaInstance.value.libraryJars.collect {
+      case file if file.getName.startsWith("scala-library") && file.getName.endsWith(".jar") =>
+        file -> url(s"http://www.scala-lang.org/api/${scalaVersion.value}/")
+    }.toMap ++
+      // Since Java 9+ introduced modules, API links changed, update these
+      // links based on used Java modules.
+      Map(
+        file("/modules/java.sql") -> url(
+          "https://docs.oracle.com/en/java/javase/11/docs/api/java.sql"
+        )
+      ),
+    // Override doc task in 2.11.x versions since linking external Java
+    // 11+ classes does not work.
+    (Compile / doc) := Def.taskDyn {
+      val docTaskValue = (Compile / doc).taskValue
+      if (scalaBinaryVersion.value == "2.11") {
+        (Compile / doc / target).toTask
+      } else {
+        Def.task(docTaskValue.value)
+      }
+    }.value
   )
 
   def scalaStyleSettings(): Seq[Setting[_]] = {
