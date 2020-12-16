@@ -49,7 +49,11 @@ final case class ExasolConfiguration(
   create_table: Boolean,
   drop_table: Boolean,
   batch_size: Int
-)
+) {
+
+  def isSingleNode(): Boolean =
+    max_nodes == 1
+}
 
 object ExasolConfiguration {
 

@@ -4,6 +4,7 @@ import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.sources.BaseRelation
 import org.apache.spark.sql.sources.Filter
 import org.apache.spark.sql.sources.PrunedFilteredScan
@@ -65,6 +66,8 @@ class ExasolRelation(
   override def buildScan(requiredColumns: Array[String], filters: Array[Filter]): RDD[Row] =
     if (requiredColumns.isEmpty) {
       makeEmptyRDD(filters)
+    } else if (manager.config.isSingleNode()) {
+      makeSingleRDD(requiredColumns, filters)
     } else {
       new ExasolRDD(
         sqlContext.sparkContext,
@@ -96,6 +99,14 @@ class ExasolRelation(
     val cntQuery = enrichQuery(Array.empty[String], filters)
     val cnt = manager.withCountQuery(cntQuery)
     sqlContext.sparkContext.parallelize(1L to cnt, 4).map(_ => Row.empty)
+  }
+
+  private[this] def makeSingleRDD(columns: Array[String], filters: Array[Filter]): RDD[Row] = {
+    val query = enrichQuery(columns, filters)
+    val rows = manager.withExecuteQuery(query)(
+      JdbcUtils.resultSetToRows(_, Types.selectColumns(columns, schema))
+    )
+    sqlContext.sparkContext.parallelize(rows.toSeq, 4)
   }
 
   /**

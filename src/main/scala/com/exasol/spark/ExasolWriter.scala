@@ -1,5 +1,6 @@
 package com.exasol.spark.writer
 
+import java.sql.PreparedStatement
 import java.sql.SQLException
 
 import org.apache.spark.SparkContext
@@ -66,13 +67,35 @@ class ExasolWriter(
     val partitionId = TaskContext.getPartitionId()
     val subConnectionUrl = hosts(partitionId)
     val subConn = manager.subConnection(subConnectionUrl)
-
     val stmt = subConn.prepareStatement(insertStmt)
+    try {
+      writePartition(iter, stmt)
+    } finally {
+      stmt.close()
+      subConn.commit()
+      subConn.close()
+    }
+  }
 
+  def insertSinglePartition(iter: Iterator[Row]): Unit = {
+    val conn = manager.writerMainConnection()
+    if (conn == null) {
+      throw new RuntimeException("Could not create main connection to Exasol!")
+    }
+    val stmt = conn.prepareStatement(insertStmt)
+    try {
+      writePartition(iter, stmt)
+    } finally {
+      stmt.close()
+      conn.commit()
+      conn.close()
+    }
+  }
+
+  private[this] def writePartition(iter: Iterator[Row], stmt: PreparedStatement): Unit = {
     val setters = rddSchema.fields.map(f => Converter.makeSetter(f.dataType))
     val nullTypes = rddSchema.fields.map(f => Types.jdbcTypeFromSparkDataType(f.dataType))
     val fieldCnt = rddSchema.fields.length
-
     val batchSize = manager.config.batch_size
 
     try {
@@ -107,12 +130,7 @@ class ExasolWriter(
     } catch {
       case ex: SQLException =>
         throw ex
-    } finally {
-      stmt.close()
-      subConn.commit()
-      subConn.close()
     }
-
   }
 
 }

@@ -137,10 +137,14 @@ class DefaultSource
     manager: ExasolConnectionManager
   ): Unit = {
     val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, manager)
-    val exaNodesCnt = writer.startParallel()
-    val newDF = repartitionPerNode(df, exaNodesCnt)
-
-    newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
+    if (manager.config.isSingleNode()) {
+      val newDF = repartitionPerNode(df, 1)
+      newDF.rdd.foreachPartition(iter => writer.insertSinglePartition(iter))
+    } else {
+      val exaNodesCnt = writer.startParallel()
+      val newDF = repartitionPerNode(df, exaNodesCnt)
+      newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
+    }
   }
 
   // Creates an Exasol table that match Spark dataframe
