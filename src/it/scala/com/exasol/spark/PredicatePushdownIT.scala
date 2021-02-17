@@ -9,7 +9,7 @@ import com.holdenkarau.spark.testing.DataFrameSuiteBase
 /**
  * Test where clause generation for user queries.
  */
-class PredicatePushdownSuite extends BaseDockerSuite with DataFrameSuiteBase {
+class PredicatePushdownSuite extends BaseIntegrationTest with DataFrameSuiteBase {
 
   test("with where clause build from filters: filter") {
     createDummyTable()

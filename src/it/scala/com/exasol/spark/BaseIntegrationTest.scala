@@ -11,7 +11,7 @@ import org.scalatest.funsuite.AnyFunSuite
 /**
  * A base integration suite with Exasol docker container setup.
  */
-trait BaseDockerSuite extends AnyFunSuite with BeforeAndAfterAll {
+trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
 
   private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.0.6"
 
