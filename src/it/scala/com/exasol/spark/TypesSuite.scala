@@ -2,17 +2,16 @@ package com.exasol.spark
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.types._
-import org.scalatest.funsuite.AnyFunSuite
 
-class TypesSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
+class TypesSuite extends BaseDockerSuite with DataFrameSuiteBase {
 
   test("converts Exasol types to Spark") {
     createAllTypesTable()
 
     val df = spark.read
       .format("com.exasol.spark")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE")
       .load()
 

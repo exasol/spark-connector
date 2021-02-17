@@ -1,10 +1,11 @@
 package com.exasol.spark
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.funsuite.AnyFunSuite
 
-/** Tests for quering an Exasol tables with reserved keywords */
-class ReservedKeywordsSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
+/**
+ * Tests for quering an Exasol tables with reserved keywords.
+ */
+class ReservedKeywordsSuite extends BaseDockerSuite with DataFrameSuiteBase {
 
   val SCHEMA: String = "RESERVED_KEYWORDS"
   val TABLE: String = "TEST_TABLE"
@@ -16,8 +17,8 @@ class ReservedKeywordsSuite extends AnyFunSuite with BaseDockerSuite with DataFr
 
     val df1 = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"""SELECT "CONDITION" FROM $SCHEMA.$TABLE""")
       .load()
 
@@ -25,8 +26,8 @@ class ReservedKeywordsSuite extends AnyFunSuite with BaseDockerSuite with DataFr
 
     val df2 = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $SCHEMA.$TABLE")
       .load()
       .select("condition")
@@ -39,8 +40,8 @@ class ReservedKeywordsSuite extends AnyFunSuite with BaseDockerSuite with DataFr
 
     val df = spark.read
       .format("com.exasol.spark")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $SCHEMA.$TABLE")
       .load()
       .select(s""""CONDITION"""")
@@ -50,7 +51,7 @@ class ReservedKeywordsSuite extends AnyFunSuite with BaseDockerSuite with DataFr
   }
 
   def createTable(): Unit =
-    exaManager.withExecute(
+    connectionManager.withExecute(
       Seq(
         s"DROP SCHEMA IF EXISTS $SCHEMA CASCADE",
         s"CREATE SCHEMA $SCHEMA",
