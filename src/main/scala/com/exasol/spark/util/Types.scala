@@ -119,8 +119,6 @@ object Types extends Logging {
     // Others
     case java.sql.Types.ROWID  => LongType
     case java.sql.Types.STRUCT => StringType
-    case _ =>
-      throw new IllegalArgumentException(s"Received an unsupported SQL type $sqlType")
   }
 
   /**
@@ -154,7 +152,8 @@ object Types extends Logging {
     case TimestampType  => java.sql.Types.TIMESTAMP
     case DateType       => java.sql.Types.DATE
     case _: DecimalType => java.sql.Types.DECIMAL
-    case _              => throw new RuntimeException(s"Unsupported Spark data type $dataType!")
+    case _ =>
+      throw new IllegalArgumentException(s"Unsupported Spark data type $dataType!")
   }
 
   /**
@@ -177,7 +176,8 @@ object Types extends Logging {
     case StringType      => "CLOB"
     case DateType        => "DATE"
     case TimestampType   => "TIMESTAMP"
-    case _               => throw new RuntimeException(s"Unsupported Spark data type $dataType!")
+    case _ =>
+      throw new IllegalArgumentException(s"Unsupported Spark data type $dataType!")
   }
 
   /**

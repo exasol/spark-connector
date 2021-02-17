@@ -12,8 +12,6 @@ object Dependencies {
   private val ScalaTestVersion = "3.2.3"
   private val ScalaTestMockitoVersion = "1.0.0-M2"
   private val MockitoVersion = "3.7.7"
-  private val ContainersJdbcVersion = "1.15.2"
-  private val ContainersScalaVersion = "0.39.1"
   private val ExasolTestContainersVersion = "3.5.0"
 
   private val sparkCurrentVersion =
@@ -37,8 +35,6 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % ScalaTestVersion,
     "org.scalatestplus" %% "scalatestplus-mockito" % ScalaTestMockitoVersion,
     "org.mockito" % "mockito-core" % MockitoVersion,
-    "org.testcontainers" % "jdbc" % ContainersJdbcVersion,
-    "com.dimafeng" %% "testcontainers-scala" % ContainersScalaVersion,
     "com.holdenkarau" %% "spark-testing-base" % SparkTestingBaseVersion,
     "com.exasol" % "exasol-testcontainers" % ExasolTestContainersVersion,
   ).map(_ % Test)

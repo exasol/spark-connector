@@ -5,7 +5,7 @@ import com.holdenkarau.spark.testing.DataFrameSuiteBase
 /**
  * Test only required columns selection from queries.
  */
-class ColumnPruningSuite extends BaseIntegrationTest with DataFrameSuiteBase {
+class ColumnPruningIT extends BaseIntegrationTest with DataFrameSuiteBase {
 
   test("returns only required columns in query") {
     createDummyTable()

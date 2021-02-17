@@ -5,7 +5,7 @@ import com.holdenkarau.spark.testing.DataFrameSuiteBase
 /**
  * Tests for quering an Exasol tables with reserved keywords.
  */
-class ReservedKeywordsSuite extends BaseIntegrationTest with DataFrameSuiteBase {
+class ReservedKeywordsIT extends BaseIntegrationTest with DataFrameSuiteBase {
 
   val SCHEMA: String = "RESERVED_KEYWORDS"
   val TABLE: String = "TEST_TABLE"

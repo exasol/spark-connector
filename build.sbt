@@ -9,8 +9,8 @@ lazy val orgSettings = Seq(
 )
 
 lazy val buildSettings = Seq(
-  scalaVersion := "2.12.13",
-  crossScalaVersions := Seq("2.11.12", "2.12.13")
+  scalaVersion := "2.12.12",
+  crossScalaVersions := Seq("2.11.12", "2.12.12")
 )
 
 lazy val root =

@@ -3,7 +3,7 @@ package com.exasol.spark
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.types._
 
-class TypesSuite extends BaseIntegrationTest with DataFrameSuiteBase {
+class TypesIT extends BaseIntegrationTest with DataFrameSuiteBase {
 
   test("converts Exasol types to Spark") {
     createAllTypesTable()

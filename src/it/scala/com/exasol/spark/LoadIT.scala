@@ -10,7 +10,7 @@ import com.holdenkarau.spark.testing.DataFrameSuiteBase
  * Tests for loading data from Exasol query as dataframes using short
  * and long source formats.
  */
-class LoadSuite extends BaseIntegrationTest with DataFrameSuiteBase {
+class LoadIT extends BaseIntegrationTest with DataFrameSuiteBase {
 
   test("runs dataframe show action successfully") {
     createDummyTable()

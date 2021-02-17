@@ -15,6 +15,60 @@ class TypesSuite extends AnyFunSuite with Matchers {
     assert(exasolTypeFromSparkDataType(DecimalType.apply(38, 37)) === "DECIMAL(36,36)")
   }
 
+  test("Spark types to JDBC types conversion") {
+    val data: Map[DataType, Int] = Map(
+      IntegerType -> java.sql.Types.INTEGER,
+      LongType -> java.sql.Types.BIGINT,
+      DoubleType -> java.sql.Types.DOUBLE,
+      FloatType -> java.sql.Types.FLOAT,
+      ShortType -> java.sql.Types.SMALLINT,
+      ByteType -> java.sql.Types.TINYINT,
+      BooleanType -> java.sql.Types.BIT,
+      StringType -> java.sql.Types.VARCHAR,
+      BinaryType -> java.sql.Types.BLOB,
+      TimestampType -> java.sql.Types.TIMESTAMP,
+      DateType -> java.sql.Types.DATE,
+      DecimalType(18, 0) -> java.sql.Types.DECIMAL
+    )
+    data.foreach {
+      case (given, expected) =>
+        assert(jdbcTypeFromSparkDataType(given) === expected)
+    }
+  }
+
+  test("Spark types to JDBC types conversion throws for unsupported type") {
+    val thrown = intercept[IllegalArgumentException] {
+      jdbcTypeFromSparkDataType(MapType(StringType, IntegerType))
+    }
+    assert(thrown.getMessage().contains("Unsupported Spark data type"))
+  }
+
+  test("Spark types to Exasol types conversion") {
+    val data: Map[DataType, String] = Map(
+      ShortType -> "SMALLINT",
+      ByteType -> "TINYINT",
+      IntegerType -> "INTEGER",
+      LongType -> "BIGINT",
+      DoubleType -> "DOUBLE",
+      FloatType -> "FLOAT",
+      BooleanType -> "BOOLEAN",
+      StringType -> "CLOB",
+      DateType -> "DATE",
+      TimestampType -> "TIMESTAMP"
+    )
+    data.foreach {
+      case (given, expected) =>
+        assert(exasolTypeFromSparkDataType(given) === expected)
+    }
+  }
+
+  test("Spark types to Exasol types conversion throws for unsupported type") {
+    val thrown = intercept[IllegalArgumentException] {
+      exasolTypeFromSparkDataType(ArrayType(FloatType))
+    }
+    assert(thrown.getMessage().contains("Unsupported Spark data type"))
+  }
+
   test("test of Int type conversion") {
     assert(createSparkTypeFromSQLType(java.sql.Types.TINYINT, 0, 0, false) === ShortType)
     assert(createSparkTypeFromSQLType(java.sql.Types.SMALLINT, 0, 0, false) === ShortType)

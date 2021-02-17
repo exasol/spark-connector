@@ -10,7 +10,7 @@ import org.scalatest.BeforeAndAfterEach
 /**
  * Integration tests for saving Spark DataFrames into Exasol tables.
  */
-class SaveSuite extends BaseIntegrationTest with BeforeAndAfterEach with DataFrameSuiteBase {
+class SaveIT extends BaseIntegrationTest with BeforeAndAfterEach with DataFrameSuiteBase {
 
   private[this] val tableName = s"$EXA_SCHEMA.$EXA_TABLE"
 
