@@ -32,6 +32,7 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
     jdbcHost = container.getDockerNetworkInternalIpAddress()
     jdbcPort = s"${container.getDefaultInternalDatabasePort()}"
     connectionManager = ExasolConnectionManager(ExasolConfiguration(getConfiguration()))
+    connectionManager.withExecute(Seq(s"CREATE SCHEMA $EXA_SCHEMA"))
   }
 
   def getConfiguration(): Map[String, String] = Map(

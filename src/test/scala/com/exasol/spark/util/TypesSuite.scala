@@ -53,6 +53,7 @@ class TypesSuite extends AnyFunSuite with Matchers {
       FloatType -> "FLOAT",
       BooleanType -> "BOOLEAN",
       StringType -> "CLOB",
+      BinaryType -> "CLOB",
       DateType -> "DATE",
       TimestampType -> "TIMESTAMP"
     )

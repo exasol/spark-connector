@@ -174,6 +174,7 @@ object Types extends Logging {
     case dt: DecimalType => convertSparkPrecisionScaleToExasol(dt)
     case BooleanType     => "BOOLEAN"
     case StringType      => "CLOB"
+    case BinaryType      => "CLOB"
     case DateType        => "DATE"
     case TimestampType   => "TIMESTAMP"
     case _ =>

@@ -9,10 +9,12 @@ object Dependencies {
   private val DefaultSparkVersion = "3.0.1"
   private val ExasolJdbcVersion = "7.0.7"
 
-  private val ScalaTestVersion = "3.2.3"
+  private val ScalaTestVersion = "3.2.4"
   private val ScalaTestMockitoVersion = "1.0.0-M2"
   private val MockitoVersion = "3.7.7"
   private val ExasolTestContainersVersion = "3.5.0"
+  private val ExasolTestDBBuilderVersion = "3.0.0"
+  private val ExasolHamcrestMatcherVersion = "1.4.0"
 
   private val sparkCurrentVersion =
     sys.env.getOrElse("SPARK_VERSION", DefaultSparkVersion)
@@ -37,6 +39,8 @@ object Dependencies {
     "org.mockito" % "mockito-core" % MockitoVersion,
     "com.holdenkarau" %% "spark-testing-base" % SparkTestingBaseVersion,
     "com.exasol" % "exasol-testcontainers" % ExasolTestContainersVersion,
+    "com.exasol" % "test-db-builder-java" % ExasolTestDBBuilderVersion,
+    "com.exasol" % "hamcrest-resultset-matcher" % ExasolHamcrestMatcherVersion,
   ).map(_ % Test)
 
   /** The list of all dependencies for the connector */
