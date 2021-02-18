@@ -5,10 +5,11 @@ import java.sql.Timestamp
 import org.apache.spark.sql.functions.col
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.funsuite.AnyFunSuite
 
-/** Test where clause generation for user queries */
-class PredicatePushdownSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
+/**
+ * Test where clause generation for user queries.
+ */
+class PredicatePushdownIT extends BaseIntegrationTest with DataFrameSuiteBase {
 
   test("with where clause build from filters: filter") {
     createDummyTable()
@@ -17,8 +18,8 @@ class PredicatePushdownSuite extends AnyFunSuite with BaseDockerSuite with DataF
 
     val df = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
       .filter($"id" < 3)
@@ -35,8 +36,8 @@ class PredicatePushdownSuite extends AnyFunSuite with BaseDockerSuite with DataF
 
     val df = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
 
@@ -56,8 +57,8 @@ class PredicatePushdownSuite extends AnyFunSuite with BaseDockerSuite with DataF
     createDummyTable()
     val df = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT date_info, updated_at FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
     val minTimestamp = Timestamp.valueOf("2017-12-30 00:00:00.0000")
@@ -80,8 +81,8 @@ class PredicatePushdownSuite extends AnyFunSuite with BaseDockerSuite with DataF
     createDummyTable()
     val df = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
     val result = df.count()

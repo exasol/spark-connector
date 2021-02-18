@@ -5,18 +5,20 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.funsuite.AnyFunSuite
 
-/** Tests for loading data from Exasol query as dataframes using short and long source formats */
-class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
+/**
+ * Tests for loading data from Exasol query as dataframes using short
+ * and long source formats.
+ */
+class LoadIT extends BaseIntegrationTest with DataFrameSuiteBase {
 
   test("runs dataframe show action successfully") {
     createDummyTable()
 
     val df = spark.read
       .format("com.exasol.spark")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
 
@@ -28,8 +30,8 @@ class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
 
     val df = spark.read
       .format("com.exasol.spark")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
 
@@ -43,8 +45,8 @@ class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
 
     val df1 = spark.read
       .format("com.exasol.spark")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
 
@@ -54,8 +56,8 @@ class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
 
     val df2 = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
 
@@ -77,8 +79,8 @@ class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
     val thrown = intercept[UnsupportedOperationException] {
       spark.read
         .format("com.exasol.spark")
-        .option("host", container.host)
-        .option("port", s"${container.port}")
+        .option("host", jdbcHost)
+        .option("port", jdbcPort)
         .load()
     }
     assert(
@@ -95,8 +97,8 @@ class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
 
     val df = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .schema(expectedSchema)
       .load()
@@ -117,8 +119,8 @@ class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
 
     val df = spark.read
       .format("exasol")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .schema(expectedSchema)
       .load()
@@ -140,8 +142,8 @@ class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
 
     val sparkConf = new SparkConf()
       .setMaster("local[*]")
-      .set("spark.exasol.port", s"${container.port}")
-      .set("spark.exasol.host", container.host)
+      .set("spark.exasol.host", jdbcHost)
+      .set("spark.exasol.port", jdbcPort)
       .set("spark.exasol.max_nodes", "200")
 
     val sparkSession = SparkSession
@@ -165,8 +167,8 @@ class LoadSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
 
     val sparkConf = new SparkConf()
       .setMaster("local[*]")
-      .set("spark.exasol.port", s"${container.port}")
-      .set("spark.exasol.host", container.host)
+      .set("spark.exasol.host", jdbcHost)
+      .set("spark.exasol.port", jdbcPort)
       .set("spark.exasol.max_nodes", "200")
 
     val sparkSession = SparkSession

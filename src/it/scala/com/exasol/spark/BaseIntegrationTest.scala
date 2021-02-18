@@ -1,21 +1,58 @@
 package com.exasol.spark
 
+import com.exasol.containers.ExasolContainer
 import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Types._
 
-import com.dimafeng.testcontainers.ExasolDockerContainer
-import com.dimafeng.testcontainers.ForAllTestContainer
-import org.scalatest.Suite
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.funsuite.AnyFunSuite
 
-/** A Base Integration Suite with Exasol DB Docker Container Setup */
-trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
+/**
+ * A base integration suite with Exasol docker container setup.
+ */
+trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
 
-  override val container = ExasolDockerContainer()
+  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.0.6"
 
-  lazy val exaConfiguration = ExasolConfiguration(container.configs)
+  val network = DockerNamedNetwork("spark-it-network", true)
+  val container = {
+    val c: ExasolContainer[_] = new ExasolContainerWithReuse(getExasolDockerImageVersion())
+    c.withExposedPorts(8563)
+    c.withNetwork(network)
+    c
+  }
 
-  lazy val exaManager = ExasolConnectionManager(exaConfiguration)
+  var jdbcHost: String = _
+  var jdbcPort: String = _
+  var connectionManager: ExasolConnectionManager = _
+
+  def prepareExasolDatabase(): Unit = {
+    container.start()
+    jdbcHost = container.getDockerNetworkInternalIpAddress()
+    jdbcPort = s"${container.getDefaultInternalDatabasePort()}"
+    connectionManager = ExasolConnectionManager(ExasolConfiguration(getConfiguration()))
+    connectionManager.withExecute(Seq(s"CREATE SCHEMA $EXA_SCHEMA"))
+  }
+
+  def getConfiguration(): Map[String, String] = Map(
+    "host" -> jdbcHost,
+    "port" -> jdbcPort,
+    "username" -> container.getUsername(),
+    "password" -> container.getPassword(),
+    "max_nodes" -> "200"
+  )
+
+  def getConnection(): java.sql.Connection =
+    container.createConnection("")
+
+  override def beforeAll(): Unit =
+    prepareExasolDatabase()
+
+  override def afterAll(): Unit = {
+    container.stop()
+    network.close()
+  }
 
   val EXA_SCHEMA = "TEST_SCHEMA"
   val EXA_TABLE = "TEST_TABLE"
@@ -46,7 +83,7 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
           |""".stripMargin,
       "commit"
     )
-    exaManager.withExecute(queries)
+    connectionManager.withExecute(queries)
   }
   // scalastyle:on nonascii
 
@@ -75,7 +112,10 @@ trait BaseDockerSuite extends ForAllTestContainer { self: Suite =>
           |)""".stripMargin,
       "commit"
     )
-    exaManager.withExecute(queries)
+    connectionManager.withExecute(queries)
   }
+
+  private[this] def getExasolDockerImageVersion(): String =
+    System.getProperty("EXASOL_DOCKER_VERSION", DEFAULT_EXASOL_DOCKER_IMAGE)
 
 }

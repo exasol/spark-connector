@@ -45,7 +45,7 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.5")
 
 // Adds a `gnu-pgp` plugin
 // https://github.com/sbt/sbt-pgp
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.2")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.1.1")
 
 // Adds a `git` plugin
 // https://github.com/sbt/sbt-git

@@ -1,18 +1,19 @@
 package com.exasol.spark
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.funsuite.AnyFunSuite
 
-/** Test only required columns selection from queries */
-class ColumnPruningSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
+/**
+ * Test only required columns selection from queries.
+ */
+class ColumnPruningIT extends BaseIntegrationTest with DataFrameSuiteBase {
 
   test("returns only required columns in query") {
     createDummyTable()
 
     val df = spark.read
       .format("com.exasol.spark")
-      .option("host", container.host)
-      .option("port", s"${container.port}")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
       .load()
       .select("city")
