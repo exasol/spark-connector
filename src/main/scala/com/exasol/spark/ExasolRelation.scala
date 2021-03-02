@@ -71,7 +71,7 @@ class ExasolRelation(
     }
 
   override def unhandledFilters(filters: Array[Filter]): Array[Filter] =
-    filters.filterNot(Filters.newFilter(_).isDefined)
+    filters.filterNot(Filters.filterToBooleanExpression(_).isDefined)
 
   /**
    * When a count action is run from Spark dataframe we do not have to read the

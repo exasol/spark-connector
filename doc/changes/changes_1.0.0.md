@@ -2,9 +2,15 @@
 
 ## Features / Improvements
 
+## Bug Fixes
+
+* #14: Fixed issue with using Exasol reserved keywords in Spark queries (PR #88).
+* #39: Fixed issue related to quoted columns in Spark queries (PR #88).
+
 ## Refactoring
 
 * #40: Added Exasol testcontainers, refactored test environment (PR #87).
+* #84: Added Exasol SQL Statement Builder for building SQL queries (PR #88).
 
 ## Documentation
 

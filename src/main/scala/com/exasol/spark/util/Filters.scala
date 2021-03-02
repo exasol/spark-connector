@@ -20,7 +20,7 @@ object Filters {
    * @return a sequence of Exasol boolean expressions
    */
   def booleanExpressionFromFilters(filters: Seq[Filter]): Seq[BooleanExpression] =
-    filters.map(newFilter(_)).map(_.toList).flatten
+    filters.map(filterToBooleanExpression(_)).map(_.toList).flatten
 
   /**
    * Given a Spark source [[org.apache.spark.sql.sources.Filter]],
@@ -59,18 +59,18 @@ object Filters {
       // case In(a, vs) => inExpr(a, vs, "IN", dataTypes)
       // case Not(In(a, vs)) => inExpr(a, vs, "NOT IN", dataTypes)
       case Not(notFilter) =>
-        newFilter(notFilter).map(BooleanTerm.not(_)).getOrElse(null)
+        filterToBooleanExpression(notFilter).map(BooleanTerm.not(_)).getOrElse(null)
       case And(leftFilter, rightFilter) =>
-        val leftExpr = newFilter(leftFilter)
-        val rightExpr = newFilter(rightFilter)
+        val leftExpr = filterToBooleanExpression(leftFilter)
+        val rightExpr = filterToBooleanExpression(rightFilter)
         if (leftExpr.isDefined && rightExpr.isDefined) {
           BooleanTerm.and(leftExpr.getOrElse(null), rightExpr.getOrElse(null))
         } else {
           null
         }
       case Or(leftFilter, rightFilter) =>
-        val leftExpr = newFilter(leftFilter)
-        val rightExpr = newFilter(rightFilter)
+        val leftExpr = filterToBooleanExpression(leftFilter)
+        val rightExpr = filterToBooleanExpression(rightFilter)
         if (leftExpr.isDefined && rightExpr.isDefined) {
           BooleanTerm.or(leftExpr.getOrElse(null), rightExpr.getOrElse(null))
         } else {
