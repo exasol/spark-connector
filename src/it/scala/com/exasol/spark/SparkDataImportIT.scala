@@ -11,21 +11,15 @@ import org.apache.spark.sql.Encoder
 import com.exasol.matcher.ResultSetStructureMatcher.table
 import com.exasol.matcher.TypeMatchMode._
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
-import org.scalatest.BeforeAndAfterEach
 
-class SparkDataImportIT
-    extends BaseIntegrationTest
-    with BeforeAndAfterEach
-    with DataFrameSuiteBase {
+class SparkDataImportIT extends BaseTableQueryIT {
 
   private[this] val INT_MIN = -2147483648
   private[this] val INT_MAX = 2147483647
   private[this] val LONG_MIN = -9223372036854775808L
   private[this] val LONG_MAX = 9223372036854775807L
-  private[this] val tableName = s"$EXA_SCHEMA.$EXA_TABLE"
 
   import sqlContext.implicits._
 

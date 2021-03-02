@@ -4,26 +4,22 @@ import java.sql.Date
 
 import com.exasol.spark.util.Types
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.BeforeAndAfterEach
-
 /**
  * Integration tests for saving Spark DataFrames into Exasol tables.
  */
-class SaveOptionsIT extends BaseIntegrationTest with BeforeAndAfterEach with DataFrameSuiteBase {
-
-  private[this] val tableName = s"$EXA_SCHEMA.$EXA_TABLE"
+class SaveOptionsIT extends BaseTableQueryIT {
 
   private[this] val saveModes = Seq("append", "errorifexists", "ignore", "overwrite")
-
   private[this] var defaultOptions: Map[String, String] = _
 
-  override def beforeEach(): Unit =
+  override def beforeEach(): Unit = {
+    super.beforeEach()
     defaultOptions = Map(
       "host" -> jdbcHost,
       "port" -> jdbcPort,
       "table" -> tableName
     )
+  }
 
   // scalastyle:off nonascii
   private[this] val dataframeTestData: Seq[(String, String, Date, String)] = Seq(
@@ -35,13 +31,11 @@ class SaveOptionsIT extends BaseIntegrationTest with BeforeAndAfterEach with Dat
   // scalastyle:on nonascii
 
   test("`tableExists` should return correct boolean result") {
-    createDummyTable()
     assert(connectionManager.tableExists(tableName) === true)
     assert(connectionManager.tableExists("DUMMY_SCHEMA.DUMMYTABLE") === false)
   }
 
   test("`truncateTable` should perform table truncation") {
-    createDummyTable()
     assert(connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") > 0)
     connectionManager.truncateTable(tableName)
     assert(connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
@@ -51,7 +45,6 @@ class SaveOptionsIT extends BaseIntegrationTest with BeforeAndAfterEach with Dat
   }
 
   test("`dropTable` should drop table") {
-    createDummyTable()
     assert(connectionManager.tableExists(tableName) === true)
     connectionManager.dropTable(tableName)
     assert(connectionManager.tableExists(tableName) === false)
@@ -61,8 +54,7 @@ class SaveOptionsIT extends BaseIntegrationTest with BeforeAndAfterEach with Dat
   }
 
   test("`createTable` should create a table") {
-    createDummyTable()
-    val newTableName = s"$EXA_SCHEMA.new_table"
+    val newTableName = s"$schema.new_table"
     assert(connectionManager.tableExists(newTableName) === false)
 
     import sqlContext.implicits._
@@ -76,19 +68,16 @@ class SaveOptionsIT extends BaseIntegrationTest with BeforeAndAfterEach with Dat
   }
 
   test("save mode 'ignore' does not insert data if table exists") {
-    createDummyTable()
     val initialRecordsCount =
       connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
     assert(runDataFrameSave("ignore", 1) === initialRecordsCount)
   }
 
   test("save mode 'overwrite' overwrite if table exists") {
-    createDummyTable()
     assert(runDataFrameSave("overwrite", 2) === dataframeTestData.size.toLong)
   }
 
   test("save mode 'append' appends data if table exists") {
-    createDummyTable()
     val initialRecordsCount =
       connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
     val totalRecords = initialRecordsCount + dataframeTestData.size
@@ -96,7 +85,6 @@ class SaveOptionsIT extends BaseIntegrationTest with BeforeAndAfterEach with Dat
   }
 
   test("save mode 'errorifexists' throws exception if table exists") {
-    createDummyTable()
     val thrown = intercept[UnsupportedOperationException] {
       runDataFrameSave("errorifexists", 4)
     }
@@ -129,7 +117,7 @@ class SaveOptionsIT extends BaseIntegrationTest with BeforeAndAfterEach with Dat
     val newOptions = defaultOptions ++ Map("drop_table" -> "true")
     saveModes.foreach {
       case mode =>
-        createDummyTable()
+        createTable()
         assert(runDataFrameSave(mode, 3, newOptions) === dataframeTestData.size)
     }
   }
