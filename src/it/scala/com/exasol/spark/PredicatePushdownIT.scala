@@ -12,47 +12,47 @@ class PredicatePushdownIT extends BaseTableQueryIT {
 
   import spark.implicits._
 
-  test("returns dataframe with equal-to-filter") {
+  test("returns dataframe with equal-to filter") {
     val df = getDataFrame().filter($"id" === 1).collect()
     assert(df.map(r => (r.getLong(0), r.getString(1))) === Seq((1, "Germany")))
   }
 
-  test("returns dataframe with not equal to filter") {
+  test("returns dataframe with not-equal-to filter") {
     val df = getDataFrame().filter($"name" =!= "Germany").collect()
     assert(df.map(r => r.getString(1)).contains("Germany") === false)
   }
 
-  test("returns dataframe with greater-than-filter") {
+  test("returns dataframe with greater-than filter") {
     val df = getDataFrame().filter($"id" > 2).collect()
     assert(df.map(r => r.getString(1)) === Seq("Portugal"))
   }
 
-  test("returns dataframe with greater than or equal filter") {
+  test("returns dataframe with greater-than or equal-to filter") {
     val df = getDataFrame().filter($"id" >= 2).collect()
     assert(df.map(r => r.getString(2)) === Seq("Paris", "Lisbon"))
   }
 
-  test("returns dataframe with less than filter") {
+  test("returns dataframe with less-than filter") {
     val df = getDataFrame().filter($"id" < 2).collect()
     assert(df.map(r => r.getString(2)) === Seq("Berlin"))
   }
 
-  test("returns dataframe with less than or equal filter") {
+  test("returns dataframe with less-than or equal-to filter") {
     val df = getDataFrame().filter($"id" <= 2).collect()
     assert(df.map(r => r.getString(2)) === Seq("Berlin", "Paris"))
   }
 
-  test("returns dataframe with string ends with filter") {
+  test("returns dataframe with string-ends-with filter") {
     val df = getDataFrame().filter($"city".endsWith("bon")).collect()
     assert(df.map(r => (r.getString(1), r.getString(2))) === Seq(("Portugal", "Lisbon")))
   }
 
-  test("returns dataframe with string contains filter") {
+  test("returns dataframe with string-contains filter") {
     val df = getDataFrame().filter($"name".contains("rma")).collect()
     assert(df.map(r => r.getString(1)) === Seq("Germany"))
   }
 
-  test("returns dataframe with string starts with filter") {
+  test("returns dataframe with string-starts-with filter") {
     val df = getDataFrame().filter($"name".startsWith("Franc")).collect()
     assert(df.map(r => (r.getString(1), r.getString(2))) === Seq(("France", "Paris")))
   }
@@ -90,7 +90,7 @@ class PredicatePushdownIT extends BaseTableQueryIT {
     assert(sqlDF.map(r => (r.getLong(0), r.getString(1))) === Seq((1, "Berlin"), (2, "Paris")))
   }
 
-  test("returns dataframe with date filter") {
+  test("returns dataframe with date literal filter") {
     val filterDate = Date.valueOf("2017-12-31")
     val df = getDataFrame()
       .filter(col("date_info") === filterDate)
@@ -99,7 +99,7 @@ class PredicatePushdownIT extends BaseTableQueryIT {
     assert(df.queryExecution.executedPlan.toString().contains("EqualTo(DATE_INFO,"))
   }
 
-  test("returns dataframe with timestamp filter") {
+  test("returns dataframe with timestamp literal filter") {
     val minTimestamp = Timestamp.valueOf("2017-12-30 00:00:00.0000")
     val df = getDataFrame()
       .filter(col("updated_at") < minTimestamp)

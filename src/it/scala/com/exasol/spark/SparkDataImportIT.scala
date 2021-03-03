@@ -172,7 +172,7 @@ class SparkDataImportIT extends BaseTableQueryIT {
         .format("exasol")
         .save()
 
-      connectionManager
+      exasolConnectionManager
         .withExecuteQuery(s"SELECT * FROM $tableName")(assertThat(_, matcher))
     }
   }

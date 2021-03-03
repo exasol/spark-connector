@@ -5,7 +5,7 @@ class BaseTableQueryIT extends AbstractTableQueryIT {
   val schema = "TEST_SCHEMA"
   override val tableName: String = s"$schema.TEST_TABLE"
   override def createTable: Unit =
-    connectionManager.withExecute(
+    exasolConnectionManager.withExecute(
       // scalastyle:off nonascii
       Seq(
         s"DROP SCHEMA IF EXISTS $schema CASCADE",

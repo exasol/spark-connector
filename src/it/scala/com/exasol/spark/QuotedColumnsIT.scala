@@ -10,7 +10,7 @@ class QuotedColumnsIT extends AbstractTableQueryIT {
 
   override val tableName = s"$schema.TEST_TABLE"
   override def createTable(): Unit =
-    connectionManager.withExecute(
+    exasolConnectionManager.withExecute(
       Seq(
         s"DROP SCHEMA IF EXISTS $schema CASCADE",
         s"CREATE SCHEMA $schema",

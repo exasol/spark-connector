@@ -24,12 +24,12 @@ class FiltersSuite extends AnyFunSuite with Matchers {
     assert(getWhereClause(Seq.empty[Filter]) === "")
   }
 
-  test("renders equal to") {
+  test("renders equal-to") {
     assert(getWhereClause(Seq(EqualTo("field", "a"))) === """("field" = 'a')""")
   }
 
   // scalastyle:off nonascii
-  test("renders equal to with different data types") {
+  test("renders equal-to with different data types") {
     val filters = Seq(
       EqualTo("bool_col", false),
       EqualTo("str_col", "XYZ"),
@@ -57,43 +57,43 @@ class FiltersSuite extends AnyFunSuite with Matchers {
   }
   // scalastyle:on nonascii
 
-  test("renders not equal to") {
+  test("renders not-equal-to") {
     assert(getWhereClause(Seq(Not(EqualTo("field", 1.0)))) === """("field" <> 1.0)""")
   }
 
-  test("renders greater than") {
+  test("renders greater-than") {
     assert(getWhereClause(Seq(GreaterThan("field", 1))) === """("field" > 1)""")
   }
 
-  test("renders greater than or equal") {
+  test("renders greater-than-or-equal") {
     assert(getWhereClause(Seq(GreaterThanOrEqual("field", 3L))) === """("field" >= 3)""")
   }
 
-  test("renders less than") {
+  test("renders less-than") {
     assert(getWhereClause(Seq(LessThan("field", 2.1f))) === """("field" < 2.1)""")
   }
 
-  test("renders less than or equal") {
+  test("renders less-than-or-equal") {
     assert(getWhereClause(Seq(LessThanOrEqual("field", "e"))) === """("field" <= 'e')""")
   }
 
-  ignore("renders is null") {
+  ignore("renders is-null") {
     assert(getWhereClause(Seq(IsNull("field"))) === """("field" IS NULL)""")
   }
 
-  ignore("renders is not null") {
+  ignore("renders is-not-null") {
     assert(getWhereClause(Seq(IsNotNull("field"))) === """("field" IS NOT NULL)""")
   }
 
-  test("renders string ends with") {
+  test("renders string-ends-with") {
     assert(getWhereClause(Seq(StringEndsWith("field", "xyz"))) === """("field" LIKE '%xyz')""")
   }
 
-  test("renders string contains") {
+  test("renders string-contains") {
     assert(getWhereClause(Seq(StringContains("field", "in"))) === """("field" LIKE '%in%')""")
   }
 
-  test("renders string starts with") {
+  test("renders string-starts-with") {
     assert(getWhereClause(Seq(StringStartsWith("field", "abc"))) === """("field" LIKE 'abc%')""")
   }
 
@@ -117,8 +117,8 @@ class FiltersSuite extends AnyFunSuite with Matchers {
 
   test("renders nested list of filters") {
     val filters = Seq(
-      Or(EqualTo("str_col", "abc"), EqualTo("int_col", 123)),
-      Or(Not(LessThan("int_col", 1)), GreaterThan("str_col", "a")),
+      Or(EqualTo("str_col", "abc"), EqualTo("int_col", 123.toShort)),
+      Or(Not(LessThan("int_col", 1.toByte)), GreaterThan("str_col", "a")),
       Or(EqualTo("str_col", "xyz"), And(EqualTo("float_col", 3.14), Not(EqualTo("int_col", 3))))
     )
     val expected =
@@ -128,6 +128,20 @@ class FiltersSuite extends AnyFunSuite with Matchers {
         |AND (("str_col" = 'xyz') OR (("float_col" = 3.14) AND ("int_col" <> 3)))
       """.stripMargin.replaceAll("\\s+", " ").trim()
     assert(getWhereClause(filters) === expected)
+  }
+
+  test("returns empty when one of and expressions is null") {
+    val expr = Filters.filterToBooleanExpression(And(EqualTo("a", 1), EqualNullSafe("b", "abc")))
+    assert(expr === None)
+  }
+
+  test("returns empty when one of or expressions is null") {
+    val expr = Filters.filterToBooleanExpression(Or(EqualNullSafe("b", "x"), LessThan("c", 1)))
+    assert(expr === None)
+  }
+
+  test("returns empty when filter is null") {
+    assert(Filters.filterToBooleanExpression(EqualNullSafe("b", "x")) === None)
   }
 
 }

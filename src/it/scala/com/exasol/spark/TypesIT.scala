@@ -11,7 +11,7 @@ class TypesIT extends AbstractTableQueryIT {
   override val tableName = s"$schema.TEST_TABLE"
   override def createTable(): Unit = {
     val maxDecimal = " DECIMAL(" + getMaxPrecisionExasol() + "," + getMaxScaleExasol() + ")"
-    connectionManager.withExecute(
+    exasolConnectionManager.withExecute(
       Seq(
         s"DROP SCHEMA IF EXISTS $schema CASCADE",
         s"CREATE SCHEMA $schema",

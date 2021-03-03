@@ -24,13 +24,13 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
 
   var jdbcHost: String = _
   var jdbcPort: String = _
-  var connectionManager: ExasolConnectionManager = _
+  var exasolConnectionManager: ExasolConnectionManager = _
 
   def prepareExasolDatabase(): Unit = {
     container.start()
     jdbcHost = container.getDockerNetworkInternalIpAddress()
     jdbcPort = s"${container.getDefaultInternalDatabasePort()}"
-    connectionManager = ExasolConnectionManager(ExasolConfiguration(getConfiguration()))
+    exasolConnectionManager = ExasolConnectionManager(ExasolConfiguration(getConfiguration()))
   }
 
   def getConfiguration(): Map[String, String] = Map(

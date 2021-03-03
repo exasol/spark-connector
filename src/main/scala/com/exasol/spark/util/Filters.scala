@@ -48,36 +48,44 @@ object Filters {
         BooleanTerm.lt(column(attribute), getLiteral(value))
       case LessThanOrEqual(attribute, value) =>
         BooleanTerm.le(column(attribute), getLiteral(value))
-      // case IsNull(attribute) => stringLiteral(s"""("$attribute" IS NULL)""")
-      // case IsNotNull(attribute) => stringLiteral(s"""("$attribute" IS NOT NULL)""")
       case StringEndsWith(attribute, value) =>
         BooleanTerm.like(column(attribute), stringLiteral(s"%$value"))
       case StringContains(attribute, value) =>
         BooleanTerm.like(column(attribute), stringLiteral(s"%$value%"))
       case StringStartsWith(attribute, value) =>
         BooleanTerm.like(column(attribute), stringLiteral(s"$value%"))
-      // case In(a, vs) => inExpr(a, vs, "IN", dataTypes)
-      // case Not(In(a, vs)) => inExpr(a, vs, "NOT IN", dataTypes)
       case Not(notFilter) =>
         filterToBooleanExpression(notFilter).map(BooleanTerm.not(_)).getOrElse(null)
-      case And(leftFilter, rightFilter) =>
-        val leftExpr = filterToBooleanExpression(leftFilter)
-        val rightExpr = filterToBooleanExpression(rightFilter)
-        if (leftExpr.isDefined && rightExpr.isDefined) {
-          BooleanTerm.and(leftExpr.getOrElse(null), rightExpr.getOrElse(null))
-        } else {
-          null
-        }
-      case Or(leftFilter, rightFilter) =>
-        val leftExpr = filterToBooleanExpression(leftFilter)
-        val rightExpr = filterToBooleanExpression(rightFilter)
-        if (leftExpr.isDefined && rightExpr.isDefined) {
-          BooleanTerm.or(leftExpr.getOrElse(null), rightExpr.getOrElse(null))
-        } else {
-          null
-        }
-      case _ => null
+      case And(leftFilter, rightFilter) => andFilterToExpression(leftFilter, rightFilter)
+      case Or(leftFilter, rightFilter)  => orFilterToExpression(leftFilter, rightFilter)
+      case _                            => null
     })
+
+  private[this] def andFilterToExpression(
+    leftFilter: Filter,
+    rightFilter: Filter
+  ): BooleanExpression = {
+    val leftExpr = filterToBooleanExpression(leftFilter)
+    val rightExpr = filterToBooleanExpression(rightFilter)
+    if (leftExpr.isDefined && rightExpr.isDefined) {
+      BooleanTerm.and(leftExpr.getOrElse(null), rightExpr.getOrElse(null))
+    } else {
+      null
+    }
+  }
+
+  private[this] def orFilterToExpression(
+    leftFilter: Filter,
+    rightFilter: Filter
+  ): BooleanExpression = {
+    val leftExpr = filterToBooleanExpression(leftFilter)
+    val rightExpr = filterToBooleanExpression(rightFilter)
+    if (leftExpr.isDefined && rightExpr.isDefined) {
+      BooleanTerm.or(leftExpr.getOrElse(null), rightExpr.getOrElse(null))
+    } else {
+      null
+    }
+  }
   // scalastyle:on null
 
   private[this] def getLiteral(value: Any): ValueExpression =
@@ -90,9 +98,7 @@ object Filters {
       case longValue: Long       => longLiteral(longValue)
       case floatValue: Float     => floatLiteral(floatValue)
       case doubleValue: Double   => doubleLiteral(doubleValue)
-      // case bigDecimalValue: BigDecimal => BigDecimalLiteral(bigDecimalValue.underlying())
-      // case bigDecimalValue: java.math.BigDecimal => BigDecimalLiteral(bigDecimalValue)
-      case _ => stringLiteral(s"$value")
+      case _                     => stringLiteral(s"$value")
     }
 
 }

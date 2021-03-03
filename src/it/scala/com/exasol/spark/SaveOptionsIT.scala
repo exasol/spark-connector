@@ -31,31 +31,31 @@ class SaveOptionsIT extends BaseTableQueryIT {
   // scalastyle:on nonascii
 
   test("`tableExists` should return correct boolean result") {
-    assert(connectionManager.tableExists(tableName) === true)
-    assert(connectionManager.tableExists("DUMMY_SCHEMA.DUMMYTABLE") === false)
+    assert(exasolConnectionManager.tableExists(tableName) === true)
+    assert(exasolConnectionManager.tableExists("DUMMY_SCHEMA.DUMMYTABLE") === false)
   }
 
   test("`truncateTable` should perform table truncation") {
-    assert(connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") > 0)
-    connectionManager.truncateTable(tableName)
-    assert(connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
+    assert(exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") > 0)
+    exasolConnectionManager.truncateTable(tableName)
+    assert(exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
     // Ensure it is idempotent
-    connectionManager.truncateTable(tableName)
-    assert(connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
+    exasolConnectionManager.truncateTable(tableName)
+    assert(exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
   }
 
   test("`dropTable` should drop table") {
-    assert(connectionManager.tableExists(tableName) === true)
-    connectionManager.dropTable(tableName)
-    assert(connectionManager.tableExists(tableName) === false)
+    assert(exasolConnectionManager.tableExists(tableName) === true)
+    exasolConnectionManager.dropTable(tableName)
+    assert(exasolConnectionManager.tableExists(tableName) === false)
     // Ensure it is idempotent
-    connectionManager.dropTable(tableName)
-    assert(connectionManager.tableExists(tableName) === false)
+    exasolConnectionManager.dropTable(tableName)
+    assert(exasolConnectionManager.tableExists(tableName) === false)
   }
 
   test("`createTable` should create a table") {
     val newTableName = s"$schema.new_table"
-    assert(connectionManager.tableExists(newTableName) === false)
+    assert(exasolConnectionManager.tableExists(newTableName) === false)
 
     import sqlContext.implicits._
     val df = sc
@@ -63,13 +63,13 @@ class SaveOptionsIT extends BaseTableQueryIT {
       .toDF("str_col", "int_col", "date_col")
 
     val newTableSchema = Types.createTableSchema(df.schema)
-    connectionManager.createTable(newTableName, newTableSchema)
-    assert(connectionManager.tableExists(newTableName) === true)
+    exasolConnectionManager.createTable(newTableName, newTableSchema)
+    assert(exasolConnectionManager.tableExists(newTableName) === true)
   }
 
   test("save mode 'ignore' does not insert data if table exists") {
     val initialRecordsCount =
-      connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+      exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
     assert(runDataFrameSave("ignore", 1) === initialRecordsCount)
   }
 
@@ -79,7 +79,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
 
   test("save mode 'append' appends data if table exists") {
     val initialRecordsCount =
-      connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+      exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
     val totalRecords = initialRecordsCount + dataframeTestData.size
     assert(runDataFrameSave("append", 3) === totalRecords)
   }
@@ -92,7 +92,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
   }
 
   test("save throws without 'create_table' or 'drop_table' option when table does not exist") {
-    connectionManager.dropTable(tableName)
+    exasolConnectionManager.dropTable(tableName)
     saveModes.foreach {
       case mode =>
         val thrown = intercept[UnsupportedOperationException] {
@@ -108,7 +108,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
     val newOptions = defaultOptions ++ Map("create_table" -> "true")
     saveModes.foreach {
       case mode =>
-        connectionManager.dropTable(tableName)
+        exasolConnectionManager.dropTable(tableName)
         assert(runDataFrameSave(mode, 2, newOptions) === dataframeTestData.size.toLong)
     }
   }
@@ -138,7 +138,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
       .format("exasol")
       .save()
 
-    connectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+    exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
   }
 
 }
