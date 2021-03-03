@@ -12,7 +12,7 @@ class PredicatePushdownIT extends BaseTableQueryIT {
 
   import spark.implicits._
 
-  test("returns dataframe with equal to filter") {
+  test("returns dataframe with equal-to-filter") {
     val df = getDataFrame().filter($"id" === 1).collect()
     assert(df.map(r => (r.getLong(0), r.getString(1))) === Seq((1, "Germany")))
   }
@@ -22,7 +22,7 @@ class PredicatePushdownIT extends BaseTableQueryIT {
     assert(df.map(r => r.getString(1)).contains("Germany") === false)
   }
 
-  test("returns dataframe with greater than filter") {
+  test("returns dataframe with greater-than-filter") {
     val df = getDataFrame().filter($"id" > 2).collect()
     assert(df.map(r => r.getString(1)) === Seq("Portugal"))
   }
