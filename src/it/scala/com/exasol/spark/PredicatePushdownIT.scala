@@ -1,91 +1,115 @@
 package com.exasol.spark
 
+import java.sql.Date
 import java.sql.Timestamp
 
-import org.apache.spark.sql.functions.col
-
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
+import org.apache.spark.sql.functions._
 
 /**
- * Test where clause generation for user queries.
+ * Tests predicate pushdown for user queries.
  */
-class PredicatePushdownIT extends BaseIntegrationTest with DataFrameSuiteBase {
+class PredicatePushdownIT extends BaseTableQueryIT {
 
-  test("with where clause build from filters: filter") {
-    createDummyTable()
+  import spark.implicits._
 
-    import spark.implicits._
+  test("returns dataframe with equal-to filter") {
+    val df = getDataFrame().filter($"id" === 1).collect()
+    assert(df.map(r => (r.getLong(0), r.getString(1))) === Seq((1, "Germany")))
+  }
 
-    val df = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
-      .load()
+  test("returns dataframe with not-equal-to filter") {
+    val df = getDataFrame().filter($"name" =!= "Germany").collect()
+    assert(df.map(r => r.getString(1)).contains("Germany") === false)
+  }
+
+  test("returns dataframe with greater-than filter") {
+    val df = getDataFrame().filter($"id" > 2).collect()
+    assert(df.map(r => r.getString(1)) === Seq("Portugal"))
+  }
+
+  test("returns dataframe with greater-than or equal-to filter") {
+    val df = getDataFrame().filter($"id" >= 2).collect()
+    assert(df.map(r => r.getString(2)) === Seq("Paris", "Lisbon"))
+  }
+
+  test("returns dataframe with less-than filter") {
+    val df = getDataFrame().filter($"id" < 2).collect()
+    assert(df.map(r => r.getString(2)) === Seq("Berlin"))
+  }
+
+  test("returns dataframe with less-than or equal-to filter") {
+    val df = getDataFrame().filter($"id" <= 2).collect()
+    assert(df.map(r => r.getString(2)) === Seq("Berlin", "Paris"))
+  }
+
+  test("returns dataframe with string-ends-with filter") {
+    val df = getDataFrame().filter($"city".endsWith("bon")).collect()
+    assert(df.map(r => (r.getString(1), r.getString(2))) === Seq(("Portugal", "Lisbon")))
+  }
+
+  test("returns dataframe with string-contains filter") {
+    val df = getDataFrame().filter($"name".contains("rma")).collect()
+    assert(df.map(r => r.getString(1)) === Seq("Germany"))
+  }
+
+  test("returns dataframe with string-starts-with filter") {
+    val df = getDataFrame().filter($"name".startsWith("Franc")).collect()
+    assert(df.map(r => (r.getString(1), r.getString(2))) === Seq(("France", "Paris")))
+  }
+
+  test("returns dataframe with not filter") {
+    val df = getDataFrame().where(not($"id" <= 2))
+    assert(df.collect().map(r => r.getString(1)) === Seq("Portugal"))
+  }
+
+  test("returns dataframe with and filter") {
+    val df = getDataFrame().where($"id" < 2 && $"name" === "France")
+    assert(df.count === 0)
+  }
+
+  test("returns dataframe with or filter") {
+    val df = getDataFrame().filter($"id" > 2 or $"name" === "France")
+    assert(df.count === 2)
+  }
+
+  test("returns dataframe with combined filter") {
+    val df = getDataFrame()
       .filter($"id" < 3)
       .filter(col("city").like("Ber%"))
       .select("id", "city")
-
-    val result = df.collect().map(x => (x.getLong(0), x.getString(1))).toSet
-    assert(result.size === 1)
-    assert(result === Set((1, "Berlin")))
+      .collect()
+    assert(df.map(r => (r.getLong(0), r.getString(1))) === Seq((1, "Berlin")))
   }
 
-  test("with where clause build from filters: createTempView and spark.sql") {
-    createDummyTable()
-
-    val df = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
-      .load()
-
-    df.createOrReplaceTempView("myTable")
-
-    val myDF = spark
-      .sql("SELECT id, city FROM myTable WHERE id BETWEEN 1 AND 3 AND name < 'Japan'")
-
-    val result = myDF.collect().map(x => (x.getLong(0), x.getString(1))).toSet
-    assert(result.size === 2)
-    assert(result === Set((1, "Berlin"), (2, "Paris")))
+  test("returns dataframe with createTempView and spark.sql filter") {
+    val df = getDataFrame()
+    df.createOrReplaceTempView("table")
+    val sqlDF = spark
+      .sql("SELECT id, city FROM table WHERE id BETWEEN 1 AND 3 AND name < 'Japan'")
+      .collect()
+    assert(sqlDF.map(r => (r.getLong(0), r.getString(1))) === Seq((1, "Berlin"), (2, "Paris")))
   }
 
-  test("date and timestamp should be read and filtered correctly") {
-    import java.sql.Date
+  test("returns dataframe with date literal filter") {
+    val filterDate = Date.valueOf("2017-12-31")
+    val df = getDataFrame()
+      .filter(col("date_info") === filterDate)
+      .select("date_info", "updated_at")
+    assert(df.count() === 1)
+    assert(df.queryExecution.executedPlan.toString().contains("EqualTo(DATE_INFO,"))
+  }
 
-    createDummyTable()
-    val df = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT date_info, updated_at FROM $EXA_SCHEMA.$EXA_TABLE")
-      .load()
+  test("returns dataframe with timestamp literal filter") {
     val minTimestamp = Timestamp.valueOf("2017-12-30 00:00:00.0000")
-    val testDate = Date.valueOf("2017-12-31")
-
-    val resultDate = df.collect().map(_.getDate(0))
-    assert(resultDate.contains(testDate))
-
-    val resultTimestamp = df.collect().map(_.getTimestamp(1)).map(x => x.after(minTimestamp))
-    assert(!resultTimestamp.contains(false))
-
-    val filteredByDateDF = df.filter(col("date_info") === testDate)
-    assert(filteredByDateDF.count() === 1)
-
-    val filteredByTimestampDF = df.filter(col("updated_at") < minTimestamp)
-    assert(filteredByTimestampDF.count() === 0)
+    val df = getDataFrame()
+      .filter(col("updated_at") < minTimestamp)
+      .select("date_info", "updated_at")
+    assert(df.count() === 0)
+    assert(df.queryExecution.executedPlan.toString().contains("LessThan(UPDATED_AT,"))
   }
 
-  test("count should be performed successfully") {
-    createDummyTable()
-    val df = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
-      .load()
-    val result = df.count()
-    assert(result === 3)
+  test("returns dataframe with count pushdown") {
+    assert(getDataFrame().count() === 3)
   }
+
 }

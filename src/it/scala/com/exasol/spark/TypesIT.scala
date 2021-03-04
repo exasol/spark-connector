@@ -1,22 +1,45 @@
 package com.exasol.spark
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.types._
 
-class TypesIT extends BaseIntegrationTest with DataFrameSuiteBase {
+import com.exasol.spark.util.Types._
+
+class TypesIT extends AbstractTableQueryIT {
+
+  private[this] val schema = "TYPES"
+
+  override val tableName = s"$schema.TEST_TABLE"
+  override def createTable(): Unit = {
+    val maxDecimal = " DECIMAL(" + getMaxPrecisionExasol() + "," + getMaxScaleExasol() + ")"
+    exasolConnectionManager.withExecute(
+      Seq(
+        s"DROP SCHEMA IF EXISTS $schema CASCADE",
+        s"CREATE SCHEMA $schema",
+        s"""|CREATE OR REPLACE TABLE $tableName (
+            |   MYID INTEGER,
+            |   MYTINYINT DECIMAL(3,0),
+            |   MYSMALLINT DECIMAL(9,0),
+            |   MYBIGINT DECIMAL(36,0),
+            |   MYDECIMALSystemDefault DECIMAL,
+            |   MYDECIMALMAX $maxDecimal,
+            |   MYNUMERIC DECIMAL( 5,2 ),
+            |   MYDOUBLE DOUBLE PRECISION,
+            |   MYCHAR CHAR,
+            |   MYNCHAR CHAR(2000),
+            |   MYLONGVARCHAR VARCHAR( 2000000),
+            |   MYBOOLEAN BOOLEAN,
+            |   MYDATE DATE,
+            |   MYTIMESTAMP TIMESTAMP,
+            |   MYGEOMETRY Geometry,
+            |   MYINTERVAL INTERVAL YEAR TO MONTH
+            |)""".stripMargin,
+        "commit"
+      )
+    )
+  }
 
   test("converts Exasol types to Spark") {
-    createAllTypesTable()
-
-    val df = spark.read
-      .format("com.exasol.spark")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_ALL_TYPES_TABLE")
-      .load()
-
-    val schemaTest = df.schema
-
+    val schemaFields = getDataFrame().schema.toList
     val schemaExpected = Map(
       "MYID" -> LongType,
       "MYTINYINT" -> ShortType,
@@ -35,11 +58,10 @@ class TypesIT extends BaseIntegrationTest with DataFrameSuiteBase {
       "MYGEOMETRY" -> StringType,
       "MYINTERVAL" -> StringType
     )
-
-    val fields = schemaTest.toList
-    fields.foreach(field => {
-      assert(field.dataType === schemaExpected.get(field.name).get)
-    })
+    schemaFields.foreach {
+      case field =>
+        assert(field.dataType === schemaExpected.get(field.name).get)
+    }
   }
 
 }

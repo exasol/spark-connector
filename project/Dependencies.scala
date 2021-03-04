@@ -8,12 +8,13 @@ object Dependencies {
   // Versions
   private val DefaultSparkVersion = "3.0.1"
   private val ExasolJdbcVersion = "7.0.7"
+  private val ExasolSQLStmtBuilderVersion = "4.3.0"
 
-  private val ScalaTestVersion = "3.2.4"
+  private val ScalaTestVersion = "3.2.5"
   private val ScalaTestMockitoVersion = "1.0.0-M2"
-  private val MockitoVersion = "3.7.7"
-  private val ExasolTestContainersVersion = "3.5.0"
-  private val ExasolTestDBBuilderVersion = "3.0.0"
+  private val MockitoVersion = "3.8.0"
+  private val ExasolTestContainersVersion = "3.5.1"
+  private val ExasolTestDBBuilderVersion = "3.1.0"
   private val ExasolHamcrestMatcherVersion = "1.4.0"
 
   private val sparkCurrentVersion =
@@ -28,6 +29,7 @@ object Dependencies {
   /** Core dependencies needed for connector */
   private val CoreDependencies: Seq[ModuleID] = Seq(
     "com.exasol" % "exasol-jdbc" % ExasolJdbcVersion,
+    "com.exasol" % "sql-statement-builder" % ExasolSQLStmtBuilderVersion,
     "org.apache.spark" %% "spark-core" % sparkCurrentVersion % "provided",
     "org.apache.spark" %% "spark-sql" % sparkCurrentVersion % "provided"
   )

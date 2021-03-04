@@ -4,78 +4,48 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
-
 /**
  * Tests for loading data from Exasol query as dataframes using short
  * and long source formats.
  */
-class LoadIT extends BaseIntegrationTest with DataFrameSuiteBase {
+class LoadIT extends BaseTableQueryIT {
 
-  test("runs dataframe show action successfully") {
-    createDummyTable()
-
-    val df = spark.read
-      .format("com.exasol.spark")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
-      .load()
-
+  test("runs dataframe show action") {
+    val df = getDataFrame()
     df.show(10, false)
   }
 
-  test("runs dataframe take action successfully") {
-    createDummyTable()
-
-    val df = spark.read
-      .format("com.exasol.spark")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
-      .load()
-
-    val res = df.take(2)
-    res.foreach(println)
-    assert(res.size === 2)
+  test("runs dataframe take action") {
+    assert(getDataFrame().take(2).size === 2)
   }
 
-  test("creates dataframe from user query") {
-    createDummyTable()
-
-    val df1 = spark.read
-      .format("com.exasol.spark")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
-      .load()
-
-    val cnt1 = df1.count
-    val cities = df1.collect().map(x => x(2)).toSet
-    assert(cities === Set("Berlin", "Paris", "Lisbon"))
-
-    val df2 = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
-      .load()
-
-    assert(cnt1 == 3)
-    assert(df2.count == cnt1)
-
-    val schema = df2.schema
-    assert(schema.exists(f => f.name == "NAME"))
-    assert(
-      schema.map(_.name).toSet ===
-        Set("ID", "UNICODE_COL", "NAME", "CITY", "DATE_INFO", "UPDATED_AT")
-    )
-
-    val typeSet = schema.map(_.dataType).toSet
-    assert(typeSet === Set(LongType, StringType, StringType, DateType, TimestampType))
+  test("runs dataframe count action") {
+    assert(getDataFrame().count === 3)
   }
 
-  test("throw exception when query string is not provided") {
+  test("runs dataframe collect action") {
+    val cities = getDataFrame().collect().map(_.getAs[String]("CITY"))
+    assert(cities === Seq("Berlin", "Paris", "Lisbon"))
+  }
+
+  test("runs dataframe queries twice") {
+    val count = getDataFrame().count
+    assert(getDataFrame().count === count)
+  }
+
+  test("returns dataframe schema names") {
+    val schemaNames = getDataFrame().schema.map(_.name)
+    assert(schemaNames === Seq("ID", "NAME", "CITY", "DATE_INFO", "UNICODE_COL", "UPDATED_AT"))
+  }
+
+  test("returns dataframe schema types") {
+    val dataTypes = getDataFrame().schema.map(_.dataType)
+    val expectedDataTypes =
+      Seq(LongType, StringType, StringType, DateType, StringType, TimestampType)
+    assert(dataTypes === expectedDataTypes)
+  }
+
+  test("throws if query parameter is not provided") {
     val thrown = intercept[UnsupportedOperationException] {
       spark.read
         .format("com.exasol.spark")
@@ -83,112 +53,74 @@ class LoadIT extends BaseIntegrationTest with DataFrameSuiteBase {
         .option("port", jdbcPort)
         .load()
     }
-    assert(
-      thrown.getMessage === "A query parameter should be specified in order to run the operation"
-    )
+    val expectedMessage = "A query parameter should be specified in order to run the operation"
+    assert(thrown.getMessage === expectedMessage)
   }
 
-  test("return only provided columns from .schema") {
-    createDummyTable()
-
+  test("returns columns from user provided schema") {
     val expectedSchema = new StructType()
       .add("NAME", StringType)
       .add("UPDATED_AT", TimestampType)
-
     val df = spark.read
       .format("exasol")
       .option("host", jdbcHost)
       .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
+      .option("query", s"SELECT * FROM $tableName")
       .schema(expectedSchema)
       .load()
-
     assert(df.schema.length === expectedSchema.length)
-    assert(df.schema.map(_.name).toSet === expectedSchema.map(_.name).toSet)
-    assert(df.schema.map(_.dataType).toSet === expectedSchema.map(_.dataType).toSet)
-    assert(df.collect().map(x => x.getString(0)).toSet === Set("Germany", "France", "Portugal"))
+    assert(df.schema.map(_.name) === expectedSchema.map(_.name))
+    assert(df.schema.map(_.dataType) === expectedSchema.map(_.dataType))
+    assert(df.collect().map(x => x.getString(0)) === Seq("Germany", "France", "Portugal"))
   }
 
-  test("should failed when provided schema in the option is wrong") {
-    createDummyTable()
-
+  test("throws if user provided schema mismatch") {
     val expectedSchema = new StructType()
       .add("NAME", StringType)
       .add("UPDATED_AT", TimestampType)
       .add("DATE_INFORMATION", DateType)
-
     val df = spark.read
       .format("exasol")
       .option("host", jdbcHost)
       .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $EXA_SCHEMA.$EXA_TABLE")
+      .option("query", s"SELECT * FROM $tableName")
       .schema(expectedSchema)
       .load()
-
-    // still available for metadata
-    assert(df.count() === 3)
-
+      .select("DATE_INFORMATION")
     val thrown = intercept[java.sql.SQLException] {
-      assert(df.collect().map(x => x.getDate(2)).length === 3)
+      df.show(10, false)
     }
-
-    assert(
-      thrown.getMessage.contains("object A.DATE_INFORMATION not found")
-    )
+    assert(thrown.getMessage().contains("""object "DATE_INFORMATION" not found"""))
   }
 
-  test("should use provided sparkConf for loading data from exasol") {
-    createDummyTable()
-
+  test("uses user provided SparkConf") {
     val sparkConf = new SparkConf()
       .setMaster("local[*]")
       .set("spark.exasol.host", jdbcHost)
       .set("spark.exasol.port", jdbcPort)
       .set("spark.exasol.max_nodes", "200")
-
     val sparkSession = SparkSession
       .builder()
       .config(sparkConf)
       .getOrCreate()
-
     val df = sparkSession.read
       .format("exasol")
-      .option("query", s"SELECT CITY FROM $EXA_SCHEMA.$EXA_TABLE")
-      .option("port", s"falsePortNumber")
-      .option("host", s"falseHostName")
+      .option("query", s"SELECT CITY FROM $tableName")
+      .option("port", "falsePortNumber")
+      .option("host", "falseHostName")
       .load()
-
     assert(df.count() === 3)
-    assert(df.collect().map(_(0)).toSet === Set("Berlin", "Lisbon", "Paris"))
   }
 
-  test("load unicode data from exasol") {
-    createDummyTable()
-
-    val sparkConf = new SparkConf()
-      .setMaster("local[*]")
-      .set("spark.exasol.host", jdbcHost)
-      .set("spark.exasol.port", jdbcPort)
-      .set("spark.exasol.max_nodes", "200")
-
-    val sparkSession = SparkSession
-      .builder()
-      .config(sparkConf)
-      .getOrCreate()
-
-    val df = sparkSession.read
+  test("returns unicode columns") {
+    val df = spark.read
       .format("exasol")
-      .option(
-        "query",
-        s"SELECT UNICODE_COL FROM $EXA_SCHEMA.$EXA_TABLE " +
-          s" WHERE UNICODE_COL IS NOT NULL"
-      )
-      .option("port", s"falsePortNumber")
-      .option("host", s"falseHostName")
+      .option("host", jdbcHost)
+      .option("port", jdbcPort)
+      .option("query", s"""SELECT "UNICODE_COL" FROM $tableName WHERE UNICODE_COL IS NOT NULL""")
       .load()
-
     assert(df.count() === 3)
-    assert(df.collect().map(_(0)).toSet === Set("öäüß", "Ö", "Ù")) // scalastyle:ignore nonascii
+    assert(df.collect().map(_(0)) === Seq("öäüß", "Ö", "Ù")) // scalastyle:ignore nonascii
   }
 
 }
