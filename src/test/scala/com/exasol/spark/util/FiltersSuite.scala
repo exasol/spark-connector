@@ -9,6 +9,7 @@ import com.exasol.sql.rendering.StringRendererConfig
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 class FiltersSuite extends AnyFunSuite with Matchers {
 
   private[this] def getWhereClause(filters: Seq[Filter]): String = {
@@ -77,11 +78,11 @@ class FiltersSuite extends AnyFunSuite with Matchers {
     assert(getWhereClause(Seq(LessThanOrEqual("field", "e"))) === """("field" <= 'e')""")
   }
 
-  ignore("renders is-null") {
+  test("renders is-null") {
     assert(getWhereClause(Seq(IsNull("field"))) === """("field" IS NULL)""")
   }
 
-  ignore("renders is-not-null") {
+  test("renders is-not-null") {
     assert(getWhereClause(Seq(IsNotNull("field"))) === """("field" IS NOT NULL)""")
   }
 
@@ -95,6 +96,16 @@ class FiltersSuite extends AnyFunSuite with Matchers {
 
   test("renders string-starts-with") {
     assert(getWhereClause(Seq(StringStartsWith("field", "abc"))) === """("field" LIKE 'abc%')""")
+  }
+
+  test("renders in") {
+    val javaDecimals: Array[Any] = Array(1.1, 2.3).map(java.math.BigDecimal.valueOf(_))
+    assert(getWhereClause(Seq(In("field", javaDecimals))) === """("field" IN (1.1, 2.3))""")
+  }
+
+  test("renders not-in") {
+    val decimals: Array[Any] = Array(BigDecimal(1.1), BigDecimal(2.2))
+    assert(getWhereClause(Seq(Not(In("field", decimals)))) === """("field" NOT IN (1.1, 2.2))""")
   }
 
   test("renders not") {

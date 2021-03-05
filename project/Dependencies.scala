@@ -8,7 +8,7 @@ object Dependencies {
   // Versions
   private val DefaultSparkVersion = "3.0.1"
   private val ExasolJdbcVersion = "7.0.7"
-  private val ExasolSQLStmtBuilderVersion = "4.3.0"
+  private val ExasolSQLStmtBuilderVersion = "4.4.0"
 
   private val ScalaTestVersion = "3.2.5"
   private val ScalaTestMockitoVersion = "1.0.0-M2"
