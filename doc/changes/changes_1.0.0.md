@@ -1,4 +1,4 @@
-# Spark Exasol Connector 1.0.0, released 2021-MM-DD
+# Spark Exasol Connector 1.0.0, released 2021-03-09
 
 Code: Fixed bugs related to identifiers
 
