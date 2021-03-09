@@ -57,6 +57,16 @@ class PredicatePushdownIT extends BaseTableQueryIT {
     assert(df.map(r => (r.getString(1), r.getString(2))) === Seq(("France", "Paris")))
   }
 
+  test("returns dataframe with in filter") {
+    val df = getDataFrame().filter($"id".isin(1, 3)).collect()
+    assert(df.map(r => r.getString(1)) === Seq("Germany", "Portugal"))
+  }
+
+  test("returns dataframe with not-in filter") {
+    val df = getDataFrame().filter(not($"name".isin("France", "Germany"))).collect()
+    assert(df.map(r => r.getString(1)) === Seq("Portugal"))
+  }
+
   test("returns dataframe with not filter") {
     val df = getDataFrame().where(not($"id" <= 2))
     assert(df.collect().map(r => r.getString(1)) === Seq("Portugal"))

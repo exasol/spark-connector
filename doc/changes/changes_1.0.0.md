@@ -1,4 +1,12 @@
-# Spark Exasol Connector 1.0.0, released 2021-MM-DD
+# Spark Exasol Connector 1.0.0, released 2021-03-09
+
+Code: Fixed bugs related to identifiers
+
+## Summary
+
+In this release, we fixed bugs related to quoted identifiers and reserved
+keywords. In addition, we refactored the integration test and SQL generation
+using Exasol SQL Statement Builder.
 
 ## Features / Improvements
 
@@ -9,8 +17,9 @@
 
 ## Refactoring
 
-* #40: Added Exasol testcontainers, refactored test environment (PR #87).
+* #40: Added Exasol Testcontainers, refactored test environment (PR #87).
 * #84: Added Exasol SQL Statement Builder for building SQL queries (PR #88).
+* #89: Added missing Exasol predicates (PR #91).
 
 ## Documentation
 
@@ -20,7 +29,7 @@
 
 ### Runtime Dependency Updates
 
-* Added `com.exasol:sql-statement-builder:4.3.0`
+* Added `com.exasol:sql-statement-builder:4.4.0`
 * Updated `com.exasol:exasol-jdbc:7.0.0` to `7.0.7`
 * Updated `org.apache.spark:spark-core:2.4.5` to `3.0.1`
 * Updated `org.apache.spark:spark-sql:2.4.5` to `3.0.1`
