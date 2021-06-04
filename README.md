@@ -89,7 +89,7 @@ These plugins help with project development.
 [exasol]: https://www.exasol.com/en/
 [spark]: https://spark.apache.org/
 [exasol-jdbc-link]: https://www.exasol.com/portal/display/DOWNLOAD/Exasol+Download+Section
-[exasol-ssb-link]: https://github.com/exasol/sql-statement-builder
+[sql-ssb-link]: https://github.com/exasol/sql-statement-builder
 [spark-sql-link]: https://spark.apache.org/sql/
 [scalatest-link]: http://www.scalatest.org/
 [scalatestplus-link]: https://github.com/scalatest/scalatestplus-mockito
