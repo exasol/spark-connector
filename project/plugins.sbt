@@ -1,10 +1,10 @@
 // Adds a `wartremover` a flexible Scala code linting tool
 // http://github.com/puffnfresh/wartremover
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.13")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.15")
 
 // Adds Contrib Warts
 // http://github.com/wartremover/wartremover-contrib/
-addSbtPlugin("org.wartremover" % "sbt-wartremover-contrib" % "1.3.11")
+addSbtPlugin("org.wartremover" % "sbt-wartremover-contrib" % "1.3.12")
 
 // Adds a `assembly` task to create a fat JAR with all of its dependencies
 // https://github.com/sbt/sbt-assembly
@@ -16,7 +16,7 @@ addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.0")
 
 // Adds Scala Code Coverage (Scoverage) used during unit tests
 // http://github.com/scoverage/sbt-scoverage
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.8.2")
 
 // Adds SBT Coveralls plugin for uploading Scala code coverage to
 // https://coveralls.io
@@ -25,7 +25,7 @@ addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.2.7")
 
 // Adds a `dependencyUpdates` task to check Maven repositories for dependency updates
 // http://github.com/rtimush/sbt-updates
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.1")
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.3")
 
 // Adds a `scalafmt` task for automatic source code formatting
 // https://github.com/lucidsoftware/neo-sbt-scalafmt
@@ -41,7 +41,7 @@ addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.2")
 
 // Adds a `sonatype` release tasks
 // https://github.com/xerial/sbt-sonatype
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.5")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.7")
 
 // Adds a `gnu-pgp` plugin
 // https://github.com/sbt/sbt-pgp
@@ -49,7 +49,7 @@ addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.1.1")
 
 // Adds a `git` plugin
 // https://github.com/sbt/sbt-git
-addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "1.0.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "1.0.1")
 
 // Setup this and project/project/plugins.sbt for formatting project/*.scala files with scalafmt
 inThisBuild(
