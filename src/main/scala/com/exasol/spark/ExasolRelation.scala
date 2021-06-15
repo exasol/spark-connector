@@ -5,11 +5,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
-import org.apache.spark.sql.sources.BaseRelation
-import org.apache.spark.sql.sources.Filter
-import org.apache.spark.sql.sources.PrunedFilteredScan
-import org.apache.spark.sql.sources.PrunedScan
-import org.apache.spark.sql.sources.TableScan
+import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 
 import com.exasol.spark.rdd.ExasolRDD
@@ -71,16 +67,14 @@ class ExasolRelation(
     } else {
       new ExasolRDD(
         sqlContext.sparkContext,
-        enrichQuery(requiredColumns, filters),
+        getEnrichedQuery(requiredColumns, filters),
         Types.selectColumns(requiredColumns, schema),
         manager
       )
     }
 
-  override def unhandledFilters(filters: Array[Filter]): Array[Filter] = {
-    val dataTypes = schema.map(field => field.name -> field.dataType).toMap
-    filters.filterNot(Filters.filterExpr(_, dataTypes).isDefined)
-  }
+  override def unhandledFilters(filters: Array[Filter]): Array[Filter] =
+    filters.filterNot(Filters.filterToBooleanExpression(_).isDefined)
 
   /**
    * When a count action is run from Spark dataframe we do not have to read the
@@ -96,39 +90,20 @@ class ExasolRelation(
    *         enriched query
    */
   private[this] def makeEmptyRDD(filters: Array[Filter]): RDD[Row] = {
-    val cntQuery = enrichQuery(Array.empty[String], filters)
+    val cntQuery = getEnrichedQuery(Array.empty[String], filters)
     val cnt = manager.withCountQuery(cntQuery)
     sqlContext.sparkContext.parallelize(1L to cnt, 4).map(_ => Row.empty)
   }
 
   private[this] def makeSingleRDD(columns: Array[String], filters: Array[Filter]): RDD[Row] = {
-    val query = enrichQuery(columns, filters)
+    val query = getEnrichedQuery(columns, filters)
     val rows = manager.withExecuteQuery(query)(
       JdbcUtils.resultSetToRows(_, Types.selectColumns(columns, schema))
     )
     sqlContext.sparkContext.parallelize(rows.toSeq, 4)
   }
 
-  /**
-   * Improves the original query with column pushdown and predicate pushdown.
-   *
-   * It will use provided column names to create a sub select query and
-   * similarly add where clause if filters are provided.
-   *
-   * Additionally, if no column names are provided it creates a `COUNT(*)`
-   * query.
-   *
-   * @param columns A list of column names
-   * @param filters A list of Spark [[org.apache.spark.sql.sources.Filter]]-s
-   * @return An enriched query with column selection and where clauses
-   */
-  private[this] def enrichQuery(columns: Array[String], filters: Array[Filter]): String = {
-    val columnStr = if (columns.isEmpty) "COUNT(*)" else columns.map(c => s"A.$c").mkString(", ")
-    val filterStr = Filters.createWhereClause(schema, filters)
-    val whereClause = if (filterStr.trim.isEmpty) "" else s"WHERE $filterStr"
-    val enrichedQuery = s"SELECT $columnStr FROM ($queryString) A $whereClause"
-    logInfo(s"Running with enriched query: $enrichedQuery")
-    enrichedQuery
-  }
+  private[this] def getEnrichedQuery(columns: Array[String], filters: Array[Filter]): String =
+    ExasolQueryEnricher(queryString).enrichQuery(columns, filters)
 
 }

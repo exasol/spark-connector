@@ -1,9 +1,10 @@
 package com.exasol.spark.util
 
 import org.apache.spark.sql.sources._
-import org.apache.spark.sql.types._
 
-import com.exasol.spark.util.Filters._
+import com.exasol.sql.expression.BooleanTerm
+import com.exasol.sql.expression.rendering.ValueExpressionRenderer
+import com.exasol.sql.rendering.StringRendererConfig
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -11,80 +12,25 @@ import org.scalatest.matchers.should.Matchers
 @SuppressWarnings(Array("org.wartremover.warts.Any"))
 class FiltersSuite extends AnyFunSuite with Matchers {
 
-  val inValues: Array[Any] = Array(1, 2, 3)
-
-  val testSchema: StructType = new StructType()
-    .add("bool_col", BooleanType)
-    .add("str_col", StringType)
-    .add("int_col", IntegerType)
-    .add("float_col", FloatType)
-    .add("double_col", DoubleType)
-    .add("null_col", StringType)
-    .add("in_col", IntegerType)
-    .add("date_col", DateType)
-    .add("datetime_col", TimestampType)
-
-  test("creates where clause from an empty list of filters") {
-    assert(createWhereClause(StructType(Array.empty[StructField]), Seq.empty[Filter]) === "")
+  private[this] def getWhereClause(filters: Seq[Filter]): String = {
+    val booleanExpressions = Filters.booleanExpressionFromFilters(filters)
+    val andExpression = BooleanTerm.and(booleanExpressions: _*)
+    val rendererConfig = StringRendererConfig.builder().quoteIdentifiers(true).build()
+    val renderer = new ValueExpressionRenderer(rendererConfig)
+    andExpression.accept(renderer)
+    renderer.render()
   }
 
-  test("creates a where clause with non-existing columns in schema") {
-    val filters = Seq[Filter](
-      LessThanOrEqual("str_col", "123"),
-      Not(EqualTo("unknown_col", 1337.0)),
-      GreaterThan("int_col", 42),
-      Not(In("in_col", inValues))
-    )
-
-    val expected =
-      """
-        |    str_col <= '123'
-        |AND int_col > 42
-        |AND (in_col NOT IN (1,2,3))
-    """.stripMargin.replaceAll("\\s+", " ").trim()
-
-    assert(createWhereClause(testSchema, filters) === expected)
+  test("renders empty filters") {
+    assert(getWhereClause(Seq.empty[Filter]) === "")
   }
 
-  test("creates where clause from a list of filters") {
-    val filters = Seq[Filter](
-      EqualTo("str_col", "abc"),
-      Not(EqualTo("int_col", 7)),
-      LessThan("int_col", 15),
-      GreaterThan("int_col", 5),
-      LessThanOrEqual("float_col", 100.0),
-      GreaterThanOrEqual("float_col", 10.0),
-      EqualTo("double_col", 0.13),
-      IsNull("null_col"),
-      IsNotNull("null_col"),
-      StringEndsWith("str_col", "suffix"),
-      StringContains("str_col", "inside"),
-      StringStartsWith("str_col", "prefix"),
-      In("in_col", inValues)
-    )
-
-    val expected =
-      """
-        |    str_col = 'abc'
-        |AND int_col != 7
-        |AND int_col < 15
-        |AND int_col > 5
-        |AND float_col <= 100.0
-        |AND float_col >= 10.0
-        |AND double_col = 0.13
-        |AND (null_col IS NULL)
-        |AND (null_col IS NOT NULL)
-        |AND (str_col LIKE '%suffix')
-        |AND (str_col LIKE '%inside%')
-        |AND (str_col LIKE 'prefix%')
-        |AND (in_col IN (1,2,3))
-      """.stripMargin.replaceAll("\\s+", " ").trim()
-
-    assert(createWhereClause(testSchema, filters) === expected)
+  test("renders equal-to") {
+    assert(getWhereClause(Seq(EqualTo("field", "a"))) === """("field" = 'a')""")
   }
 
   // scalastyle:off nonascii
-  test("creates where clause from EqualTo with different data types") {
+  test("renders equal-to with different data types") {
     val filters = Seq(
       EqualTo("bool_col", false),
       EqualTo("str_col", "XYZ"),
@@ -96,39 +42,117 @@ class FiltersSuite extends AnyFunSuite with Matchers {
       EqualTo("date_col", "2018-01-01"),
       EqualTo("datetime_col", "2018-01-01 00:00:59.123")
     )
-
     val expected =
       """
-        |    bool_col = false
-        |AND str_col = 'XYZ'
-        |AND str_col = 'Ö'
-        |AND str_col = 'He said 'good morning''
-        |AND int_col = 42
-        |AND float_col = 13.0
-        |AND double_col = 100.0
-        |AND date_col = date '2018-01-01'
-        |AND datetime_col = timestamp '2018-01-01 00:00:59.123'
+        |    ("bool_col" = FALSE)
+        |AND ("str_col" = 'XYZ')
+        |AND ("str_col" = 'Ö')
+        |AND ("str_col" = 'He said 'good morning'')
+        |AND ("int_col" = 42)
+        |AND ("float_col" = 13.0)
+        |AND ("double_col" = 100.0)
+        |AND ("date_col" = '2018-01-01')
+        |AND ("datetime_col" = '2018-01-01 00:00:59.123')
       """.stripMargin.replaceAll("\\s+", " ").trim()
-
-    assert(createWhereClause(testSchema, filters) === expected)
+    assert(getWhereClause(filters) === expected)
   }
   // scalastyle:on nonascii
 
-  test("creates where clause from a nested list of filters") {
+  test("renders not-equal-to") {
+    assert(getWhereClause(Seq(Not(EqualTo("field", 1.0)))) === """("field" <> 1.0)""")
+  }
+
+  test("renders greater-than") {
+    assert(getWhereClause(Seq(GreaterThan("field", 1))) === """("field" > 1)""")
+  }
+
+  test("renders greater-than-or-equal") {
+    assert(getWhereClause(Seq(GreaterThanOrEqual("field", 3L))) === """("field" >= 3)""")
+  }
+
+  test("renders less-than") {
+    assert(getWhereClause(Seq(LessThan("field", 2.1f))) === """("field" < 2.1)""")
+  }
+
+  test("renders less-than-or-equal") {
+    assert(getWhereClause(Seq(LessThanOrEqual("field", "e"))) === """("field" <= 'e')""")
+  }
+
+  test("renders is-null") {
+    assert(getWhereClause(Seq(IsNull("field"))) === """("field" IS NULL)""")
+  }
+
+  test("renders is-not-null") {
+    assert(getWhereClause(Seq(IsNotNull("field"))) === """("field" IS NOT NULL)""")
+  }
+
+  test("renders string-ends-with") {
+    assert(getWhereClause(Seq(StringEndsWith("field", "xyz"))) === """("field" LIKE '%xyz')""")
+  }
+
+  test("renders string-contains") {
+    assert(getWhereClause(Seq(StringContains("field", "in"))) === """("field" LIKE '%in%')""")
+  }
+
+  test("renders string-starts-with") {
+    assert(getWhereClause(Seq(StringStartsWith("field", "abc"))) === """("field" LIKE 'abc%')""")
+  }
+
+  test("renders in") {
+    val javaDecimals: Array[Any] = Array(1.1, 2.3).map(java.math.BigDecimal.valueOf(_))
+    assert(getWhereClause(Seq(In("field", javaDecimals))) === """("field" IN (1.1, 2.3))""")
+  }
+
+  test("renders not-in") {
+    val decimals: Array[Any] = Array(BigDecimal(1.1), BigDecimal(2.2))
+    assert(getWhereClause(Seq(Not(In("field", decimals)))) === """("field" NOT IN (1.1, 2.2))""")
+  }
+
+  test("renders not") {
+    assert(
+      getWhereClause(Seq(Not(StringEndsWith("field", ".")))) === """NOT(("field" LIKE '%.'))"""
+    )
+  }
+
+  test("renders and") {
+    val filter = And(LessThan("field1", 1), EqualTo("field2", "one"))
+    val expected = """(("field1" < 1) AND ("field2" = 'one'))"""
+    assert(getWhereClause(Seq(filter)) === expected)
+  }
+
+  test("renders or") {
+    val filter = Or(GreaterThanOrEqual("field1", 13.0), Not(EqualTo("field2", "one")))
+    val expected = """(("field1" >= 13.0) OR ("field2" <> 'one'))"""
+    assert(getWhereClause(Seq(filter)) === expected)
+  }
+
+  test("renders nested list of filters") {
     val filters = Seq(
-      Or(EqualTo("str_col", "abc"), EqualTo("int_col", 123)),
-      Or(Not(IsNull("int_col")), IsNotNull("str_col")),
+      Or(EqualTo("str_col", "abc"), EqualTo("int_col", 123.toShort)),
+      Or(Not(LessThan("int_col", 1.toByte)), GreaterThan("str_col", "a")),
       Or(EqualTo("str_col", "xyz"), And(EqualTo("float_col", 3.14), Not(EqualTo("int_col", 3))))
     )
-
     val expected =
       """
-        |((str_col = 'abc') OR (int_col = 123))
-        |AND (((NOT ((int_col IS NULL)))) OR ((str_col IS NOT NULL)))
-        |AND ((str_col = 'xyz') OR (((float_col = 3.14) AND (int_col != 3))))
+        |    (("str_col" = 'abc') OR ("int_col" = 123))
+        |AND (NOT(("int_col" < 1)) OR ("str_col" > 'a'))
+        |AND (("str_col" = 'xyz') OR (("float_col" = 3.14) AND ("int_col" <> 3)))
       """.stripMargin.replaceAll("\\s+", " ").trim()
+    assert(getWhereClause(filters) === expected)
+  }
 
-    assert(createWhereClause(testSchema, filters) === expected)
+  test("returns empty when one of and expressions is null") {
+    val expr = Filters.filterToBooleanExpression(And(EqualTo("a", 1), EqualNullSafe("b", "abc")))
+    assert(expr === None)
+  }
+
+  test("returns empty when one of or expressions is null") {
+    val expr = Filters.filterToBooleanExpression(Or(EqualNullSafe("b", "x"), LessThan("c", 1)))
+    assert(expr === None)
+  }
+
+  test("returns empty when filter is null") {
+    assert(Filters.filterToBooleanExpression(EqualNullSafe("b", "x")) === None)
   }
 
 }

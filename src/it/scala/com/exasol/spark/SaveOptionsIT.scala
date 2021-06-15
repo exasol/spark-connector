@@ -4,21 +4,22 @@ import java.sql.Date
 
 import com.exasol.spark.util.Types
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.scalatest.funsuite.AnyFunSuite
-
-/** Integration tests for saving Spark dataframes into Exasol tables */
-class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase {
-
-  private[this] val tableName = s"$EXA_SCHEMA.$EXA_TABLE"
+/**
+ * Integration tests for saving Spark DataFrames into Exasol tables.
+ */
+class SaveOptionsIT extends BaseTableQueryIT {
 
   private[this] val saveModes = Seq("append", "errorifexists", "ignore", "overwrite")
+  private[this] var defaultOptions: Map[String, String] = _
 
-  private[this] val defaultOptions = Map(
-    "host" -> container.host,
-    "port" -> s"${container.port}",
-    "table" -> tableName
-  )
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    defaultOptions = Map(
+      "host" -> jdbcHost,
+      "port" -> jdbcPort,
+      "table" -> tableName
+    )
+  }
 
   // scalastyle:off nonascii
   private[this] val dataframeTestData: Seq[(String, String, Date, String)] = Seq(
@@ -30,35 +31,31 @@ class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
   // scalastyle:on nonascii
 
   test("`tableExists` should return correct boolean result") {
-    createDummyTable()
-    assert(exaManager.tableExists(tableName) === true)
-    assert(exaManager.tableExists("DUMMY_SCHEMA.DUMMYTABLE") === false)
+    assert(exasolConnectionManager.tableExists(tableName) === true)
+    assert(exasolConnectionManager.tableExists("DUMMY_SCHEMA.DUMMYTABLE") === false)
   }
 
   test("`truncateTable` should perform table truncation") {
-    createDummyTable()
-    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") > 0)
-    exaManager.truncateTable(tableName)
-    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
+    assert(exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") > 0)
+    exasolConnectionManager.truncateTable(tableName)
+    assert(exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
     // Ensure it is idempotent
-    exaManager.truncateTable(tableName)
-    assert(exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
+    exasolConnectionManager.truncateTable(tableName)
+    assert(exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName") === 0)
   }
 
   test("`dropTable` should drop table") {
-    createDummyTable()
-    assert(exaManager.tableExists(tableName) === true)
-    exaManager.dropTable(tableName)
-    assert(exaManager.tableExists(tableName) === false)
+    assert(exasolConnectionManager.tableExists(tableName) === true)
+    exasolConnectionManager.dropTable(tableName)
+    assert(exasolConnectionManager.tableExists(tableName) === false)
     // Ensure it is idempotent
-    exaManager.dropTable(tableName)
-    assert(exaManager.tableExists(tableName) === false)
+    exasolConnectionManager.dropTable(tableName)
+    assert(exasolConnectionManager.tableExists(tableName) === false)
   }
 
   test("`createTable` should create a table") {
-    createDummyTable()
-    val newTableName = s"$EXA_SCHEMA.new_table"
-    assert(exaManager.tableExists(newTableName) === false)
+    val newTableName = s"$schema.new_table"
+    assert(exasolConnectionManager.tableExists(newTableName) === false)
 
     import sqlContext.implicits._
     val df = sc
@@ -66,32 +63,28 @@ class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
       .toDF("str_col", "int_col", "date_col")
 
     val newTableSchema = Types.createTableSchema(df.schema)
-    exaManager.createTable(newTableName, newTableSchema)
-    assert(exaManager.tableExists(newTableName) === true)
+    exasolConnectionManager.createTable(newTableName, newTableSchema)
+    assert(exasolConnectionManager.tableExists(newTableName) === true)
   }
 
   test("save mode 'ignore' does not insert data if table exists") {
-    createDummyTable()
     val initialRecordsCount =
-      exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+      exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
     assert(runDataFrameSave("ignore", 1) === initialRecordsCount)
   }
 
   test("save mode 'overwrite' overwrite if table exists") {
-    createDummyTable()
     assert(runDataFrameSave("overwrite", 2) === dataframeTestData.size.toLong)
   }
 
   test("save mode 'append' appends data if table exists") {
-    createDummyTable()
     val initialRecordsCount =
-      exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+      exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
     val totalRecords = initialRecordsCount + dataframeTestData.size
     assert(runDataFrameSave("append", 3) === totalRecords)
   }
 
   test("save mode 'errorifexists' throws exception if table exists") {
-    createDummyTable()
     val thrown = intercept[UnsupportedOperationException] {
       runDataFrameSave("errorifexists", 4)
     }
@@ -99,7 +92,7 @@ class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
   }
 
   test("save throws without 'create_table' or 'drop_table' option when table does not exist") {
-    exaManager.dropTable(tableName)
+    exasolConnectionManager.dropTable(tableName)
     saveModes.foreach {
       case mode =>
         val thrown = intercept[UnsupportedOperationException] {
@@ -115,7 +108,7 @@ class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
     val newOptions = defaultOptions ++ Map("create_table" -> "true")
     saveModes.foreach {
       case mode =>
-        exaManager.dropTable(tableName)
+        exasolConnectionManager.dropTable(tableName)
         assert(runDataFrameSave(mode, 2, newOptions) === dataframeTestData.size.toLong)
     }
   }
@@ -124,7 +117,7 @@ class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
     val newOptions = defaultOptions ++ Map("drop_table" -> "true")
     saveModes.foreach {
       case mode =>
-        createDummyTable()
+        createTable()
         assert(runDataFrameSave(mode, 3, newOptions) === dataframeTestData.size)
     }
   }
@@ -145,7 +138,7 @@ class SaveSuite extends AnyFunSuite with BaseDockerSuite with DataFrameSuiteBase
       .format("exasol")
       .save()
 
-    exaManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+    exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
   }
 
 }

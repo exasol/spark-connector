@@ -42,6 +42,7 @@ versions of Spark, we are planning to change to the newer JVM versions.
 | Dependency                                  | Purpose                                                         | License              |
 |---------------------------------------------|-----------------------------------------------------------------|----------------------|
 | [Exasol JDBC][exasol-jdbc-link]             | Accessing Exasol using JDBC and sub-connections                 | MIT License          |
+| [Exasol SQL Statement Builder][sql-ssb-link]| Building SQL statements safely without string concatenation     | MIT License          |
 | [Spark Core][spark]                         | Apache Spark core libraries for optimized computation           | Apache License 2.0   |
 | [Spark SQL][spark-sql-link]                 | Apache Spark higher-level SQL and Dataframe interface libraries | Apache License 2.0   |
 
@@ -88,6 +89,7 @@ These plugins help with project development.
 [exasol]: https://www.exasol.com/en/
 [spark]: https://spark.apache.org/
 [exasol-jdbc-link]: https://www.exasol.com/portal/display/DOWNLOAD/Exasol+Download+Section
+[sql-ssb-link]: https://github.com/exasol/sql-statement-builder
 [spark-sql-link]: https://spark.apache.org/sql/
 [scalatest-link]: http://www.scalatest.org/
 [scalatestplus-link]: https://github.com/scalatest/scalatestplus-mockito

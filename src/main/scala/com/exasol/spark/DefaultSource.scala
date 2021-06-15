@@ -10,6 +10,9 @@ import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Types
 import com.exasol.spark.writer.ExasolWriter
+import com.exasol.sql.StatementFactory
+import com.exasol.sql.dql.select.rendering.SelectRenderer
+import com.exasol.sql.rendering.StringRendererConfig
 
 /**
  * The default entry source for creating integration between Exasol and Spark.
@@ -125,8 +128,16 @@ class DefaultSource
         }
     }
 
-    val newParams = parameters ++ Map("query" -> s"SELECT * FROM $tableName")
+    val newParams = parameters ++ Map("query" -> getSelectFromTableQuery(tableName))
     createRelation(sqlContext, newParams, data.schema)
+  }
+
+  private[this] def getSelectFromTableQuery(tableName: String): String = {
+    val select = StatementFactory.getInstance().select().all().from().table(tableName)
+    val rendererConfig = StringRendererConfig.builder().quoteIdentifiers(true).build()
+    val renderer = new SelectRenderer(rendererConfig)
+    select.accept(renderer)
+    renderer.render()
   }
 
   // Saves Spark dataframe into an Exasol table

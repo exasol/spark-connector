@@ -76,17 +76,14 @@ class ExasolRDD(
   override def getPartitions: Array[Partition] = {
     mainConnection = createMainConnection()
     mainStatement = mainConnection.createStatement()
+    logInfo(s"Executing enriched query '$queryString'.")
     mainResultSet = mainStatement.executeQuery(queryString).asInstanceOf[EXAResultSet]
-
     val handle = mainResultSet.GetHandle()
-
     val partitions = manager
       .subConnections(mainConnection)
       .zipWithIndex
       .map { case (url, idx) => ExasolRDDPartition(idx, handle, url) }
-
     logInfo(s"The number of partitions is ${partitions.size}")
-
     partitions.toArray
   }
 

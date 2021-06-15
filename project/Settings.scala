@@ -43,7 +43,6 @@ object Settings {
     // ScalaFmt settings
     scalafmtOnCompile := true,
     // Scoverage settings
-    coverageMinimum := 50,
     coverageOutputHTML := true,
     coverageOutputXML := true,
     coverageFailOnMinimum := false,
