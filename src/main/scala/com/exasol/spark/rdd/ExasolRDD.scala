@@ -58,12 +58,12 @@ class ExasolRDD(
     if (conn == null) {
       logError("Main EXAConnection is null!")
       throw new RuntimeException(
-          ExaError
-            .messageBuilder("F-SEC-11")
-            .message("Could not create main JDBC connection for query.")
-            .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
-            .toString()
-          )
+        ExaError
+          .messageBuilder("F-SEC-11")
+          .message("Could not create main JDBC connection for query.")
+          .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
+          .toString()
+      )
     }
 
     val cnt = manager.initParallel(conn)

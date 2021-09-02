@@ -43,7 +43,7 @@ object Dependencies {
     "com.holdenkarau" %% "spark-testing-base" % SparkTestingBaseVersion,
     "com.exasol" % "exasol-testcontainers" % ExasolTestContainersVersion,
     "com.exasol" % "test-db-builder-java" % ExasolTestDBBuilderVersion,
-    "com.exasol" % "hamcrest-resultset-matcher" % ExasolHamcrestMatcherVersion,
+    "com.exasol" % "hamcrest-resultset-matcher" % ExasolHamcrestMatcherVersion
   ).map(_ % Test)
 
   /** The list of all dependencies for the connector */

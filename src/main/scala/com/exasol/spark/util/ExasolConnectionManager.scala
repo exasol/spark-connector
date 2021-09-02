@@ -79,9 +79,8 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     hosts
       .zip(ports)
       .zipWithIndex
-      .map {
-        case ((host, port), idx) =>
-          s"jdbc:exa-worker:$host:$port;workerID=$idx;workertoken=$token"
+      .map { case ((host, port), idx) =>
+        s"jdbc:exa-worker:$host:$port;workerID=$idx;workertoken=$token"
       }
   }
 
@@ -143,10 +142,9 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    * @return A result of `handle` function
    */
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
-  def withExecuteQuery[T](query: String)(handle: EXAResultSet => T): T = withStatement[T] {
-    stmt =>
-      val rs = stmt.executeQuery(query).asInstanceOf[EXAResultSet]
-      ExasolConnectionManager.using(rs)(handle)
+  def withExecuteQuery[T](query: String)(handle: EXAResultSet => T): T = withStatement[T] { stmt =>
+    val rs = stmt.executeQuery(query).asInstanceOf[EXAResultSet]
+    ExasolConnectionManager.using(rs)(handle)
   }
 
   /** Given a query with `count(*)` returns the result. */

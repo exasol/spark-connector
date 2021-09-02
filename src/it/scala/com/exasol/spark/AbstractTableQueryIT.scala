@@ -5,10 +5,7 @@ import org.apache.spark.sql.DataFrame
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.BeforeAndAfterEach
 
-abstract class AbstractTableQueryIT
-    extends BaseIntegrationTest
-    with DataFrameSuiteBase
-    with BeforeAndAfterEach {
+abstract class AbstractTableQueryIT extends BaseIntegrationTest with DataFrameSuiteBase with BeforeAndAfterEach {
 
   val tableName: String
   def createTable(): Unit

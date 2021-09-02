@@ -35,12 +35,11 @@ class ExasolRDDSuite extends AnyFunSuite with Matchers with MockitoSugar {
     val partitions = rdd.getPartitions
 
     assert(partitions.size == 2)
-    partitions.zipWithIndex.foreach {
-      case (part, idx) =>
-        assert(part.index === idx)
-        assert(part.isInstanceOf[ExasolRDDPartition])
-        assert(part.asInstanceOf[ExasolRDDPartition].handle === handle)
-        assert(part.asInstanceOf[ExasolRDDPartition].connectionUrl === s"url${idx + 1}")
+    partitions.zipWithIndex.foreach { case (part, idx) =>
+      assert(part.index === idx)
+      assert(part.isInstanceOf[ExasolRDDPartition])
+      assert(part.asInstanceOf[ExasolRDDPartition].handle === handle)
+      assert(part.asInstanceOf[ExasolRDDPartition].connectionUrl === s"url${idx + 1}")
     }
     verify(manager, times(1)).mainConnection
     verify(manager, times(1)).subConnections(mainConnection)

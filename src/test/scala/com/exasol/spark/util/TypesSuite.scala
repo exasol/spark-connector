@@ -30,9 +30,8 @@ class TypesSuite extends AnyFunSuite with Matchers {
       DateType -> java.sql.Types.DATE,
       DecimalType(18, 0) -> java.sql.Types.DECIMAL
     )
-    data.foreach {
-      case (given, expected) =>
-        assert(jdbcTypeFromSparkDataType(given) === expected)
+    data.foreach { case (given, expected) =>
+      assert(jdbcTypeFromSparkDataType(given) === expected)
     }
   }
 
@@ -57,9 +56,8 @@ class TypesSuite extends AnyFunSuite with Matchers {
       DateType -> "DATE",
       TimestampType -> "TIMESTAMP"
     )
-    data.foreach {
-      case (given, expected) =>
-        assert(exasolTypeFromSparkDataType(given) === expected)
+    data.foreach { case (given, expected) =>
+      assert(exasolTypeFromSparkDataType(given) === expected)
     }
   }
 

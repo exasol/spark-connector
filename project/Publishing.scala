@@ -73,13 +73,12 @@ object Publishing {
     credentials ++= (for {
       username <- sys.env.get("SONATYPE_USERNAME")
       password <- sys.env.get("SONATYPE_PASSWORD")
-    } yield
-      Credentials(
-        "Sonatype Nexus Repository Manager",
-        "oss.sonatype.org",
-        username,
-        password
-      )).toSeq,
+    } yield Credentials(
+      "Sonatype Nexus Repository Manager",
+      "oss.sonatype.org",
+      username,
+      password
+    )).toSeq,
     // Git versioning settings
     git.useGitDescribe := true,
     // git.baseVersion setting represents previously released version
@@ -95,7 +94,7 @@ object Publishing {
         git.gitUncommittedChanges.value,
         git.uncommittedSignifier.value
       )
-      git.gitHeadCommit.value map { _.substring(0, 7) } map { sha =>
+      git.gitHeadCommit.value.map(_.substring(0, 7)).map { sha =>
         git.baseVersion.value + "-" + sha + suffix
       }
     }

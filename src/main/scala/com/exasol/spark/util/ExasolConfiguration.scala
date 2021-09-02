@@ -86,7 +86,7 @@ object ExasolConfiguration {
     if (str.length > 0) {
       str
         .split(";")
-        .foreach(kv => {
+        .foreach { kv =>
           if (kv.filter(_ == '=').length != 1) {
             throw new IllegalArgumentException(
               ExaError
@@ -96,7 +96,7 @@ object ExasolConfiguration {
                 .toString()
             )
           }
-        })
+        }
     }
     str
   }

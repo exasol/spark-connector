@@ -63,7 +63,7 @@ class SparkDataImportIT extends BaseTableQueryIT {
   }
 
   test("saves float") {
-    SparkImportChecker(Seq(1.01F, 0.45f)).assert(
+    SparkImportChecker(Seq(1.01f, 0.45f)).assert(
       table()
         .withDefaultNumberTolerance(new BigDecimal(1e-3))
         .row(java.lang.Float.valueOf("1.01"))

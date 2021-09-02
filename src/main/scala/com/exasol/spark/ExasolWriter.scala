@@ -16,7 +16,6 @@ import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Types
 
 /**
- *
  */
 class ExasolWriter(
   @transient val sc: SparkContext,
@@ -40,12 +39,12 @@ class ExasolWriter(
 
     if (mainConnection == null) {
       throw new RuntimeException(
-          ExaError
-            .messageBuilder("F-SEC-7")
-            .message("Could not create main JDBC connection to Exasol cluster.")
-            .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
-            .toString()
-            )
+        ExaError
+          .messageBuilder("F-SEC-7")
+          .message("Could not create main JDBC connection to Exasol cluster.")
+          .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
+          .toString()
+      )
     }
 
     val cnt = manager.initParallel(mainConnection)
