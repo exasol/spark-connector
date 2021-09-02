@@ -6,6 +6,8 @@ import org.apache.spark.internal.Logging
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
 
+import com.exasol.errorreporting.ExaError
+
 /**
  * A helper object with functions to convert JDBC [[java.sql.ResultSet]] into
  * Spark [[org.apache.spark.sql.Row]] or vice versa.
@@ -72,7 +74,16 @@ object Converter extends Logging {
 
     case _ =>
       (_: PreparedStatement, _: Row, pos: Int) =>
-        throw new IllegalArgumentException(s"Cannot translate non-null value for field $pos")
+        throw new IllegalArgumentException(
+          ExaError
+            .messageBuilder("F-SEC-10")
+            .message(
+              "Could not find matching data type for position {{POSITION}}.",
+              String.valueOf(pos)
+            )
+            .ticketMitigation()
+            .toString()
+        )
   }
 
 }

@@ -7,6 +7,7 @@ import scala.util.Try
 
 import org.apache.spark.internal.Logging
 
+import com.exasol.errorreporting.ExaError
 import com.exasol.jdbc.EXAConnection
 import com.exasol.jdbc.EXAResultSet
 import com.exasol.jdbc.EXAStatement
@@ -153,7 +154,15 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     val cnt = if (rs.next()) {
       rs.getLong(1)
     } else {
-      throw new IllegalStateException("Could not query the count!")
+      throw new IllegalStateException(
+        ExaError
+          .messageBuilder("E-SEC-9")
+          .message("Could not run 'count' query.")
+          .mitigation(
+            "Please check that JDBC connection is available or query statement is valid."
+          )
+          .toString()
+      )
     }
     cnt
   }

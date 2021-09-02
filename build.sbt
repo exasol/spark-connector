@@ -9,8 +9,8 @@ lazy val orgSettings = Seq(
 )
 
 lazy val buildSettings = Seq(
-  scalaVersion := "2.12.12",
-  crossScalaVersions := Seq("2.11.12", "2.12.12")
+  scalaVersion := "2.12.14",
+  crossScalaVersions := Seq("2.11.12", "2.12.14")
 )
 
 lazy val root =
@@ -22,5 +22,4 @@ lazy val root =
     .settings(Settings.projectSettings(scalaVersion))
     .enablePlugins(IntegrationTestPlugin, GitVersioning)
 
-addCommandAlias("ci-release", ";reload;clean;release with-defaults")
 addCommandAlias("pluginUpdates", ";reload plugins;dependencyUpdates;reload return")

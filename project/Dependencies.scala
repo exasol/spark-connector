@@ -30,6 +30,7 @@ object Dependencies {
   private val CoreDependencies: Seq[ModuleID] = Seq(
     "com.exasol" % "exasol-jdbc" % ExasolJdbcVersion,
     "com.exasol" % "sql-statement-builder-java8" % ExasolSQLStmtBuilderVersion,
+    "com.exasol" % "error-reporting-java" % "0.4.0",
     "org.apache.spark" %% "spark-core" % sparkCurrentVersion % "provided",
     "org.apache.spark" %% "spark-sql" % sparkCurrentVersion % "provided"
   )

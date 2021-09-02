@@ -4,6 +4,8 @@ import java.net.InetAddress
 
 import scala.util.matching.Regex
 
+import com.exasol.errorreporting.ExaError
+
 /**
  * The configuration parameters for Spark Exasol connector.
  *
@@ -62,14 +64,22 @@ object ExasolConfiguration {
     case IPv4_REGEX(_*) => host
     case _ =>
       throw new IllegalArgumentException(
-        "The host value should be an ip address of the first Exasol data node!"
+        ExaError
+          .messageBuilder("E-SEC-4")
+          .message("The host value is not an IPv4 address.")
+          .mitigation("The host value should be an IPv4 address of the first Exasol datanode.")
+          .toString()
       )
   }
 
   def checkJdbcOptions(str: String): String = {
     if (str.endsWith(";") || str.startsWith(";")) {
       throw new IllegalArgumentException(
-        "Jdbc options should not start or end with semicolon"
+        ExaError
+          .messageBuilder("E-SEC-5")
+          .message("JDBC options should not start or end with semicolon.")
+          .mitigation("Please remove from beginning or end of JDBC options.")
+          .toString()
       )
     }
 
@@ -79,7 +89,11 @@ object ExasolConfiguration {
         .foreach(kv => {
           if (kv.filter(_ == '=').length != 1) {
             throw new IllegalArgumentException(
-              s"Invalid property: $kv does not have key=value format"
+              ExaError
+                .messageBuilder("E-SEC-6")
+                .message("Parameter {{PARAMETER}} does not have 'key=value' format.", kv)
+                .mitigation("Please make sure parameters are encoded as 'key=value' pairs.")
+                .toString()
             )
           }
         })
