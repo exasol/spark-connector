@@ -20,6 +20,7 @@ abstract class AbstractTableQueryIT extends BaseIntegrationTest with DataFrameSu
       .format("exasol")
       .option("host", jdbcHost)
       .option("port", jdbcPort)
+      .option("jdbc_options", "validateservercertificate=0")
       .option("query", query.fold(s"SELECT * FROM $tableName")(identity))
       .load()
 

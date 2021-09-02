@@ -48,14 +48,12 @@ class ExasolRDDSuite extends AnyFunSuite with Matchers with MockitoSugar {
   test("`getPartitions` throws exceptions if main connection is null") {
     val sparkContext = mock[SparkContext]
     val manager = mock[ExasolConnectionManager]
-
     when(manager.mainConnection).thenReturn(null)
-
     val thrown = intercept[RuntimeException] {
       new ExasolRDD(sparkContext, "", StructType(Nil), manager).getPartitions
     }
-    assert(thrown.getMessage === "Could not establish main connection to Exasol!")
-
+    assert(thrown.getMessage().startsWith("F-SEC-11"))
+    assert(thrown.getMessage().contains("Could not establish main JDBC connection for query"))
     verify(manager, times(1)).mainConnection
   }
 

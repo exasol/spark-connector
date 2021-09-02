@@ -9,25 +9,25 @@ set -o errtrace -o nounset -o pipefail -o errexit
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 cd "$BASE_DIR"
 
-MAIN_SCALA_VERSION=2.12.12
-MAIN_SPARK_VERSION=3.0.1
+DEFAULT_SCALA_VERSION=2.12.14
+DEFAULT_SPARK_VERSION=3.1.2
 
-if [[ -z "${TRAVIS_SCALA_VERSION:-}" ]]; then
-  echo "Environment variable TRAVIS_SCALA_VERSION is not set"
-  echo "Using MAIN_SCALA_VERSION: $MAIN_SCALA_VERSION"
-  TRAVIS_SCALA_VERSION=$MAIN_SCALA_VERSION
+if [[ -z "${SCALA_VERSION:-}" ]]; then
+  echo "Environment variable SCALA_VERSION is not set"
+  echo "Using DEFAULT_SCALA_VERSION: $DEFAULT_SCALA_VERSION"
+  SCALA_VERSION=$DEFAULT_SCALA_VERSION
 fi
 
 if [[ -z "${SPARK_VERSION:-}" ]]; then
   echo "Environment variable SPARK_VERSION is not set"
-  echo "Using MAIN_SPARK_VERSION: $MAIN_SPARK_VERSION"
-  SPARK_VERSION=$MAIN_SPARK_VERSION
+  echo "Using DEFAULT_SPARK_VERSION: $DEFAULT_SPARK_VERSION"
+  SPARK_VERSION=$DEFAULT_SPARK_VERSION
 fi
 
 run_self_check () {
   echo "############################################"
   echo "#                                          #"
-  echo "#        Self-check                        #"
+  echo "#        Self Script Check                 #"
   echo "#                                          #"
   echo "############################################"
   # Don't fail here, failing later at the end when all shell scripts are checked anyway.
@@ -41,9 +41,9 @@ run_cleaning () {
   echo "#        Cleaning                          #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx \
+  sbt \
     -Dspark.currentVersion=$SPARK_VERSION \
-    ++$TRAVIS_SCALA_VERSION \
+    ++$SCALA_VERSION \
     clean
 }
 
@@ -53,9 +53,9 @@ run_unit_tests () {
   echo "#        Unit testing                      #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx \
+  sbt \
     -Dspark.currentVersion=$SPARK_VERSION \
-    ++$TRAVIS_SCALA_VERSION \
+    ++$SCALA_VERSION \
     coverage test
 }
 
@@ -65,9 +65,9 @@ run_integration_tests () {
   echo "#        Integration testing               #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx \
+  sbt \
     -Dspark.currentVersion=$SPARK_VERSION \
-    ++$TRAVIS_SCALA_VERSION \
+    ++$SCALA_VERSION \
     coverage it:test
 }
 
@@ -77,9 +77,9 @@ run_coverage_report () {
   echo "#        Coverage report                   #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx \
+  sbt \
     -Dspark.currentVersion=$SPARK_VERSION \
-    ++$TRAVIS_SCALA_VERSION \
+    ++$SCALA_VERSION \
     coverageReport
 }
 
@@ -89,9 +89,9 @@ run_api_doc () {
   echo "#        Generating API documentaion       #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx \
+  sbt \
     -Dspark.currentVersion=$SPARK_VERSION \
-    ++$TRAVIS_SCALA_VERSION \
+    ++$SCALA_VERSION \
     doc
 }
 
@@ -101,9 +101,9 @@ run_dependency_info () {
   echo "#        Dependency information            #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx \
+  sbt \
     -Dspark.currentVersion=$SPARK_VERSION \
-    ++$TRAVIS_SCALA_VERSION \
+    ++$SCALA_VERSION \
     dependencyUpdates pluginUpdates dependencyTree
 }
 
@@ -122,9 +122,9 @@ run_assembly () {
   echo "#        Assembling binary artifact        #"
   echo "#                                          #"
   echo "############################################"
-  ./sbtx \
+  sbt \
     -Dspark.currentVersion=$SPARK_VERSION \
-    ++$TRAVIS_SCALA_VERSION \
+    ++$SCALA_VERSION \
     assembly
 }
 

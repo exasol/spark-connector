@@ -175,7 +175,7 @@ class DefaultSource
           .messageBuilder("E-SEC-2")
           .message("Table {{TABLE}} does not exist.", tableName)
           .mitigation(
-            "Please create table before hand or enable table creation by setting 'create_table' option."
+            "Please create table beforehand or enable table creation by setting 'create_table' option."
           )
           .toString()
       )

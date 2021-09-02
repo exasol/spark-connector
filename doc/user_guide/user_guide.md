@@ -161,7 +161,7 @@ cd spark-exasol-connector/
 To create an assembled jar file, run the command:
 
 ```sh
-./sbtx assembly
+sbt assembly
 ```
 
 The assembled jar file should be located at

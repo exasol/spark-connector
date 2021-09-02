@@ -15,39 +15,31 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers {
   test("check extra exasol jdbc options are correctly configured for establishing connection") {
     assert(getECMConnectionString(emptyOpts) === "jdbc:exa:10.0.0.1:8888")
 
-    val correctOpts1 = emptyOpts ++ Map(
-      "jdbc_options" -> "debug=1"
-    )
+    val correctOpts1 = emptyOpts ++ Map("jdbc_options" -> "debug=1")
     assert(getECMConnectionString(correctOpts1) === "jdbc:exa:10.0.0.1:8888;debug=1")
 
-    val correctOpts2 = emptyOpts ++ Map(
-      "jdbc_options" -> "debug=1;encryption=0"
-    )
+    val correctOpts2 = emptyOpts ++ Map("jdbc_options" -> "debug=1;encryption=0")
     assert(getECMConnectionString(correctOpts2) === "jdbc:exa:10.0.0.1:8888;debug=1;encryption=0")
   }
 
   test("check exasol jdbc options has invalid property format") {
-    val incorrectOpt = emptyOpts ++ Map(
-      "jdbc_options" -> "debug==1;encryption=0"
-    )
-
+    val incorrectOpt = emptyOpts ++ Map("jdbc_options" -> "debug==1;encryption=0")
     val thrown = intercept[IllegalArgumentException] {
       getECMConnectionString(incorrectOpt)
     }
-    val thrownMsg = thrown.getMessage
-    assert(thrownMsg === "Invalid property: debug==1 does not have key=value format")
+    val message = thrown.getMessage()
+    assert(message.startsWith("E-SEC-6"))
+    assert(message.contains("Parameter 'debug==1' does not have key=value format"))
   }
 
   test("check exasol jdbc options start with semicolon") {
-    val incorrectOpt = emptyOpts ++ Map(
-      "jdbc_options" -> ";debug=1;encryption=0"
-    )
-
+    val incorrectOpt = emptyOpts ++ Map("jdbc_options" -> ";debug=1;encryption=0")
     val thrown = intercept[IllegalArgumentException] {
       getECMConnectionString(incorrectOpt)
     }
-    val thrownMsg = thrown.getMessage
-    assert(thrownMsg === "Jdbc options should not start or end with semicolon")
+    val message = thrown.getMessage()
+    assert(message.startsWith("E-SEC-5"))
+    assert(message.contains("JDBC options should not start or end with semicolon"))
   }
 
 }

@@ -18,34 +18,32 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
     val thrown = intercept[UnsupportedOperationException] {
       new DefaultSource().createRelation(sqlContext, Map[String, String]())
     }
-    val thrownMsg = thrown.getMessage
-    assert(thrownMsg === "A query parameter should be specified in order to run the operation")
+    assertErrors(thrown.getMessage(), "E-SEC-1", "Parameter 'query' is missing")
   }
 
   test("throws an Exception if host parameter is not an ip address") {
     val parameters = Map("query" -> "SELECT 1", "host" -> "a.b.c.d")
     val sqlContext = mock[SQLContext]
     when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
-
     val thrown = intercept[IllegalArgumentException] {
       new DefaultSource().createRelation(sqlContext, parameters)
     }
-
-    val thrownMsg = thrown.getMessage
-    assert(thrownMsg === "The host value should be an ip address of the first Exasol data node!")
+    assertErrors(thrown.getMessage(), "E-SEC-4", "host value should be an IPv4 address of the first Exasol datanode")
   }
 
   test("when saving should throw an Exception if no `table` parameter is provided") {
     val df = mock[DataFrame]
     val sqlContext = mock[SQLContext]
-
     val thrown = intercept[UnsupportedOperationException] {
       new DefaultSource().createRelation(sqlContext, SaveMode.Append, Map[String, String](), df)
     }
+    assertErrors(thrown.getMessage(), "E-SEC-1", "Parameter 'table' is missing")
+  }
 
-    assert(
-      thrown.getMessage === "A table parameter should be specified in order to run the operation"
-    )
+  private[this] def assertErrors(message: String, errorCode: String, containedString: String): Unit = {
+    assert(message.startsWith(errorCode))
+    assert(message.contains(containedString))
+    ()
   }
 
   test("`repartitionPerNode` should reduce dataframe partitions number") {

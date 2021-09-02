@@ -23,23 +23,22 @@ import com.exasol.jdbc.EXAStatement
  */
 final case class ExasolConnectionManager(config: ExasolConfiguration) {
 
+  private[this] val mainJdbcConnectionUrl = s"jdbc:exa:${config.host}:${config.port}"
+
   /** A regular Exasol jdbc connection string */
   def getJdbcConnectionString(): String =
-    config.jdbc_options.length() match {
-      case 0 => s"jdbc:exa:${config.host}:${config.port}"
-      case _ => s"jdbc:exa:${config.host}:${config.port};${config.jdbc_options}"
-    }
+    getConnectionStringWithOptions(mainJdbcConnectionUrl)
 
   def mainConnection(): EXAConnection =
     ExasolConnectionManager.makeConnection(
-      getJdbcConnectionString,
+      getJdbcConnectionString(),
       config.username,
       config.password
     )
 
   def writerMainConnection(): EXAConnection =
     ExasolConnectionManager.makeConnection(
-      s"$getJdbcConnectionString;autocommit=0",
+      s"${getJdbcConnectionString()};autocommit=0",
       config.username,
       config.password
     )
@@ -52,7 +51,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    */
   def getConnection(): EXAConnection =
     ExasolConnectionManager.createConnection(
-      getJdbcConnectionString,
+      getJdbcConnectionString(),
       config.username,
       config.password
     )
@@ -80,7 +79,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
       .zip(ports)
       .zipWithIndex
       .map { case ((host, port), idx) =>
-        s"jdbc:exa-worker:$host:$port;workerID=$idx;workertoken=$token"
+        getConnectionStringWithOptions(s"jdbc:exa-worker:$host:$port;workerID=$idx;workertoken=$token")
       }
   }
 
@@ -216,6 +215,15 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
   def createTable(tableName: String, tableSchema: String): Unit = withStatement[Unit] { stmt =>
     val _ = stmt.executeUpdate(s"CREATE TABLE $tableName ($tableSchema)")
     ()
+  }
+
+  private[this] def getConnectionStringWithOptions(url: String): String = {
+    val jdbcOptions = config.jdbc_options
+    if (jdbcOptions == null || jdbcOptions.isEmpty) {
+      url
+    } else {
+      s"$url;$jdbcOptions"
+    }
   }
 
 }

@@ -60,7 +60,7 @@ class ExasolRDD(
       throw new RuntimeException(
         ExaError
           .messageBuilder("F-SEC-11")
-          .message("Could not create main JDBC connection for query.")
+          .message("Could not establish main JDBC connection for query.")
           .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
           .toString()
       )

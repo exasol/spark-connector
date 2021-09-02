@@ -91,8 +91,8 @@ object ExasolConfiguration {
             throw new IllegalArgumentException(
               ExaError
                 .messageBuilder("E-SEC-6")
-                .message("Parameter {{PARAMETER}} does not have 'key=value' format.", kv)
-                .mitigation("Please make sure parameters are encoded as 'key=value' pairs.")
+                .message("Parameter {{PARAMETER}} does not have key=value format.", kv)
+                .mitigation("Please make sure parameters are encoded as key=value pairs.")
                 .toString()
             )
           }

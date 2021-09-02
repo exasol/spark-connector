@@ -17,6 +17,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
     defaultOptions = Map(
       "host" -> jdbcHost,
       "port" -> jdbcPort,
+      "jdbc_options" -> "validateservercertificate=0",
       "table" -> tableName
     )
   }
@@ -88,7 +89,8 @@ class SaveOptionsIT extends BaseTableQueryIT {
     val thrown = intercept[UnsupportedOperationException] {
       runDataFrameSave("errorifexists", 4)
     }
-    assert(thrown.getMessage.contains(s"Table $tableName already exists"))
+    assert(thrown.getMessage().startsWith("E-SEC-3"))
+    assert(thrown.getMessage().contains(s"Table '$tableName' already exists"))
   }
 
   test("save throws without 'create_table' or 'drop_table' option when table does not exist") {
@@ -97,9 +99,8 @@ class SaveOptionsIT extends BaseTableQueryIT {
       val thrown = intercept[UnsupportedOperationException] {
         runDataFrameSave(mode, 2)
       }
-      assert(
-        thrown.getMessage.contains(s"Table $tableName does not exist. Please enable")
-      )
+      assert(thrown.getMessage().startsWith("E-SEC-2"))
+      assert(thrown.getMessage().contains(s"Table '$tableName' does not exist."))
     }
   }
 

@@ -40,8 +40,7 @@ class LoadIT extends BaseTableQueryIT {
 
   test("returns dataframe schema types") {
     val dataTypes = getDataFrame().schema.map(_.dataType)
-    val expectedDataTypes =
-      Seq(LongType, StringType, StringType, DateType, StringType, TimestampType)
+    val expectedDataTypes = Seq(LongType, StringType, StringType, DateType, StringType, TimestampType)
     assert(dataTypes === expectedDataTypes)
   }
 
@@ -53,8 +52,8 @@ class LoadIT extends BaseTableQueryIT {
         .option("port", jdbcPort)
         .load()
     }
-    val expectedMessage = "A query parameter should be specified in order to run the operation"
-    assert(thrown.getMessage === expectedMessage)
+    assert(thrown.getMessage().startsWith("E-SEC-1"))
+    assert(thrown.getMessage().contains("Parameter 'query' is missing."))
   }
 
   test("returns columns from user provided schema") {
@@ -65,6 +64,7 @@ class LoadIT extends BaseTableQueryIT {
       .format("exasol")
       .option("host", jdbcHost)
       .option("port", jdbcPort)
+      .option("jdbc_options", "validateservercertificate=0")
       .option("query", s"SELECT * FROM $tableName")
       .schema(expectedSchema)
       .load()
@@ -84,6 +84,7 @@ class LoadIT extends BaseTableQueryIT {
       .option("host", jdbcHost)
       .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $tableName")
+      .option("jdbc_options", "validateservercertificate=0")
       .schema(expectedSchema)
       .load()
       .select("DATE_INFORMATION")
@@ -108,6 +109,7 @@ class LoadIT extends BaseTableQueryIT {
       .option("query", s"SELECT CITY FROM $tableName")
       .option("port", "falsePortNumber")
       .option("host", "falseHostName")
+      .option("jdbc_options", "validateservercertificate=0")
       .load()
     assert(df.count() === 3)
   }
@@ -117,6 +119,7 @@ class LoadIT extends BaseTableQueryIT {
       .format("exasol")
       .option("host", jdbcHost)
       .option("port", jdbcPort)
+      .option("jdbc_options", "validateservercertificate=0")
       .option("query", s"""SELECT "UNICODE_COL" FROM $tableName WHERE UNICODE_COL IS NOT NULL""")
       .load()
     assert(df.count() === 3)
