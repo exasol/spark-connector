@@ -17,7 +17,7 @@ object Publishing {
       "Apache License 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")
     ),
     publishMavenStyle := true,
-    publishArtifact in Test := false,
+    Test / publishArtifact := false,
     pomIncludeRepository := Function.const(false),
     publishTo := {
       val nexus = "https://oss.sonatype.org/"
@@ -66,10 +66,10 @@ object Publishing {
     // Gnupg related settings
     // Global scope somehow needed here; otherwise publishLocalSigned looks for these credentials
     // in default path of ~/.sbt/gpg/
-    useGpg in Global := false,
-    pgpPublicRing in Global := baseDirectory.value / "project" / ".gnupg" / "local.pubring.asc",
-    pgpSecretRing in Global := baseDirectory.value / "project" / ".gnupg" / "local.secring.asc",
-    pgpPassphrase in Global := sys.env.get("PGP_PASSPHRASE").map(_.toArray),
+    Global / useGpg := false,
+    Global / pgpPublicRing := baseDirectory.value / "project" / ".gnupg" / "local.pubring.asc",
+    Global / pgpSecretRing := baseDirectory.value / "project" / ".gnupg" / "local.secring.asc",
+    Global / pgpPassphrase := sys.env.get("PGP_PASSPHRASE").map(_.toArray),
     credentials ++= (for {
       username <- sys.env.get("SONATYPE_USERNAME")
       password <- sys.env.get("SONATYPE_PASSWORD")

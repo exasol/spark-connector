@@ -7,15 +7,15 @@ object Dependencies {
 
   // Versions
   private val DefaultSparkVersion = "3.0.1"
-  private val ExasolJdbcVersion = "7.0.7"
+  private val ExasolJdbcVersion = "7.1.0"
   private val ExasolSQLStmtBuilderVersion = "4.4.1"
 
   private val ScalaTestVersion = "3.2.9"
   private val ScalaTestMockitoVersion = "1.0.0-M2"
-  private val MockitoVersion = "3.11.0"
-  private val ExasolTestContainersVersion = "3.5.3"
-  private val ExasolTestDBBuilderVersion = "3.1.1"
-  private val ExasolHamcrestMatcherVersion = "1.4.0"
+  private val MockitoVersion = "3.12.4"
+  private val ExasolTestContainersVersion = "4.0.1"
+  private val ExasolTestDBBuilderVersion = "3.2.1"
+  private val ExasolHamcrestMatcherVersion = "1.4.1"
 
   private val sparkCurrentVersion =
     sys.env.getOrElse("SPARK_VERSION", DefaultSparkVersion)

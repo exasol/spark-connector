@@ -16,6 +16,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.types.StructType
 
+import com.exasol.errorreporting.ExaError
 import com.exasol.jdbc.EXAConnection
 import com.exasol.jdbc.EXAResultSet
 import com.exasol.spark.util.ExasolConnectionManager

@@ -2,7 +2,7 @@ package com.exasol.spark.sbt
 
 import sbt._
 import org.scalastyle.sbt.ScalastylePlugin
-import com.lucidchart.sbt.scalafmt.ScalafmtPlugin
+import org.scalafmt.sbt.ScalafmtPlugin
 
 /** A plugin for creating an integration test task and settings */
 object IntegrationTestPlugin extends AutoPlugin {

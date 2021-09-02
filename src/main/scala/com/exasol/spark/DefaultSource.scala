@@ -222,8 +222,7 @@ class DefaultSource
             .messageBuilder("E-SEC-1")
             .message("Parameter {{PARAMETER}} is missing.", key)
             .mitigation("Please provide required parameter.")
-            .toString(),
-          exception
+            .toString()
         )
     }
 

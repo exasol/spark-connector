@@ -184,7 +184,7 @@ object Types extends Logging {
   private[this] def getUnsupportedDataTypeErrorCode(dataType: DataType): String =
     ExaError
       .messageBuilder("F-SEC-8")
-      .message("Unsupported Spark data type {{DATA_TYPE}} is not supported.", dataType.toString())
+      .message("Unsupported Spark data type {{DATA_TYPE}} is not supported.", String.valueOf(dataType))
       .ticketMitigation()
       .toString()
 
