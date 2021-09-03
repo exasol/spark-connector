@@ -116,7 +116,9 @@ class DefaultSource
             ExaError
               .messageBuilder("E-SEC-3")
               .message(
-                "Table {{TABLE}} already exists in 'errorifexists' or 'default' write modes.", tableName)
+                "Table {{TABLE}} already exists in 'errorifexists' or 'default' write modes.",
+                tableName
+              )
               .mitigation(
                 "Please use one of the following write modes: 'append', 'overwrite', 'ignore'."
               )

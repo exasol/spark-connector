@@ -6,6 +6,9 @@ Code name:
 
 ## Refactorings
 
+* #94: Added notice about Spark Streaming
+* #96: Added unified error codes
+
 ## Dependency Updates
 
 ### Runtime Dependency Updates

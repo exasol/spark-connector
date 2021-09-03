@@ -152,7 +152,6 @@ class SparkDataImportIT extends BaseTableQueryIT {
       )
     }
     assert(thrown.getMessage().startsWith("F-SEC-8"))
-    assert(thrown.getMessage().contains("Unsupported Spark data type 'MapType"))
   }
 
   case class SparkImportChecker[T: Encoder](input: Seq[T]) {
