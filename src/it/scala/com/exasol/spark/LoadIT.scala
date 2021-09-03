@@ -10,6 +10,8 @@ import org.apache.spark.sql.types._
  */
 class LoadIT extends BaseTableQueryIT {
 
+  private[this] val JDBC_OPTIONS = "validateservercertificate=0"
+
   test("runs dataframe show action") {
     val df = getDataFrame()
     df.show(10, false)
@@ -64,7 +66,7 @@ class LoadIT extends BaseTableQueryIT {
       .format("exasol")
       .option("host", jdbcHost)
       .option("port", jdbcPort)
-      .option("jdbc_options", "validateservercertificate=0")
+      .option("jdbc_options", JDBC_OPTIONS)
       .option("query", s"SELECT * FROM $tableName")
       .schema(expectedSchema)
       .load()
@@ -84,7 +86,7 @@ class LoadIT extends BaseTableQueryIT {
       .option("host", jdbcHost)
       .option("port", jdbcPort)
       .option("query", s"SELECT * FROM $tableName")
-      .option("jdbc_options", "validateservercertificate=0")
+      .option("jdbc_options", JDBC_OPTIONS)
       .schema(expectedSchema)
       .load()
       .select("DATE_INFORMATION")
@@ -109,7 +111,7 @@ class LoadIT extends BaseTableQueryIT {
       .option("query", s"SELECT CITY FROM $tableName")
       .option("port", "falsePortNumber")
       .option("host", "falseHostName")
-      .option("jdbc_options", "validateservercertificate=0")
+      .option("jdbc_options", JDBC_OPTIONS)
       .load()
     assert(df.count() === 3)
   }
@@ -119,7 +121,7 @@ class LoadIT extends BaseTableQueryIT {
       .format("exasol")
       .option("host", jdbcHost)
       .option("port", jdbcPort)
-      .option("jdbc_options", "validateservercertificate=0")
+      .option("jdbc_options", JDBC_OPTIONS)
       .option("query", s"""SELECT "UNICODE_COL" FROM $tableName WHERE UNICODE_COL IS NOT NULL""")
       .load()
     assert(df.count() === 3)
