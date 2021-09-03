@@ -10,6 +10,7 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers {
     ExasolConnectionManager(conf).getJdbcConnectionString()
   }
 
+  @SuppressWarnings(Array("scala:S1313")) // Hardcoded IP addresses are safe in tests
   val emptyOpts: Map[String, String] = Map("host" -> "10.0.0.1", "port" -> "8888")
 
   test("check extra exasol jdbc options are correctly configured for establishing connection") {

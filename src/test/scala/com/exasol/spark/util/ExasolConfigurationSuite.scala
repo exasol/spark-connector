@@ -5,6 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 class ExasolConfigurationSuite extends AnyFunSuite with Matchers {
 
+  @SuppressWarnings(Array("scala:S1313")) // Hardcoded IP addresses are safe in tests
   val validIPv4Addresses: Seq[String] = Seq(
     "1.1.1.1",
     "255.255.255.255",
