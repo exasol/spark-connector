@@ -17,6 +17,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
     defaultOptions = Map(
       "host" -> jdbcHost,
       "port" -> jdbcPort,
+      "jdbc_options" -> "validateservercertificate=0",
       "table" -> tableName
     )
   }
@@ -88,37 +89,34 @@ class SaveOptionsIT extends BaseTableQueryIT {
     val thrown = intercept[UnsupportedOperationException] {
       runDataFrameSave("errorifexists", 4)
     }
-    assert(thrown.getMessage.contains(s"Table $tableName already exists"))
+    assert(thrown.getMessage().startsWith("E-SEC-3"))
+    assert(thrown.getMessage().contains(s"Table '$tableName' already exists"))
   }
 
   test("save throws without 'create_table' or 'drop_table' option when table does not exist") {
     exasolConnectionManager.dropTable(tableName)
-    saveModes.foreach {
-      case mode =>
-        val thrown = intercept[UnsupportedOperationException] {
-          runDataFrameSave(mode, 2)
-        }
-        assert(
-          thrown.getMessage.contains(s"Table $tableName does not exist. Please enable")
-        )
+    saveModes.foreach { case mode =>
+      val thrown = intercept[UnsupportedOperationException] {
+        runDataFrameSave(mode, 2)
+      }
+      assert(thrown.getMessage().startsWith("E-SEC-2"))
+      assert(thrown.getMessage().contains(s"Table '$tableName' does not exist."))
     }
   }
 
   test("save with 'create_table' option creates a new table before saving dataframe") {
     val newOptions = defaultOptions ++ Map("create_table" -> "true")
-    saveModes.foreach {
-      case mode =>
-        exasolConnectionManager.dropTable(tableName)
-        assert(runDataFrameSave(mode, 2, newOptions) === dataframeTestData.size.toLong)
+    saveModes.foreach { case mode =>
+      exasolConnectionManager.dropTable(tableName)
+      assert(runDataFrameSave(mode, 2, newOptions) === dataframeTestData.size.toLong)
     }
   }
 
   test("save with 'drop_table' option drops and creates a new table before saving dataframe") {
     val newOptions = defaultOptions ++ Map("drop_table" -> "true")
-    saveModes.foreach {
-      case mode =>
-        createTable()
-        assert(runDataFrameSave(mode, 3, newOptions) === dataframeTestData.size)
+    saveModes.foreach { case mode =>
+      createTable()
+      assert(runDataFrameSave(mode, 3, newOptions) === dataframeTestData.size)
     }
   }
 

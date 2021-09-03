@@ -58,9 +58,8 @@ class TypesIT extends AbstractTableQueryIT {
       "MYGEOMETRY" -> StringType,
       "MYINTERVAL" -> StringType
     )
-    schemaFields.foreach {
-      case field =>
-        assert(field.dataType === schemaExpected.get(field.name).get)
+    schemaFields.foreach { case field =>
+      assert(field.dataType === schemaExpected.get(field.name).get)
     }
   }
 

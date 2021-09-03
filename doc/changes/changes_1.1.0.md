@@ -4,11 +4,11 @@ Code: Added Support for Java 8 Runtime
 
 ## Summary
 
-This release adds support for Java 8 runtime environments. We updated `sql-statement-builder` that was released for Java 11 to `sql-statement-builder-java8` version.  
+This release adds support for Java 8 runtime environments. We updated `sql-statement-builder` that was released for Java 11 to `sql-statement-builder-java8` version.
 
 ## Features
 
-* #92: Added support for Java 8.
+* #92: Added support for Java 8
 
 ## Dependency Updates
 

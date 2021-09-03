@@ -6,6 +6,7 @@ import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 
+import com.exasol.errorreporting.ExaError
 import com.exasol.spark.util.ExasolConfiguration
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Types
@@ -112,10 +113,16 @@ class DefaultSource
       case SaveMode.ErrorIfExists =>
         if (isTableExist) {
           throw new UnsupportedOperationException(
-            s"""|Table $tableName already exists. And DataFrame write mode is set to
-                |`errorifexists` or `default`. Please use one of other SaveMode
-                |modes: 'append', 'overwrite' or 'ignore'.
-            """.stripMargin
+            ExaError
+              .messageBuilder("E-SEC-3")
+              .message(
+                "Table {{TABLE}} already exists in 'errorifexists' or 'default' write modes.",
+                tableName
+              )
+              .mitigation(
+                "Please use one of the following write modes: 'append', 'overwrite', 'ignore'."
+              )
+              .toString()
           )
         }
         createExasolTable(data, tableName, manager)
@@ -164,17 +171,13 @@ class DefaultSource
       manager.createTable(tableName, Types.createTableSchema(df.schema))
     } else {
       throw new UnsupportedOperationException(
-        s"""
-           |Table $tableName does not exist. Please enable table creation by setting
-           |'create_table' option to 'true'.
-           |For example:
-           |  df.write
-           |    .mode("overwrite")
-           |    .option("table", "nonexist")
-           |    .option("create_table", "true")
-           |    .format("exasol")
-           |    .save()
-        """.stripMargin
+        ExaError
+          .messageBuilder("E-SEC-2")
+          .message("Table {{TABLE}} does not exist.", tableName)
+          .mitigation(
+            "Please create table beforehand or enable table creation by setting 'create_table' option."
+          )
+          .toString()
       )
     }
 
@@ -215,7 +218,11 @@ class DefaultSource
       case Some(str) => str
       case None =>
         throw new UnsupportedOperationException(
-          s"A $key parameter should be specified in order to run the operation"
+          ExaError
+            .messageBuilder("E-SEC-1")
+            .message("Parameter {{PARAMETER}} is missing.", key)
+            .mitigation("Please provide required parameter.")
+            .toString()
         )
     }
 

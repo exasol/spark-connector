@@ -63,7 +63,7 @@ class SparkDataImportIT extends BaseTableQueryIT {
   }
 
   test("saves float") {
-    SparkImportChecker(Seq(1.01F, 0.45f)).assert(
+    SparkImportChecker(Seq(1.01f, 0.45f)).assert(
       table()
         .withDefaultNumberTolerance(new BigDecimal(1e-3))
         .row(java.lang.Float.valueOf("1.01"))
@@ -151,7 +151,7 @@ class SparkDataImportIT extends BaseTableQueryIT {
           .matches()
       )
     }
-    assert(thrown.getMessage().contains("Unsupported Spark data type MapType"))
+    assert(thrown.getMessage().startsWith("F-SEC-8"))
   }
 
   case class SparkImportChecker[T: Encoder](input: Seq[T]) {
@@ -166,6 +166,7 @@ class SparkDataImportIT extends BaseTableQueryIT {
             "host" -> jdbcHost,
             "port" -> jdbcPort,
             "table" -> tableName,
+            "jdbc_options" -> "validateservercertificate=0",
             "drop_table" -> "true"
           )
         )

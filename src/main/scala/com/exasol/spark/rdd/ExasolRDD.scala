@@ -16,6 +16,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.types.StructType
 
+import com.exasol.errorreporting.ExaError
 import com.exasol.jdbc.EXAConnection
 import com.exasol.jdbc.EXAResultSet
 import com.exasol.spark.util.ExasolConnectionManager
@@ -56,7 +57,13 @@ class ExasolRDD(
     val conn = manager.mainConnection()
     if (conn == null) {
       logError("Main EXAConnection is null!")
-      throw new RuntimeException("Could not establish main connection to Exasol!")
+      throw new RuntimeException(
+        ExaError
+          .messageBuilder("F-SEC-11")
+          .message("Could not establish main JDBC connection for query.")
+          .mitigation("Please make sure that there is a network connection between Spark and Exasol clusters.")
+          .toString()
+      )
     }
 
     val cnt = manager.initParallel(conn)

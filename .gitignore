@@ -8,6 +8,9 @@ project/target
 target/
 .history
 .bsp
+.bloop
+.metals
+metals.sbt
 
 # Java
 *.class

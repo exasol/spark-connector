@@ -30,9 +30,8 @@ class TypesSuite extends AnyFunSuite with Matchers {
       DateType -> java.sql.Types.DATE,
       DecimalType(18, 0) -> java.sql.Types.DECIMAL
     )
-    data.foreach {
-      case (given, expected) =>
-        assert(jdbcTypeFromSparkDataType(given) === expected)
+    data.foreach { case (given, expected) =>
+      assert(jdbcTypeFromSparkDataType(given) === expected)
     }
   }
 
@@ -40,7 +39,9 @@ class TypesSuite extends AnyFunSuite with Matchers {
     val thrown = intercept[IllegalArgumentException] {
       jdbcTypeFromSparkDataType(MapType(StringType, IntegerType))
     }
-    assert(thrown.getMessage().contains("Unsupported Spark data type"))
+    val message = thrown.getMessage()
+    assert(message.startsWith("F-SEC-8"))
+    assert(message.contains("'MapType(StringType,IntegerType,true)' is not supported"))
   }
 
   test("Spark types to Exasol types conversion") {
@@ -57,9 +58,8 @@ class TypesSuite extends AnyFunSuite with Matchers {
       DateType -> "DATE",
       TimestampType -> "TIMESTAMP"
     )
-    data.foreach {
-      case (given, expected) =>
-        assert(exasolTypeFromSparkDataType(given) === expected)
+    data.foreach { case (given, expected) =>
+      assert(exasolTypeFromSparkDataType(given) === expected)
     }
   }
 
@@ -67,7 +67,9 @@ class TypesSuite extends AnyFunSuite with Matchers {
     val thrown = intercept[IllegalArgumentException] {
       exasolTypeFromSparkDataType(ArrayType(FloatType))
     }
-    assert(thrown.getMessage().contains("Unsupported Spark data type"))
+    val message = thrown.getMessage()
+    assert(message.startsWith("F-SEC-8"))
+    assert(message.contains("Spark data type 'ArrayType(FloatType,true)' is not supported"))
   }
 
   test("test of Int type conversion") {

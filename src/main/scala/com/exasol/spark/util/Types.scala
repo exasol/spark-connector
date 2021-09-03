@@ -5,6 +5,8 @@ import java.sql.ResultSetMetaData
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.types._
 
+import com.exasol.errorreporting.ExaError
+
 /**
  * A helper class with mapping functions between Exasol JDBC types and Spark SQL
  * types.
@@ -152,8 +154,7 @@ object Types extends Logging {
     case TimestampType  => java.sql.Types.TIMESTAMP
     case DateType       => java.sql.Types.DATE
     case _: DecimalType => java.sql.Types.DECIMAL
-    case _ =>
-      throw new IllegalArgumentException(s"Unsupported Spark data type $dataType!")
+    case _              => throw new IllegalArgumentException(getUnsupportedDataTypeErrorCode(dataType))
   }
 
   /**
@@ -177,9 +178,15 @@ object Types extends Logging {
     case BinaryType      => "CLOB"
     case DateType        => "DATE"
     case TimestampType   => "TIMESTAMP"
-    case _ =>
-      throw new IllegalArgumentException(s"Unsupported Spark data type $dataType!")
+    case _               => throw new IllegalArgumentException(getUnsupportedDataTypeErrorCode(dataType))
   }
+
+  private[this] def getUnsupportedDataTypeErrorCode(dataType: DataType): String =
+    ExaError
+      .messageBuilder("F-SEC-8")
+      .message("Spark data type {{DATA_TYPE}} is not supported.", String.valueOf(dataType))
+      .ticketMitigation()
+      .toString()
 
   /**
    * Convert Spark Type with Decimal precision,scale to Exasol type.

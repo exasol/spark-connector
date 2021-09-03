@@ -9,13 +9,13 @@ import org.apache.spark.scheduler.SparkListenerApplicationEnd
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
 
+import com.exasol.errorreporting.ExaError
 import com.exasol.jdbc.EXAConnection
 import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Types
 
 /**
- *
  */
 class ExasolWriter(
   @transient val sc: SparkContext,
@@ -38,7 +38,13 @@ class ExasolWriter(
     mainConnection = manager.writerMainConnection()
 
     if (mainConnection == null) {
-      throw new RuntimeException("Could not create main connection to Exasol!")
+      throw new RuntimeException(
+        ExaError
+          .messageBuilder("F-SEC-7")
+          .message("Could not create main JDBC connection to Exasol cluster.")
+          .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
+          .toString()
+      )
     }
 
     val cnt = manager.initParallel(mainConnection)

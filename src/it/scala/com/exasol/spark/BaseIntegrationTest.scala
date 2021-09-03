@@ -12,7 +12,7 @@ import org.scalatest.funsuite.AnyFunSuite
  */
 trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
 
-  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.0.6"
+  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.1.0-d1"
 
   val network = DockerNamedNetwork("spark-it-network", true)
   val container = {
@@ -38,6 +38,7 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
     "port" -> jdbcPort,
     "username" -> container.getUsername(),
     "password" -> container.getPassword(),
+    "jdbc_options" -> "validateservercertificate=0",
     "max_nodes" -> "200"
   )
 

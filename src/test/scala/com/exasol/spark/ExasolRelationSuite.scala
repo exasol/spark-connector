@@ -12,11 +12,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 
-class ExasolRelationSuite
-    extends AnyFunSuite
-    with Matchers
-    with MockitoSugar
-    with DataFrameSuiteBase {
+class ExasolRelationSuite extends AnyFunSuite with Matchers with MockitoSugar with DataFrameSuiteBase {
 
   test("unhandledFilters keeps non-pushed filters") {
     val filters = Array[Filter](

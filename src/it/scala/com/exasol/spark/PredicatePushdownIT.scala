@@ -78,7 +78,7 @@ class PredicatePushdownIT extends BaseTableQueryIT {
   }
 
   test("returns dataframe with or filter") {
-    val df = getDataFrame().filter($"id" > 2 or $"name" === "France")
+    val df = getDataFrame().filter(($"id" > 2).or($"name" === "France"))
     assert(df.count === 2)
   }
 
