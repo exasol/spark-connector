@@ -54,13 +54,13 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare for Sonar Cloud Scan
-        if: startsWith(matrix.exasol-docker-version, '7.1')
+        if: startsWith(matrix.exasol-docker-version, '7.1') && startsWith(matrix.spark, '3.1')
         run: |
           find . -name scoverage.xml -exec sed -i \
           's#/home/runner/work/spark-exasol-connector/spark-exasol-connector#/github/workspace#g' {} +
 
       - name: Sonar Cloud Scan
-        if: startsWith(matrix.exasol-docker-version, '7.1')
+        if: startsWith(matrix.exasol-docker-version, '7.1') && startsWith(matrix.spark, '3.1')
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
