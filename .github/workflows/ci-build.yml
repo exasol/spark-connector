@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         scala: [ 2.12.14 ]
-        spark: [ 2.4.7, 3.0.2, 3.1.2 ]
+        spark: [ 3.0.2, 3.1.2 ]
         exasol-docker-version: [ 6.2.16-d1, 7.0.12, 7.1.0-d1 ]
 
     steps:
