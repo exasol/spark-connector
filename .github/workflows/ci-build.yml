@@ -1,76 +1,56 @@
 name: CI Build
 
 on:
-  - push
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build:
-    name: Build with Scala ${{ matrix.scala }}, Spark ${{ matrix.spark }} and Exasol ${{ matrix.exasol-docker-version }}
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        scala: [ 2.12.14 ]
-        spark: [ 3.0.2, 3.1.2 ]
-        exasol-docker-version: [ 6.2.16-d1, 7.0.12, 7.1.0-d1 ]
-
     steps:
-      - name: Checkout the Repository
+      - name: Checkout the repository
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Setup Java and Scala with JDK 11
-        uses: olafurpg/setup-scala@v10
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
         with:
+          distribution: 'temurin'
           java-version: 11
-
-      - name: Pull Docker Images
-        run: |
-          docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
-
-      - name: Cache Local SBT Dependencies
+      - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-          key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-sbt-cache-
-
-      - name: Run CI
-        run: ./scripts/ci.sh
-        env:
-          SCALA_VERSION: ${{ matrix.scala }}
-          SPARK_VERSION: ${{ matrix.spark }}
-          EXASOL_DOCKER_VERSION: ${{ matrix.exasol-docker-version }}
-
-      - name: Upload Coverage Results to Coveralls
-        run: sbt ++${{ matrix.scala }} coveralls
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Prepare for Sonar Cloud Scan
-        if: startsWith(matrix.exasol-docker-version, '7.1') && startsWith(matrix.spark, '3.1')
+            ${{ runner.os }}-maven-
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Run tests and build with Maven
         run: |
-          find . -name scoverage.xml -exec sed -i \
-          's#/home/runner/work/spark-exasol-connector/spark-exasol-connector#/github/workspace#g' {} +
-
-      - name: Sonar Cloud Scan
-        if: startsWith(matrix.exasol-docker-version, '7.1') && startsWith(matrix.spark, '3.1')
-        uses: sonarsource/sonarcloud-github-action@master
+          mvn --batch-mode clean verify \
+              -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+              -DtrimStackTrace=false
+      - name: Publish Test Report
+        uses: scacap/action-surefire-report@v1
+        if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sonar analysis
+        if: ${{ env.SONAR_TOKEN != null }}
+        run: |
+          mvn --batch-mode sonar:sonar \
+              -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+              -DtrimStackTrace=false \
+              -Dsonar.organization=exasol \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=$SONAR_TOKEN
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Cleanup
-        run: |
-          rm -rf "$HOME/.ivy2/local" || true
-          find $HOME/Library/Caches/Coursier/v1 -name "ivydata-*.properties" -delete || true
-          find $HOME/.ivy2/cache                -name "ivydata-*.properties" -delete || true
-          find $HOME/.cache/coursier/v1         -name "ivydata-*.properties" -delete || true
-          find $HOME/.coursier/cache            -name "*.lock"               -delete || true
-          find $HOME/.sbt                       -name "*.lock"               -delete || true
