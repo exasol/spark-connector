@@ -300,15 +300,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M4</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                    <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties ${argLine}</argLine>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
                 <version>2.0.2</version>
@@ -324,6 +315,19 @@
                         <goals>
                             <goal>test</goal>
                         </goals>
+                        <configuration>
+                            <suffixes>(?&lt;!IT)</suffixes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>integration-test</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <suffixes>(?&lt;=IT)</suffixes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -527,56 +531,19 @@
                         <module>integration_tests</module>
                     </modules>
                     <excludedPlugins>
-                        <!--
-                        <excludedPlugin>com.exasol:artifact-reference-checker-maven-plugin</excludedPlugin>
-                        -->
+                        <excludedPlugin>org.apache.maven.plugins:maven-surefire-plugin</excludedPlugin>
+                        <excludedPlugin>org.apache.maven.plugins:maven-failsafe-plugin</excludedPlugin>
                     </excludedPlugins>
                     <excludedFiles />
                     <linkReplacements>
-                        <!--
                         <linkReplacement>
-                            LICENSE-exasol-script-api.txt|https://mit-license.org/
-                        </linkReplacement>
-                        <linkReplacement>
-                            https://github.com/google/guava/guava|https://github.com/google/guava
-                        </linkReplacement>
-                        <linkReplacement>
-                            http://wiki.fasterxml.com/JacksonModuleScala|https://github.com/FasterXML/jackson-module-scala
-                        </linkReplacement>
-                        <linkReplacement>
-                            http://nexus.sonatype.org/oss-repository-hosting.html|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
+                            LICENSE-exasol-jdbc.txt|https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
                         </linkReplacement>
                         <linkReplacement>
                             http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
                         </linkReplacement>
-                        -->
                     </linkReplacements>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M5</version>
-                <configuration>
-                    <!--
-                        Set the highest log level for coverage testing, so that we have a chance to reach branches in
-                        the logging lambdas too.
-                    -->
-                    <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties ${argLine}</argLine>
-                    <skipTests>true</skipTests>
-                    <includes>
-                        <include>**IT.scala</include>
-                    </includes>
-                    <systemPropertyVariables />
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>

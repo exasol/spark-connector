@@ -43,7 +43,6 @@ Code name:
 * Added `org.apache.maven.plugins:maven-compiler-plugin:3.8.1`
 * Added `org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M1`
 * Added `org.apache.maven.plugins:maven-enforcer-plugin:3.0.0`
-* Added `org.apache.maven.plugins:maven-failsafe-plugin:3.0.0-M5`
 * Added `org.apache.maven.plugins:maven-gpg-plugin:3.0.1`
 * Added `org.apache.maven.plugins:maven-install-plugin:2.5.2`
 * Added `org.apache.maven.plugins:maven-jar-plugin:3.2.0`
@@ -51,7 +50,7 @@ Code name:
 * Added `org.apache.maven.plugins:maven-resources-plugin:3.2.0`
 * Added `org.apache.maven.plugins:maven-site-plugin:3.9.1`
 * Added `org.apache.maven.plugins:maven-source-plugin:3.2.1`
-* Added `org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4`
+* Added `org.apache.maven.plugins:maven-surefire-plugin:2.12.4`
 * Added `org.codehaus.mojo:versions-maven-plugin:2.8.1`
 * Added `org.itsallcode:openfasttrace-maven-plugin:1.2.1`
 * Added `org.jacoco:jacoco-maven-plugin:0.8.7`
