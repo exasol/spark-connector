@@ -56,6 +56,5 @@ Code name:
 * Added `org.jacoco:jacoco-maven-plugin:0.8.7`
 * Added `org.scalastyle:scalastyle-maven-plugin:1.0.0`
 * Added `org.scalatest:scalatest-maven-plugin:2.0.2`
-* Added `org.scoverage:scoverage-maven-plugin:1.4.1`
 * Added `org.sonatype.ossindex.maven:ossindex-maven-plugin:3.1.0`
 * Added `org.sonatype.plugins:nexus-staging-maven-plugin:1.6.8`
