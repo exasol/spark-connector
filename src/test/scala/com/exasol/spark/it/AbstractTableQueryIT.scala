@@ -2,17 +2,29 @@ package com.exasol.spark
 
 import org.apache.spark.sql.DataFrame
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.BeforeAndAfterEach
+import org.apache.spark.sql.SparkSession
+import org.scalatest.BeforeAndAfterAll
 
-abstract class AbstractTableQueryIT extends BaseIntegrationTest with DataFrameSuiteBase with BeforeAndAfterEach {
+abstract class AbstractTableQueryIT extends BaseIntegrationTest with BeforeAndAfterAll with BeforeAndAfterEach {
 
+  private[this] var spark: SparkSession = _
   val tableName: String
   def createTable(): Unit
 
-  override def beforeEach(): Unit = {
+  def getSpark(): SparkSession = spark
+
+  override def beforeAll(): Unit = {
+    super.beforeAll()
+    spark = SparkSessionProvider.getSparkSession()
+  }
+
+  override def beforeEach(): Unit =
     createTable()
-    ()
+
+  override def afterAll(): Unit = {
+    spark.close()
+    super.afterAll()
   }
 
   private[spark] def getDataFrame(query: Option[String] = None): DataFrame =

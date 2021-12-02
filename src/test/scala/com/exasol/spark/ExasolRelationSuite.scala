@@ -41,7 +41,7 @@ class ExasolRelationSuite extends AnyFunSuite with Matchers with MockitoSugar {
     val rdd = new ExasolRelation(sqlContext, userQuery, None, manager).buildScan()
     assert(rdd.isInstanceOf[RDD[Row]])
     assert(rdd.partitions.size === 4)
-    assert(rdd.count === expectedCount)
+    assert(rdd.count() === expectedCount)
     verify(manager, times(1)).withCountQuery(countQuery)
   }
 

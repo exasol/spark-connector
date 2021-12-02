@@ -21,6 +21,8 @@ class SparkDataImportIT extends BaseTableQueryIT {
   private[this] val LONG_MIN = -9223372036854775808L
   private[this] val LONG_MAX = 9223372036854775807L
 
+  private[this] val spark = getSpark()
+  private[this] val sqlContext = spark.sqlContext
   import sqlContext.implicits._
 
   test("saves boolean") {

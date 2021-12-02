@@ -10,6 +10,7 @@ import org.apache.spark.sql.functions._
  */
 class PredicatePushdownIT extends BaseTableQueryIT {
 
+  private[this] val spark = getSpark()
   import spark.implicits._
 
   test("returns dataframe with equal-to filter") {
@@ -74,12 +75,12 @@ class PredicatePushdownIT extends BaseTableQueryIT {
 
   test("returns dataframe with and filter") {
     val df = getDataFrame().where($"id" < 2 && $"name" === "France")
-    assert(df.count === 0)
+    assert(df.count() === 0)
   }
 
   test("returns dataframe with or filter") {
     val df = getDataFrame().filter(($"id" > 2).or($"name" === "France"))
-    assert(df.count === 2)
+    assert(df.count() === 2)
   }
 
   test("returns dataframe with combined filter") {

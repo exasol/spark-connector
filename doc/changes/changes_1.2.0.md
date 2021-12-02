@@ -23,11 +23,10 @@ Code name:
 * Added `com.exasol:exasol-testcontainers:5.1.1`
 * Added `com.exasol:hamcrest-resultset-matcher:1.5.1`
 * Added `com.exasol:test-db-builder-java:3.2.1`
-* Added `com.holdenkarau:spark-testing-base_2.12:3.2.0_1.1.1`
 * Added `org.apache.logging.log4j:log4j-1.2-api:2.14.1`
 * Added `org.mockito:mockito-core:4.1.0`
-* Added `org.scalatestplus:scalatestplus-mockito_2.12:1.0.0-M2`
-* Added `org.scalatest:scalatest_2.12:3.2.9`
+* Added `org.scalatestplus:scalatestplus-mockito_2.13:1.0.0-M2`
+* Added `org.scalatest:scalatest_2.13:3.2.9`
 
 ### Plugin Dependency Updates
 
@@ -35,7 +34,7 @@ Code name:
 * Added `com.exasol:artifact-reference-checker-maven-plugin:0.4.0`
 * Added `com.exasol:error-code-crawler-maven-plugin:0.7.1`
 * Added `com.exasol:project-keeper-maven-plugin:1.3.4`
-* Added `io.github.evis:scalafix-maven-plugin_2.12:0.1.4_0.9.31`
+* Added `io.github.evis:scalafix-maven-plugin_2.13:0.1.4_0.9.31`
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.14`
 * Added `net.alchim31.maven:scala-maven-plugin:4.5.4`
 * Added `org.apache.maven.plugins:maven-assembly-plugin:3.3.0`

@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.compat.version}</artifactId>
-            <version>3.2.0</version>
+            <version>${spark.version}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_${scala.compat.version}</artifactId>
-            <version>3.2.0</version>
+            <version>${spark.version}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -142,46 +142,6 @@
             <artifactId>mockito-core</artifactId>
             <version>4.1.0</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.holdenkarau</groupId>
-            <artifactId>spark-testing-base_${scala.compat.version}</artifactId>
-            <version>3.2.0_1.1.1</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-compress</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.thrift</groupId>
-                    <artifactId>libthrift</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.thrift</groupId>
-                    <artifactId>libfb303</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.avro</groupId>
-                    <artifactId>avro</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.spark-project.spark</groupId>
-                    <artifactId>unused</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.codehaus.jackson</groupId>
-                    <artifactId>jackson-mapper-asl</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -724,27 +684,37 @@
     </build>
     <profiles>
         <profile>
-            <id>scala2.12</id>
+            <id>spark3.2</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <scala.version>2.12.15</scala.version>
+                <spark.version>3.2.0</spark.version>
+                <scala.version>2.13.5</scala.version>
+                <scala.compat.version>2.13</scala.compat.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>spark3.1</id>
+            <properties>
+                <spark.version>3.1.2</spark.version>
+                <scala.version>2.12.10</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
             </properties>
         </profile>
         <profile>
-            <id>scala2.11</id>
+            <id>spark2.4</id>
             <properties>
-                <scala.version>2.11.12</scala.version>
-                <scala.compat.version>2.11</scala.compat.version>
+                <spark.version>2.4.8</spark.version>
+                <scala.version>2.12.10</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
             </properties>
         </profile>
         <profile>
-            <id>scala2.13</id>
+            <id>scala2.12</id>
             <properties>
-                <scala.version>2.13.6</scala.version>
-                <scala.compat.version>2.13</scala.compat.version>
+                <scala.version>2.12.15</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
             </properties>
         </profile>
     </profiles>

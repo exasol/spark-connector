@@ -25,7 +25,7 @@ class ExasolRDDSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
     val handle: Int = 7
 
-    when(manager.mainConnection).thenReturn(mainConnection)
+    when(manager.mainConnection()).thenReturn(mainConnection)
     when(manager.subConnections(mainConnection)).thenReturn(Seq("url1", "url2"))
     when(mainConnection.createStatement()).thenReturn(mainStatement)
     when(mainStatement.executeQuery("")).thenReturn(mainResultSet)
@@ -41,20 +41,20 @@ class ExasolRDDSuite extends AnyFunSuite with Matchers with MockitoSugar {
       assert(part.asInstanceOf[ExasolRDDPartition].handle === handle)
       assert(part.asInstanceOf[ExasolRDDPartition].connectionUrl === s"url${idx + 1}")
     }
-    verify(manager, times(1)).mainConnection
+    verify(manager, times(1)).mainConnection()
     verify(manager, times(1)).subConnections(mainConnection)
   }
 
   test("`getPartitions` throws exceptions if main connection is null") {
     val sparkContext = mock[SparkContext]
     val manager = mock[ExasolConnectionManager]
-    when(manager.mainConnection).thenReturn(null)
+    when(manager.mainConnection()).thenReturn(null)
     val thrown = intercept[RuntimeException] {
       new ExasolRDD(sparkContext, "", StructType(Nil), manager).getPartitions
     }
     assert(thrown.getMessage().startsWith("F-SEC-11"))
     assert(thrown.getMessage().contains("Could not establish main JDBC connection for query"))
-    verify(manager, times(1)).mainConnection
+    verify(manager, times(1)).mainConnection()
   }
 
 }

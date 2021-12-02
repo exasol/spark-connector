@@ -50,7 +50,7 @@ final case class ExasolQueryEnricher(userQuery: String) {
   }
 
   private[this] def addFilters(filters: Array[Filter], select: Select): Unit = {
-    val booleanExpressions = Filters.booleanExpressionFromFilters(filters)
+    val booleanExpressions = Filters.booleanExpressionFromFilters(filters.toSeq)
     if (!booleanExpressions.isEmpty) {
       val _ = select.where(and(booleanExpressions: _*))
     }

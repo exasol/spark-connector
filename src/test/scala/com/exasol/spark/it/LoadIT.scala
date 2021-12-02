@@ -11,6 +11,7 @@ import org.apache.spark.sql.types._
 class LoadIT extends BaseTableQueryIT {
 
   private[this] val JDBC_OPTIONS = "validateservercertificate=0"
+  private[this] val spark = getSpark()
 
   test("runs dataframe show action") {
     val df = getDataFrame()
@@ -22,7 +23,7 @@ class LoadIT extends BaseTableQueryIT {
   }
 
   test("runs dataframe count action") {
-    assert(getDataFrame().count === 3)
+    assert(getDataFrame().count() === 3)
   }
 
   test("runs dataframe collect action") {
@@ -31,8 +32,8 @@ class LoadIT extends BaseTableQueryIT {
   }
 
   test("runs dataframe queries twice") {
-    val count = getDataFrame().count
-    assert(getDataFrame().count === count)
+    val count = getDataFrame().count()
+    assert(getDataFrame().count() === count)
   }
 
   test("returns dataframe schema names") {

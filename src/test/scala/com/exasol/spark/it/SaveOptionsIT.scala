@@ -9,6 +9,9 @@ import com.exasol.spark.util.Types
  */
 class SaveOptionsIT extends BaseTableQueryIT {
 
+  private[this] val spark = getSpark()
+  private[this] val sqlContext = spark.sqlContext
+  private[this] val sparkContext = spark.sparkContext
   private[this] val saveModes = Seq("append", "errorifexists", "ignore", "overwrite")
   private[this] var defaultOptions: Map[String, String] = _
 
@@ -59,7 +62,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
     assert(exasolConnectionManager.tableExists(newTableName) === false)
 
     import sqlContext.implicits._
-    val df = sc
+    val df = sparkContext
       .parallelize(Seq(("a", 103, Date.valueOf("2019-01-14"))))
       .toDF("str_col", "int_col", "date_col")
 
@@ -69,8 +72,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
   }
 
   test("save mode 'ignore' does not insert data if table exists") {
-    val initialRecordsCount =
-      exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+    val initialRecordsCount = exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
     assert(runDataFrameSave("ignore", 1) === initialRecordsCount)
   }
 
@@ -79,8 +81,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
   }
 
   test("save mode 'append' appends data if table exists") {
-    val initialRecordsCount =
-      exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
+    val initialRecordsCount = exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
     val totalRecords = initialRecordsCount + dataframeTestData.size
     assert(runDataFrameSave("append", 3) === totalRecords)
   }
@@ -126,7 +127,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
     options: Map[String, String] = defaultOptions
   ): Long = {
     import sqlContext.implicits._
-    val df = sc
+    val df = sparkContext
       .parallelize(dataframeTestData, partitionCount)
       .toDF("name", "city", "date_info", "unicode_col")
 
