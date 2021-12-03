@@ -41,11 +41,6 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Run scalafix linting
-        run: |
-          mvn --batch-mode clean compile test scalafix:scalafix ${{ matrix.profile }} \
-              -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-              -DtrimStackTrace=false
       - name: Run tests and build with Maven
         run: |
           mvn --batch-mode verify ${{ matrix.profile }} \
