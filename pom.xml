@@ -10,6 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <artifact.name>${project.artifactId}_${scala.compat.version}-${project.version}-spark-${spark.version}</artifact.name>
         <java.version>1.8</java.version>
         <gpg.skip>true</gpg.skip>
     </properties>
@@ -169,7 +170,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>${project.artifactId}_${scala.compat.version}-${project.version}</finalName>
+        <finalName>${artifact.name}</finalName>
         <plugins>
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
@@ -417,7 +418,7 @@
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
-                    <finalName>${project.artifactId}_${scala.compat.version}-${project.version}-assembly</finalName>
+                    <finalName>${artifact.name}-assembly</finalName>
                 </configuration>
                 <executions>
                     <execution>
