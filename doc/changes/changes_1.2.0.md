@@ -16,7 +16,6 @@ Code name:
 * Added `com.exasol:error-reporting-java8:0.4.1`
 * Added `com.exasol:exasol-jdbc:7.1.3`
 * Added `com.exasol:sql-statement-builder-java8:4.5.0`
-* Added `com.google.guava:guava:31.0.1-jre`
 
 ### Test Dependency Updates
 
