@@ -11,7 +11,6 @@ import org.apache.spark.sql.types._
 class LoadIT extends BaseTableQueryIT {
 
   private[this] val JDBC_OPTIONS = "validateservercertificate=0"
-  private[this] val spark = getSpark()
 
   test("runs dataframe show action") {
     val df = getDataFrame()

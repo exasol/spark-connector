@@ -10,7 +10,6 @@ import org.apache.spark.sql.functions._
  */
 class PredicatePushdownIT extends BaseTableQueryIT {
 
-  private[this] val spark = getSpark()
   import spark.implicits._
 
   test("returns dataframe with equal-to filter") {
