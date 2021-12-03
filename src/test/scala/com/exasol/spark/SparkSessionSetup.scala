@@ -2,12 +2,12 @@ package com.exasol.spark
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
+import org.apache.spark.SparkContextHelper
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.SQLContext
 
-import org.scalatest.Suite
 import org.scalatest.BeforeAndAfterAll
-import org.apache.spark.SparkContextHelper
+import org.scalatest.Suite
 
 /**
  * A trait that provides Spark session setup accross tests.

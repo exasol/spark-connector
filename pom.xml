@@ -494,7 +494,10 @@
                         <excludedPlugin>org.apache.maven.plugins:maven-surefire-plugin</excludedPlugin>
                         <excludedPlugin>org.apache.maven.plugins:maven-failsafe-plugin</excludedPlugin>
                     </excludedPlugins>
-                    <excludedFiles />
+                    <excludedFiles>
+                        <excludedFile>README.md</excludedFile>
+                        <excludedFile>.github/workflows/release_droid*.yml</excludedFile>
+                    </excludedFiles>
                     <linkReplacements>
                         <linkReplacement>
                             LICENSE-exasol-jdbc.txt|https://docs.exasol.com/connect_exasol/drivers/jdbc.htm

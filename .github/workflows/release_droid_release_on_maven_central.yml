@@ -6,6 +6,14 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { profile: '-Pspark3.2', project-keeper-skip: false }
+          - { profile: '-Pspark3.2 -Pscala2.12', project-keeper-skip: true }
+          - { profile: '-Pspark3.1', project-keeper-skip: true }
+          - { profile: '-Pspark2.4', project-keeper-skip: true }
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -30,7 +38,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Publish to Central Repository
+        run: |
+          mvn clean deploy ${{ matrix.profile }} \
+              -Dgpg.skip=false \
+              -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
+              -DskipTests \
+              -Dproject-keeper.skip=${{ matrix.project-keeper-skip }}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-        run: mvn clean -Dgpg.skip=false -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} -DskipTests deploy

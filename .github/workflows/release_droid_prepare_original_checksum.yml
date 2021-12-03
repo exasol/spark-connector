@@ -6,6 +6,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { profile: '-Pspark3.2', project-keeper-skip: false }
+          - { profile: '-Pspark3.2 -Pscala2.12', project-keeper-skip: true }
+          - { profile: '-Pspark3.1', project-keeper-skip: true }
+          - { profile: '-Pspark2.4', project-keeper-skip: true }
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -24,7 +32,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Run tests and build with Maven
-        run: mvn --batch-mode clean verify --file pom.xml
+        run: |
+          mvn --batch-mode clean verify --file pom.xml ${{ matrix.profile }} \
+              -Dproject-keeper.skip=${{ matrix.project-keeper-skip }}
       - name: Prepare checksum
         run: find target -maxdepth 1 -name *.jar -exec sha256sum "{}" + > original_checksum
       - name: Upload checksum to the artifactory

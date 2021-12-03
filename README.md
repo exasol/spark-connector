@@ -3,7 +3,7 @@
 <img alt="spark-exasol-connector logo" src="doc/images/spark-exasol-connector_128x128.png" style="float:left; padding:0px 10px 10px 10px;"/>
 
 [![Build Status](https://github.com/exasol/spark-exasol-connector/actions/workflows/ci-build.yml/badge.svg)](https://github.com/exasol/spark-exasol-connector/actions/workflows/ci-build.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/com.exasol/spark-exasol-connector)](https://search.maven.org/artifact/com.exasol/spark-exasol-connector)
+[![Maven Central](https://img.shields.io/maven-central/v/com.exasol/spark-exasol-connector)](https://search.maven.org/artifact/com.exasol/spark-exasol-connector_2.13)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3Aspark-exasol-connector&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.exasol%3Aspark-exasol-connector)
 
