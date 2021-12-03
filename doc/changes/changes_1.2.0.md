@@ -6,8 +6,10 @@ Code name:
 
 ## Refactorings
 
+* #75: Added dependencies vulnerabilities checker
 * #94: Added notice about Spark Streaming
 * #96: Added unified error codes
+* #101: Migrated to Maven based build from SBT
 
 ## Dependency Updates
 

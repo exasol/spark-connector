@@ -594,6 +594,7 @@
                     </excludedPlugins>
                     <excludedFiles>
                         <excludedFile>README.md</excludedFile>
+                        <excludedFile>.github/workflows/ci-build-next-java.yml</excludedFile>
                         <excludedFile>.github/workflows/release_droid*.yml</excludedFile>
                     </excludedFiles>
                     <linkReplacements>
