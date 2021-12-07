@@ -17,7 +17,6 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
   val network = DockerNamedNetwork("spark-it-network", true)
   val container = {
     val c: ExasolContainer[_] = new ExasolContainerWithReuse(getExasolDockerImageVersion())
-    c.withExposedPorts(8563)
     c.withNetwork(network)
     c
   }
@@ -50,7 +49,13 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
     network.close()
   }
 
-  private[this] def getExasolDockerImageVersion(): String =
-    System.getProperty("EXASOL_DOCKER_VERSION", DEFAULT_EXASOL_DOCKER_IMAGE)
+  private[this] def getExasolDockerImageVersion(): String = {
+    val dockerVersion = System.getenv("EXASOL_DOCKER_VERSION")
+    if (dockerVersion == null) {
+      DEFAULT_EXASOL_DOCKER_IMAGE
+    } else {
+      dockerVersion
+    }
+  }
 
 }

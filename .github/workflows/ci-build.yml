@@ -8,11 +8,12 @@ on:
 
 jobs:
   build:
-    name: Building with ${{ matrix.name }}
+    name: Building with ${{ matrix.name }} and Exasol ${{ matrix.exasol-docker-version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        exasol-docker-version: [ 6.2.17-d1, 7.0.14, 7.1.3 ]
         include:
           - { name: 'Spark3.2 and Scala 2.13', profile: '-Pspark3.2', project-keeper-skip: false }
           - { name: 'Spark3.2 and Scala 2.12', profile: '-Pspark3.2 -Pscala2.12', project-keeper-skip: true }
@@ -41,6 +42,8 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+      - name: Pull docker Images
+        run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
       - name: Run scalafix linting
         if: ${{ false }}
         run: |
@@ -53,6 +56,8 @@ jobs:
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
               -DtrimStackTrace=false \
               -Dproject-keeper.skip=${{ matrix.project-keeper-skip }}
+        env:
+          EXASOL_DOCKER_VERSION: ${{ matrix.exasol-docker-version }}
       - name: Publish Test Report
         uses: scacap/action-surefire-report@v1
         if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
