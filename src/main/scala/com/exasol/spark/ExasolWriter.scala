@@ -73,7 +73,7 @@ class ExasolWriter(
     val subConnectionUrl = hosts(partitionId)
     val subConn = manager.subConnection(subConnectionUrl)
 
-    val stmt = subConn.prepareStatement(insertStmt)
+    val stmt = subConn.prepareStatement(insertStmt())
 
     val setters = rddSchema.fields.map(f => Converter.makeSetter(f.dataType))
     val nullTypes = rddSchema.fields.map(f => Types.jdbcTypeFromSparkDataType(f.dataType))

@@ -78,6 +78,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     hosts
       .zip(ports)
       .zipWithIndex
+      .toSeq
       .map { case ((host, port), idx) =>
         getConnectionStringWithOptions(s"jdbc:exa-worker:$host:$port;workerID=$idx;workertoken=$token")
       }
@@ -103,7 +104,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    * @return A result of `handle` function
    */
   def withConnection[T](handle: EXAConnection => T): T =
-    ExasolConnectionManager.using(getConnection)(handle)
+    ExasolConnectionManager.using(getConnection())(handle)
 
   /**
    * A helper method to run with a new statement.

@@ -1,18 +1,20 @@
 package com.exasol.spark
 
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
+import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.sources._
 
 import com.exasol.spark.util.ExasolConnectionManager
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.mockito.Mockito._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 
-class ExasolRelationSuite extends AnyFunSuite with Matchers with MockitoSugar with DataFrameSuiteBase {
+class ExasolRelationSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
   test("unhandledFilters keeps non-pushed filters") {
     val filters = Array[Filter](
@@ -21,7 +23,7 @@ class ExasolRelationSuite extends AnyFunSuite with Matchers with MockitoSugar wi
       Not(EqualTo("a", false))
     )
     val nullFilters = Array(EqualNullSafe("b", "xyz"))
-    val relation = new ExasolRelation(spark.sqlContext, "", None, null)
+    val relation = new ExasolRelation(null, "", None, null)
     assert(relation.unhandledFilters(filters) === Array.empty[Filter])
     assert(relation.unhandledFilters(filters ++ nullFilters) === nullFilters)
   }
@@ -32,10 +34,14 @@ class ExasolRelationSuite extends AnyFunSuite with Matchers with MockitoSugar wi
     val expectedCount = 5L
     val manager = mock[ExasolConnectionManager]
     when(manager.withCountQuery(countQuery)).thenReturn(expectedCount)
-    val rdd = new ExasolRelation(spark.sqlContext, userQuery, None, manager).buildScan()
+    val conf = new SparkConf().setMaster("local[1]").setAppName("test-relation")
+    val sparkContext = new SparkContext(conf)
+    val sqlContext = mock[SQLContext]
+    when(sqlContext.sparkContext).thenReturn(sparkContext)
+    val rdd = new ExasolRelation(sqlContext, userQuery, None, manager).buildScan()
     assert(rdd.isInstanceOf[RDD[Row]])
     assert(rdd.partitions.size === 4)
-    assert(rdd.count === expectedCount)
+    assert(rdd.count() === expectedCount)
     verify(manager, times(1)).withCountQuery(countQuery)
   }
 

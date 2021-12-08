@@ -4,8 +4,8 @@
 project/.gnupg/local*
 
 # sbt
+target
 project/target
-target/
 .history
 .bsp
 .bloop
@@ -14,25 +14,39 @@ metals.sbt
 
 # Java
 *.class
+dependency-reduced-pom.xml
+pom.xml.versionsBackup
+.dbeaver*
+.directory
+local
+
+# Python
+venv/
 
 # Logs
+~*
 *.log
+**/*.log
 log/
 logs/
+*.lock
+*.orig
 
 # Temporary files
 *~
 *.bak
 *.old
+*.swp
 *.tmp
 nohup.out
-tmp/
+tmp
+*.md.html
 
 # vim
 .*.sw[a-z]
 
 # IntelliJ
-.idea/
+.idea
 .idea_modules/
 *.iml
 *.ipr
@@ -43,7 +57,6 @@ tmp/
 .classpath
 .project
 .scala_dependencies
-.settings/
 *.sc
 
 # Ensime
