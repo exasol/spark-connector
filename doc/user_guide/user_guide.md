@@ -34,7 +34,7 @@ is used for the parallel connections from the Spark tasks to Exasol data nodes.
 The Spark Exasol Connector is released to the Maven Central Repository. You can
 find all the releases at [com.exasol/spark-connector][maven-link] page.
 
-[maven-link]: https://search.maven.org/artifact/com.exasol/spark-exasol-connector
+[maven-link]: https://search.maven.org/artifact/com.exasol/spark-connector
 
 There are several options to include the connector as a dependency to your
 projects. Here we assume you know the basics of providing dependencies to your
@@ -84,7 +84,7 @@ libraryDependencies += "com.exasol" % "spark-connector" %% "<VERSION>"
 ```
 
 Similar to the Java dependency, we add the resolver to the Exasol Artifactory so
-that the Exasol JDBC driver can be found. 
+that the Exasol JDBC driver can be found.
 
 ### Spark Exasol Connector as Databricks Cluster Dependency
 
@@ -153,9 +153,9 @@ latest commits that may not be released yet.
 Clone the repository:
 
 ```sh
-git clone https://github.com/exasol/spark-exasol-connector
+git clone https://github.com/exasol/spark-connector
 
-cd spark-exasol-connector/
+cd spark-connector/
 ```
 
 To create an assembled jar file, run the command:
@@ -165,13 +165,13 @@ sbt assembly
 ```
 
 The assembled jar file should be located at
-`target/scala-2.12/spark-exasol-connector-assembly-<VERSION>.jar`.
+`target/scala-2.12/spark-connector-assembly-<VERSION>.jar`.
 
 Then you can use this jar file with `spark-submit`, `spark-shell` or `pyspark`
 commands.
 
 ```shell
-spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
+spark-shell --jars /path/to/spark-connector-assembly-*.jar
 ```
 
 ## Configuration Options
@@ -296,7 +296,7 @@ than the SparkConf configurations.
 ## Creating a Spark DataFrame From Exasol Query
 
 You can query the Exasol database and load the results of the query into a Spark
-dataframe. 
+dataframe.
 
 For that specify the data source format as `"exasol"` and provide the required
 configurations.
@@ -403,7 +403,7 @@ Additionally, a Spark save operation takes optional `SaveMode` configurations.
 | `"ignore"`          | If the table exists, the save operation is skipped, and nothing is changed in the existing table.
 
 Please keep in mind that Spark Save Modes do not use any locking mechanisms,
-thus they are not atomic. 
+thus they are not atomic.
 
 ## Troubleshooting
 

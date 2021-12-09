@@ -8,13 +8,13 @@ to `7.0.0`.
 
 ## Features / Improvements
 
-* [#76](https://github.com/exasol/spark-exasol-connector/issues/76): Enabled extra options for JDBC connection (PR [#77](https://github.com/exasol/spark-exasol-connector/pull/77)).
-* [#78](https://github.com/exasol/spark-exasol-connector/issues/78): Updated Exasol JDBC version to `7.0.0` (PR [#79](https://github.com/exasol/spark-exasol-connector/pull/79)).
+* [#76](https://github.com/exasol/spark-connector/issues/76): Enabled extra options for JDBC connection (PR [#77](https://github.com/exasol/spark-connector/pull/77)).
+* [#78](https://github.com/exasol/spark-connector/issues/78): Updated Exasol JDBC version to `7.0.0` (PR [#79](https://github.com/exasol/spark-connector/pull/79)).
 
 ## Documentation
 
-* [#80](https://github.com/exasol/spark-exasol-connector/issues/80): Removed auto release setup from Travis CI (PR [#83](https://github.com/exasol/spark-exasol-connector/pull/83)).
-* [#81](https://github.com/exasol/spark-exasol-connector/issues/81): Updated user and development guide (PR [#82](https://github.com/exasol/spark-exasol-connector/pull/82)).
+* [#80](https://github.com/exasol/spark-connector/issues/80): Removed auto release setup from Travis CI (PR [#83](https://github.com/exasol/spark-connector/pull/83)).
+* [#81](https://github.com/exasol/spark-connector/issues/81): Updated user and development guide (PR [#82](https://github.com/exasol/spark-connector/pull/82)).
 
 ## Dependency Updates
 

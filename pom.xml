@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
-    <artifactId>spark-exasol-connector</artifactId>
+    <artifactId>spark-connector</artifactId>
     <version>1.2.0</version>
     <name>The Spark Exasol Connector</name>
     <description>A connector for Apache Spark to access Exasol</description>
-    <url>https://github.com/exasol/spark-exasol-connector</url>
+    <url>https://github.com/exasol/spark-connector</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -30,9 +30,9 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:https://github.com/exasol/spark-exasol-connector.git</connection>
-        <developerConnection>scm:git:https://github.com/exasol/spark-exasol-connector.git</developerConnection>
-        <url>https://github.com/exasol/spark-exasol-connector/tree/main</url>
+        <connection>scm:git:https://github.com/exasol/spark-connector.git</connection>
+        <developerConnection>scm:git:https://github.com/exasol/spark-connector.git</developerConnection>
+        <url>https://github.com/exasol/spark-connector/tree/main</url>
     </scm>
     <distributionManagement>
         <snapshotRepository>
@@ -605,6 +605,9 @@
                     <linkReplacements>
                         <linkReplacement>
                             LICENSE-exasol-jdbc.txt|https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
+                        </linkReplacement>
+                        <linkReplacement>
+                            https://netty.io/netty-all/|https://netty.io/index.html
                         </linkReplacement>
                         <linkReplacement>
                             http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin

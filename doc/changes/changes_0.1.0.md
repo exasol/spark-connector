@@ -7,9 +7,9 @@ continued improvements.
 
 * Initial working version (with known issues)
 * Initial predicate pushdown implementation
-  [#6](https://github.com/EXASOL/spark-exasol-connector/pull/6)
-  [#7](https://github.com/EXASOL/spark-exasol-connector/pull/7)
+  [#6](https://github.com/exasol/spark-connector/pull/6)
+  [#7](https://github.com/exasol/spark-connector/pull/7)
 * Build plugins such as linting and formatting
 * Travis CI based continuous build process
 * Basic manual Sonatype release script
-  [#11](https://github.com/EXASOL/spark-exasol-connector/pull/11)
+  [#11](https://github.com/exasol/spark-connector/pull/11)
