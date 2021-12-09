@@ -34,7 +34,6 @@ object Filters {
   // scalastyle:off null
   // Suppression is accepted since we have terminal conditions in the
   // recursion.
-  @SuppressWarnings(Array("org.wartremover.warts.Recursion"))
   def filterToBooleanExpression(filter: Filter): Option[BooleanExpression] =
     Option(filter match {
       case EqualTo(attribute, value) =>

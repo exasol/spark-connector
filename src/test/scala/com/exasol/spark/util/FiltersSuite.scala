@@ -9,7 +9,6 @@ import com.exasol.sql.rendering.StringRendererConfig
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-@SuppressWarnings(Array("org.wartremover.warts.Any"))
 class FiltersSuite extends AnyFunSuite with Matchers {
 
   private[this] def getWhereClause(filters: Seq[Filter]): String = {

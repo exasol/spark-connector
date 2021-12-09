@@ -115,7 +115,6 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    * @tparam T A result type of the `handle` function
    * @return A result of `handle` function
    */
-  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   def withStatement[T](handle: EXAStatement => T): T = withConnection[T] { conn =>
     val stmt = conn.createStatement().asInstanceOf[EXAStatement]
     ExasolConnectionManager.using(stmt)(handle)
@@ -141,7 +140,6 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    * @tparam T A result type of the `handle` function
    * @return A result of `handle` function
    */
-  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   def withExecuteQuery[T](query: String)(handle: EXAResultSet => T): T = withStatement[T] { stmt =>
     val rs = stmt.executeQuery(query).asInstanceOf[EXAResultSet]
     ExasolConnectionManager.using(rs)(handle)
@@ -239,7 +237,6 @@ object ExasolConnectionManager extends Logging {
   private[this] val connections: ConcurrentHashMap[String, EXAConnection] =
     new ConcurrentHashMap()
 
-  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   private[util] def createConnection(
     url: String,
     username: String,
