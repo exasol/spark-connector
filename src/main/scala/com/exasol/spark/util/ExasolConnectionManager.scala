@@ -23,18 +23,26 @@ import com.exasol.jdbc.EXAStatement
  */
 final case class ExasolConnectionManager(config: ExasolConfiguration) {
 
-  private[this] val mainJdbcConnectionUrl = s"jdbc:exa:${config.host}:${config.port}"
+  private[this] val DO_NOT_VALIDATE_CERTIFICATE = "validateservercertificate=0"
+  private[this] val MAIN_CONNECTION_PREFIX = "jdbc:exa"
+  private[this] val WORKER_CONNECTION_PREFIX = "jdbc:exa-worker"
 
   /** A regular Exasol jdbc connection string */
-  def getJdbcConnectionString(): String =
-    getConnectionStringWithOptions(mainJdbcConnectionUrl)
+  def getJdbcConnectionString(): String = {
+    val host = getHostWithFingerprint(config.host)
+    val url = s"$MAIN_CONNECTION_PREFIX:$host:${config.port}"
+    getConnectionStringWithOptions(url)
+  }
+
+  private[this] def getHostWithFingerprint(host: String): String =
+    if (!config.fingerprint.isEmpty() && !config.jdbc_options.contains(DO_NOT_VALIDATE_CERTIFICATE)) {
+      host + "/" + config.fingerprint
+    } else {
+      host
+    }
 
   def mainConnection(): EXAConnection =
-    ExasolConnectionManager.makeConnection(
-      getJdbcConnectionString(),
-      config.username,
-      config.password
-    )
+    ExasolConnectionManager.makeConnection(getJdbcConnectionString(), config.username, config.password)
 
   def writerMainConnection(): EXAConnection =
     ExasolConnectionManager.makeConnection(
@@ -50,11 +58,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    * the user.
    */
   def getConnection(): EXAConnection =
-    ExasolConnectionManager.createConnection(
-      getJdbcConnectionString(),
-      config.username,
-      config.password
-    )
+    ExasolConnectionManager.createConnection(getJdbcConnectionString(), config.username, config.password)
 
   /**
    * Starts a parallel sub-connections from the main JDBC connection.
@@ -80,7 +84,9 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
       .zipWithIndex
       .toSeq
       .map { case ((host, port), idx) =>
-        getConnectionStringWithOptions(s"jdbc:exa-worker:$host:$port;workerID=$idx;workertoken=$token")
+        val hostWithFingerprint = getHostWithFingerprint(host)
+        val url = s"$WORKER_CONNECTION_PREFIX:$hostWithFingerprint:$port;workerID=$idx;workertoken=$token"
+        getConnectionStringWithOptions(url)
       }
   }
 
