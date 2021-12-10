@@ -14,12 +14,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    defaultOptions = Map(
-      "host" -> jdbcHost,
-      "port" -> jdbcPort,
-      "jdbc_options" -> "validateservercertificate=0",
-      "table" -> tableName
-    )
+    defaultOptions = getConfiguration() ++ Map("table" -> tableName)
   }
 
   // scalastyle:off nonascii

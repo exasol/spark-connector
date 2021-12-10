@@ -12,7 +12,8 @@ import org.scalatest.funsuite.AnyFunSuite
  */
 trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
 
-  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.1.0-d1"
+  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.1.3"
+  private[this] val JDBC_URL_PATTERN = raw"""jdbc:exa:[^/]+/([^:]+):.*""".r
 
   val network = DockerNamedNetwork("spark-it-network", true)
   val container = {
@@ -32,14 +33,31 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
     exasolConnectionManager = ExasolConnectionManager(ExasolConfiguration(getConfiguration()))
   }
 
-  def getConfiguration(): Map[String, String] = Map(
-    "host" -> jdbcHost,
-    "port" -> jdbcPort,
-    "username" -> container.getUsername(),
-    "password" -> container.getPassword(),
-    "jdbc_options" -> "validateservercertificate=0",
-    "max_nodes" -> "200"
-  )
+  def getConfiguration(): Map[String, String] = {
+    val defaultOptions = Map(
+      "host" -> jdbcHost,
+      "port" -> jdbcPort,
+      "username" -> container.getUsername(),
+      "password" -> container.getPassword(),
+      "max_nodes" -> "200"
+    )
+    if (imageSupportsFingerprint()) {
+      defaultOptions ++ Map("fingerprint" -> getFingerprint())
+    } else {
+      defaultOptions ++ Map("jdbc_options" -> "validateservercertificate=0")
+    }
+  }
+
+  def getFingerprint(): String =
+    JDBC_URL_PATTERN.findFirstMatchIn(container.getJdbcUrl()) match {
+      case Some(m) => m.group(1)
+      case _       => ""
+    }
+
+  def imageSupportsFingerprint(): Boolean = {
+    val image = container.getDockerImageReference()
+    (image.getMajor() >= 7) && (image.getMinor() >= 1)
+  }
 
   override def beforeAll(): Unit =
     prepareExasolDatabase()
