@@ -2,15 +2,15 @@
 
 ### Features
 
-* [#68](https://github.com/exasol/spark-exasol-connector/issues/68): Add drop
+* [#68](https://github.com/exasol/spark-connector/issues/68): Add drop
   table option (PR
-  [#72](https://github.com/exasol/spark-exasol-connector/pull/72)).
+  [#72](https://github.com/exasol/spark-connector/pull/72)).
 
 ### Documentation
 
-* [#59](https://github.com/exasol/spark-exasol-connector/issues/59): Add
+* [#59](https://github.com/exasol/spark-connector/issues/59): Add
   dependency list to readme (PR
-  [#73](https://github.com/exasol/spark-exasol-connector/pull/73)).
+  [#73](https://github.com/exasol/spark-connector/pull/73)).
 
 ### Dependency Updates
 

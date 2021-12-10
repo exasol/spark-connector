@@ -68,7 +68,6 @@
 [73]: https://github.com/diffplug/spotless
 [3]: https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
 [5]: https://opensource.org/licenses/MIT
-[14]: https://netty.io/netty-all/
 [23]: https://github.com/mockito/mockito
 [55]: http://www.mojohaus.org/versions-maven-plugin/
 [35]: https://maven.apache.org/plugins/maven-compiler-plugin/
@@ -92,6 +91,7 @@
 [75]: https://github.com/evis/scalafix-maven-plugin
 [51]: https://maven.apache.org/plugins/maven-jar-plugin/
 [20]: http://www.apache.org/licenses/LICENSE-2.0
+[14]: https://netty.io/index.html
 [12]: https://github.com/google/guava
 [45]: http://www.sonatype.com/public-parent/nexus-maven-plugins/nexus-staging/nexus-staging-maven-plugin/
 [9]: http://www.apache.org/licenses/LICENSE-2.0.html

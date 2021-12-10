@@ -2,27 +2,27 @@
 
 ### Bug Fixes
 
-* [#60](https://github.com/exasol/spark-exasol-connector/issues/60): Removed
+* [#60](https://github.com/exasol/spark-connector/issues/60): Removed
   `not null` constraint from string types (PR
-  [#63](https://github.com/exasol/spark-exasol-connector/pull/63)).
+  [#63](https://github.com/exasol/spark-connector/pull/63)).
 
 ### Improvements
 
-* [#45](https://github.com/exasol/spark-exasol-connector/issues/45): Improved
-  logging (PR [#56](https://github.com/exasol/spark-exasol-connector/pull/56)).
-* [#62](https://github.com/exasol/spark-exasol-connector/issues/62): Updated
+* [#45](https://github.com/exasol/spark-connector/issues/45): Improved
+  logging (PR [#56](https://github.com/exasol/spark-connector/pull/56)).
+* [#62](https://github.com/exasol/spark-connector/issues/62): Updated
   Spark and Exasol versions (PR
-  [#64](https://github.com/exasol/spark-exasol-connector/pull/64)).
-* [#69](https://github.com/exasol/spark-exasol-connector/issues/69): Updated the
+  [#64](https://github.com/exasol/spark-connector/pull/64)).
+* [#69](https://github.com/exasol/spark-connector/issues/69): Updated the
   document and changelog structure. (PR
-  [#70](https://github.com/exasol/spark-exasol-connector/pull/70)).
+  [#70](https://github.com/exasol/spark-connector/pull/70)).
 * Added project logo (PR
-  [#67](https://github.com/exasol/spark-exasol-connector/pull/67)).
+  [#67](https://github.com/exasol/spark-connector/pull/67)).
 
 ### Documentation
 
 * Fixed write example in readme (PR
-  [#58](https://github.com/exasol/spark-exasol-connector/pull/58)).
+  [#58](https://github.com/exasol/spark-connector/pull/58)).
 
 ### Dependency Updates
 
