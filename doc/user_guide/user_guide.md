@@ -169,11 +169,8 @@ To create an assembled jar file, run the command:
 mvn package -DskipTests=true
 ```
 
-The assembled jar file
-```sh
-spark-connector_2.13-1.2.0-spark-3.2.0-assembly.jar
-```
-should be located in `target/` folder.
+The assembled jar file with `-assembly` suffix should be located in `target/`
+folder.
 
 If you want different version of Spark, you can use profiles `-Pspark3.1` or
 `-Pspark2.4` for Spark `3.1` or `2.4` versions respectively.
@@ -188,8 +185,7 @@ Then you can use this jar file with `spark-submit`, `spark-shell` or `pyspark`
 commands.
 
 ```sh
-spark-shell --jars \
-spark-connector_2.13-1.2.0-spark-3.2.0-assembly.jar
+spark-shell --jars path/to/assemled-jar
 ```
 
 ## Configuration Options
