@@ -10,6 +10,10 @@ In this release we added an option for providing Exasol certificate fingerprint 
 
 * #103: Added an option so that users can provide certificate fingerprint
 
+## Bugs
+
+* #106: Fixed Log4J CVE-2021-44228 vulnerability
+
 ## Refactorings
 
 * #54: Added Spark versions to the released artifacts
