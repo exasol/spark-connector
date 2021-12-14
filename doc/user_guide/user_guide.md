@@ -147,6 +147,11 @@ commands.
 
 ### Spark Exasol Connector as JAR Dependency
 
+Please check out the
+[releases](https://github.com/exasol/spark-connector/releases) page for already
+assembled jar file. Each release contains a jar file with `-assembly` suffix to
+that respective version.
+
 You can also build an assembled jar from the source. This way, you use the
 latest commits that may not be released yet.
 
@@ -164,14 +169,27 @@ To create an assembled jar file, run the command:
 mvn package -DskipTests=true
 ```
 
-The assembled jar file should be located at
-`target/spark-connector-<VERSION>-assembly.jar`.
+The assembled jar file
+```sh
+spark-connector_2.13-1.2.0-spark-3.2.0-assembly.jar
+```
+should be located in `target/` folder.
+
+If you want different version of Spark, you can use profiles `-Pspark3.1` or
+`-Pspark2.4` for Spark `3.1` or `2.4` versions respectively.
+
+For example,
+
+```sh
+mvn package -Pspark3.1 -DskipTests=true
+```
 
 Then you can use this jar file with `spark-submit`, `spark-shell` or `pyspark`
 commands.
 
-```shell
-spark-shell --jars /path/to/spark-connector-assembly-*.jar
+```sh
+spark-shell --jars \
+spark-connector_2.13-1.2.0-spark-3.2.0-assembly.jar
 ```
 
 ## Configuration Options
