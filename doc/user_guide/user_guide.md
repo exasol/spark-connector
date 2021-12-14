@@ -34,7 +34,7 @@ is used for the parallel connections from the Spark tasks to Exasol data nodes.
 The Spark Exasol Connector is released to the Maven Central Repository. You can
 find all the releases at [com.exasol/spark-connector][maven-link] page.
 
-[maven-link]: https://search.maven.org/artifact/com.exasol/spark-connector
+[maven-link]: https://mvnrepository.com/artifact/com.exasol/spark-connector
 
 There are several options to include the connector as a dependency to your
 projects. Here we assume you know the basics of providing dependencies to your
@@ -63,9 +63,9 @@ For that add the Exasol Artifactory and the dependency itself to your project:
 </dependencies>
 ```
 
-The connector uses the [Exasol JDBC driver][exasol-jdbc] as one of its dependencies. We add
-the repository identifier for the Exasol Maven Artifactory so that the Exasol
-JDBC is transitively fetched.
+The connector uses the [Exasol JDBC driver][exasol-jdbc] as one of its
+dependencies. We add the repository identifier for the Exasol Maven Artifactory
+so that the Exasol JDBC is transitively fetched.
 
 [exasol-jdbc]: https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
 
@@ -74,8 +74,8 @@ latest Spark Exasol Connector releases.
 
 ### Spark Exasol Connector as SBT Dependency
 
-To provide the connector to your Spark Scala projects, add the following lines to your
-`build.sbt` file:
+To provide the connector to your Spark Scala projects, add the following lines
+to your `build.sbt` file:
 
 ```scala
 resolvers ++= Seq("Exasol Releases" at "https://maven.exasol.com/artifactory/exasol-releases")
@@ -100,7 +100,7 @@ Go to your cluster, then to `Libraries`, and click `Install New`:
 - Select Maven as a Library Source.
 - In the Coordinate field, enter artifact coordinates
   `com.exasol:spark-connector_2.12:<VERSION>`. Please notice that we use the
-  Scala version 2.12, change it to 2.11 if your Databricks Runtime version
+  Scala version 2.12, change it to 2.13 if your Databricks Runtime version
   requires it.
 - In the Repository field, enter the Exasol Artifactory
   `https://maven.exasol.com/artifactory/exasol-releases`.
@@ -120,8 +120,8 @@ spark-shell \
   --packages com.exasol:spark-connector_2.12:<VERSION>
 ```
 
-The `spark-shell` provides Read-Eval-Print-Loop (REPL) to interactively learn and
-experiment with the API.
+The `spark-shell` provides Read-Eval-Print-Loop (REPL) to interactively learn
+and experiment with the API.
 
 ### Spark Exasol Connector With Spark Submit
 
@@ -147,6 +147,11 @@ commands.
 
 ### Spark Exasol Connector as JAR Dependency
 
+Please check out the
+[releases](https://github.com/exasol/spark-connector/releases) page for already
+assembled jar file. Each release contains a jar file with `-assembly` suffix to
+that respective version.
+
 You can also build an assembled jar from the source. This way, you use the
 latest commits that may not be released yet.
 
@@ -161,17 +166,26 @@ cd spark-connector/
 To create an assembled jar file, run the command:
 
 ```sh
-sbt assembly
+mvn package -DskipTests=true
 ```
 
-The assembled jar file should be located at
-`target/scala-2.12/spark-connector-assembly-<VERSION>.jar`.
+The assembled jar file with the `-assembly` suffix should be located in the `target/`
+folder.
+
+If you want different version of Spark, you can use profiles `-Pspark3.1` or
+`-Pspark2.4` for Spark `3.1` or `2.4` versions respectively.
+
+For example,
+
+```sh
+mvn package -Pspark3.1 -DskipTests=true
+```
 
 Then you can use this jar file with `spark-submit`, `spark-shell` or `pyspark`
 commands.
 
-```shell
-spark-shell --jars /path/to/spark-connector-assembly-*.jar
+```sh
+spark-shell --jars path/to/assemled-jar
 ```
 
 ## Configuration Options
@@ -189,6 +203,7 @@ List of required and optional parameters:
 | ``spark.exasol.port``         | ``port``         | ``8563``      | A JDBC port number to connect to Exasol database
 | ``spark.exasol.username``     | ``username``     | ``sys``       | A username for connecting to the Exasol database
 | ``spark.exasol.password``     | ``password``     | ``exasol``    | A password for connecting to the Exasol database
+| ``spark.exasol.fingerprint``  | ``fingerprint``  | ``""``        | A Exasol connection certificate fingerprint value
 | ``spark.exasol.max_nodes``    | ``max_nodes``    | ``200``       | The number of data nodes in the Exasol cluster
 | ``spark.exasol.batch_size``   | ``batch_size``   | ``1000``      | The number of records batched before running an execute statement when saving dataframe
 | ``spark.exasol.create_table`` | ``create_table`` | ``false``     | A permission to create a table if it does not exist in the Exasol database when saving dataframe
@@ -439,8 +454,8 @@ Mode](https://issues.apache.org/jira/browse/SPARK-24374).
 
 ### Spark DataFrame `.show()` Action
 
-The spark dataframe `.show()` action is one of the operations that fails because of
-the problems described in the previous section.
+The spark dataframe `.show()` action is one of the operations that fails because
+of the problems described in the previous section.
 
 We recommend using the `collect()` operation with combination SQL
 `LIMIT` clause instead.
@@ -488,9 +503,9 @@ It can be mitigated by submitting a Spark application with enough resources so
 that it can start parallel tasks that are more or equal to the number of
 parallel Exasol connections.
 
-Additionally, you can limit the Exasol parallel connections using the `max_nodes`
-parameter. However, we do not advise to limit this value in the production
-environment.
+Additionally, you can limit the Exasol parallel connections using the
+`max_nodes` parameter. However, we do not advise to limit this value in the
+production environment.
 
 ### Connection Refused
 

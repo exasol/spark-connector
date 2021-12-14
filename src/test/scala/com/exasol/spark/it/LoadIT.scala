@@ -10,8 +10,6 @@ import org.apache.spark.sql.types._
  */
 class LoadIT extends BaseTableQueryIT {
 
-  private[this] val JDBC_OPTIONS = "validateservercertificate=0"
-
   test("runs dataframe show action") {
     val df = getDataFrame()
     df.show(10, false)
@@ -62,12 +60,7 @@ class LoadIT extends BaseTableQueryIT {
     val expectedSchema = new StructType()
       .add("NAME", StringType)
       .add("UPDATED_AT", TimestampType)
-    val df = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("jdbc_options", JDBC_OPTIONS)
-      .option("query", s"SELECT * FROM $tableName")
+    val df = getDataFrameReader(s"SELECT * FROM $tableName")
       .schema(expectedSchema)
       .load()
     assert(df.schema.length === expectedSchema.length)
@@ -81,12 +74,7 @@ class LoadIT extends BaseTableQueryIT {
       .add("NAME", StringType)
       .add("UPDATED_AT", TimestampType)
       .add("DATE_INFORMATION", DateType)
-    val df = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", s"SELECT * FROM $tableName")
-      .option("jdbc_options", JDBC_OPTIONS)
+    val df = getDataFrameReader(s"SELECT * FROM $tableName")
       .schema(expectedSchema)
       .load()
       .select("DATE_INFORMATION")
@@ -97,33 +85,33 @@ class LoadIT extends BaseTableQueryIT {
   }
 
   test("uses user provided SparkConf") {
-    val sparkConf = new SparkConf()
+    var sparkConf = new SparkConf()
       .setMaster("local[*]")
       .set("spark.exasol.host", jdbcHost)
       .set("spark.exasol.port", jdbcPort)
-      .set("spark.exasol.max_nodes", "200")
+      .set("spark.exasol.max_nodes", "20")
+
+    if (imageSupportsFingerprint()) {
+      sparkConf = sparkConf.set("spark.exasol.fingerprint", getFingerprint())
+    } else {
+      sparkConf = sparkConf.set("spark.exasol.jdbc_options", "validateservercertificate=0")
+    }
+
     val sparkSession = SparkSession
       .builder()
       .config(sparkConf)
       .getOrCreate()
     val df = sparkSession.read
       .format("exasol")
-      .option("query", s"SELECT CITY FROM $tableName")
       .option("port", "falsePortNumber")
       .option("host", "falseHostName")
-      .option("jdbc_options", JDBC_OPTIONS)
+      .option("query", s"SELECT CITY FROM $tableName")
       .load()
     assert(df.count() === 3)
   }
 
   test("returns unicode columns") {
-    val df = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("jdbc_options", JDBC_OPTIONS)
-      .option("query", s"""SELECT "UNICODE_COL" FROM $tableName WHERE UNICODE_COL IS NOT NULL""")
-      .load()
+    val df = getDataFrameReader(s"""SELECT "UNICODE_COL" FROM $tableName WHERE UNICODE_COL IS NOT NULL""").load()
     assert(df.count() === 3)
     assert(df.collect().map(_(0)) === Seq("öäüß", "Ö", "Ù")) // scalastyle:ignore nonascii
   }

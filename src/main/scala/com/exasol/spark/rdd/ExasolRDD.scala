@@ -79,7 +79,6 @@ class ExasolRDD(
     conn
   }
 
-  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def getPartitions: Array[Partition] = {
     mainConnection = createMainConnection()
     mainStatement = mainConnection.createStatement()
@@ -95,7 +94,6 @@ class ExasolRDD(
   }
 
   // scalastyle:off null return
-  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf", "org.wartremover.warts.Return"))
   override def compute(split: Partition, context: TaskContext): Iterator[Row] = {
     var closed = false
     var resultSet: ResultSet = null

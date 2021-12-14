@@ -47,20 +47,54 @@ final case class ExasolConfiguration(
   jdbc_options: String,
   username: String,
   password: String,
+  fingerprint: String,
   max_nodes: Int,
   create_table: Boolean,
   drop_table: Boolean,
   batch_size: Int
 )
 
+/**
+ * A companion object that creates {@link ExasolConfiguration}.
+ */
 object ExasolConfiguration {
 
-  val IPv4_DIGITS: String = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
-  val IPv4_REGEX: Regex = raw"""^$IPv4_DIGITS\.$IPv4_DIGITS\.$IPv4_DIGITS\.$IPv4_DIGITS$$""".r
+  private[this] val IPv4_DIGITS: String = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+  private[this] val IPv4_REGEX: Regex = raw"""^$IPv4_DIGITS\.$IPv4_DIGITS\.$IPv4_DIGITS\.$IPv4_DIGITS$$""".r
+  private[this] val DEFAULT_MAX_NODES = "200"
+  private[this] val DEFAULT_BATCH_SIZE = "1000"
 
-  def getLocalHost(): String = InetAddress.getLocalHost.getHostAddress
+  /**
+   * Returns {@link ExasolConfiguration} from key-value options.
+   *
+   * It also validates key-value parameters.
+   *
+   * @param options key value options
+   * @return an instance of {@link ExasolConfiguration}
+   */
+  def apply(options: Map[String, String]): ExasolConfiguration = {
+    val host = options.getOrElse("host", getLocalHost())
+    val jdbc_options = options.getOrElse("jdbc_options", "")
+    checkHost(host)
+    checkJdbcOptions(jdbc_options)
 
-  def checkHost(host: String): String = host match {
+    ExasolConfiguration(
+      host = host,
+      port = options.getOrElse("port", "8888").toInt,
+      jdbc_options = jdbc_options,
+      username = options.getOrElse("username", "sys"),
+      password = options.getOrElse("password", "exasol"),
+      fingerprint = options.getOrElse("fingerprint", ""),
+      max_nodes = options.getOrElse("max_nodes", DEFAULT_MAX_NODES).toInt,
+      create_table = options.getOrElse("create_table", "false").toBoolean,
+      drop_table = options.getOrElse("drop_table", "false").toBoolean,
+      batch_size = options.getOrElse("batch_size", DEFAULT_BATCH_SIZE).toInt
+    )
+  }
+
+  private[this] def getLocalHost(): String = InetAddress.getLocalHost().getHostAddress()
+
+  private[util] def checkHost(host: String): String = host match {
     case IPv4_REGEX(_*) => host
     case _ =>
       throw new IllegalArgumentException(
@@ -72,8 +106,16 @@ object ExasolConfiguration {
       )
   }
 
-  def checkJdbcOptions(str: String): String = {
-    if (str.endsWith(";") || str.startsWith(";")) {
+  private[this] def checkJdbcOptions(options: String): Unit = {
+    checkStartsOrEndsWith(options, ";")
+    if (!options.isEmpty()) {
+      val keyValuePairs = options.split(";")
+      checkContainsKeyValuePairs(keyValuePairs, "=")
+    }
+  }
+
+  private[this] def checkStartsOrEndsWith(input: String, pattern: String): Unit =
+    if (input.endsWith(pattern) || input.startsWith(pattern)) {
       throw new IllegalArgumentException(
         ExaError
           .messageBuilder("E-SEC-5")
@@ -83,38 +125,17 @@ object ExasolConfiguration {
       )
     }
 
-    if (str.length > 0) {
-      str
-        .split(";")
-        .foreach { kv =>
-          if (kv.filter(_ == '=').length != 1) {
-            throw new IllegalArgumentException(
-              ExaError
-                .messageBuilder("E-SEC-6")
-                .message("Parameter {{PARAMETER}} does not have key=value format.", kv)
-                .mitigation("Please make sure parameters are encoded as key=value pairs.")
-                .toString()
-            )
-          }
-        }
+  private[this] def checkContainsKeyValuePairs(options: Array[String], pattern: String): Unit =
+    options.foreach { case keyValue =>
+      if (keyValue.split(pattern).length != 2) {
+        throw new IllegalArgumentException(
+          ExaError
+            .messageBuilder("E-SEC-6")
+            .message("Parameter {{PARAMETER}} does not have key=value format.", keyValue)
+            .mitigation("Please make sure parameters are encoded as key=value pairs.")
+            .toString()
+        )
+      }
     }
-    str
-  }
-
-  @SuppressWarnings(
-    Array("org.wartremover.warts.Overloading", "org.danielnixon.extrawarts.StringOpsPartial")
-  )
-  def apply(opts: Map[String, String]): ExasolConfiguration =
-    ExasolConfiguration(
-      host = checkHost(opts.getOrElse("host", getLocalHost())),
-      port = opts.getOrElse("port", "8888").toInt,
-      jdbc_options = checkJdbcOptions(opts.getOrElse("jdbc_options", "")),
-      username = opts.getOrElse("username", "sys"),
-      password = opts.getOrElse("password", "exasol"),
-      max_nodes = opts.getOrElse("max_nodes", "200").toInt,
-      create_table = opts.getOrElse("create_table", "false").toBoolean,
-      drop_table = opts.getOrElse("drop_table", "false").toBoolean,
-      batch_size = opts.getOrElse("batch_size", "1000").toInt
-    )
 
 }

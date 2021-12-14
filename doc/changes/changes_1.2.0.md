@@ -1,11 +1,22 @@
-# Spark Exasol Connector 1.2.0, released 2021-??-??
+# Spark Exasol Connector 1.2.0, released 2021-12-14
 
-Code name:
+Code name: Added support for certificate fingerprint
 
 ## Summary
 
+In this release we added an option for providing Exasol certificate fingerprint value. Similarly, we added Spark versions to the released artifacts, improved errors and migrated to Maven based build from SBT build. We also updated Log4J dependency to fix recent `CVE-2021-44228` vulnerability.
+
+## Features
+
+* #103: Added an option so that users can provide certificate fingerprint
+
+## Bugs
+
+* #106: Fixed Log4J CVE-2021-44228 vulnerability
+
 ## Refactorings
 
+* #54: Added Spark versions to the released artifacts
 * #75: Added dependencies vulnerabilities checker
 * #94: Added notice about Spark Streaming
 * #96: Added unified error codes
@@ -25,14 +36,14 @@ Code name:
 * Added `com.exasol:exasol-testcontainers:5.1.1`
 * Added `com.exasol:hamcrest-resultset-matcher:1.5.1`
 * Added `com.exasol:test-db-builder-java:3.2.1`
-* Added `org.apache.logging.log4j:log4j-1.2-api:2.14.1`
+* Added `org.apache.logging.log4j:log4j-1.2-api:2.16.0`
 * Added `org.mockito:mockito-core:4.1.0`
 * Added `org.scalatestplus:scalatestplus-mockito_2.13:1.0.0-M2`
 * Added `org.scalatest:scalatest_2.13:3.2.9`
 
 ### Plugin Dependency Updates
 
-* Added `com.diffplug.spotless:spotless-maven-plugin:2.17.5`
+* Added `com.diffplug.spotless:spotless-maven-plugin:2.17.6`
 * Added `com.exasol:artifact-reference-checker-maven-plugin:0.4.0`
 * Added `com.exasol:error-code-crawler-maven-plugin:0.7.1`
 * Added `com.exasol:project-keeper-maven-plugin:1.3.4`
