@@ -169,7 +169,7 @@ To create an assembled jar file, run the command:
 mvn package -DskipTests=true
 ```
 
-The assembled jar file with `-assembly` suffix should be located in `target/`
+The assembled jar file with the `-assembly` suffix should be located in the `target/`
 folder.
 
 If you want different version of Spark, you can use profiles `-Pspark3.1` or
