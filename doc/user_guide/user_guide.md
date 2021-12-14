@@ -171,7 +171,7 @@ Then you can use this jar file with `spark-submit`, `spark-shell` or `pyspark`
 commands.
 
 ```shell
-spark-shell --jars /path/to/spark-exasol-connector-assembly-*.jar
+spark-shell --jars /path/to/spark-connector-assembly-*.jar
 ```
 
 ## Configuration Options
