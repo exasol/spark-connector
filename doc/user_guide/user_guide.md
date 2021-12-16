@@ -34,7 +34,7 @@ is used for the parallel connections from the Spark tasks to Exasol data nodes.
 The Spark Exasol Connector is released to the Maven Central Repository. You can
 find all the releases at [com.exasol/spark-connector][maven-link] page.
 
-[maven-link]: https://mvnrepository.com/artifact/com.exasol/spark-connector
+[maven-link]: https://search.maven.org/artifact/com.exasol/spark-connector_2.12
 
 There are several options to include the connector as a dependency to your
 projects. Here we assume you know the basics of providing dependencies to your

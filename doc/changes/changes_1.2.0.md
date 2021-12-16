@@ -1,4 +1,4 @@
-# Spark Exasol Connector 1.2.0, released 2021-12-14
+# Spark Exasol Connector 1.2.0, released 2021-12-16
 
 Code name: Added support for certificate fingerprint
 
@@ -21,6 +21,7 @@ In this release we added an option for providing Exasol certificate fingerprint 
 * #94: Added notice about Spark Streaming
 * #96: Added unified error codes
 * #101: Migrated to Maven based build from SBT
+* #108: Removed custom loader class from tests
 
 ## Dependency Updates
 
