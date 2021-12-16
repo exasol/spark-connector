@@ -17,7 +17,6 @@
 
 package org.apache.log4j;
 
-import org.apache.log4j.helpers.Loader;
 import org.apache.log4j.helpers.ThreadLocalMap;
 
 import java.lang.reflect.InvocationTargetException;
@@ -64,14 +63,13 @@ public class MDC {
 
     static final int HT_SIZE = 7;
 
-    boolean java1;
+    final static boolean java1 = false;
 
     Object tlm;
 
     private Method removeMethod;
 
     private MDC() {
-        java1 = Loader.isJava1();
         if (!java1) {
             tlm = new ThreadLocalMap();
         }
