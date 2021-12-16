@@ -1,4 +1,4 @@
-# Spark Exasol Connector 1.2.0, released 2021-12-??
+# Spark Exasol Connector 1.2.0, released 2021-12-16
 
 Code name: Added support for certificate fingerprint
 
