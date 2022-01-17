@@ -9,7 +9,6 @@
     <url>https://github.com/exasol/spark-connector</url>
     <properties>
         <java.version>1.8</java.version>
-        <artifact.name>${project.artifactId}_${scala.compat.version}-${project.version}</artifact.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <gpg.skip>true</gpg.skip>
@@ -509,27 +508,34 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/assembly/all-dependencies.xml</descriptor>
-                    </descriptors>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                        </manifest>
-                    </archive>
-                    <finalName>${artifact.name}-assembly</finalName>
-                </configuration>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <finalName>${project.artifactId}-${project.version}-assembly</finalName>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>reference.conf</resource>
+                                </transformer>
+                            </transformers>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -597,6 +603,7 @@
                     <excludedPlugins>
                         <excludedPlugin>org.apache.maven.plugins:maven-jar-plugin</excludedPlugin>
                         <excludedPlugin>org.apache.maven.plugins:maven-source-plugin</excludedPlugin>
+                        <excludedPlugin>org.apache.maven.plugins:maven-assembly-plugin</excludedPlugin>
                         <excludedPlugin>org.apache.maven.plugins:maven-surefire-plugin</excludedPlugin>
                         <excludedPlugin>org.apache.maven.plugins:maven-failsafe-plugin</excludedPlugin>
                     </excludedPlugins>

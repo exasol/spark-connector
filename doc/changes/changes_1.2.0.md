@@ -52,7 +52,6 @@ In this release we added an option for providing Exasol certificate fingerprint 
 * Added `io.github.evis:scalafix-maven-plugin_2.13:0.1.4_0.9.31`
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.15`
 * Added `net.alchim31.maven:scala-maven-plugin:4.5.6`
-* Added `org.apache.maven.plugins:maven-assembly-plugin:3.3.0`
 * Added `org.apache.maven.plugins:maven-clean-plugin:3.1.0`
 * Added `org.apache.maven.plugins:maven-compiler-plugin:3.9.0`
 * Added `org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M1`
@@ -62,6 +61,7 @@ In this release we added an option for providing Exasol certificate fingerprint 
 * Added `org.apache.maven.plugins:maven-jar-plugin:3.2.2`
 * Added `org.apache.maven.plugins:maven-javadoc-plugin:3.3.1`
 * Added `org.apache.maven.plugins:maven-resources-plugin:3.2.0`
+* Added `org.apache.maven.plugins:maven-shade-plugin:3.2.4`
 * Added `org.apache.maven.plugins:maven-site-plugin:3.10.0`
 * Added `org.apache.maven.plugins:maven-source-plugin:3.2.1`
 * Added `org.apache.maven.plugins:maven-surefire-plugin:2.12.4`
