@@ -42,7 +42,7 @@
 | [Apache Maven Source Plugin][47]                        | [Apache License, Version 2.0][18]              |
 | [Apache Maven Javadoc Plugin][49]                       | [Apache License, Version 2.0][18]              |
 | [Apache Maven JAR Plugin][51]                           | [Apache License, Version 2.0][18]              |
-| [Apache Maven Assembly Plugin][53]                      | [Apache License, Version 2.0][18]              |
+| [Apache Maven Shade Plugin][53]                         | [Apache License, Version 2.0][18]              |
 | [Versions Maven Plugin][55]                             | [Apache License, Version 2.0][18]              |
 | [org.sonatype.ossindex.maven:ossindex-maven-plugin][57] | [ASL2][13]                                     |
 | [Reproducible Build Maven Plugin][59]                   | [Apache 2.0][13]                               |
@@ -69,6 +69,7 @@
 [3]: https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
 [5]: https://opensource.org/licenses/MIT
 [23]: https://github.com/mockito/mockito
+[53]: https://maven.apache.org/plugins/maven-shade-plugin/
 [55]: http://www.mojohaus.org/versions-maven-plugin/
 [35]: https://maven.apache.org/plugins/maven-compiler-plugin/
 [79]: https://maven.apache.org/plugins/maven-resources-plugin/
@@ -114,4 +115,3 @@
 [8]: http://spark.apache.org/
 [49]: https://maven.apache.org/plugins/maven-javadoc-plugin/
 [65]: https://github.com/exasol/error-code-crawler-maven-plugin
-[53]: https://maven.apache.org/plugins/maven-assembly-plugin/

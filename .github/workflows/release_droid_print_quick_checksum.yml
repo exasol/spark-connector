@@ -9,11 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - { profile: '-Pspark3.2', project-keeper-skip: false }
-          - { profile: '-Pspark3.2 -Pscala2.12', project-keeper-skip: true }
-          - { profile: '-Pspark3.1', project-keeper-skip: true }
-          - { profile: '-Pspark2.4', project-keeper-skip: true }
+        profile: [ '-Pspark3.2', '-Pspark3.2 -Pscala2.12', '-Pspark3.1', '-Pspark2.4' ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -31,11 +27,17 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Install xmlstarlet
+        run: sudo apt install -y --no-install-recommends xmlstarlet
+      - name: Create release pom file
+        run: ./tools/createReleasePom.sh
       - name: Build with Maven skipping tests
         run: |
-          mvn --batch-mode clean verify ${{ matrix.profile }} \
+          mvn --batch-mode --file release.xml clean verify ${{ matrix.profile }} \
               -DskipTests \
-              -Dproject-keeper.skip=${{ matrix.project-keeper-skip }}
+              -Dproject-keeper.skip=false
+      - name: Remove release pom file
+        run: rm -rf release.xml
       - name: Print checksum
         run: echo 'checksum_start==';find target -maxdepth 1 -name *.jar -exec sha256sum "{}" + | xargs;echo '==checksum_end'
 
