@@ -33,9 +33,13 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Install xmlstarlet
+        run: sudo apt install -y --no-install-recommends xmlstarlet
+      - name: Create release pom file
+        run: ./tools/createReleasePom.sh
       - name: Publish to Central Repository
         run: |
-          mvn --file pom.xml clean deploy ${{ matrix.profile }} \
+          mvn --file release.xml clean deploy ${{ matrix.profile }} \
               -Dgpg.skip=false \
               -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
               -DskipTests \
@@ -43,3 +47,5 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      - name: Remove release pom file
+        run: rm -rf release.xml

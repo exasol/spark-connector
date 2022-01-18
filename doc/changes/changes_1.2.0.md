@@ -1,4 +1,4 @@
-# Spark Exasol Connector 1.2.0, released 2021-12-??
+# Spark Exasol Connector 1.2.0, released 2022-01-18
 
 Code name: Added support for certificate fingerprint
 
@@ -13,6 +13,7 @@ In this release we added an option for providing Exasol certificate fingerprint 
 ## Bugs
 
 * #106: Fixed Log4J CVE-2021-44228 vulnerability
+* #111: Fixed issues related to cross releasing with updated release droid workflows
 * #112: Updated Log4J dependency to 2.17.0 version
 
 ## Refactorings

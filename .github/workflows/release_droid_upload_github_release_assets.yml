@@ -31,11 +31,17 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Install xmlstarlet
+        run: sudo apt install -y --no-install-recommends xmlstarlet
+      - name: Create release pom file
+        run: ./tools/createReleasePom.sh
       - name: Build with Maven skipping tests
         run: |
-          mvn --batch-mode --file pom.xml clean verify ${{ matrix.profile }} \
+          mvn --batch-mode --file release.xml clean verify ${{ matrix.profile }} \
               -DskipTests \
               -Dproject-keeper.skip=false
+      - name: Remove release pom file
+        run: rm -rf release.xml
       - name: Generate sha256sum files
         run: find target -maxdepth 1 -name *.jar -exec bash -c 'sha256sum {} > {}.sha256' \;
       - name: Upload assets to the GitHub release draft
