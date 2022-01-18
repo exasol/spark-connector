@@ -35,7 +35,7 @@ jobs:
         run: |
           mvn --batch-mode --file release.xml clean verify ${{ matrix.profile }} \
               -DskipTests \
-              -Dproject-keeper.skip=false
+              -Dproject-keeper.skip=true
       - name: Remove release pom file
         run: rm -rf release.xml
       - name: Print checksum
