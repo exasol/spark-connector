@@ -12,8 +12,7 @@ import org.scalatest.funsuite.AnyFunSuite
  */
 trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
 
-  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.1.4"
-  private[this] val JDBC_URL_PATTERN = raw"""jdbc:exa:[^/]+/([^:]+):.*""".r
+  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.1.10"
 
   val network = DockerNamedNetwork("spark-it-network", true)
   val container = {
@@ -49,10 +48,7 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
   }
 
   def getFingerprint(): String =
-    JDBC_URL_PATTERN.findFirstMatchIn(container.getJdbcUrl()) match {
-      case Some(m) => m.group(1)
-      case _       => ""
-    }
+    container.getTlsCertificateFingerprint().get()
 
   def imageSupportsFingerprint(): Boolean = {
     val image = container.getDockerImageReference()
