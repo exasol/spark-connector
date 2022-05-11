@@ -56,7 +56,7 @@ jobs:
           asset_path: target/*.sha256
       - name: Upload error-code-report
         uses: shogo82148/actions-upload-release-asset@v1
-        if: ${{ !matrix.project-keeper-skip }}
+        if: ${{ matrix.profile == '-Pspark3.2' }}
         with:
           upload_url: ${{ github.event.inputs.upload_url }}
           asset_path: target/error_code_report.json

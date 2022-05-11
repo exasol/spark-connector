@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        exasol-docker-version: [ 7.1.4 ]
+        exasol-docker-version: [ 7.1.10 ]
         mvn:
           [
             {
@@ -37,14 +37,6 @@ jobs:
               project-keeper-skip: true,
             },
           ]
-        include:
-          - mvn:
-              {
-                name: 'Spark3.2 and Scala 2.13',
-                profile: '-Pspark3.2',
-                project-keeper-skip: true,
-              }
-            exasol-docker-version: 6.2.17-d1
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
