@@ -576,6 +576,8 @@
                 </executions>
                 <configuration>
                     <excludeVulnerabilityIds>
+												<!-- excluded vulnerabilities for building with Spark2.4 and Scala 2.12 and Exasol 7.1.10 -->
+
                         <!-- com.squareup.okhttp:okhttp:jar:2.7.5 is provided by hadoop, required by spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
                         <exclude>CVE-2021-0341</exclude>
                         <exclude>sonatype-2018-0035</exclude>
@@ -590,6 +592,39 @@
                         <exclude>CVE-2022-26612</exclude>
                         <!-- com.google.guava:guava:jar:31.1-jre: Currently no update available. Risk does not apply, as potential attackers cannot access the temp directory. -->
                         <exclude>sonatype-2020-0926</exclude>
+
+												<!-- excluded vulnerabilities for building with Spark3.1 and Scala 2.12 and Exasol 7.1.10 -->
+
+                      	<!-- com.fasterxml.jackson.core:jackson-databind:jar:2.10.5.1 provided by spark-core. Currently no update available. -->
+                      	<exclude>CVE-2020-36518</exclude>
+                      	<exclude>sonatype-2021-4682</exclude>
+                      	<!-- org.apache.spark:spark-core_2.12:jar:3.1.3. Currently no update available. -->
+                      	<exclude>sonatype-2022-1694</exclude>
+                      	<!-- org.glassfish.jersey.core:jersey-common:jar:2.30 provided by spark-core. Currently no update available. -->
+                      	<exclude>CVE-2021-28168</exclude>
+                      	<!-- commons-codec:commons-codec:jar:1.9 provided by avro-mapred ... spark-core. Currently no update available. -->
+                      	<exclude>sonatype-2012-0050</exclude>
+                      	<!-- org.glassfish.jersey.media:jersey-media-jaxb:jar:2.30 provided by jersey-server ... spark-core. Currently no update available. -->
+                      	<exclude>sonatype-2016-0687</exclude>
+
+												<!-- excluded vulnerabilities for building with Spark3.1 and Scala 2.12 and Exasol 7.1.10 -->
+
+                      	<!-- org.glassfish.jersey.media:jersey-media-jaxb:jar:2.22.2 provided by jersey-server ... spark-core. Currently no update available. -->
+                      	<exclude>sonatype-2016-0687</exclude>
+                      	<!-- org.apache.spark:spark-network-common_2.12:jar:2.4.8 provided by spark-core. Currently no update available. -->
+                      	<exclude>CVE-2021-38296</exclude>
+                      	<!-- commons-codec:commons-codec:jar:1.9 provided by spark-core. Currently no update available. -->
+                      	<exclude>sonatype-2012-0050</exclude>
+                      	<!-- org.glassfish.jersey.core:jersey-common:jar:2.22.2 provided by spark-core. Currently no update available. -->
+                      	<exclude>CVE-2021-28168</exclude>
+                      	<!-- org.apache.spark:spark-core_2.12:jar:2.4.8. Currently no update available. -->
+                      	<exclude>CVE-2022-33891</exclude>
+                      	<exclude>sonatype-2022-2430</exclude>
+                      	<!-- com.fasterxml.jackson.core:jackson-databind:jar:2.11.4: Currently no update available. -->
+                      	<exclude>CVE-2020-36518</exclude>
+                      	<exclude>sonatype-2021-4682</exclude>
+                      	<!-- org.javassist:javassist:jar:3.18.1-GA provided by jersey-hk2 ... spark-core. Currently no update available. -->
+                      	<exclude>sonatype-2014-0257</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
@@ -812,7 +847,7 @@
         <profile>
             <id>spark3.1</id>
             <properties>
-                <spark.version>3.1.2</spark.version>
+                <spark.version>3.1.3</spark.version>
                 <scala.version>2.12.10</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
                 <jackson.version>2.10.5.1</jackson.version>
