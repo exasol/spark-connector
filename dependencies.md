@@ -67,7 +67,7 @@
 [0]: https://www.scala-lang.org/
 [1]: https://www.apache.org/licenses/LICENSE-2.0
 [2]: http://www.exasol.com
-[3]: LICENSE-exasol-jdbc.txt
+[3]: https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
 [4]: https://github.com/exasol/sql-statement-builder
 [5]: https://opensource.org/licenses/MIT
 [6]: https://github.com/exasol/error-reporting-java
@@ -75,7 +75,7 @@
 [8]: http://www.apache.org/licenses/LICENSE-2.0.html
 [9]: https://github.com/google/guava
 [10]: http://www.apache.org/licenses/LICENSE-2.0.txt
-[11]: https://netty.io/netty-all/
+[11]: https://netty.io/index.html
 [12]: http://github.com/FasterXML/jackson
 [13]: https://www.apache.org/licenses/LICENSE-2.0.txt
 [14]: http://www.scalatest.org
@@ -94,7 +94,7 @@
 [27]: http://github.com/davidB/scala-maven-plugin
 [28]: http://unlicense.org/
 [29]: https://maven.apache.org/plugins/maven-compiler-plugin/
-[30]: http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin
+[30]: https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
 [31]: https://maven.apache.org/enforcer/maven-enforcer-plugin/
 [32]: https://www.mojohaus.org/flatten-maven-plugin/
 [33]: https://sonatype.github.io/ossindex-maven/maven-plugin/
