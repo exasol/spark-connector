@@ -1,0 +1,14 @@
+sources:
+  - type: maven
+    path: pom.xml
+    modules:
+      - maven_central
+      - integration_tests
+excludes:
+  - regex: "(?s)E-PK-CORE-62: The project's README.md does not contain a valid badges block. Please add or replace the following badges:.*"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build-next-java.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_prepare_original_checksum.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_print_quick_checksum.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_release_on_maven_central.yml'"
