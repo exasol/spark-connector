@@ -42,14 +42,14 @@
 | [org.sonatype.ossindex.maven:ossindex-maven-plugin][33] | [ASL2][10]                                     |
 | [Reproducible Build Maven Plugin][34]                   | [Apache 2.0][10]                               |
 | [Maven Surefire Plugin][35]                             | [Apache License, Version 2.0][13]              |
-| [Apache Maven JAR Plugin][36]                           | [Apache License, Version 2.0][13]              |
-| [Apache Maven Shade Plugin][37]                         | [Apache License, Version 2.0][13]              |
-| [Versions Maven Plugin][38]                             | [Apache License, Version 2.0][13]              |
-| [Apache Maven Deploy Plugin][39]                        | [Apache License, Version 2.0][13]              |
-| [Apache Maven GPG Plugin][40]                           | [Apache License, Version 2.0][13]              |
-| [Apache Maven Source Plugin][41]                        | [Apache License, Version 2.0][13]              |
-| [Apache Maven Javadoc Plugin][42]                       | [Apache License, Version 2.0][13]              |
-| [Nexus Staging Maven Plugin][43]                        | [Eclipse Public License][44]                   |
+| [Versions Maven Plugin][36]                             | [Apache License, Version 2.0][13]              |
+| [Apache Maven Deploy Plugin][37]                        | [Apache License, Version 2.0][13]              |
+| [Apache Maven GPG Plugin][38]                           | [Apache License, Version 2.0][13]              |
+| [Apache Maven Source Plugin][39]                        | [Apache License, Version 2.0][13]              |
+| [Apache Maven Javadoc Plugin][40]                       | [Apache License, Version 2.0][13]              |
+| [Nexus Staging Maven Plugin][41]                        | [Eclipse Public License][42]                   |
+| [Apache Maven JAR Plugin][43]                           | [Apache License, Version 2.0][13]              |
+| [Apache Maven Shade Plugin][44]                         | [Apache License, Version 2.0][13]              |
 | [Maven Failsafe Plugin][45]                             | [Apache License, Version 2.0][13]              |
 | [Project keeper maven plugin][46]                       | [The MIT License][47]                          |
 | [JaCoCo :: Maven Plugin][48]                            | [Eclipse Public License 2.0][49]               |
@@ -100,15 +100,15 @@
 [33]: https://sonatype.github.io/ossindex-maven/maven-plugin/
 [34]: http://zlika.github.io/reproducible-build-maven-plugin
 [35]: https://maven.apache.org/surefire/maven-surefire-plugin/
-[36]: https://maven.apache.org/plugins/maven-jar-plugin/
-[37]: https://maven.apache.org/plugins/maven-shade-plugin/
-[38]: http://www.mojohaus.org/versions-maven-plugin/
-[39]: https://maven.apache.org/plugins/maven-deploy-plugin/
-[40]: https://maven.apache.org/plugins/maven-gpg-plugin/
-[41]: https://maven.apache.org/plugins/maven-source-plugin/
-[42]: https://maven.apache.org/plugins/maven-javadoc-plugin/
-[43]: http://www.sonatype.com/public-parent/nexus-maven-plugins/nexus-staging/nexus-staging-maven-plugin/
-[44]: http://www.eclipse.org/legal/epl-v10.html
+[36]: http://www.mojohaus.org/versions-maven-plugin/
+[37]: https://maven.apache.org/plugins/maven-deploy-plugin/
+[38]: https://maven.apache.org/plugins/maven-gpg-plugin/
+[39]: https://maven.apache.org/plugins/maven-source-plugin/
+[40]: https://maven.apache.org/plugins/maven-javadoc-plugin/
+[41]: http://www.sonatype.com/public-parent/nexus-maven-plugins/nexus-staging/nexus-staging-maven-plugin/
+[42]: http://www.eclipse.org/legal/epl-v10.html
+[43]: https://maven.apache.org/plugins/maven-jar-plugin/
+[44]: https://maven.apache.org/plugins/maven-shade-plugin/
 [45]: https://maven.apache.org/surefire/maven-failsafe-plugin/
 [46]: https://github.com/exasol/project-keeper/
 [47]: https://github.com/exasol/project-keeper/blob/main/LICENSE
