@@ -16,3 +16,5 @@ linkReplacements:
   - LICENSE-exasol-jdbc.txt|https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
   - https://netty.io/netty-all/|https://netty.io/index.html
   - http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
+  - jquery.org/license|https://github.com/jquery/jquery/blob/main/LICENSE.txt
+  - https://avro.apache.org/avro-mapred|https://avro.apache.org

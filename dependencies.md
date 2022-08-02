@@ -90,12 +90,12 @@
 [18]: http://www.eclipse.org/org/documents/edl-v10.php
 [19]: https://opensource.org/licenses/BSD-2-Clause
 [20]: https://asm.ow2.io/license.html
-[21]: jquery.org/license
+[21]: https://github.com/jquery/jquery/blob/main/LICENSE.txt
 [22]: http://www.opensource.org/licenses/mit-license.php
 [23]: https://www.w3.org/Consortium/Legal/copyright-documents-19990405
 [24]: https://projects.eclipse.org/projects/ee4j.jersey/jersey-server
 [25]: https://projects.eclipse.org/projects/ee4j.jersey/jersey-client
-[26]: https://avro.apache.org/avro-mapred
+[26]: https://avro.apache.org
 [27]: https://www.apache.org/licenses/LICENSE-2.0.txt
 [28]: http://www.scalatest.org
 [29]: http://www.apache.org/licenses/LICENSE-2.0
