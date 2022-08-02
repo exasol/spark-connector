@@ -1,4 +1,4 @@
-package com.exasol.cloudetl
+package com.exasol.spark
 
 import java.util.concurrent.ConcurrentHashMap
 
