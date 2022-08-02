@@ -1,4 +1,4 @@
-# The Spark Exasol Connector 1.2.1, released 2022-08-02
+# The Spark Exasol Connector 1.2.1, released 2022-08-03
 
 Code name:
 
@@ -12,16 +12,16 @@ spark-core as current there is no update available.
 
 ### Compile Dependency Updates
 
-* Updated `com.exasol:exasol-jdbc:7.1.4` to `7.1.10`
+* Updated `com.exasol:exasol-jdbc:7.1.4` to `7.1.11`
 * Updated `org.scala-lang:scala-library:2.13.5` to `2.13.8`
 
 ### Test Dependency Updates
 
-* Updated `com.exasol:exasol-testcontainers:5.1.1` to `6.1.1`
-* Updated `com.exasol:test-db-builder-java:3.2.2` to `3.3.2`
-* Updated `org.apache.logging.log4j:log4j-1.2-api:2.17.1` to `2.17.2`
-* Added `org.apache.logging.log4j:log4j-core:2.17.2`
-* Updated `org.mockito:mockito-core:4.2.0` to `4.5.1`
+* Updated `com.exasol:exasol-testcontainers:5.1.1` to `6.1.2`
+* Updated `com.exasol:test-db-builder-java:3.2.2` to `3.3.3`
+* Updated `org.apache.logging.log4j:log4j-1.2-api:2.17.1` to `2.18.0`
+* Added `org.apache.logging.log4j:log4j-core:2.18.0`
+* Updated `org.mockito:mockito-core:4.2.0` to `4.6.1`
 
 ### Plugin Dependency Updates
 
