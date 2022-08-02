@@ -685,6 +685,8 @@
                         <!-- org.apache.spark:spark-core_2.12:jar:2.4.8. Currently no update available. -->
                         <exclude>CVE-2022-33891</exclude>
                         <exclude>sonatype-2022-2430</exclude>
+                        <!-- org.apache.spark:spark-network-common_2.12. Currently no update available. -->
+                        <exclude>CVE-2021-38296</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
