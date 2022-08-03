@@ -1,8 +1,8 @@
 # The Spark Exasol Connector 1.2.1, released 2022-08-03
 
-Code name:
+Code name: Dependency updates
 
-## Features
+## Bugfixes
 
 * #118: Dependency update to fix vulnerabilities reported by ossindex and broken links
 Updated com.fasterxml.jackson.core and excluded dependencies provided by
