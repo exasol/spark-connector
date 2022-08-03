@@ -7,32 +7,6 @@
     <name>The Spark Exasol Connector</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
-    <properties>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <gpg.skip>true</gpg.skip>
-    </properties>
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://opensource.org/licenses/MIT</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>Exasol</name>
-            <email>opensource@exasol.com</email>
-            <organization>Exasol AG</organization>
-            <organizationUrl>https://www.exasol.com/</organizationUrl>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:https://github.com/exasol/spark-connector.git</connection>
-        <developerConnection>scm:git:https://github.com/exasol/spark-connector.git</developerConnection>
-        <url>https://github.com/exasol/spark-connector/tree/main</url>
-    </scm>
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
