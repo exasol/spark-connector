@@ -3,36 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
     <artifactId>spark-connector</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <name>The Spark Exasol Connector</name>
     <description>A connector for Apache Spark to access Exasol</description>
-    <url>https://github.com/exasol/spark-connector</url>
-    <properties>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <gpg.skip>true</gpg.skip>
-    </properties>
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://opensource.org/licenses/MIT</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>Exasol</name>
-            <email>opensource@exasol.com</email>
-            <organization>Exasol AG</organization>
-            <organizationUrl>https://www.exasol.com/</organizationUrl>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:https://github.com/exasol/spark-connector.git</connection>
-        <developerConnection>scm:git:https://github.com/exasol/spark-connector.git</developerConnection>
-        <url>https://github.com/exasol/spark-connector/tree/main</url>
-    </scm>
+    <url>https://github.com/exasol/spark-connector/</url>
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -68,7 +42,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-jdbc</artifactId>
-            <version>7.1.10</version>
+            <version>7.1.11</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
@@ -146,6 +120,36 @@
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-databind</artifactId>
                 </exclusion>
+                <!-- excluded to fix vulnerabilities CVE-2021-0341 and sonatype-2018-0035 -->
+                <exclusion>
+                    <groupId>com.squareup.okhttp</groupId>
+                    <artifactId>okhttp</artifactId>
+                </exclusion>
+                <!-- excluded to fix vulnerability CVE-2021-28168 for profile spark3.1 -->
+                <exclusion>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-common</artifactId>
+                </exclusion>
+                <!-- excluded to fix vulnerability sonatype-2016-0687 for profile spark3.1 -->
+                <exclusion>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-jaxb</artifactId>
+                </exclusion>
+                <!-- excluded to fix vulnerability sonatype-2014-0257 in dependency org.javassist:javassist for profile spark2.4 -->
+                <exclusion>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-client</artifactId>
+                </exclusion>
+                <!-- excluded to fix vulnerability sonatype-2014-0257 in dependency org.javassist:javassist for profile spark2.4 -->
+                <exclusion>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-server</artifactId>
+                </exclusion>
+                <!-- excluded to fix vulnerability for profile spark3.1 -->
+                <exclusion>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro-mapred</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -181,7 +185,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.77.Final</version>
+            <version>4.1.79.Final</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -190,10 +194,45 @@
             <version>${jackson.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--replace old version in org.apache.spark-core_2.12 with vulnerability CVE-2021-28168 -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>2.36</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2016-0687 -->
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-jaxb</artifactId>
+            <version>2.36</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2014-0257 in dependency org.javassist:javassist -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>2.36</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2014-0257 in dependency org.javassist:javassist -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>2.36</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--replace old version in org.apache.spark:spark-core_2.12 with vulnerability sonatype-2012-0050 in dependency commons-codec:commons-codec -->
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro-mapred</artifactId>
+            <version>1.11.1</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
-            <version>3.3.2</version>
+            <version>3.3.3</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -224,6 +263,16 @@
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-http</artifactId>
                 </exclusion>
+                <!-- excluded to fix vulnerability CVE-2022-2047 -->
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-client</artifactId>
+                </exclusion>
+                <!-- excluded to fix vulnerabilities CVE-2021-0341 and sonatype-2018-0035 -->
+                <exclusion>
+                    <groupId>com.squareup.okhttp</groupId>
+                    <artifactId>okhttp</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <!-- Test Dependencies -->
@@ -242,25 +291,25 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.5.1</version>
+            <version>4.6.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
-            <version>2.17.2</version>
+            <version>2.18.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.17.2</version>
+            <version>2.18.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>test-db-builder-java</artifactId>
-            <version>3.3.2</version>
+            <version>3.3.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -272,7 +321,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-testcontainers</artifactId>
-            <version>6.1.1</version>
+            <version>6.1.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -492,7 +541,7 @@
                 </executions>
                 <configuration>
                     <charset>UTF-8</charset>
-                    <doclint />
+                    <doclint/>
                     <serialwarn>true</serialwarn>
                     <failOnError>true</failOnError>
                     <failOnWarnings>true</failOnWarnings>
@@ -536,7 +585,7 @@
                                 </filter>
                             </filters>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>reference.conf</resource>
                                 </transformer>
@@ -544,6 +593,13 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -574,6 +630,39 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludeVulnerabilityIds>
+                        <!-- excluded vulnerabilities for profile spark3.2 -->
+                        <!-- Building with Spark3.2 and Scala 2.12 and Exasol 7.1.10 -->
+
+                        <!-- io.netty:netty-handler:jar:4.1.77.Final is provided by arrow-vector ... spark-catalyst ... spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
+                        <exclude>sonatype-2020-0026</exclude>
+                        <!-- com.google.protobuf:protobuf-java:jar:2.5.0 is provided by orc-core ... spark-sql ... spark-core. Currently no update available. -->
+                        <exclude>CVE-2021-22569</exclude>
+                        <!-- com.google.guava:guava:jar:31.1-jre: Currently no update available. Risk does not apply, as potential attackers cannot access the temp directory. -->
+                        <exclude>sonatype-2020-0926</exclude>
+
+                        <!-- excluded vulnerabilities for profile spark3.1 -->
+                        <!-- building with Spark3.1 and Scala 2.12 and Exasol 7.1.10 -->
+
+                        <!-- com.fasterxml.jackson.core:jackson-databind:jar:2.10.5.1 provided by spark-core. Currently no update available. -->
+                        <exclude>CVE-2020-36518</exclude>
+                        <exclude>sonatype-2021-4682</exclude>
+                        <!-- org.apache.spark:spark-core_2.12:jar:3.1.3. Currently no update available. -->
+                        <exclude>sonatype-2022-1694</exclude>
+
+                        <!-- excluded vulnerabilities for profile spark2.4 -->
+                        <!-- building with Spark2.4 and Scala 2.12 and Exasol 7.1.10 -->
+
+                        <!-- commons-codec:commons-codec:jar:1.9 provided by spark-catalyst ... spark-sql. Currently no update available. -->
+                        <exclude>sonatype-2012-0050</exclude>
+                        <!-- org.apache.spark:spark-core_2.12:jar:2.4.8. Currently no update available. -->
+                        <exclude>CVE-2022-33891</exclude>
+                        <exclude>sonatype-2022-2430</exclude>
+                        <!-- org.apache.spark:spark-network-common_2.12. Currently no update available. -->
+                        <exclude>CVE-2021-38296</exclude>
+                    </excludeVulnerabilityIds>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>io.github.zlika</groupId>
@@ -592,7 +681,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>1.3.4</version>
+                <version>2.5.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -600,36 +689,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <modules>
-                        <module>maven_central</module>
-                        <module>jar_artifact</module>
-                        <module>integration_tests</module>
-                    </modules>
-                    <excludedPlugins>
-                        <excludedPlugin>org.apache.maven.plugins:maven-jar-plugin</excludedPlugin>
-                        <excludedPlugin>org.apache.maven.plugins:maven-source-plugin</excludedPlugin>
-                        <excludedPlugin>org.apache.maven.plugins:maven-assembly-plugin</excludedPlugin>
-                        <excludedPlugin>org.apache.maven.plugins:maven-surefire-plugin</excludedPlugin>
-                        <excludedPlugin>org.apache.maven.plugins:maven-failsafe-plugin</excludedPlugin>
-                    </excludedPlugins>
-                    <excludedFiles>
-                        <excludedFile>README.md</excludedFile>
-                        <excludedFile>.github/workflows/ci-build-next-java.yml</excludedFile>
-                        <excludedFile>.github/workflows/release_droid*.yml</excludedFile>
-                    </excludedFiles>
-                    <linkReplacements>
-                        <linkReplacement>
-                            LICENSE-exasol-jdbc.txt|https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
-                        </linkReplacement>
-                        <linkReplacement>
-                            https://netty.io/netty-all/|https://netty.io/index.html
-                        </linkReplacement>
-                        <linkReplacement>
-                            http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
-                        </linkReplacement>
-                    </linkReplacements>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -815,16 +874,16 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <spark.version>3.2.0</spark.version>
+                <spark.version>3.2.2</spark.version>
                 <scala.version>2.13.8</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
-                <jackson.version>2.12.5</jackson.version>
+                <jackson.version>2.12.7</jackson.version>
             </properties>
         </profile>
         <profile>
             <id>spark3.1</id>
             <properties>
-                <spark.version>3.1.2</spark.version>
+                <spark.version>3.1.3</spark.version>
                 <scala.version>2.12.10</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
                 <jackson.version>2.10.5.1</jackson.version>
@@ -855,4 +914,10 @@
             </properties>
         </profile>
     </profiles>
+    <parent>
+        <artifactId>spark-connector-generated-parent</artifactId>
+        <groupId>com.exasol</groupId>
+        <version>1.2.1</version>
+        <relativePath>pk_generated_parent.pom</relativePath>
+    </parent>
 </project>

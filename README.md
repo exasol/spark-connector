@@ -1,9 +1,7 @@
 # Spark Exasol Connector
 
-<img alt="spark-exasol-connector logo" src="doc/images/spark-exasol-connector_128x128.png" style="float:left; padding:0px 10px 10px 10px;"/>
-
 [![Build Status](https://github.com/exasol/spark-connector/actions/workflows/ci-build.yml/badge.svg)](https://github.com/exasol/spark-connector/actions/workflows/ci-build.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/com.exasol/spark-connector)](https://search.maven.org/artifact/com.exasol/spark-connector_2.12)
+[![Maven Central – The Spark Exasol Connector](https://img.shields.io/maven-central/v/com.exasol/spark-connector)](https://search.maven.org/artifact/com.exasol/spark-connector_2.13)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3Aspark-connector&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.exasol%3Aspark-connector)
 
@@ -16,6 +14,8 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3Aspark-connector&metric=coverage)](https://sonarcloud.io/dashboard?id=com.exasol%3Aspark-connector)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3Aspark-connector&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=com.exasol%3Aspark-connector)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3Aspark-connector&metric=ncloc)](https://sonarcloud.io/dashboard?id=com.exasol%3Aspark-connector)
+
+<img alt="spark-exasol-connector logo" src="doc/images/spark-exasol-connector_128x128.png" style="float:left; padding:0px 10px 10px 10px;"/>
 
 ## Overview
 

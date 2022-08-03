@@ -70,3 +70,5 @@ tmp
 # Windows
 Desktop.ini
 Thumbs.db
+
+*.flattened-pom.xml

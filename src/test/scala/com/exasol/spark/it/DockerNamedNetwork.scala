@@ -2,13 +2,12 @@ package com.exasol.spark
 
 import java.util.concurrent.ConcurrentHashMap
 
+import com.github.dockerjava.api.DockerClient
 import org.apache.spark.internal.Logging
-
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import org.testcontainers.DockerClientFactory
 import org.testcontainers.containers.Network
-import org.testcontainers.utility.ResourceReaper
 
 /**
  * A reusable docker network.
@@ -33,15 +32,14 @@ class DockerNamedNetwork(name: String, reuse: Boolean) extends Network with Logg
           + s"the network manually using 'docker network rm $id'."
       )
     } else {
-      ResourceReaper.instance().removeNetworkById(id)
+      removeNetwork()
     }
 
   override def apply(base: Statement, description: Description): Statement =
     throw new UnsupportedOperationException()
 
   private[this] def getNetworkId(): String = {
-    val network = DockerClientFactory
-      .lazyClient()
+    val network = getDockerClient()
       .listNetworksCmd()
       .withNameFilter(name)
       .exec()
@@ -56,12 +54,19 @@ class DockerNamedNetwork(name: String, reuse: Boolean) extends Network with Logg
   }
 
   private[this] def createNetwork(): String =
-    DockerClientFactory
-      .lazyClient()
+    getDockerClient()
       .createNetworkCmd()
       .withName(name)
       .exec()
       .getId()
+
+  private[this] def removeNetwork(): Unit = {
+    getDockerClient().removeNetworkCmd(id).exec()
+    ()
+  }
+
+  private[this] def getDockerClient(): DockerClient = DockerClientFactory.lazyClient()
+
 }
 
 object DockerNamedNetwork extends Logging {

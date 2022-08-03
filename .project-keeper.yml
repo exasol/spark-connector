@@ -1,0 +1,20 @@
+sources:
+  - type: maven
+    path: pom.xml
+    modules:
+      - maven_central
+      - integration_tests
+excludes:
+  - regex: "(?s)E-PK-CORE-62: The project's README.md does not contain a valid badges block. Please add or replace the following badges:.*"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build-next-java.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_prepare_original_checksum.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_print_quick_checksum.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_release_on_maven_central.yml'"
+linkReplacements:
+  - LICENSE-exasol-jdbc.txt|https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
+  - https://netty.io/netty-all/|https://netty.io/index.html
+  - http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
+  - jquery.org/license|https://github.com/jquery/jquery/blob/main/LICENSE.txt
+  - https://avro.apache.org/avro-mapred|https://avro.apache.org
