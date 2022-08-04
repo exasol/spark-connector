@@ -1,4 +1,4 @@
-# The Spark Exasol Connector 1.2.1, released 2022-08-03
+# The Spark Exasol Connector 1.2.1, released 2022-08-04
 
 Code name: Dependency updates
 
