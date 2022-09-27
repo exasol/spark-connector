@@ -12,7 +12,7 @@ import org.scalatest.funsuite.AnyFunSuite
  */
 trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
 
-  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.1.10"
+  private[this] val DEFAULT_EXASOL_DOCKER_IMAGE = "7.1.14"
 
   val network = DockerNamedNetwork("spark-it-network", true)
   val container = {

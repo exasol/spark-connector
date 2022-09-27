@@ -13,7 +13,6 @@ excludes:
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_release_on_maven_central.yml'"
 linkReplacements:
-  - LICENSE-exasol-jdbc.txt|https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
   - https://netty.io/netty-all/|https://netty.io/index.html
   - http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
   - jquery.org/license|https://github.com/jquery/jquery/blob/main/LICENSE.txt
