@@ -10,7 +10,7 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatest.Suite
 
 /**
- * A trait that provides Spark session setup accross tests.
+ * A trait that provides Spark session setup across tests.
  */
 trait SparkSessionSetup extends BeforeAndAfterAll { self: Suite =>
   @transient lazy val spark: SparkSession = SparkSessionProvider.getSparkSession()
