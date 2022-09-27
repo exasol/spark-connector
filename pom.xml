@@ -524,6 +524,7 @@
                         <exclude>sonatype-2021-4682</exclude>
                         <!-- org.apache.spark:spark-core_2.12:jar:3.1.3. Currently no update available. -->
                         <exclude>sonatype-2022-1694</exclude>
+                        <exclude>CVE-2022-25168</exclude>
 
                         <!-- excluded vulnerabilities for profile spark2.4 -->
                         <!-- building with Spark2.4 and Scala 2.12 and Exasol 7.1.10 -->
