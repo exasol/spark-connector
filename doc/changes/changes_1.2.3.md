@@ -1,6 +1,6 @@
 # The Spark Exasol Connector 1.2.3, released 2022-10-25
 
-Code name:
+Code name: Spark 3.3
 
 ## Summary
 
@@ -16,9 +16,9 @@ For Spark 3.3 the following vulnerabilities in dependencies were fixed by updati
 * CVE-2022-3171: Uncontrolled Resource Consumption ('Resource Exhaustion') in `org.apache.commons:commons-text`
 * sonatype-2022-5820: Improper Restriction of XML External Entity Reference ('XXE') in `hadoop-common`
 
-## Know Remaining Spark 3.3.4 Vulnerabilities and Sonatype Warnings
+## Known Remaining Spark 3.3.4 Vulnerabilities and Sonatype Warnings
 
-The following vulnerabilities are know in Spark 3.3.4, but no update is available at the time of this `spark-connector` update, so instead we evaluate the risks here.
+The following vulnerabilities are known in Spark 3.3.4, but no update is available at the time of this `spark-connector` update, so instead we evaluate the risks here.
 
 * The command line tool `hdfs ec` has the known vulnerability sonatype-2022-5732, but the connector is not affected, since it does not use this tool. For more details see [HDFS-16766 on the Haddop issue tracker](https://issues.apache.org/jira/browse/HDFS-16766).
 * Related to the vulnerability above the code creates `DocumentBuilderFactory` instances in various other locations, but the collection ticket [HADOOP-18469](https://issues.apache.org/jira/browse/HADOOP-18469) states that no additional issues are known as a result yet.
@@ -31,7 +31,11 @@ While you can still download older versions of the `spark-connector` that suppor
 
 ## Features
 
-* ISSUE_NUMBER: description
+* #125: Added support for Spark 3.3
+
+## Bugfixes
+
+* #125: Fixed vulnerabilities in dependencies
 
 ## Dependency Updates
 
