@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        exasol-docker-version: [ 7.1.14 ]
+        exasol-docker-version: [ 7.1.15 ]
         mvn:
           [
             {
