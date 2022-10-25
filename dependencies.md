@@ -89,7 +89,7 @@
 [14]: http://www.eclipse.org/legal/epl-2.0
 [15]: https://www.gnu.org/software/classpath/license.html
 [16]: https://creativecommons.org/publicdomain/zero/1.0/
-[17]: https://projects.eclipse.org/projects/ee4j.jersey/project/jersey-media-jaxb
+[17]: https://eclipse-ee4j.github.io/jersey/
 [18]: http://www.eclipse.org/org/documents/edl-v10.php
 [19]: https://opensource.org/licenses/BSD-2-Clause
 [20]: https://asm.ow2.io/license.html
@@ -100,7 +100,7 @@
 [25]: https://projects.eclipse.org/projects/ee4j.jersey/jersey-client
 [26]: https://avro.apache.org
 [27]: https://www.apache.org/licenses/LICENSE-2.0.txt
-[28]: https://developers.google.com/protocol-buffers/protobuf-java/
+[28]: https://developers.google.com/protocol-buffers/docs/javatutorial
 [29]: https://opensource.org/licenses/BSD-3-Clause
 [30]: https://commons.apache.org/proper/commons-text
 [31]: http://www.scalatest.org
