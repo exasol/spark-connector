@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        profile: [ '-Pspark3.2', '-Pspark3.2 -Pscala2.12', '-Pspark3.1', '-Pspark2.4' ]
+        profile: [ '-Pspark3.3' ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
