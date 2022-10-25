@@ -27,6 +27,8 @@ The following vulnerabilities are know in Spark 3.3.4, but no update is availabl
 
 At the moment no Spark 3.2 version is available where vulnerabilities in dependencies can be fixed or are not exploitable. So we cannot offer a connector for these versions until the upstream project provide updates.
 
+While you can still download older versions of the `spark-connector` that support Spark 3.2, **we recommend updating**, because there are no secure 3.2 versions available at the time of this connector release. 
+
 ## Features
 
 * ISSUE_NUMBER: description
