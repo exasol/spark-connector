@@ -523,6 +523,7 @@
                         <exclude>sonatype-2022-5732</exclude>
                         <!-- Same root cause as above, but according to HADOOP-18469 does not result in known issue -->
                         <exclude>sonatype-2022-5820</exclude>
+
                         <!-- excluded vulnerabilities for profile spark3.2 -->
                         <!-- Building with Spark3.2 and Scala 2.12 and Exasol 7.1.10 -->
                         <!-- io.netty:netty-handler:jar:4.1.77.Final is provided by arrow-vector ... spark-catalyst ... spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
@@ -714,7 +715,7 @@
                 <spark.version>3.2.2</spark.version>
                 <scala.version>2.13.8</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
-                <jackson.version>2.13.4.2</jackson.version>
+                <jackson.version>2.12.7</jackson.version>
             </properties>
         </profile>
         <profile>

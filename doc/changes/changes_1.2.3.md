@@ -4,15 +4,17 @@ Code name:
 
 ## Summary
 
-The following vulnerabilities in dependencies were fixed by updating the dependencies:
+* Added support for Spark 3.3.
+* Removed support for Spark 3.1
+* Removed support for Spark 2.4.
+* Removed support for Scala 2.12
+* Dropped incomplete Scala 2.12 profile from build.
+
+For Spark 3.3 the following vulnerabilities in dependencies were fixed by updating the dependencies:
 
 * CVE-2022-42003: Uncontrolled Resource Consumption in `jackson-databind`
 * CVE-2022-3171: Uncontrolled Resource Consumption ('Resource Exhaustion') in `org.apache.commons:commons-text`
 * sonatype-2022-5820: Improper Restriction of XML External Entity Reference ('XXE') in `hadoop-common`
-
-* Added support for Spark 3.3.
-* Removed support for Spark 2.4.
-* Dropped incomplete Scala 2.12 profile from build.
 
 ## Know Remaining Spark 3.3.4 Vulnerabilities and Sonatype Warnings
 
@@ -20,6 +22,10 @@ The following vulnerabilities are know in Spark 3.3.4, but no update is availabl
 
 * The command line tool `hdfs ec` has the known vulnerability sonatype-2022-5732, but the connector is not affected, since it does not use this tool. For more details see [HDFS-16766 on the Haddop issue tracker](https://issues.apache.org/jira/browse/HDFS-16766).
 * Related to the vulnerability above the code creates `DocumentBuilderFactory` instances in various other locations, but the collection ticket [HADOOP-18469](https://issues.apache.org/jira/browse/HADOOP-18469) states that no additional issues are known as a result yet.
+
+## Spark 3.2
+
+At the moment no Spark 3.2 version is available where vulnerabilities in dependencies can be fixed or are not exploitable. So we cannot offer a connector for these versions until the upstream project provide updates.
 
 ## Features
 

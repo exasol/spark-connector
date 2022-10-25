@@ -17,25 +17,16 @@ jobs:
         mvn:
           [
             {
-              name: 'Spark3.2 and Scala 2.13',
-              profile: '-Pspark3.2',
+              name: 'Spark3.3',
+              profile: '-Pspark3.3',
               project-keeper-skip: false,
             },
-            {
-              name: 'Spark3.2 and Scala 2.12',
-              profile: '-Pspark3.2 -Pscala2.12',
-              project-keeper-skip: true,
-            },
-            {
-              name: 'Spark3.1 and Scala 2.12',
-              profile: '-Pspark3.1',
-              project-keeper-skip: true,
-            },
-            {
-              name: 'Spark2.4 and Scala 2.12',
-              profile: '-Pspark2.4',
-              project-keeper-skip: true,
-            },
+            # Build for 3.2 disabled until a fix version is available that deals with CVE-2022-42003 and CVE-2022-42004
+            #{
+            #  name: 'Spark3.2',
+            #  profile: '-Pspark3.2',
+            #  project-keeper-skip: true,
+            #},
           ]
     steps:
       - name: Checkout the repository
