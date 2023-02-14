@@ -698,6 +698,11 @@
                 <version>0.1.4_0.9.31</version>
                 <dependencies>
                     <dependency>
+                        <groupId>com.geirsson</groupId>
+                        <artifactId>metaconfig-pprint_${scala.compat.version}</artifactId>
+                        <version>0.11.1</version>
+                    </dependency>
+                    <dependency>
                         <groupId>com.github.liancheng</groupId>
                         <artifactId>organize-imports_${scala.compat.version}</artifactId>
                         <version>0.6.0</version>

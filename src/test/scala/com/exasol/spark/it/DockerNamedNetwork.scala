@@ -2,8 +2,9 @@ package com.exasol.spark
 
 import java.util.concurrent.ConcurrentHashMap
 
-import com.github.dockerjava.api.DockerClient
 import org.apache.spark.internal.Logging
+
+import com.github.dockerjava.api.DockerClient
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import org.testcontainers.DockerClientFactory

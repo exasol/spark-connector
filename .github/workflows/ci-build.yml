@@ -52,7 +52,6 @@ jobs:
       - name: Pull docker Images
         run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
       - name: Run scalafix linting
-        if: ${{ false }}
         run: |
           mvn --batch-mode clean compile test scalafix:scalafix ${{ matrix.mvn.profile }} \
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
