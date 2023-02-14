@@ -12,6 +12,7 @@ excludes:
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_print_quick_checksum.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_release_on_maven_central.yml'"
+  - "E-PK-CORE-53: The dependencies.md file has outdated content."
 linkReplacements:
   - https://netty.io/netty-all/|https://netty.io/index.html
   - http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
