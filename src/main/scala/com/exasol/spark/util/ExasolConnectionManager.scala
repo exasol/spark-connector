@@ -248,7 +248,7 @@ object ExasolConnectionManager extends Logging {
     username: String,
     password: String
   ): EXAConnection = {
-    val _ = Class.forName("com.exasol.jdbc.EXADriver") // scalastyle:ignore classForName
+    val _ = Class.forName("com.exasol.jdbc.EXADriver")
     DriverManager.setLoginTimeout(JDBC_LOGIN_TIMEOUT)
     val conn = DriverManager.getConnection(url, username, password)
     conn.asInstanceOf[EXAConnection]

@@ -2,10 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spark-connector</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <name>The Spark Exasol Connector</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
+    <parent>
+        <artifactId>spark-connector-generated-parent</artifactId>
+        <groupId>com.exasol</groupId>
+        <version>1.2.4</version>
+        <relativePath>pk_generated_parent.pom</relativePath>
+    </parent>
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -16,15 +22,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-    <repositories>
-        <repository>
-            <id>maven.exasol.com</id>
-            <url>https://maven.exasol.com/artifactory/exasol-releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -34,7 +31,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-jdbc</artifactId>
-            <version>7.1.11</version>
+            <version>7.1.17</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
@@ -142,6 +139,16 @@
                     <groupId>org.apache.avro</groupId>
                     <artifactId>avro-mapred</artifactId>
                 </exclusion>
+                <!-- exluded to fix CVEs: CVE-2022-37865 and CVE-2022-37866 -->
+                <exclusion>
+                    <groupId>org.apache.ivy</groupId>
+                    <artifactId>ivy</artifactId>
+                </exclusion>
+                <!-- exluded to fix CVE-2021-37533 -->
+                <exclusion>
+                    <groupId>commons-net</groupId>
+                    <artifactId>commons-net</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -177,7 +184,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.84.Final</version>
+            <version>4.1.89.Final</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -190,28 +197,28 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
-            <version>2.36</version>
+            <version>${jersey.version}</version>
             <scope>provided</scope>
         </dependency>
         <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2016-0687 -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-jaxb</artifactId>
-            <version>2.36</version>
+            <version>${jersey.version}</version>
             <scope>provided</scope>
         </dependency>
         <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2014-0257 in dependency org.javassist:javassist -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>2.36</version>
+            <version>${jersey.version}</version>
             <scope>provided</scope>
         </dependency>
         <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2014-0257 in dependency org.javassist:javassist -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>2.36</version>
+            <version>${jersey.version}</version>
             <scope>provided</scope>
         </dependency>
         <!--replace old version in org.apache.spark:spark-core_2.12 with vulnerability sonatype-2012-0050 in dependency commons-codec:commons-codec -->
@@ -265,6 +272,16 @@
                     <groupId>com.squareup.okhttp</groupId>
                     <artifactId>okhttp</artifactId>
                 </exclusion>
+                <!-- excluded to fix CVE-2022-40152 -->
+                <exclusion>
+                    <groupId>com.fasterxml.woodstox</groupId>
+                    <artifactId>woodstox-core</artifactId>
+                </exclusion>
+                <!-- exluded to fix CVE-2021-37533 -->
+                <exclusion>
+                    <groupId>commons-net</groupId>
+                    <artifactId>commons-net</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <!-- Test Dependencies -->
@@ -283,7 +300,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.8.0</version>
+            <version>5.1.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -307,7 +324,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>test-db-builder-java</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -319,19 +336,21 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-testcontainers</artifactId>
-            <version>6.3.0</version>
+            <version>6.5.1</version>
             <scope>test</scope>
         </dependency>
         <!-- Dependencies that are forced higher to fix vulnerabilities -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.21.8</version><!-- fixes sonatype-2022-5732 -->
+            <version>3.21.12</version>
+            <!-- fixes sonatype-2022-5732 -->
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.10.0</version><!-- fixes sonatype-2022-5732 -->
+            <version>1.10.0</version>
+            <!-- fixes sonatype-2022-5732 -->
         </dependency>
     </dependencies>
     <build>
@@ -339,7 +358,7 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>4.7.2</version>
+                <version>4.8.0</version>
                 <executions>
                     <execution>
                         <id>scala-compile-first</id>
@@ -476,7 +495,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -523,13 +542,12 @@
                         <exclude>sonatype-2022-5732</exclude>
                         <!-- Same root cause as above, but according to HADOOP-18469 does not result in known issue -->
                         <exclude>sonatype-2022-5820</exclude>
-
+                        <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') from jackson-core:2.13.4 -->
+                        <exclude>sonatype-2022-6438</exclude>
                         <!-- excluded vulnerabilities for profile spark3.2 -->
                         <!-- Building with Spark3.2 and Scala 2.12 and Exasol 7.1.10 -->
                         <!-- io.netty:netty-handler:jar:4.1.77.Final is provided by arrow-vector ... spark-catalyst ... spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
                         <exclude>sonatype-2020-0026</exclude>
-                        <!-- com.google.protobuf:protobuf-java:jar:2.5.0 is provided by orc-core ... spark-sql ... spark-core. Currently no update available. -->
-                        <exclude>CVE-2021-22569</exclude>
                         <!-- com.google.guava:guava:jar:31.1-jre: Currently no update available. Risk does not apply, as potential attackers cannot access the temp directory. -->
                         <exclude>sonatype-2020-0926</exclude>
                         <!-- excluded vulnerabilities for profile spark3.1 -->
@@ -546,7 +564,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>2.8.0</version>
+                <version>2.9.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -605,7 +623,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>artifact-reference-checker-maven-plugin</artifactId>
-                <version>0.4.1</version>
+                <version>0.4.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -633,32 +651,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.scalastyle</groupId>
-                <artifactId>scalastyle-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <verbose>false</verbose>
-                    <failOnViolation>true</failOnViolation>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <failOnWarning>false</failOnWarning>
-                    <sourceDirectory>${project.basedir}/src/main/scala</sourceDirectory>
-                    <testSourceDirectory>${project.basedir}/src/test/scala</testSourceDirectory>
-                    <configLocation>${project.basedir}/scalastyle-config.xml</configLocation>
-                    <outputFile>${project.build.directory}/scalastyle-output.xml</outputFile>
-                    <outputEncoding>UTF-8</outputEncoding>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.24.0</version>
+                <version>2.33.0</version>
                 <configuration>
                     <scala>
                         <scalafmt>
@@ -679,6 +674,11 @@
                 <artifactId>scalafix-maven-plugin_${scala.compat.version}</artifactId>
                 <version>0.1.4_0.9.31</version>
                 <dependencies>
+                    <dependency>
+                        <groupId>com.geirsson</groupId>
+                        <artifactId>metaconfig-pprint_${scala.compat.version}</artifactId>
+                        <version>0.11.1</version>
+                    </dependency>
                     <dependency>
                         <groupId>com.github.liancheng</groupId>
                         <artifactId>organize-imports_${scala.compat.version}</artifactId>
@@ -706,32 +706,33 @@
                 <spark.version>3.3.1</spark.version>
                 <scala.version>2.13.10</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
+                <!--
+                    Update this jackson version with new release of Spark
+                    Scala module 2.13.4 requires Jackson Databind version >= 2.13.0 and < 2.14.0
+                -->
                 <jackson.version>2.13.4.2</jackson.version>
+                <jersey.version>3.1.1</jersey.version>
             </properties>
         </profile>
         <profile>
             <id>spark3.2</id>
             <properties>
-                <spark.version>3.2.2</spark.version>
-                <scala.version>2.13.8</scala.version>
+                <spark.version>3.2.3</spark.version>
+                <scala.version>2.13.10</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
-                <jackson.version>2.12.7</jackson.version>
+                <jackson.version>2.12.7.1</jackson.version>
+                <jersey.version>3.1.1</jersey.version>
             </properties>
         </profile>
         <profile>
             <id>spark3.1</id>
             <properties>
                 <spark.version>3.1.3</spark.version>
-                <scala.version>2.12.10</scala.version>
+                <scala.version>2.12.17</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
                 <jackson.version>2.10.5.1</jackson.version>
+                <jersey.version>3.1.1</jersey.version>
             </properties>
         </profile>
     </profiles>
-    <parent>
-        <artifactId>spark-connector-generated-parent</artifactId>
-        <groupId>com.exasol</groupId>
-        <version>1.2.3</version>
-        <relativePath>pk_generated_parent.pom</relativePath>
-    </parent>
 </project>

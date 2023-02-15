@@ -17,14 +17,12 @@ class SaveOptionsIT extends BaseTableQueryIT {
     defaultOptions = getConfiguration() ++ Map("table" -> tableName)
   }
 
-  // scalastyle:off nonascii
   private[this] val dataframeTestData: Seq[(String, String, Date, String)] = Seq(
     ("name1", "city1", Date.valueOf("2019-01-11"), "äpişge"),
     ("name1", "city2", Date.valueOf("2019-01-12"), "gül"),
     ("name2", "city1", Date.valueOf("2019-02-25"), "çigit"),
     ("name2", "city2", Date.valueOf("2019-02-25"), "okay")
   )
-  // scalastyle:on nonascii
 
   test("`tableExists` should return correct boolean result") {
     assert(exasolConnectionManager.tableExists(tableName) === true)

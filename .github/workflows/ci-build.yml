@@ -10,10 +10,13 @@ jobs:
   build:
     name: Building with ${{ matrix.mvn.name }} and Exasol ${{ matrix.exasol-docker-version }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
-        exasol-docker-version: [ 7.1.15 ]
+        exasol-docker-version: [ 7.1.17 ]
         mvn:
           [
             {
@@ -30,31 +33,25 @@ jobs:
           ]
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 11
-      - name: Cache local Maven repository
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
       - name: Cache SonarCloud packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+      - name: Enable testcontainer reuse
+        run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
       - name: Pull docker Images
         run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
       - name: Run scalafix linting
-        if: ${{ false }}
         run: |
           mvn --batch-mode clean compile test scalafix:scalafix ${{ matrix.mvn.profile }} \
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \

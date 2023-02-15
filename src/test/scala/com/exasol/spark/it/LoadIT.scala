@@ -113,7 +113,7 @@ class LoadIT extends BaseTableQueryIT {
   test("returns unicode columns") {
     val df = getDataFrameReader(s"""SELECT "UNICODE_COL" FROM $tableName WHERE UNICODE_COL IS NOT NULL""").load()
     assert(df.count() === 3)
-    assert(df.collect().map(_(0)) === Seq("öäüß", "Ö", "Ù")) // scalastyle:ignore nonascii
+    assert(df.collect().map(_(0)) === Seq("öäüß", "Ö", "Ù"))
   }
 
 }

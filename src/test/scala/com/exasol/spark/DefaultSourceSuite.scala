@@ -3,8 +3,8 @@ package com.exasol.spark
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.Row
-import org.apache.spark.sql.SaveMode
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.SaveMode
 
 import org.mockito.Mockito.when
 import org.scalatest.funsuite.AnyFunSuite

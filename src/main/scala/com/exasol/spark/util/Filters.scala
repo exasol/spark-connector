@@ -31,7 +31,6 @@ object Filters {
    * @return an Exasol boolean expression, [[scala.None]] is returned if
    *         expression cannot be created from the filter
    */
-  // scalastyle:off null
   // Suppression is accepted since we have terminal conditions in the
   // recursion.
   def filterToBooleanExpression(filter: Filter): Option[BooleanExpression] =
@@ -92,7 +91,6 @@ object Filters {
       null
     }
   }
-  // scalastyle:on null
 
   private[this] def getLiteral(value: Any): ValueExpression =
     value match {

@@ -24,10 +24,8 @@ class ExasolWriter(
   manager: ExasolConnectionManager
 ) extends Serializable {
 
-  // scalastyle:off null
   @transient private var mainConnection: EXAConnection = null
   private var hosts: Seq[String] = null
-  // scalastyle:on
 
   def closeMainResources(): Unit =
     if (mainConnection != null && !mainConnection.isClosed) {
