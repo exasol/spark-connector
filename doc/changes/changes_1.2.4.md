@@ -4,9 +4,12 @@ Code name:
 
 ## Summary
 
+Updated dependencies and fixed vulnerabilities.
+
 ## Refactoring
 
 * #129: Updated dependencies and fixed vulnerabilities
+
 ## Dependency Updates
 
 ### Compile Dependency Updates
