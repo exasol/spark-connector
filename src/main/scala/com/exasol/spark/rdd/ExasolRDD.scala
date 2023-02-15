@@ -35,11 +35,9 @@ class ExasolRDD(
 ) extends RDD[Row](sc, Nil)
     with Logging {
 
-  // scalastyle:off null
   @transient private var mainConnection: EXAConnection = null
   @transient private var mainStatement: Statement = null
   @transient private var mainResultSet: EXAResultSet = null
-  // scalastyle:on
 
   def closeMainResources(): Unit = {
     if (mainConnection != null) {
@@ -93,7 +91,6 @@ class ExasolRDD(
     partitions.toArray
   }
 
-  // scalastyle:off null return
   override def compute(split: Partition, context: TaskContext): Iterator[Row] = {
     var closed = false
     var resultSet: ResultSet = null
@@ -159,6 +156,5 @@ class ExasolRDD(
 
     JdbcUtils.resultSetToRows(resultSet, querySchema)
   }
-  // scalastyle:on null return
 
 }

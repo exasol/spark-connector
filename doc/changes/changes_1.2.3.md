@@ -69,4 +69,5 @@ While you can still download older versions of the `spark-connector` that suppor
 * Updated `org.codehaus.mojo:flatten-maven-plugin:1.2.7` to `1.3.0`
 * Updated `org.codehaus.mojo:versions-maven-plugin:2.10.0` to `2.14.2`
 * Updated `org.itsallcode:openfasttrace-maven-plugin:1.5.0` to `1.6.1`
+* Removed `org.scalastyle:scalastyle-maven-plugin:1.0.0`
 * Updated `org.scalatest:scalatest-maven-plugin:2.0.2` to `2.2.0`

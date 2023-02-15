@@ -16,7 +16,7 @@ object Types extends Logging {
   private val MAX_PRECISION_EXASOL: Int = 36
   private val MAX_SCALE_EXASOL: Int = 36
 
-  val LongDecimal: DecimalType = DecimalType(20, 0) // scalastyle:ignore magic.number
+  val LongDecimal: DecimalType = DecimalType(20, 0)
 
   /**
    * Given a [[java.sql.ResultSetMetaData]] returns a Spark

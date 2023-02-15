@@ -64,13 +64,12 @@
 | [Reproducible Build Maven Plugin][71]                   | [Apache 2.0][10]                               |
 | [Artifact reference checker and unifier][72]            | [MIT License][73]                              |
 | [OpenFastTrace Maven Plugin][74]                        | [GNU General Public License v3.0][75]          |
-| [Scalastyle Maven Plugin][76]                           | [Apache 2.0][8]                                |
-| [spotless-maven-plugin][77]                             | [The Apache Software License, Version 2.0][27] |
-| [scalafix-maven-plugin][78]                             | [BSD-3-Clause][29]                             |
-| [Apache Maven Clean Plugin][79]                         | [Apache License, Version 2.0][27]              |
-| [Apache Maven Resources Plugin][80]                     | [Apache License, Version 2.0][27]              |
-| [Apache Maven Install Plugin][81]                       | [Apache License, Version 2.0][27]              |
-| [Apache Maven Site Plugin][82]                          | [Apache License, Version 2.0][27]              |
+| [spotless-maven-plugin][76]                             | [The Apache Software License, Version 2.0][27] |
+| [scalafix-maven-plugin][77]                             | [BSD-3-Clause][29]                             |
+| [Apache Maven Clean Plugin][78]                         | [Apache License, Version 2.0][27]              |
+| [Apache Maven Resources Plugin][79]                     | [Apache License, Version 2.0][27]              |
+| [Apache Maven Install Plugin][80]                       | [Apache License, Version 2.0][27]              |
+| [Apache Maven Site Plugin][81]                          | [Apache License, Version 2.0][27]              |
 
 [0]: https://www.scala-lang.org/
 [1]: https://www.apache.org/licenses/LICENSE-2.0
@@ -148,10 +147,9 @@
 [73]: https://github.com/exasol/artifact-reference-checker-maven-plugin/blob/main/LICENSE
 [74]: https://github.com/itsallcode/openfasttrace-maven-plugin
 [75]: https://www.gnu.org/licenses/gpl-3.0.html
-[76]: http://www.scalastyle.org
-[77]: https://github.com/diffplug/spotless
-[78]: https://github.com/evis/scalafix-maven-plugin
-[79]: https://maven.apache.org/plugins/maven-clean-plugin/
-[80]: https://maven.apache.org/plugins/maven-resources-plugin/
-[81]: https://maven.apache.org/plugins/maven-install-plugin/
-[82]: https://maven.apache.org/plugins/maven-site-plugin/
+[76]: https://github.com/diffplug/spotless
+[77]: https://github.com/evis/scalafix-maven-plugin
+[78]: https://maven.apache.org/plugins/maven-clean-plugin/
+[79]: https://maven.apache.org/plugins/maven-resources-plugin/
+[80]: https://maven.apache.org/plugins/maven-install-plugin/
+[81]: https://maven.apache.org/plugins/maven-site-plugin/

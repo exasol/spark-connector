@@ -28,7 +28,6 @@ class FiltersSuite extends AnyFunSuite with Matchers {
     assert(getWhereClause(Seq(EqualTo("field", "a"))) === """("field" = 'a')""")
   }
 
-  // scalastyle:off nonascii
   test("renders equal-to with different data types") {
     val filters = Seq(
       EqualTo("bool_col", false),
@@ -55,7 +54,6 @@ class FiltersSuite extends AnyFunSuite with Matchers {
       """.stripMargin.replaceAll("\\s+", " ").trim()
     assert(getWhereClause(filters) === expected)
   }
-  // scalastyle:on nonascii
 
   test("renders not-equal-to") {
     assert(getWhereClause(Seq(Not(EqualTo("field", 1.0)))) === """("field" <> 1.0)""")
