@@ -28,7 +28,7 @@ jobs:
       - name: Install xmlstarlet
         run: sudo apt install -y --no-install-recommends xmlstarlet
       - name: Create release pom file
-        run: ./tools/createReleasePom.sh "{{ matrix.profile }}"
+        run: ./tools/createReleasePom.sh ${{ matrix.profile }}
       - name: Publish to Central Repository
         run: |
           mvn --file release.xml clean deploy ${{ matrix.profile }} \
