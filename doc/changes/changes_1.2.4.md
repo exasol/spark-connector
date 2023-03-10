@@ -1,4 +1,4 @@
-# The Spark Exasol Connector 1.2.4, released 2023-08-10
+# The Spark Exasol Connector 1.2.4, released 2023-03-10
 
 Code name: Fixed remote Maven Central release bug
 
