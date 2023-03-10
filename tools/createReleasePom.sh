@@ -3,6 +3,7 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+set -o xtrace
 
 if ! command -v xmlstarlet &>/dev/null; then
 	echo "xmlstarlet tool is not available, please install it to continue."
