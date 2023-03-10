@@ -43,7 +43,7 @@
 | ------------------------------------------------------- | ---------------------------------------------- |
 | [SonarQube Scanner for Maven][45]                       | [GNU LGPL 3][46]                               |
 | [scala-maven-plugin][47]                                | [Public domain (Unlicense)][48]                |
-| [Apache Maven Compiler Plugin][49]                      | [Apache License, Version 2.0][27]              |
+| [Apache Maven Compiler Plugin][49]                      | [Apache-2.0][27]                               |
 | [Apache Maven Enforcer Plugin][50]                      | [Apache License, Version 2.0][27]              |
 | [Maven Flatten Plugin][51]                              | [Apache Software Licenese][27]                 |
 | [org.sonatype.ossindex.maven:ossindex-maven-plugin][52] | [ASL2][10]                                     |
@@ -108,7 +108,7 @@
 [34]: https://github.com/mockito/mockito
 [35]: https://github.com/mockito/mockito/blob/main/LICENSE
 [36]: https://logging.apache.org/log4j/2.x/log4j-api/
-[37]: https://logging.apache.org/log4j/2.x/log4j-1.2-api/
+[37]: https://logging.apache.org/log4j/2.x/
 [38]: https://logging.apache.org/log4j/2.x/log4j-core/
 [39]: https://github.com/exasol/test-db-builder-java/
 [40]: https://github.com/exasol/test-db-builder-java/blob/main/LICENSE

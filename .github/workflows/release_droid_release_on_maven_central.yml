@@ -28,12 +28,11 @@ jobs:
       - name: Install xmlstarlet
         run: sudo apt install -y --no-install-recommends xmlstarlet
       - name: Create release pom file
-        run: ./tools/createReleasePom.sh
+        run: ./tools/createReleasePom.sh {{ matrix.profile }}
       - name: Publish to Central Repository
         run: |
           mvn --file release.xml clean deploy ${{ matrix.profile }} \
               -Dgpg.skip=false \
-              -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
               -DskipTests \
               -Dproject-keeper.skip=true
         env:

@@ -20,3 +20,4 @@ linkReplacements:
   - https://avro.apache.org/avro-mapred|https://avro.apache.org
   - https://projects.eclipse.org/projects/ee4j.jersey/project/jersey-media-jaxb|https://eclipse-ee4j.github.io/jersey/
   - https://developers.google.com/protocol-buffers/protobuf-java/|https://developers.google.com/protocol-buffers/docs/javatutorial
+  - https://logging.apache.org/log4j/2.x/log4j-1.2-api/|https://logging.apache.org/log4j/2.x/
