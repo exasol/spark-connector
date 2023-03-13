@@ -14,6 +14,8 @@
     </parent>
     <properties>
         <log4j.version>2.20.0</log4j.version>
+        <sonar.sources>.</sonar.sources>
+        <sonar.inclusions>src/main/**</sonar.inclusions>
     </properties>
     <distributionManagement>
         <snapshotRepository>
