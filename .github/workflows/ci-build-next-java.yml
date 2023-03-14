@@ -9,6 +9,9 @@ on:
 jobs:
   java-17-compatibility:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -19,6 +22,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+          cache: 'maven'
       - name: Run tests and build with Maven
         if: ${{ false }}
         run: |

@@ -41,6 +41,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
+          cache: 'maven'
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -72,7 +73,7 @@ jobs:
       - name: Sonar analysis
         if: ${{ env.SONAR_TOKEN != null && !matrix.mvn.project-keeper-skip }}
         run: |
-          mvn --batch-mode sonar:sonar \
+          mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
               -DtrimStackTrace=false \
               -Dsonar.organization=exasol \

@@ -78,14 +78,11 @@ Similar to using maven, you should provide maven artifact coordinates to the
 
 Go to your cluster, then to `Libraries`, and click `Install New`:
 
-- Select Maven as a Library Source.
-- In the Coordinate field, enter artifact coordinates
-  `com.exasol:spark-connector_2.12:<VERSION>`. Please notice that we use the
-  Scala version 2.12, change it to 2.13 if your Databricks Runtime version
-  requires it.
-- In the Repository field, enter the Exasol Artifactory
-  `https://maven.exasol.com/artifactory/exasol-releases`.
-- Click Install.
+- Select Maven as a `Library Source`
+- In the `Coordinates` field, enter artifact coordinates
+  `com.exasol:spark-connector_2.13:<VERSION>`. Please notice that we use the
+  Scala version 2.13, please let us know if you require Scala version 2.12.
+- Click `Install`
 
 Please change the `<VERSION>` to one of the latest Spark Exasol Connector
 releases.

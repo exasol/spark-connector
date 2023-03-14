@@ -20,6 +20,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
+          cache: 'maven'
       - name: Install xmlstarlet
         run: sudo apt install -y --no-install-recommends xmlstarlet
       - name: Create release pom file
