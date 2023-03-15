@@ -34,40 +34,24 @@ is used for the parallel connections from the Spark tasks to Exasol data nodes.
 The Spark Exasol Connector is released to the Maven Central Repository. You can
 find all the releases at [com.exasol/spark-connector][maven-link] page.
 
-[maven-link]: https://search.maven.org/artifact/com.exasol/spark-connector_2.12
+[maven-link]: https://central.sonatype.com/search?q=%2522spark-connector_2.13%2522%2520%2522com.exasol%2522
 
 There are several options to include the connector as a dependency to your
-projects. Here we assume you know the basics of providing dependencies to your
 projects.
 
 ### Spark Exasol Connector as Maven Dependency
 
 You can provide the connector as a dependency to your Spark Java applications.
 
-For that add the Exasol Artifactory and the dependency itself to your project:
-
 ```xml
-<repositories>
-    <repository>
-        <id>maven.exasol.com</id>
-        <url>https://maven.exasol.com/artifactory/exasol-releases</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
         <groupId>com.exasol</groupId>
-        <artifactId>spark-connector_2.12</artifactId>
+        <artifactId>spark-connector_2.13</artifactId>
         <version><VERSION></version>
     </dependency>
 </dependencies>
 ```
-
-The connector uses the [Exasol JDBC driver][exasol-jdbc] as one of its
-dependencies. We add the repository identifier for the Exasol Maven Artifactory
-so that the Exasol JDBC is transitively fetched.
-
-[exasol-jdbc]: https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
 
 Please do not forget to update the `<VERSION>` placeholder with one of the
 latest Spark Exasol Connector releases.
@@ -78,13 +62,10 @@ To provide the connector to your Spark Scala projects, add the following lines
 to your `build.sbt` file:
 
 ```scala
-resolvers ++= Seq("Exasol Releases" at "https://maven.exasol.com/artifactory/exasol-releases")
-
 libraryDependencies += "com.exasol" % "spark-connector" %% "<VERSION>"
 ```
 
-Similar to the Java dependency, we add the resolver to the Exasol Artifactory so
-that the Exasol JDBC driver can be found.
+Similarly, please do not forget to update the `<VERSION>` placeholder.
 
 ### Spark Exasol Connector as Databricks Cluster Dependency
 
@@ -97,14 +78,11 @@ Similar to using maven, you should provide maven artifact coordinates to the
 
 Go to your cluster, then to `Libraries`, and click `Install New`:
 
-- Select Maven as a Library Source.
-- In the Coordinate field, enter artifact coordinates
-  `com.exasol:spark-connector_2.12:<VERSION>`. Please notice that we use the
-  Scala version 2.12, change it to 2.13 if your Databricks Runtime version
-  requires it.
-- In the Repository field, enter the Exasol Artifactory
-  `https://maven.exasol.com/artifactory/exasol-releases`.
-- Click Install.
+- Select Maven as a `Library Source`
+- In the `Coordinates` field, enter artifact coordinates
+  `com.exasol:spark-connector_2.13:<VERSION>`. Please note that we use the
+  Scala version 2.13. Please contact us know if you require Scala version 2.12.
+- Click `Install`
 
 Please change the `<VERSION>` to one of the latest Spark Exasol Connector
 releases.
@@ -112,12 +90,10 @@ releases.
 ### Spark Exasol Connector With Spark Shell
 
 You can also integrate the Spark Exasol Connector to the Spark Shell. Provide
-the artifact coordinates to the `--repositories` and `--packages` parameters:
+the artifact coordinates `--packages` parameters:
 
 ```sh
-spark-shell \
-  --repositories https://maven.exasol.com/artifactory/exasol-releases \
-  --packages com.exasol:spark-connector_2.12:<VERSION>
+spark-shell --packages com.exasol:spark-connector_2.13:<VERSION>
 ```
 
 The `spark-shell` provides Read-Eval-Print-Loop (REPL) to interactively learn
@@ -133,14 +109,13 @@ Use the `spark-submit` command:
 ```sh
 spark-submit \
   --master spark://spark-master-url:7077 \
-  --repositories https://maven.exasol.com/artifactory/exasol-releases \
-  --packages com.exasol:spark-connector_2.11:<VERSION> \
+  --packages com.exasol:spark-connector_2.13:<VERSION> \
   --class com.organization.SparkApplication \
   path/to/spark_application.jar
 ```
 
-The `--repositories` and `--packages` can be omitted if your Spark application
-JAR already includes the connector as a dependency (e.g, jar-with-dependencies).
+The `--packages` parameter can be omitted if your Spark application
+JAR already includes the connector as a dependency (e.g, `jar-with-dependencies`).
 
 Like `spark-shell` and `spark-submit`, you can also use `pyspark` and `sparkR`
 commands.
@@ -172,13 +147,13 @@ mvn package -DskipTests=true
 The assembled jar file with the `-assembly` suffix should be located in the `target/`
 folder.
 
-If you want different version of Spark, you can use profiles `-Pspark3.1` or
-`-Pspark2.4` for Spark `3.1` or `2.4` versions respectively.
+If you want different version of Spark, you can use profiles `-Pspark3.2` or
+`-Pspark3.1` for Spark `3.2` or `3.1` versions, respectively.
 
 For example,
 
 ```sh
-mvn package -Pspark3.1 -DskipTests=true
+mvn package -Pspark3.2 -DskipTests=true
 ```
 
 Then you can use this jar file with `spark-submit`, `spark-shell` or `pyspark`
@@ -195,20 +170,20 @@ facilitate the integration between Spark and Exasol clusters.
 
 List of required and optional parameters:
 
-| Spark Configuration           | Configuration    | Default       | Description
-| :---                          | :---             | :---          | :---
-|                               | ``query``        | *<none>*      | An Exasol SQL query string to send to Exasol cluster
-|                               | ``table``        | *<none>*      | A table name (with schema, e.g. schema.table) to save dataframe into
-| ``spark.exasol.host``         | ``host``         | ``10.0.0.11`` | A host ip address to the **first** Exasol node
-| ``spark.exasol.port``         | ``port``         | ``8563``      | A JDBC port number to connect to Exasol database
-| ``spark.exasol.username``     | ``username``     | ``sys``       | A username for connecting to the Exasol database
-| ``spark.exasol.password``     | ``password``     | ``exasol``    | A password for connecting to the Exasol database
-| ``spark.exasol.fingerprint``  | ``fingerprint``  | ``""``        | A Exasol connection certificate fingerprint value
-| ``spark.exasol.max_nodes``    | ``max_nodes``    | ``200``       | The number of data nodes in the Exasol cluster
-| ``spark.exasol.batch_size``   | ``batch_size``   | ``1000``      | The number of records batched before running an execute statement when saving dataframe
-| ``spark.exasol.create_table`` | ``create_table`` | ``false``     | A permission to create a table if it does not exist in the Exasol database when saving dataframe
-| ``spark.exasol.drop_table``   | ``drop_table``   | ``false``     | A permission to drop the table if it exists in the Exasol database when saving dataframe
-| ``spark.exasol.jdbc_options`` | ``jdbc_options`` | ``""``        | A string to specify the list of Exasol JDBC options using a ``key1=value1;key2=value2`` format
+| Spark Configuration         | Configuration  | Default     | Description                                                                                      |
+| :-------------------------- | :------------- | :---------- | :----------------------------------------------------------------------------------------------- |
+|                             | `query`        | _<none>_    | An Exasol SQL query string to send to Exasol cluster                                             |
+|                             | `table`        | _<none>_    | A table name (with schema, e.g. schema.table) to save dataframe into                             |
+| `spark.exasol.host`         | `host`         | `10.0.0.11` | A host ip address to the **first** Exasol node                                                   |
+| `spark.exasol.port`         | `port`         | `8563`      | A JDBC port number to connect to Exasol database                                                 |
+| `spark.exasol.username`     | `username`     | `sys`       | A username for connecting to the Exasol database                                                 |
+| `spark.exasol.password`     | `password`     | `exasol`    | A password for connecting to the Exasol database                                                 |
+| `spark.exasol.fingerprint`  | `fingerprint`  | `""`        | A Exasol connection certificate fingerprint value                                                |
+| `spark.exasol.max_nodes`    | `max_nodes`    | `200`       | The number of data nodes in the Exasol cluster                                                   |
+| `spark.exasol.batch_size`   | `batch_size`   | `1000`      | The number of records batched before running an execute statement when saving dataframe          |
+| `spark.exasol.create_table` | `create_table` | `false`     | A permission to create a table if it does not exist in the Exasol database when saving dataframe |
+| `spark.exasol.drop_table`   | `drop_table`   | `false`     | A permission to drop the table if it exists in the Exasol database when saving dataframe         |
+| `spark.exasol.jdbc_options` | `jdbc_options` | `""`        | A string to specify the list of Exasol JDBC options using a `key1=value1;key2=value2` format     |
 
 ### Max Nodes
 
@@ -410,12 +385,12 @@ time.
 
 Additionally, a Spark save operation takes optional `SaveMode` configurations.
 
-| Spark Save Mode     | Description
-| :---                | :---
-| `"error"` (default) | If the table exists an exception is thrown. You could drop the table via the connector `drop_table` option.
-| `"append"`          | If the table exists, the contents of the dataframe are appended to the existing table.
-| `"overwrite"`       | If the table exists, it is truncated first and then the contents of the dataframe are saved to the table.
-| `"ignore"`          | If the table exists, the save operation is skipped, and nothing is changed in the existing table.
+| Spark Save Mode     | Description                                                                                                 |
+| :------------------ | :---------------------------------------------------------------------------------------------------------- |
+| `"error"` (default) | If the table exists an exception is thrown. You could drop the table via the connector `drop_table` option. |
+| `"append"`          | If the table exists, the contents of the dataframe are appended to the existing table.                      |
+| `"overwrite"`       | If the table exists, it is truncated first and then the contents of the dataframe are saved to the table.   |
+| `"ignore"`          | If the table exists, the save operation is skipped, and nothing is changed in the existing table.           |
 
 Please keep in mind that Spark Save Modes do not use any locking mechanisms,
 thus they are not atomic.
