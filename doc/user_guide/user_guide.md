@@ -65,7 +65,7 @@ to your `build.sbt` file:
 libraryDependencies += "com.exasol" % "spark-connector" %% "<VERSION>"
 ```
 
-Similar please do not forget to update the `<VERSION>` placeholder.
+Similarly, please do not forget to update the `<VERSION>` placeholder.
 
 ### Spark Exasol Connector as Databricks Cluster Dependency
 
@@ -80,8 +80,8 @@ Go to your cluster, then to `Libraries`, and click `Install New`:
 
 - Select Maven as a `Library Source`
 - In the `Coordinates` field, enter artifact coordinates
-  `com.exasol:spark-connector_2.13:<VERSION>`. Please notice that we use the
-  Scala version 2.13, please let us know if you require Scala version 2.12.
+  `com.exasol:spark-connector_2.13:<VERSION>`. Please note that we use the
+  Scala version 2.13. Please contact us know if you require Scala version 2.12.
 - Click `Install`
 
 Please change the `<VERSION>` to one of the latest Spark Exasol Connector
@@ -115,7 +115,7 @@ spark-submit \
 ```
 
 The `--packages` parameter can be omitted if your Spark application
-JAR already includes the connector as a dependency (e.g, jar-with-dependencies).
+JAR already includes the connector as a dependency (e.g, `jar-with-dependencies`).
 
 Like `spark-shell` and `spark-submit`, you can also use `pyspark` and `sparkR`
 commands.
@@ -148,7 +148,7 @@ The assembled jar file with the `-assembly` suffix should be located in the `tar
 folder.
 
 If you want different version of Spark, you can use profiles `-Pspark3.2` or
-`-Pspark3.1` for Spark `3.2` or `3.1` versions respectively.
+`-Pspark3.1` for Spark `3.2` or `3.1` versions, respectively.
 
 For example,
 
