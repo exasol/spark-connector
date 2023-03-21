@@ -1,6 +1,6 @@
-# The Spark Exasol Connector 1.3.0, released 2023-??-??
+# The Spark Exasol Connector 1.3.0, released 2023-03-22
 
-Code name:
+Code name: Release Artifact with Scala 2.12
 
 ## Summary
 
@@ -8,7 +8,11 @@ In this release we added a artifact release for Scala 2.12 version.
 
 ## Features
 
-* ISSUE_NUMBER: description
+* #140: Added release artifact with Scala 2.12 variant
+
+## Bugs
+
+* #131: Removed project-keeper check suppression on `dependencies.md` file
 
 ## Dependency Updates
 
