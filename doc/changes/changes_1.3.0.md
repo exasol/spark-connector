@@ -4,7 +4,7 @@ Code name: Release Artifact with Scala 2.12
 
 ## Summary
 
-In this release we added a artifact release for Scala 2.12 version.
+In this release we added an artifact release for Scala 2.12 version.
 
 ## Features
 
