@@ -66,10 +66,10 @@
 | [OpenFastTrace Maven Plugin][74]                        | [GNU General Public License v3.0][75]          |
 | [spotless-maven-plugin][76]                             | [The Apache Software License, Version 2.0][27] |
 | [scalafix-maven-plugin][77]                             | [BSD-3-Clause][29]                             |
-| [Apache Maven Clean Plugin][78]                         | [Apache License, Version 2.0][27]              |
-| [Apache Maven Resources Plugin][79]                     | [Apache License, Version 2.0][27]              |
-| [Apache Maven Install Plugin][80]                       | [Apache License, Version 2.0][27]              |
-| [Apache Maven Site Plugin][81]                          | [Apache License, Version 2.0][27]              |
+| [Maven Clean Plugin][78]                                | [The Apache Software License, Version 2.0][10] |
+| [Maven Resources Plugin][79]                            | [The Apache Software License, Version 2.0][10] |
+| [Maven Install Plugin][80]                              | [The Apache Software License, Version 2.0][10] |
+| [Maven Site Plugin 3][81]                               | [The Apache Software License, Version 2.0][10] |
 
 [0]: https://www.scala-lang.org/
 [1]: https://www.apache.org/licenses/LICENSE-2.0
@@ -149,7 +149,7 @@
 [75]: https://www.gnu.org/licenses/gpl-3.0.html
 [76]: https://github.com/diffplug/spotless
 [77]: https://github.com/evis/scalafix-maven-plugin
-[78]: https://maven.apache.org/plugins/maven-clean-plugin/
-[79]: https://maven.apache.org/plugins/maven-resources-plugin/
-[80]: https://maven.apache.org/plugins/maven-install-plugin/
-[81]: https://maven.apache.org/plugins/maven-site-plugin/
+[78]: http://maven.apache.org/plugins/maven-clean-plugin/
+[79]: http://maven.apache.org/plugins/maven-resources-plugin/
+[80]: http://maven.apache.org/plugins/maven-install-plugin/
+[81]: http://maven.apache.org/plugins/maven-site-plugin/
