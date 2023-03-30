@@ -74,7 +74,7 @@
 [0]: https://www.scala-lang.org/
 [1]: https://www.apache.org/licenses/LICENSE-2.0
 [2]: http://www.exasol.com
-[3]: https://docs.exasol.com/connect_exasol/drivers/jdbc.htm
+[3]: https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/7.1.19/exasol-jdbc-7.1.19-license.txt
 [4]: https://github.com/exasol/sql-statement-builder
 [5]: https://opensource.org/licenses/MIT
 [6]: https://github.com/exasol/error-reporting-java
