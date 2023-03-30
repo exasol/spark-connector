@@ -1,7 +1,7 @@
 # Spark Exasol Connector
 
 [![Build Status](https://github.com/exasol/spark-connector/actions/workflows/ci-build.yml/badge.svg)](https://github.com/exasol/spark-connector/actions/workflows/ci-build.yml)
-[![Maven Central – The Spark Exasol Connector](https://img.shields.io/maven-central/v/com.exasol/spark-connector)](https://central.sonatype.com/search?q=%2522spark-connector_2.13%2522%2520%2522com.exasol%2522)
+[![Maven Central – The Spark Exasol Connector](https://img.shields.io/maven-central/v/com.exasol/spark-connector)](https://central.sonatype.com/artifact/com.exasol/spark-connector_2.13/1.3.0-spark-3.3.2/versions)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3Aspark-connector&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.exasol%3Aspark-connector)
 
