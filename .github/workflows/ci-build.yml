@@ -21,6 +21,11 @@ jobs:
         mvn:
           [
             {
+              name: 'Spark3.4',
+              profile: '-Pspark3.4',
+              project-keeper-skip: false,
+            },
+            {
               name: 'Spark3.3',
               profile: '-Pspark3.3',
               project-keeper-skip: false,
@@ -30,12 +35,6 @@ jobs:
               profile: '-Pspark3.3-scala2.12',
               project-keeper-skip: false,
             },
-            # Build for 3.2 disabled until a fix version is available that deals with CVE-2022-42003 and CVE-2022-42004
-            #{
-            #  name: 'Spark3.2',
-            #  profile: '-Pspark3.2',
-            #  project-keeper-skip: true,
-            #},
           ]
     steps:
       - name: Checkout the repository
