@@ -15,6 +15,7 @@ Code name:
 * Updated `com.exasol:error-reporting-java8:0.4.1` to `1.0.1`
 * Updated `com.exasol:exasol-jdbc:7.1.17` to `7.1.19`
 * Updated `com.exasol:sql-statement-builder-java8:4.5.0` to `4.5.4`
+* Added `com.fasterxml.woodstox:woodstox-core:6.5.1`
 * Updated `com.google.protobuf:protobuf-java:3.22.2` to `3.22.3`
 
 ### Test Dependency Updates
