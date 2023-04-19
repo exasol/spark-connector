@@ -1,8 +1,12 @@
 # The Spark Exasol Connector 1.4.0, released 2023-04-24
 
-Code name:
+Code name: Support Apache Spark 3.4.0
 
 ## Summary
+
+In this release, we added support for the [Apache Spark 3.4.0 version](https://spark.apache.org/releases/spark-release-3-4-0.html). With this release, users could use the Exasol connector in the latest Apache Spark clusters such as Azure Databricks.
+
+We also fixed bugs due to the missing dependency classes when using the connector as a Maven dependency in the Spark applications.
 
 ## Features
 
