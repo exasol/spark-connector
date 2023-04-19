@@ -1,12 +1,12 @@
 # The Spark Exasol Connector 1.3.2, released 2023-??-??
 
-Code name: 
+Code name:
 
 ## Summary
 
-## Features
+## Bug Fixes
 
-* ISSUE_NUMBER: description
+* #145: Fixed missing class issue when using the connector as Maven dependency
 
 ## Dependency Updates
 
