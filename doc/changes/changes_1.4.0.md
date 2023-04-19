@@ -1,8 +1,12 @@
-# The Spark Exasol Connector 1.3.1, released 2023-??-??
+# The Spark Exasol Connector 1.4.0, released 2023-04-24
 
 Code name:
 
 ## Summary
+
+## Features
+
+* #147: Added support for Apache Spark 3.4.0 version
 
 ## Bug Fixes
 
