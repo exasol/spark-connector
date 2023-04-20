@@ -604,6 +604,7 @@
                     <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
                     <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
                     <ignoredResourcePatterns>
+                        <ignoredResourcePattern>git.properties</ignoredResourcePattern>
                         <ignoredResourcePattern>arrow-git.properties</ignoredResourcePattern>
                         <ignoredResourcePattern>.*\.proto$</ignoredResourcePattern>
                     </ignoredResourcePatterns>
