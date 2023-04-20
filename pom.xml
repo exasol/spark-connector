@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spark-connector</artifactId>
-    <version>1.3.1</version>
+    <version>1.4.0</version>
     <name>The Spark Exasol Connector</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
     <parent>
         <artifactId>spark-connector-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>1.3.1</version>
+        <version>1.4.0</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
@@ -254,6 +254,10 @@
                 <exclusion>
                     <groupId>javax.servlet</groupId>
                     <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-server</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -601,6 +605,8 @@
                     <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
                     <ignoredResourcePatterns>
                         <ignoredResourcePattern>git.properties</ignoredResourcePattern>
+                        <ignoredResourcePattern>arrow-git.properties</ignoredResourcePattern>
+                        <ignoredResourcePattern>.*\.proto$</ignoredResourcePattern>
                     </ignoredResourcePatterns>
                 </configuration>
             </plugin>
@@ -694,10 +700,20 @@
     </build>
     <profiles>
         <profile>
-            <id>spark3.3</id>
+            <id>spark3.4</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <spark.version>3.4.0</spark.version>
+                <scala.version>2.13.10</scala.version>
+                <scala.compat.version>2.13</scala.compat.version>
+                <jackson.version>2.14.2</jackson.version>
+                <jersey.version>3.1.1</jersey.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>spark3.3</id>
             <properties>
                 <spark.version>3.3.2</spark.version>
                 <scala.version>2.13.10</scala.version>
@@ -717,16 +733,6 @@
                 <scala.version>2.12.17</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
                 <jackson.version>2.13.4.2</jackson.version>
-                <jersey.version>3.1.1</jersey.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>spark3.2</id>
-            <properties>
-                <spark.version>3.2.3</spark.version>
-                <scala.version>2.13.10</scala.version>
-                <scala.compat.version>2.13</scala.compat.version>
-                <jackson.version>2.12.7.1</jackson.version>
                 <jersey.version>3.1.1</jersey.version>
             </properties>
         </profile>
