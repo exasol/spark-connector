@@ -13,6 +13,7 @@
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
+        <java.version>1.8</java.version>
         <log4j.version>2.20.0</log4j.version>
         <!-- These lines are required for Sonar to find sources and to report coverage -->
         <sonar.sources>.</sonar.sources>
@@ -42,12 +43,12 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>sql-statement-builder-java8</artifactId>
-            <version>4.5.0</version>
+            <version>4.5.4</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>error-reporting-java8</artifactId>
-            <version>0.4.1</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -98,6 +99,14 @@
                 <exclusion>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-mapreduce-client-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-client-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-client-runtime</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.apache.zookeeper</groupId>
@@ -155,6 +164,14 @@
                     <groupId>commons-net</groupId>
                     <artifactId>commons-net</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>activation</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -190,7 +207,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.90.Final</version>
+            <version>4.1.91.Final</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -233,6 +250,12 @@
             <artifactId>avro-mapred</artifactId>
             <version>1.11.1</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -278,17 +301,29 @@
                     <groupId>com.squareup.okhttp</groupId>
                     <artifactId>okhttp</artifactId>
                 </exclusion>
-                <!-- excluded to fix CVE-2022-40152 -->
-                <exclusion>
-                    <groupId>com.fasterxml.woodstox</groupId>
-                    <artifactId>woodstox-core</artifactId>
-                </exclusion>
                 <!-- exluded to fix CVE-2021-37533 -->
                 <exclusion>
                     <groupId>commons-net</groupId>
                     <artifactId>commons-net</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-reload4j</artifactId>
+                </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.woodstox</groupId>
+            <artifactId>woodstox-core</artifactId>
+            <version>6.5.1</version>
         </dependency>
         <!-- Test Dependencies -->
         <dependency>
@@ -306,7 +341,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.2.0</version>
+            <version>5.3.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -336,27 +371,25 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>hamcrest-resultset-matcher</artifactId>
-            <version>1.5.3</version>
+            <version>1.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-testcontainers</artifactId>
-            <version>6.5.1</version>
+            <version>6.5.2</version>
             <scope>test</scope>
         </dependency>
         <!-- Dependencies that are forced higher to fix vulnerabilities -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.22.2</version>
-            <!-- fixes sonatype-2022-5732 -->
+            <version>3.22.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>1.10.0</version>
-            <!-- fixes sonatype-2022-5732 -->
         </dependency>
     </dependencies>
     <build>
@@ -511,6 +544,7 @@
                         <configuration>
                             <finalName>${project.artifactId}-${project.version}-assembly</finalName>
                             <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
@@ -548,69 +582,37 @@
                         <exclude>sonatype-2022-5732</exclude>
                         <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') from jackson-core:2.13.4 -->
                         <exclude>sonatype-2022-6438</exclude>
-                        <!-- io.netty:netty-handler:jar:4.1.90.Final is provided by arrow-vector ... spark-catalyst ... spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
+                        <!-- io.netty:netty-handler:jar:4.1.91.Final is provided by arrow-vector ... spark-catalyst ... spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
                         <exclude>sonatype-2020-0026</exclude>
                         <!-- com.google.guava:guava:jar:31.1-jre: Currently no update available. Risk does not apply, as potential attackers cannot access the temp directory. -->
                         <exclude>sonatype-2020-0926</exclude>
+                        <!-- org.apache.spark:spark-core_2.12:jar:3.3.2: CWE-269: Improper Privilege Management (6.4); https://ossindex.sonatype.org/vulnerability/CVE-2023-22946 -->
+                        <!-- This from the spark-code_2.12 version, which we release using profiles below. -->
+                        <exclude>CVE-2023-22946</exclude>
                     </excludeVulnerabilityIds>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.basepom.maven</groupId>
+                <artifactId>duplicate-finder-maven-plugin</artifactId>
+                <configuration>
+                    <printEqualFiles>false</printEqualFiles>
+                    <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
+                    <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
+                    <ignoredResourcePatterns>
+                        <ignoredResourcePattern>git.properties</ignoredResourcePattern>
+                    </ignoredResourcePatterns>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>2.9.6</version>
+                <version>2.9.7</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>verify</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>merge-results</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>merge</goal>
-                        </goals>
-                        <configuration>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.build.directory}/</directory>
-                                    <includes>
-                                        <include>jacoco*.exec</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                            <destFile>${project.build.directory}/aggregate.exec</destFile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/aggregate.exec</dataFile>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -647,7 +649,7 @@
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.35.0</version>
+                <version>2.36.0</version>
                 <configuration>
                     <scala>
                         <scalafmt>
