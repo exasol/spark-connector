@@ -16,6 +16,7 @@ Code name:
 
 ### Test Dependency Updates
 
+* Added `com.amazonaws:aws-java-sdk-s3:1.12.429`
 * Added `org.junit.jupiter:junit-jupiter-api:5.9.2`
 * Added `org.junit.jupiter:junit-jupiter:5.9.2`
 * Updated `org.mockito:mockito-core:5.3.0` to `5.2.0`

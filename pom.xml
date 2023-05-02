@@ -156,11 +156,6 @@
                     <groupId>org.glassfish.jersey.core</groupId>
                     <artifactId>jersey-server</artifactId>
                 </exclusion>
-                <!-- excluded to fix vulnerability for profile spark3.1 -->
-                <exclusion>
-                    <groupId>org.apache.avro</groupId>
-                    <artifactId>avro-mapred</artifactId>
-                </exclusion>
                 <!-- exluded to fix CVEs: CVE-2022-37865 and CVE-2022-37866 -->
                 <exclusion>
                     <groupId>org.apache.ivy</groupId>
@@ -266,6 +261,10 @@
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-server</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -306,6 +305,10 @@
                 <exclusion>
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
                 </exclusion>
                 <!-- excluded to fix vulnerabilities CVE-2021-0341 and sonatype-2018-0035 -->
                 <exclusion>
@@ -413,6 +416,16 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>localstack</artifactId>
             <version>1.17.6</version>
+            <scope>test</scope>
+        </dependency>
+        <!--
+            Issue with Localstack S3
+            https://stackoverflow.com/questions/64017812/junit-awscredentials-noclassdeffounderror-with-localstackcontainer
+        -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.429</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -524,6 +537,13 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
                 <version>2.2.0</version>
@@ -626,7 +646,7 @@
                         <!-- io.netty:netty-handler:jar:4.1.91.Final is provided by arrow-vector ... spark-catalyst ... spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
                         <exclude>sonatype-2020-0026</exclude>
                         <!-- com.google.guava:guava:jar:31.1-jre: Currently no update available. Risk does not apply, as potential attackers cannot access the temp directory. -->
-                        <exclude>sonatype-2020-0926</exclude>
+                        <exclude>CVE-2020-8908</exclude>
                         <!-- org.apache.spark:spark-core_2.12:jar:3.3.2: CWE-269: Improper Privilege Management (6.4); https://ossindex.sonatype.org/vulnerability/CVE-2023-22946 -->
                         <!-- This from the spark-code_2.12 version, which we release using profiles below. -->
                         <exclude>CVE-2023-22946</exclude>
