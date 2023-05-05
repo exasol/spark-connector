@@ -1,1 +1,2 @@
 com.exasol.spark.DefaultSource
+com.exasol.spark.s3.S3Source

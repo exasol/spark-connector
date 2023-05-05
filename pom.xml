@@ -2,19 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spark-connector</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <name>The Spark Exasol Connector</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
     <parent>
         <artifactId>spark-connector-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>1.4.0</version>
+        <version>1.5.0</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>8</java.version>
         <log4j.version>2.20.0</log4j.version>
+        <junit.version>5.9.2</junit.version>
+        <mockito.version>5.2.0</mockito.version>
         <!-- These lines are required for Sonar to find sources and to report coverage -->
         <sonar.sources>.</sonar.sources>
         <sonar.inclusions>src/main/**</sonar.inclusions>
@@ -49,6 +51,11 @@
             <groupId>com.exasol</groupId>
             <artifactId>error-reporting-java8</artifactId>
             <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>spark-connector-common-java</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -148,11 +155,6 @@
                 <exclusion>
                     <groupId>org.glassfish.jersey.core</groupId>
                     <artifactId>jersey-server</artifactId>
-                </exclusion>
-                <!-- excluded to fix vulnerability for profile spark3.1 -->
-                <exclusion>
-                    <groupId>org.apache.avro</groupId>
-                    <artifactId>avro-mapred</artifactId>
                 </exclusion>
                 <!-- exluded to fix CVEs: CVE-2022-37865 and CVE-2022-37866 -->
                 <exclusion>
@@ -259,6 +261,14 @@
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-server</artifactId>
                 </exclusion>
+                <!--
+                    Excluded because of: [CVE-2023-26048] CWE-770: Allocation of Resources Without Limits or Throttling (5.3);
+                    https://ossindex.sonatype.org/vulnerability/CVE-2023-26048
+                -->
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -300,6 +310,11 @@
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-client</artifactId>
                 </exclusion>
+                <!-- excluded to fix vulnerabilities CVE-2023-26048 -->
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                </exclusion>
                 <!-- excluded to fix vulnerabilities CVE-2021-0341 and sonatype-2018-0035 -->
                 <exclusion>
                     <groupId>com.squareup.okhttp</groupId>
@@ -324,6 +339,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Dependencies that are forced higher to fix vulnerabilities -->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.22.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.woodstox</groupId>
             <artifactId>woodstox-core</artifactId>
@@ -345,7 +371,25 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.3.0</version>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -384,16 +428,33 @@
             <version>6.5.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- Dependencies that are forced higher to fix vulnerabilities -->
         <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>3.22.3</version>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>localstack</artifactId>
+            <version>1.17.6</version>
+            <scope>test</scope>
+        </dependency>
+        <!--
+            Issue with Localstack S3
+            https://stackoverflow.com/questions/64017812/junit-awscredentials-noclassdeffounderror-with-localstackcontainer
+        -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.429</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>1.10.0</version>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.17.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <version>3.14.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -472,19 +533,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.scalatest</groupId>
@@ -589,7 +648,7 @@
                         <!-- io.netty:netty-handler:jar:4.1.91.Final is provided by arrow-vector ... spark-catalyst ... spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
                         <exclude>sonatype-2020-0026</exclude>
                         <!-- com.google.guava:guava:jar:31.1-jre: Currently no update available. Risk does not apply, as potential attackers cannot access the temp directory. -->
-                        <exclude>sonatype-2020-0926</exclude>
+                        <exclude>CVE-2020-8908</exclude>
                         <!-- org.apache.spark:spark-core_2.12:jar:3.3.2: CWE-269: Improper Privilege Management (6.4); https://ossindex.sonatype.org/vulnerability/CVE-2023-22946 -->
                         <!-- This from the spark-code_2.12 version, which we release using profiles below. -->
                         <exclude>CVE-2023-22946</exclude>

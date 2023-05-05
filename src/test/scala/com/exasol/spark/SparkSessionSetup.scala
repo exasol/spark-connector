@@ -6,6 +6,8 @@ import org.apache.spark.SparkContextHelper
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.SparkSession
 
+import com.exasol.spark.SparkSessionProvider
+
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.Suite
 
@@ -13,19 +15,18 @@ import org.scalatest.Suite
  * A trait that provides Spark session setup across tests.
  */
 trait SparkSessionSetup extends BeforeAndAfterAll { self: Suite =>
-  @transient lazy val spark: SparkSession = SparkSessionProvider.getSparkSession()
-  @transient lazy val sqlContext: SQLContext = SparkSessionProvider.getSQLContext()
+  @transient lazy val spark: SparkSession = SparkSessionProvider.getSparkSession(getSparkConf())
+  @transient lazy val sqlContext: SQLContext = SparkSession.builder().getOrCreate().sqlContext
   @transient private var sparkContext: SparkContext = _
 
   override def beforeAll(): Unit = {
     super.beforeAll()
     setupSparkContext()
-    setupSparkSession()
   }
 
   override def afterAll(): Unit = {
     stopSparkContext()
-    SparkSessionProvider.setSparkSession(null)
+    spark.stop()
     super.afterAll()
   }
 
@@ -39,22 +40,11 @@ trait SparkSessionSetup extends BeforeAndAfterAll { self: Suite =>
     sparkContext = SparkContext.getOrCreate(getSparkConf())
   }
 
-  private[this] def setupSparkSession(): Unit =
-    if (SparkSessionProvider.getSparkSession() != null && !isSparkContextStopped()) {
-      // do nothing
-    } else {
-      val builder = SparkSession.builder()
-      SparkSessionProvider.setSparkSession(builder.getOrCreate())
-    }
-
   private[this] def stopSparkContext(): Unit =
     if (sparkContext != null) {
       sparkContext.stop()
       sparkContext = null
     }
-
-  private[this] def isSparkContextStopped(): Boolean =
-    SparkSessionProvider.getSparkSession().sparkContext.isStopped
 
   private[this] def getSparkConf(): SparkConf =
     new SparkConf()
@@ -66,21 +56,5 @@ trait SparkSessionSetup extends BeforeAndAfterAll { self: Suite =>
 
   private[this] def getRandomAppId(): String =
     this.getClass().getName() + math.floor(math.random() * 1000).toLong.toString()
-
-}
-
-/**
- * An object that manages transient Spark session.
- */
-object SparkSessionProvider {
-  @transient var sparkSession: SparkSession = _
-
-  def getSparkSession(): SparkSession = sparkSession
-
-  def setSparkSession(session: SparkSession): Unit =
-    sparkSession = session
-
-  def getSQLContext(): SQLContext =
-    SparkSession.builder().getOrCreate().sqlContext
 
 }
