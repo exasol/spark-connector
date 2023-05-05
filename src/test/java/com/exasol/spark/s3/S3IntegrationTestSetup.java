@@ -21,13 +21,13 @@ import com.exasol.spark.BaseIntegrationSetup;
 /**
  * An integration test class with {@link LocalStackContainer} S3 setup.
  */
-public class S3IntegrationTestSetup extends BaseIntegrationSetup {
+public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
     private static final Logger LOGGER = Logger.getLogger(S3IntegrationTestSetup.class.getName());
     protected static final String DEFAULT_BUCKET_NAME = "csvtest";
 
     @Container
     private static final LocalStackContainer S3 = new LocalStackContainer(
-            DockerImageName.parse("localstack/localstack:1.4")).withServices(Service.S3);
+            DockerImageName.parse("localstack/localstack:2.0.2")).withServices(Service.S3);
 
     // protected static S3Client s3Client;
 

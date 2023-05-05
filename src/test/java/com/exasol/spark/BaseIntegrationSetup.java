@@ -40,7 +40,7 @@ public class BaseIntegrationSetup {
         connection = EXASOL.createConnection();
         factory = new ExasolObjectFactory(connection);
         spark = SparkSessionProvider.getSparkSession(createSparkConfiguration());
-        createDatabase("DEFAULT_SCHEMA");
+        createExasolSchema("DEFAULT_SCHEMA");
     }
 
     @AfterAll
@@ -50,13 +50,13 @@ public class BaseIntegrationSetup {
         spark.close();
     }
 
-    private static void createDatabase(final String exasolSchemaName) {
+    private static void createExasolSchema(final String exasolSchemaName) {
         LOGGER.fine(() -> "Creating a new schema '" + exasolSchemaName + '"');
-        dropDatabase();
-        exasolDatabase = factory.createSchema(exasolSchemaName);
+        dropExasolSchema();
+        exasolSchema = factory.createSchema(exasolSchemaName);
     }
 
-    private static void dropDatabase() {
+    private static void dropExasolSchema() {
         if (exasolDatabase != null) {
             LOGGER.fine(() -> "Dropping schema '" + exasolDatabase.getName() + '"');
             exasolDatabase.drop();

@@ -31,7 +31,7 @@ public final class ExasolOptions {
     /**
      * Gets the JDBC connection URL.
      *
-     * @return jdbc connection url
+     * @return JDBC connection URL
      */
     public String getJdbcUrl() {
         return this.jdbcUrl;
