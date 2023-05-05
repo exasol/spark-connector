@@ -1,8 +1,9 @@
 package com.exasol.spark.s3;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.spark.sql.connector.catalog.SupportsRead;
 import org.apache.spark.sql.connector.catalog.SupportsWrite;
@@ -29,17 +30,19 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
      */
     public ExasolS3Table(final StructType schema) {
         this.schema = schema;
-        this.capabilities = new HashSet<>(Arrays.asList(TableCapability.BATCH_READ, TableCapability.BATCH_WRITE));
+        this.capabilities = Collections.unmodifiableSet(
+                Stream.of(TableCapability.BATCH_READ, TableCapability.BATCH_WRITE).collect(Collectors.toSet()));
     }
 
     @Override
     public String name() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("ExasolS3Table[")
-            .append("schema='" + this.schema().toString())
-            .append("',")
-            .append("capabilities='" + this.capabilities().toString())
-            .append("']");
+        builder //
+                .append("ExasolS3Table[") //
+                .append("schema='" + this.schema().toString()) //
+                .append("',") //
+                .append("capabilities='" + this.capabilities().toString()) //
+                .append("']");
         return builder.toString();
     }
 
