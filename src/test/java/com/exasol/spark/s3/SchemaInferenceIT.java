@@ -32,15 +32,18 @@ class SchemaInferenceIT extends S3IntegrationTestSetup {
 
     @Test
     void testInferSchemaFromExasolTable() {
-        final Table table = exasolDatabase.createTable("multi_column_table", //
-                Arrays.asList("c1", "c2", "c3", "c4", "c5"), //
-                Arrays.asList("VARCHAR(10)", "INTEGER", "DATE", "DOUBLE", "BOOLEAN"));
+        final Table table = exasolSchema.createTable("multi_column_table", //
+                Arrays.asList("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"), //
+                Arrays.asList("VARCHAR(10)", "INTEGER", "DATE", "DOUBLE", "BOOLEAN", "TIMESTAMP", "DECIMAL(18,2)", "CHAR(255)"));
         final StructType expectedSchema = new StructType() //
                 .add("c1", DataTypes.StringType, true) //
                 .add("c2", DataTypes.LongType, true) //
                 .add("c3", DataTypes.DateType, true) //
                 .add("c4", DataTypes.DoubleType, true) //
-                .add("c5", DataTypes.BooleanType, true);
+                .add("c5", DataTypes.BooleanType, true) //
+                .add("c6", DataTypes.TimestampType, true) //
+                .add("c7", DataTypes.createDecimalType(18, 2), true) //
+                .add("c8", DataTypes.StringType, true);
         final StructType schema = spark.read() //
                 .format("exasol-s3") //
                 .option("query", "SELECT * FROM " + table.getFullyQualifiedName()) //

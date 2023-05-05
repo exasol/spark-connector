@@ -31,7 +31,7 @@ public class BaseIntegrationSetup {
 
     protected static Connection connection;
     protected static ExasolObjectFactory factory;
-    protected static ExasolSchema exasolDatabase;
+    protected static ExasolSchema exasolSchema;
     protected static SparkSession spark;
 
     @BeforeAll
@@ -45,22 +45,22 @@ public class BaseIntegrationSetup {
 
     @AfterAll
     public static void afterAll() throws SQLException {
-        dropDatabase();
+        dropExasolSchema();
         connection.close();
         spark.close();
     }
 
     private static void createExasolSchema(final String exasolSchemaName) {
-        LOGGER.fine(() -> "Creating a new schema '" + exasolSchemaName + '"');
+        LOGGER.fine(() -> "Creating a new Exasol schema '" + exasolSchemaName + '"');
         dropExasolSchema();
         exasolSchema = factory.createSchema(exasolSchemaName);
     }
 
     private static void dropExasolSchema() {
-        if (exasolDatabase != null) {
-            LOGGER.fine(() -> "Dropping schema '" + exasolDatabase.getName() + '"');
-            exasolDatabase.drop();
-            exasolDatabase = null;
+        if (exasolSchema != null) {
+            LOGGER.fine(() -> "Dropping Exasol schema '" + exasolSchema.getName() + '"');
+            exasolSchema.drop();
+            exasolSchema = null;
         }
     }
 
@@ -71,23 +71,14 @@ public class BaseIntegrationSetup {
                 { "username", EXASOL.getUsername() }, //
                 { "password", EXASOL.getPassword() }, //
                 { "jdbc_url", EXASOL.getJdbcUrl() }, //
+                { "fingerprint", getFingerprint() }, //
         }).collect(Collectors.toMap(e -> e[0], e -> e[1]));
-        if (imageSupportsFingerprint()) {
-            map.put("fingerprint", getFingerprint());
-        } else {
-            map.put("jdbc_options", "validateservercertificate=0");
-        }
         LOGGER.fine(() -> "Prepared options '" + map.toString() + "'.");
         return map;
     }
 
     private String getFingerprint() {
         return EXASOL.getTlsCertificateFingerprint().get();
-    }
-
-    private boolean imageSupportsFingerprint() {
-        final ExasolDockerImageReference image = EXASOL.getDockerImageReference();
-        return (image.getMajor() >= 7) && (image.getMinor() >= 1);
     }
 
     private static SparkConf createSparkConfiguration() {

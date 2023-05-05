@@ -261,6 +261,10 @@
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-server</artifactId>
                 </exclusion>
+                <!--
+                    Excluded because of: [CVE-2023-26048] CWE-770: Allocation of Resources Without Limits or Throttling (5.3);
+                    https://ossindex.sonatype.org/vulnerability/CVE-2023-26048
+                -->
                 <exclusion>
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-util</artifactId>
@@ -306,6 +310,7 @@
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-client</artifactId>
                 </exclusion>
+                <!-- excluded to fix vulnerabilities CVE-2023-26048 -->
                 <exclusion>
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-util</artifactId>
@@ -333,6 +338,17 @@
                     <artifactId>slf4j-reload4j</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- Dependencies that are forced higher to fix vulnerabilities -->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.22.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.woodstox</groupId>
@@ -434,16 +450,11 @@
             <version>1.17.6</version>
             <scope>test</scope>
         </dependency>
-        <!-- Dependencies that are forced higher to fix vulnerabilities -->
         <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>3.22.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>1.10.0</version>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <version>3.14.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

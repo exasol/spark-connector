@@ -55,12 +55,12 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     @Override
     public ScanBuilder newScanBuilder(final CaseInsensitiveStringMap map) {
-        return null;
+        return null; // this will be implemented in #149
     }
 
     @Override
     public WriteBuilder newWriteBuilder(final LogicalWriteInfo defaultInfo) {
-        return null;
+        return null; // this will be implemented in #149
     }
 
 }
