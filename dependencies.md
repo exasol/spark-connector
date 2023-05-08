@@ -20,9 +20,9 @@
 | [jersey-core-client][27]                    | [EPL 2.0][16]; [GPL2 w/ CPE][17]; [EDL 1.0][20]; [BSD 2-Clause][21]; [Apache License, 2.0][9]; [Public Domain][18]; [Modified BSD][22]; [jQuery license][23]; [MIT license][24]; [W3C license][25] |
 | [Apache Avro Mapred API][28]                | [Apache License, Version 2.0][14]                                                                                                                                                                  |
 | Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][14]                                                                                                                                                                  |
-| [Woodstox][29]                              | [The Apache License, Version 2.0][11]                                                                                                                                                              |
-| [Protocol Buffers [Core]][30]               | [BSD-3-Clause][31]                                                                                                                                                                                 |
-| [Apache Commons Text][32]                   | [Apache License, Version 2.0][14]                                                                                                                                                                  |
+| [Protocol Buffers [Core]][29]               | [BSD-3-Clause][30]                                                                                                                                                                                 |
+| [Apache Commons Text][31]                   | [Apache License, Version 2.0][14]                                                                                                                                                                  |
+| [Woodstox][32]                              | [The Apache License, Version 2.0][11]                                                                                                                                                              |
 
 ## Test Dependencies
 
@@ -67,7 +67,7 @@
 | [Artifact reference checker and unifier][75]            | [MIT License][76]                              |
 | [OpenFastTrace Maven Plugin][77]                        | [GNU General Public License v3.0][78]          |
 | [spotless-maven-plugin][79]                             | [The Apache Software License, Version 2.0][14] |
-| [scalafix-maven-plugin][80]                             | [BSD-3-Clause][31]                             |
+| [scalafix-maven-plugin][80]                             | [BSD-3-Clause][30]                             |
 | [Maven Clean Plugin][81]                                | [The Apache Software License, Version 2.0][11] |
 | [Maven Resources Plugin][82]                            | [The Apache Software License, Version 2.0][11] |
 | [Maven Install Plugin][83]                              | [The Apache Software License, Version 2.0][11] |
@@ -102,10 +102,10 @@
 [26]: https://projects.eclipse.org/projects/ee4j.jersey/jersey-server
 [27]: https://projects.eclipse.org/projects/ee4j.jersey/jersey-client
 [28]: https://avro.apache.org
-[29]: https://github.com/FasterXML/woodstox
-[30]: https://developers.google.com/protocol-buffers/docs/javatutorial
-[31]: https://opensource.org/licenses/BSD-3-Clause
-[32]: https://commons.apache.org/proper/commons-text
+[29]: https://developers.google.com/protocol-buffers/docs/javatutorial
+[30]: https://opensource.org/licenses/BSD-3-Clause
+[31]: https://commons.apache.org/proper/commons-text
+[32]: https://github.com/FasterXML/woodstox
 [33]: http://www.scalatest.org
 [34]: http://www.apache.org/licenses/LICENSE-2.0
 [35]: https://github.com/scalatest/scalatestplus-mockito
