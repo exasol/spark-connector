@@ -9,6 +9,7 @@ Code name:
 ## Security
 
 * #151: Fixed vulnerability `CVE-2023-26048` coming with `jetty-util` transitive dependency
+
 ## Dependency Updates
 
 ### Compile Dependency Updates
