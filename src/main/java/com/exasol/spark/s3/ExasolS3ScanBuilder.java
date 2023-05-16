@@ -3,6 +3,7 @@ package com.exasol.spark.s3;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -110,7 +111,7 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
      * @return Enriched SQL query for the intermediate storage.
      */
     protected String getScanQuery() {
-        return "SELECT * FROM " + getTableOrQuery() + ";";
+        return "SELECT * FROM " + getTableOrQuery() + " ";
     }
 
     private String getTableOrQuery() {
@@ -122,8 +123,44 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
     }
 
     private void prepareIntermediateData(final String s3BucketKey) {
-        final String enrichedQuery = getScanQuery();
-        new S3DataExporter(this.options, s3BucketKey).exportData(enrichedQuery);
+        final String exportQuery = new S3ExportQueryGenerator(this.options, s3BucketKey).generateQuery(getScanQuery());
+        new S3DataExporter(this.options, s3BucketKey).exportData(exportQuery);
+    }
+
+    /**
+     * A class that generates {@code SQL} query for exporting data from Exasol database into {@code S3} location.
+     */
+    private static class S3ExportQueryGenerator extends AbstractQueryGenerator {
+        private final String s3BucketKey;
+        private final int numberOfFiles;
+
+        public S3ExportQueryGenerator(final ExasolOptions options, final String s3BucketKey) {
+            super(options);
+            this.s3BucketKey = s3BucketKey;
+            this.numberOfFiles = options.getNumberOfPartitions();
+        }
+
+        public String generateQuery(final String baseQuery) {
+            return new StringBuilder() //
+                    .append("EXPORT (\n" + baseQuery + "\n) INTO CSV\n") //
+                    .append(getIdentifier()) //
+                    .append(getFiles()) //
+                    .append(getFooter()) //
+                    .toString();
+        }
+
+        private String getFiles() {
+            final StringBuilder builder = new StringBuilder();
+            final String prefix = "FILE '" + this.s3BucketKey + "/";
+            for (int fileIndex = 1; fileIndex <= this.numberOfFiles; fileIndex++) {
+                builder.append(prefix).append(String.format("part-%03d", fileIndex)).append(".csv'\n");
+            }
+            return builder.toString();
+        }
+
+        private String getFooter() {
+            return "WITH COLUMN NAMES\nBOOLEAN = 'true/false'";
+        }
     }
 
     /**
@@ -131,27 +168,29 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
      */
     private static class S3DataExporter {
         private final ExasolOptions options;
+        private final String s3Bucket;
         private final String s3BucketKey;
 
         public S3DataExporter(final ExasolOptions options, final String s3BucketKey) {
             this.options = options;
+            this.s3Bucket = options.getS3Bucket();
             this.s3BucketKey = s3BucketKey;
         }
 
-        public int exportData(final String query) {
+        public int exportData(final String exportQuery) {
             final ExasolConnectionFactory connectionFactory = new ExasolConnectionFactory(this.options);
-            try (final Connection connection = connectionFactory.getConnection()) {
-                final int numberOfExportedRows = 12;
-                LOGGER.info(() -> "Exported '" + numberOfExportedRows + "' rows into '" + this.options.getS3Bucket()
-                        + "/" + s3BucketKey + "'.");
+            try (final Connection connection = connectionFactory.getConnection();
+                    final Statement statement = connection.createStatement()) {
+                final int numberOfExportedRows = statement.executeUpdate(exportQuery);
+                LOGGER.info(() -> "Exported '" + numberOfExportedRows + "' rows into '" + this.s3Bucket + "/"
+                        + this.s3BucketKey + "'.");
                 return numberOfExportedRows;
             } catch (final SQLException exception) {
                 throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-22")
                         .message("Failed to run export query {{exportQuery}} into S3 path {{s3Path}} location.")
-                        .parameter("exportQuery", removeIdentifiedByPart(query))
-                        .parameter("s3Path", this.options.getS3Bucket() + "/" + s3BucketKey)
-                        .mitigation(
-                                "Please make sure that the query or table name is correct and obeys SQL syntax rules.")
+                        .parameter("exportQuery", removeIdentifiedByPart(exportQuery))
+                        .parameter("s3Path", this.s3Bucket + "/" + this.s3BucketKey)
+                        .mitigation("Please ensure that query or table name is correct and obeys SQL syntax rules.")
                         .toString(), exception);
             }
         }
