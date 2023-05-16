@@ -15,8 +15,8 @@
     <properties>
         <java.version>8</java.version>
         <log4j.version>2.20.0</log4j.version>
-        <junit.version>5.9.2</junit.version>
-        <mockito.version>5.2.0</mockito.version>
+        <junit.version>5.9.3</junit.version>
+        <mockito.version>5.3.1</mockito.version>
         <!-- These lines are required for Sonar to find sources and to report coverage -->
         <sonar.sources>.</sonar.sources>
         <sonar.inclusions>src/main/**</sonar.inclusions>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-jdbc</artifactId>
-            <version>7.1.19</version>
+            <version>7.1.20</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
@@ -209,7 +209,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.91.Final</version>
+            <version>4.1.92.Final</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -343,7 +343,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.22.3</version>
+            <version>3.23.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -430,8 +430,14 @@
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.18.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
             <artifactId>localstack</artifactId>
-            <version>1.17.6</version>
+            <version>1.18.1</version>
             <scope>test</scope>
         </dependency>
         <!--
@@ -441,13 +447,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.429</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>1.17.6</version>
+            <version>1.12.469</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -645,8 +645,6 @@
                         <exclude>sonatype-2022-5732</exclude>
                         <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') from jackson-core:2.13.4 -->
                         <exclude>sonatype-2022-6438</exclude>
-                        <!-- io.netty:netty-handler:jar:4.1.91.Final is provided by arrow-vector ... spark-catalyst ... spark-core. Currently no update available. As potential attackers cannot manipulate the URL, the developers decided to accept the risk for now. -->
-                        <exclude>sonatype-2020-0026</exclude>
                         <!-- com.google.guava:guava:jar:31.1-jre: Currently no update available. Risk does not apply, as potential attackers cannot access the temp directory. -->
                         <exclude>CVE-2020-8908</exclude>
                         <!-- org.apache.spark:spark-core_2.12:jar:3.3.2: CWE-269: Improper Privilege Management (6.4); https://ossindex.sonatype.org/vulnerability/CVE-2023-22946 -->

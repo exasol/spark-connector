@@ -41,9 +41,9 @@
 | [Test Database Builder for Java][45]            | [MIT License][46]                         |
 | [Matcher for SQL Result Sets][47]               | [MIT License][48]                         |
 | [Test containers for Exasol on Docker][49]      | [MIT License][50]                         |
+| [Testcontainers :: JUnit Jupiter Extension][51] | [MIT][52]                                 |
 | [Testcontainers :: Localstack][51]              | [MIT][52]                                 |
 | [AWS Java SDK for Amazon S3][53]                | [Apache License, Version 2.0][54]         |
-| [Testcontainers :: JUnit Jupiter Extension][51] | [MIT][52]                                 |
 | [EqualsVerifier | release normal jar][55]       | [Apache License, Version 2.0][16]         |
 
 ## Plugin Dependencies
@@ -84,7 +84,7 @@
 [0]: https://www.scala-lang.org/
 [1]: https://www.apache.org/licenses/LICENSE-2.0
 [2]: http://www.exasol.com
-[3]: https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/7.1.19/exasol-jdbc-7.1.19-license.txt
+[3]: https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/7.1.20/exasol-jdbc-7.1.20-license.txt
 [4]: https://github.com/exasol/sql-statement-builder/
 [5]: https://github.com/exasol/sql-statement-builder/blob/main/LICENSE
 [6]: https://github.com/exasol/error-reporting-java/
