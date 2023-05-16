@@ -2,7 +2,9 @@ package com.exasol.spark.s3;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -17,6 +19,9 @@ import org.junit.jupiter.api.Test;
 
 import com.exasol.dbbuilder.dialects.Table;
 
+/**
+ * Abstract setup for data reading integration tests.
+ */
 abstract class AbstractDataReadingIntegrationTest extends S3IntegrationTestSetup {
 
     private static Table table;
@@ -113,6 +118,19 @@ abstract class AbstractDataReadingIntegrationTest extends S3IntegrationTestSetup
                 .filter((FilterFunction<Row>) row -> (row.getInt(0) % 2) == 0 ? true : false) //
                 .map((MapFunction<Row, Integer>) row -> row.getInt(0), Encoders.INT());
         assertThat(df.collectAsList(), contains(2, 4, 6));
+    }
+
+    @Test
+    void testThrowsIfNumberOfPartitionsExceedsMaximumAllowed() {
+        final Dataset<Row> df = spark.read() //
+                .format(this.format) //
+                .option("table", table.getFullyQualifiedName()) //
+                .options(getSparkOptions()) //
+                .option("numPartitions", "1001") //
+                .load();
+        final ExasolValidationException exception = assertThrows(ExasolValidationException.class,
+                () -> df.collectAsList());
+        assertThat(exception.getMessage(), containsString("is larger than maximum allowed '1000' value."));
     }
 
 }

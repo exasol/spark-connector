@@ -1,10 +1,14 @@
 package com.exasol.spark.s3;
 
+import static com.exasol.spark.s3.Constants.*;
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.connector.catalog.SupportsRead;
 import org.apache.spark.sql.connector.catalog.SupportsWrite;
 import org.apache.spark.sql.connector.catalog.TableCapability;
@@ -58,12 +62,46 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     @Override
     public ScanBuilder newScanBuilder(final CaseInsensitiveStringMap map) {
-        return null; // this will be implemented in #149
+        final ExasolOptions options = getExasolOptions(map);
+        updateSparkConfigurationForS3(options);
+        return new ExasolS3ScanBuilder(options, this.schema, map);
     }
 
     @Override
     public WriteBuilder newWriteBuilder(final LogicalWriteInfo defaultInfo) {
         return null; // this will be implemented in #149
+    }
+
+    private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
+        final ExasolOptions.Builder builder = ExasolOptions.builder() //
+                .jdbcUrl(options.get(JDBC_URL)) //
+                .username(options.get(USERNAME)) //
+                .password(options.get(PASSWORD)) //
+                .s3Bucket(options.get(S3_BUCKET));
+        if (options.containsKey(TABLE)) {
+            builder.table(options.get(TABLE));
+        } else if (options.containsKey(QUERY)) {
+            builder.query(options.get(QUERY));
+        }
+        return builder.withOptionsMap(options.asCaseSensitiveMap()).build();
+    }
+
+    private void updateSparkConfigurationForS3(final ExasolOptions options) {
+        final SparkSession sparkSession = SparkSession.active();
+        synchronized (sparkSession.sparkContext().hadoopConfiguration()) {
+            final Configuration conf = sparkSession.sparkContext().hadoopConfiguration();
+            if (options.hasEnabled(CI_ENABLED)) {
+                conf.set("fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider");
+                conf.set("fs.s3a.access.key", options.get(AWS_ACCESS_KEY_ID));
+                conf.set("fs.s3a.secret.key", options.get(AWS_SECRET_ACCESS_KEY));
+            }
+            if (options.containsKey(S3_ENDPOINT_OVERRIDE)) {
+                conf.set("fs.s3a.endpoint", "http://" + options.get(S3_ENDPOINT_OVERRIDE));
+            }
+            if (options.hasEnabled(S3_PATH_STYLE_ACCESS)) {
+                conf.set("fs.s3a.path.style.access", "true");
+            }
+        }
     }
 
 }
