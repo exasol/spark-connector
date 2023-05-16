@@ -23,7 +23,7 @@ import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
  */
 public class BaseIntegrationSetup {
     private static final Logger LOGGER = Logger.getLogger(BaseIntegrationSetup.class.getName());
-    private static final String DEFAULT_DOCKER_IMAGE = "7.1.19";
+    private static final String DEFAULT_DOCKER_IMAGE = "7.1.20";
 
     @Container
     private static final ExasolContainer<? extends ExasolContainer<?>> EXASOL = new ExasolContainer<>(
