@@ -18,6 +18,8 @@ import org.apache.spark.sql.connector.write.WriteBuilder;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
+import com.exasol.errorreporting.ExaError;
+
 /**
  * Represents an instance of {@link ExasolS3Table}.
  *
@@ -63,6 +65,7 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
     @Override
     public ScanBuilder newScanBuilder(final CaseInsensitiveStringMap map) {
         final ExasolOptions options = getExasolOptions(map);
+        validateNumberOfPartitions(options);
         updateSparkConfigurationForS3(options);
         return new ExasolS3ScanBuilder(options, this.schema, map);
     }
@@ -84,6 +87,16 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
             builder.query(options.get(QUERY));
         }
         return builder.withOptionsMap(options.asCaseSensitiveMap()).build();
+    }
+
+    private void validateNumberOfPartitions(final ExasolOptions options) {
+        final int numberOfPartitions = options.getNumberOfPartitions();
+        if (numberOfPartitions > MAX_ALLOWED_NUMBER_OF_PARTITIONS) {
+            throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-23")
+                    .message("The number of partitions is larger than maximum allowed {{MAXPARTITIONS}} value.",
+                            String.valueOf(MAX_ALLOWED_NUMBER_OF_PARTITIONS))
+                    .mitigation("Please set the number of partitions parameter to a lower value.").toString());
+        }
     }
 
     private void updateSparkConfigurationForS3(final ExasolOptions options) {
