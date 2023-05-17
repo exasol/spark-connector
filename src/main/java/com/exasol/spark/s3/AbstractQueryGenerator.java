@@ -24,6 +24,11 @@ public abstract class AbstractQueryGenerator {
         this.options = options;
     }
 
+    /**
+     * Creates an {@code IDENTIFIED BY} part of a query.
+     *
+     * @return identifiedBy part of a query
+     */
     public String getIdentifier() {
         final String awsAccessKeyId = this.options.get(AWS_ACCESS_KEY_ID);
         final String awsSecretAccessKey = this.options.get(AWS_SECRET_ACCESS_KEY);
