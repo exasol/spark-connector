@@ -18,7 +18,7 @@ public abstract class AbstractImportExportQueryGenerator {
     protected final ExasolOptions options;
 
     /**
-     * Creates a new instance of {@link AbstractQueryGenerator}.
+     * Creates a new instance of {@link AbstractImportExportQueryGenerator}.
      *
      * @param options user provided options
      */
