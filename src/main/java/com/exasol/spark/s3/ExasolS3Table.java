@@ -104,7 +104,7 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
         final SparkSession sparkSession = SparkSession.active();
         synchronized (sparkSession.sparkContext().hadoopConfiguration()) {
             final Configuration conf = sparkSession.sparkContext().hadoopConfiguration();
-            if (options.hasEnabled(AWS_CREDENTIALS_PROVIDER)) {
+            if (options.containsKey(AWS_CREDENTIALS_PROVIDER)) {
                 conf.set("fs.s3a.aws.credentials.provider", options.get(AWS_CREDENTIALS_PROVIDER));
                 conf.set("fs.s3a.access.key", options.get(AWS_ACCESS_KEY_ID));
                 conf.set("fs.s3a.secret.key", options.get(AWS_SECRET_ACCESS_KEY));

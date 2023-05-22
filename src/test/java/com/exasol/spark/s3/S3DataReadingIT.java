@@ -21,7 +21,7 @@ class S3DataReadingIT extends AbstractDataReadingIntegrationTest {
         final Map<String, String> options = getOptionsMap();
         options.put("awsAccessKeyId", S3.getAccessKey());
         options.put("awsSecretAccessKey", S3.getSecretKey());
-        options.put("awsCredentialsProvider", "SimpleAWSCredentialsProvider");
+        options.put("awsCredentialsProvider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider");
         options.put("awsRegion", S3.getRegion());
         options.put("s3Bucket", DEFAULT_BUCKET_NAME);
         options.put("s3PathStyleAccess", "true");

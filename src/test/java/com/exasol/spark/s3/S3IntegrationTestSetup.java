@@ -58,7 +58,7 @@ public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
     private static void redirectIpAddress(final ExasolContainer<?> exasolContainer, final String original,
             final String redirect) {
         final List<String> commands = Arrays.asList( //
-                "sed -i '/amazonaws/d' " + HOSTS_FILE,
+                "sed -i '/amazonaws/d' " + HOSTS_FILE, //
                 "echo '" + redirect + " " + original + "' >> " + HOSTS_FILE);
         commands.forEach(command -> {
             try {
