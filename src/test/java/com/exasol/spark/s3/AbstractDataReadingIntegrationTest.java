@@ -126,7 +126,7 @@ abstract class AbstractDataReadingIntegrationTest extends S3IntegrationTestSetup
                 .load();
         final ExasolValidationException exception = assertThrows(ExasolValidationException.class,
                 () -> df.collectAsList());
-        assertThat(exception.getMessage(), containsString("is larger than maximum allowed '1000' value."));
+        assertThat(exception.getMessage(), containsString("exceeds the supported maximum of '1000'."));
     }
 
 }
