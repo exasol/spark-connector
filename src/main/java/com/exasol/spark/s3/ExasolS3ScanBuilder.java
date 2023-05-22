@@ -75,23 +75,23 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
     @Override
     public Scan build() {
         final SparkSession sparkSession = SparkSession.active();
-        final String s3Bucket = this.options.getS3Bucket();
-        final String s3BucketKey = UUID.randomUUID() + "-" + sparkSession.sparkContext().applicationId();
+        final String bucket = this.options.getS3Bucket();
+        final String bucketKey = generateRandomBucketKey(sparkSession);
         // Import query data into `s3Bucket/s3BucketKey` location as `CSV` files
-        importDataIntoS3Location(sparkSession, s3Bucket, s3BucketKey);
+        LOGGER.info(() -> "Using S3 bucket '" + bucket + "' with folder '" + bucketKey + "' for scan job data.");
+        prepareIntermediateData(bucketKey);
         // Uses Spark `CSVTable` to read `CSV` files
-        final Seq<String> csvFilesPaths = getS3CSVFiles(s3Bucket, s3BucketKey);
+        final Seq<String> csvFilesPaths = getCSVFiles(bucket, bucketKey);
         return new CSVTable("", sparkSession, this.properties, csvFilesPaths, Option.apply(this.schema),
                 new CSVFileFormat().getClass()).newScanBuilder(getUpdatedMapWithCSVOptions(this.properties)).build();
     }
 
-    private void importDataIntoS3Location(final SparkSession spark, final String s3Bucket, final String s3BucketKey) {
-        LOGGER.info(() -> "Using S3 bucket '" + s3Bucket + "' with folder '" + s3BucketKey + "' for scan job data.");
-        prepareIntermediateData(s3BucketKey);
+    private String generateRandomBucketKey(final SparkSession sparkSession) {
+        return UUID.randomUUID() + "-" + sparkSession.sparkContext().applicationId();
     }
 
-    private Seq<String> getS3CSVFiles(final String s3Bucket, final String s3BucketKey) {
-        final String path = "s3a://" + Paths.get(s3Bucket, s3BucketKey, "*.csv").toString();
+    private Seq<String> getCSVFiles(final String bucket, final String bucketKey) {
+        final String path = "s3a://" + Paths.get(bucket, bucketKey, "*.csv").toString();
         return JavaConverters.asScalaIteratorConverter(Arrays.asList(path).iterator()).asScala().toSeq();
     }
 
@@ -122,21 +122,21 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
         }
     }
 
-    private void prepareIntermediateData(final String s3BucketKey) {
-        final String exportQuery = new S3ExportQueryGenerator(this.options, s3BucketKey).generateQuery(getScanQuery());
-        new S3DataExporter(this.options, s3BucketKey).exportData(exportQuery);
+    private void prepareIntermediateData(final String bucketKey) {
+        final String exportQuery = new S3ExportQueryGenerator(this.options, bucketKey).generateQuery(getScanQuery());
+        new S3DataExporter(this.options, bucketKey).exportData(exportQuery);
     }
 
     /**
      * A class that generates {@code SQL} query for exporting data from Exasol database into {@code S3} location.
      */
-    private static class S3ExportQueryGenerator extends AbstractQueryGenerator {
-        private final String s3BucketKey;
+    private static class S3ExportQueryGenerator extends AbstractImportExportQueryGenerator {
+        private final String bucketKey;
         private final int numberOfFiles;
 
-        public S3ExportQueryGenerator(final ExasolOptions options, final String s3BucketKey) {
+        public S3ExportQueryGenerator(final ExasolOptions options, final String bucketKey) {
             super(options);
-            this.s3BucketKey = s3BucketKey;
+            this.bucketKey = bucketKey;
             this.numberOfFiles = options.getNumberOfPartitions();
         }
 
@@ -151,7 +151,7 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
 
         private String getFiles() {
             final StringBuilder builder = new StringBuilder();
-            final String prefix = "FILE '" + this.s3BucketKey + "/";
+            final String prefix = "FILE '" + this.bucketKey + "/";
             for (int fileIndex = 1; fileIndex <= this.numberOfFiles; fileIndex++) {
                 builder.append(prefix).append(String.format("part-%03d", fileIndex)).append(".csv'\n");
             }
@@ -168,13 +168,13 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
      */
     private static class S3DataExporter {
         private final ExasolOptions options;
-        private final String s3Bucket;
-        private final String s3BucketKey;
+        private final String bucket;
+        private final String bucketKey;
 
-        public S3DataExporter(final ExasolOptions options, final String s3BucketKey) {
+        public S3DataExporter(final ExasolOptions options, final String bucketKey) {
             this.options = options;
-            this.s3Bucket = options.getS3Bucket();
-            this.s3BucketKey = s3BucketKey;
+            this.bucket = options.getS3Bucket();
+            this.bucketKey = bucketKey;
         }
 
         public int exportData(final String exportQuery) {
@@ -182,14 +182,14 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
             try (final Connection connection = connectionFactory.getConnection();
                     final Statement statement = connection.createStatement()) {
                 final int numberOfExportedRows = statement.executeUpdate(exportQuery);
-                LOGGER.info(() -> "Exported '" + numberOfExportedRows + "' rows into '" + this.s3Bucket + "/"
-                        + this.s3BucketKey + "'.");
+                LOGGER.info(() -> "Exported '" + numberOfExportedRows + "' rows into '" + this.bucket + "/"
+                        + this.bucketKey + "'.");
                 return numberOfExportedRows;
             } catch (final SQLException exception) {
 throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-22")
          .message("Failed to run export query {{exportQuery}} into S3 location {{s3Path}}.")
          .parameter("exportQuery", removeIdentifiedByPart(exportQuery))
-         .parameter("s3Path", this.s3Bucket + "/" + this.s3BucketKey)
+         .parameter("s3Path", this.bucket + "/" + this.bucketKey)
          .mitigation("Please ensure that query and table name are correct and satisfy SQL syntax requirements.")
          .toString(), exception);
             }
