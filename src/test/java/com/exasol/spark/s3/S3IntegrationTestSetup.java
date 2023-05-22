@@ -44,7 +44,7 @@ public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
                         .create(AwsBasicCredentials.create(S3.getAccessKey(), S3.getSecretKey()))) //
                 .region(Region.of(S3.getRegion())) //
                 .build();
-        updateHostsFileInExasol();
+        redirectIpAddress(EXASOL, "csvtest.s3.amazonaws.com", getS3ContainerInternalIp());
         createBucket(DEFAULT_BUCKET_NAME);
     }
 
@@ -53,20 +53,20 @@ public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
         s3Client.createBucket(b -> b.bucket(bucketName));
     }
 
-    private static void updateHostsFileInExasol() {
+    private static void redirectIpAddress(final ExasolContainer<?> exasolContainer, final String original,
+            final String redirect) {
         final List<String> commands = Arrays.asList( //
-                "sed -i '/amazonaws/d' /etc/hosts", //
-                "echo '" + getS3ContainerInternalIp() + " csvtest.s3.amazonaws.com' >> /etc/hosts" //
-        );
+                "sed -i '/amazonaws/d' " + HOSTS_FILE, // maybe use original here?
+                "echo '" + redirect + " " + original + "' >> " + HOSTS_FILE);
         commands.forEach(command -> {
             try {
-                final ExecResult exitCode = EXASOL.execInContainer("/bin/sh", "-c", command);
+                final ExecResult exitCode = exasolContainer.execInContainer("/bin/sh", "-c", command);
                 if (exitCode.getExitCode() != 0) {
                     throw new RuntimeException(
-                            "Command to update Exasol container `/etc/hosts` file returned non-zero result.");
+                            "Command to update Exasol container '" + HOSTS_FILE + "' file returned non-zero result.");
                 }
             } catch (final InterruptedException | IOException exception) {
-                throw new RuntimeException("Failed to update Exasol container `/etc/hosts`.", exception);
+                throw new RuntimeException("Failed to update Exasol container '" + HOSTS_FILE + "'.", exception);
             }
         });
     }

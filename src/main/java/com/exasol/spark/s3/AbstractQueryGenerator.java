@@ -12,7 +12,7 @@ import static com.exasol.spark.s3.Constants.*;
  * @see <a href="https://docs.exasol.com/db/latest/sql/export.htm">Exasol Export</a>
  */
 public abstract class AbstractQueryGenerator {
-    /** An {@link ExasolOptions} options. */
+    /** Spark options for scenarios involving an Exasol database */
     protected final ExasolOptions options;
 
     /**

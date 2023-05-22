@@ -89,15 +89,16 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
         return builder.withOptionsMap(options.asCaseSensitiveMap()).build();
     }
 
-    private void validateNumberOfPartitions(final ExasolOptions options) {
-        final int numberOfPartitions = options.getNumberOfPartitions();
-        if (numberOfPartitions > MAX_ALLOWED_NUMBER_OF_PARTITIONS) {
-            throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-23")
-                    .message("The number of partitions is larger than maximum allowed {{MAXPARTITIONS}} value.",
-                            String.valueOf(MAX_ALLOWED_NUMBER_OF_PARTITIONS))
-                    .mitigation("Please set the number of partitions parameter to a lower value.").toString());
-        }
+private void validateNumberOfPartitions(final ExasolOptions options) {
+    final int numberOfPartitions = options.getNumberOfPartitions();
+    if (numberOfPartitions > MAX_ALLOWED_NUMBER_OF_PARTITIONS) {
+        throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-23") //
+                .message("The number of partitions exceeds the supported maximum of {{MAXPARTITIONS}}.",
+                        MAX_ALLOWED_NUMBER_OF_PARTITIONS) //
+                .mitigation("Please set parameter {{param}} to a lower value.", NUMBER_OF_PARTITIONS) //
+		.toString());
     }
+}
 
     private void updateSparkConfigurationForS3(final ExasolOptions options) {
         final SparkSession sparkSession = SparkSession.active();
