@@ -89,23 +89,23 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
         return builder.withOptionsMap(options.asCaseSensitiveMap()).build();
     }
 
-private void validateNumberOfPartitions(final ExasolOptions options) {
-    final int numberOfPartitions = options.getNumberOfPartitions();
-    if (numberOfPartitions > MAX_ALLOWED_NUMBER_OF_PARTITIONS) {
-        throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-23") //
-                .message("The number of partitions exceeds the supported maximum of {{MAXPARTITIONS}}.",
+    private void validateNumberOfPartitions(final ExasolOptions options) {
+        final int numberOfPartitions = options.getNumberOfPartitions();
+        if (numberOfPartitions > MAX_ALLOWED_NUMBER_OF_PARTITIONS) {
+            throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-23") //
+                    .message("The number of partitions exceeds the supported maximum of {{MAXPARTITIONS}}.",
                         MAX_ALLOWED_NUMBER_OF_PARTITIONS) //
-                .mitigation("Please set parameter {{param}} to a lower value.", NUMBER_OF_PARTITIONS) //
-		.toString());
+                    .mitigation("Please set parameter {{param}} to a lower value.", NUMBER_OF_PARTITIONS) //
+                    .toString());
+        }
     }
-}
 
     private void updateSparkConfigurationForS3(final ExasolOptions options) {
         final SparkSession sparkSession = SparkSession.active();
         synchronized (sparkSession.sparkContext().hadoopConfiguration()) {
             final Configuration conf = sparkSession.sparkContext().hadoopConfiguration();
-            if (options.hasEnabled(CI_ENABLED)) {
-                conf.set("fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider");
+            if (options.hasEnabled(AWS_CREDENTIALS_PROVIDER)) {
+                conf.set("fs.s3a.aws.credentials.provider", options.get(AWS_CREDENTIALS_PROVIDER));
                 conf.set("fs.s3a.access.key", options.get(AWS_ACCESS_KEY_ID));
                 conf.set("fs.s3a.secret.key", options.get(AWS_SECRET_ACCESS_KEY));
             }

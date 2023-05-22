@@ -22,7 +22,7 @@ public final class Constants {
     /** Maximum allowed number of partitions for Spark job. */
     public static final int MAX_ALLOWED_NUMBER_OF_PARTITIONS = 1000;
     /** Boolean parameter name to indicate local and CI environment. */
-    public static final String CI_ENABLED = "exasol-ci";
+    public static final String REPLACE_LOCALHOST_BY_DEFAULT_S3_ENDPOINT = "replaceLocalhostByDefaultS3Endpoint";
 
     //
 
@@ -32,6 +32,8 @@ public final class Constants {
     public static final String AWS_SECRET_ACCESS_KEY = "awsSecretAccessKey";
     /** AWS session token parameter name. */
     public static final String AWS_SESSION_TOKEN = "awsSessionToken";
+    /** AWS credentials provider name. */
+    public static final String AWS_CREDENTIALS_PROVIDER = "awsCredentialsProvider";
     /** AWS region parameter name. */
     public static final String AWS_REGION = "awsRegion";
     /** Default AWS region value. */

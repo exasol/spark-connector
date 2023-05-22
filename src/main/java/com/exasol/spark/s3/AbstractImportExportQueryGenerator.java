@@ -12,6 +12,8 @@ import static com.exasol.spark.s3.Constants.*;
  * @see <a href="https://docs.exasol.com/db/latest/sql/export.htm">Exasol Export</a>
  */
 public abstract class AbstractImportExportQueryGenerator {
+    private static final String DEFAULT_S3_ENDPOINT = "amazonaws.com";
+
     /** Spark options for scenarios involving an Exasol database */
     protected final ExasolOptions options;
 
@@ -45,19 +47,14 @@ public abstract class AbstractImportExportQueryGenerator {
     }
 
     private String getS3Endpoint() {
-        if (this.options.containsKey(S3_ENDPOINT_OVERRIDE)) {
-            return replaceInCITests(this.options.get(S3_ENDPOINT_OVERRIDE));
-        } else {
-            return "amazonaws.com";
+        String override =  this.options.get(S3_ENDPOINT_OVERRIDE);
+        if (override == null) {
+            return DEFAULT_S3_ENDPOINT;
         }
-    }
-
-    private String replaceInCITests(final String endpoint) {
-        if (this.options.hasEnabled(CI_ENABLED)) {
-            return endpoint.replace("localhost", "amazonaws.com");
-        } else {
-            return endpoint;
+        if (this.options.hasEnabled(REPLACE_LOCALHOST_BY_DEFAULT_S3_ENDPOINT)) {
+            return override.replace("localhost", DEFAULT_S3_ENDPOINT);
         }
+        return override;
     }
 
 }

@@ -13,6 +13,7 @@ import org.testcontainers.containers.localstack.LocalStackContainer.Service;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
+import com.exasol.containers.ExasolContainer;
 import com.exasol.spark.BaseIntegrationSetup;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -25,6 +26,7 @@ import software.amazon.awssdk.services.s3.S3Client;
  */
 public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
     private static final Logger LOGGER = Logger.getLogger(S3IntegrationTestSetup.class.getName());
+    private static final String HOSTS_FILE = "/etc/hosts";
     protected static final String DEFAULT_BUCKET_NAME = "csvtest";
 
     @Container
@@ -56,7 +58,7 @@ public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
     private static void redirectIpAddress(final ExasolContainer<?> exasolContainer, final String original,
             final String redirect) {
         final List<String> commands = Arrays.asList( //
-                "sed -i '/amazonaws/d' " + HOSTS_FILE, // maybe use original here?
+                "sed -i '/amazonaws/d' " + HOSTS_FILE,
                 "echo '" + redirect + " " + original + "' >> " + HOSTS_FILE);
         commands.forEach(command -> {
             try {

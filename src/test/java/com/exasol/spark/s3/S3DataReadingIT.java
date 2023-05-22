@@ -21,13 +21,14 @@ class S3DataReadingIT extends AbstractDataReadingIntegrationTest {
         final Map<String, String> options = getOptionsMap();
         options.put("awsAccessKeyId", S3.getAccessKey());
         options.put("awsSecretAccessKey", S3.getSecretKey());
+        options.put("awsCredentialsProvider", "SimpleAWSCredentialsProvider");
         options.put("awsRegion", S3.getRegion());
         options.put("s3Bucket", DEFAULT_BUCKET_NAME);
         options.put("s3PathStyleAccess", "true");
         options.put("awsEndpointOverride", endpointOverride);
         options.put("useSsl", "false");
         options.put("numPartitions", "3");
-        options.put("exasol-ci", "true");
+        options.put("replaceLocalhostByDefaultS3Endpoint", "true");
         return options;
     }
 
