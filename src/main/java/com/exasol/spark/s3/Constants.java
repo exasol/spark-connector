@@ -23,6 +23,10 @@ public final class Constants {
     public static final int MAX_ALLOWED_NUMBER_OF_PARTITIONS = 1000;
     /** Boolean parameter name to indicate local and CI environment. */
     public static final String REPLACE_LOCALHOST_BY_DEFAULT_S3_ENDPOINT = "replaceLocalhostByDefaultS3Endpoint";
+    /** Parameter name for intermediate data location for writing. */
+    public static final String INTERMEDIATE_DATA_PATH = "PATH";
+    /** Parameter name for intermediate path S3 bucket key. */
+    public static final String WRITE_S3_BUCKET_KEY = "writeS3BucketKey";
 
     //
 

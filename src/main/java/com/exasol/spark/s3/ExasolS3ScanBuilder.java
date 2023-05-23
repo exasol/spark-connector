@@ -186,12 +186,13 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
                         + this.bucketKey + "'.");
                 return numberOfExportedRows;
             } catch (final SQLException exception) {
-throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-22")
-         .message("Failed to run export query {{exportQuery}} into S3 location {{s3Path}}.")
-         .parameter("exportQuery", removeIdentifiedByPart(exportQuery))
-         .parameter("s3Path", this.bucket + "/" + this.bucketKey)
-         .mitigation("Please ensure that query and table name are correct and satisfy SQL syntax requirements.")
-         .toString(), exception);
+                throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-22")
+                        .message("Failed to run export query {{exportQuery}} into S3 location {{s3Path}}.")
+                        .parameter("exportQuery", removeIdentifiedByPart(exportQuery))
+                        .parameter("s3Path", this.bucket + "/" + this.bucketKey)
+                        .mitigation(
+                                "Please ensure that query and table name are correct and satisfy SQL syntax requirements.")
+                        .toString(), exception);
             }
         }
     }
