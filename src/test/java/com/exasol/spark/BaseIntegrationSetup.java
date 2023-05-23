@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.junit.jupiter.Container;
 
 import com.exasol.containers.ExasolContainer;
-import com.exasol.containers.ExasolDockerImageReference;
 import com.exasol.dbbuilder.dialects.exasol.ExasolObjectFactory;
 import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 
@@ -23,10 +22,10 @@ import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
  */
 public class BaseIntegrationSetup {
     private static final Logger LOGGER = Logger.getLogger(BaseIntegrationSetup.class.getName());
-    private static final String DEFAULT_DOCKER_IMAGE = "7.1.19";
+    private static final String DEFAULT_DOCKER_IMAGE = "7.1.20";
 
     @Container
-    private static final ExasolContainer<? extends ExasolContainer<?>> EXASOL = new ExasolContainer<>(
+    protected static final ExasolContainer<? extends ExasolContainer<?>> EXASOL = new ExasolContainer<>(
             getExasolDockerImage()).withReuse(true);
 
     protected static Connection connection;

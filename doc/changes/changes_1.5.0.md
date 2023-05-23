@@ -19,6 +19,8 @@ Code name:
 * Updated `com.exasol:exasol-jdbc:7.1.19` to `7.1.20`
 * Added `com.exasol:spark-connector-common-java:1.0.0`
 * Updated `com.google.protobuf:protobuf-java:3.22.3` to `3.23.0`
+* Added `org.apache.hadoop:hadoop-aws:3.3.5`
+* Added `software.amazon.awssdk:s3:2.20.66`
 
 ### Test Dependency Updates
 
