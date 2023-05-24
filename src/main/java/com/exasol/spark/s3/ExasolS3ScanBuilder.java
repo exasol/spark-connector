@@ -79,6 +79,7 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
         final String bucketKey = generateRandomBucketKey(sparkSession);
         // Import query data into `s3Bucket/s3BucketKey` location as `CSV` files
         LOGGER.info(() -> "Using S3 bucket '" + bucket + "' with folder '" + bucketKey + "' for scan job data.");
+        addSparkCleanupJobListener(sparkSession, bucketKey);
         prepareIntermediateData(bucketKey);
         // Uses Spark `CSVTable` to read `CSV` files
         final Seq<String> csvFilesPaths = getCSVFiles(bucket, bucketKey);
@@ -88,6 +89,10 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
 
     private String generateRandomBucketKey(final SparkSession sparkSession) {
         return UUID.randomUUID() + "-" + sparkSession.sparkContext().applicationId();
+    }
+
+    private void addSparkCleanupJobListener(final SparkSession spark, final String bucketKey) {
+        spark.sparkContext().addSparkListener(new S3CleanupListener(this.options, bucketKey));
     }
 
     private Seq<String> getCSVFiles(final String bucket, final String bucketKey) {
