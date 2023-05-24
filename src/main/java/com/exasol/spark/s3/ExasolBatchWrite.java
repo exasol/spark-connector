@@ -76,15 +76,13 @@ public class ExasolBatchWrite implements BatchWrite {
         final String query = new S3ImportQueryGenerator(options).generateQuery();
         try (final Connection connection = new ExasolConnectionFactory(this.options).getConnection();
                 final Statement stmt = connection.createStatement()) {
-            connection.setAutoCommit(false);
             final int rows = stmt.executeUpdate(query);
             connection.commit();
             final long time = System.currentTimeMillis() - start;
             LOGGER.info(() -> "Imported '" + rows + "' rows into the table '" + table + "' in '" + time + "' millis.");
         } catch (final SQLException exception) {
             throw new ExasolConnectionException(ExaError.messageBuilder("E-SEC-24")
-                    .message("Failure running the import {{query}} query.",
-                            removeIdentifiedByPart(query))
+                    .message("Failure running the import {{query}} query.", removeIdentifiedByPart(query))
                     .mitigation("Please check that connection address, username and password are correct.").toString(),
                     exception);
         } finally {
