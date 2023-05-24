@@ -142,7 +142,9 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
 
         public String generateQuery(final String baseQuery) {
             return new StringBuilder() //
-                    .append("EXPORT (\n" + baseQuery + "\n) INTO CSV\n") //
+                    .append("EXPORT (\n") //
+                    .append(baseQuery) //
+                    .append("\n) INTO CSV\n") //
                     .append(getIdentifier()) //
                     .append(getFiles()) //
                     .append(getFooter()) //

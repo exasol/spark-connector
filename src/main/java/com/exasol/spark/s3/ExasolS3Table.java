@@ -72,7 +72,11 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     @Override
     public WriteBuilder newWriteBuilder(final LogicalWriteInfo defaultInfo) {
-        return null; // this will be implemented in #149
+        final ExasolOptions options = getExasolOptions(defaultInfo.options());
+        validateHasTable(options);
+        validateNumberOfPartitions(options);
+        updateSparkConfigurationForS3(options);
+        return new ExasolWriteBuilderProvider(options).createWriteBuilder(this.schema, defaultInfo);
     }
 
     private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
@@ -94,8 +98,18 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
         if (numberOfPartitions > MAX_ALLOWED_NUMBER_OF_PARTITIONS) {
             throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-23") //
                     .message("The number of partitions exceeds the supported maximum of {{MAXPARTITIONS}}.",
-                        MAX_ALLOWED_NUMBER_OF_PARTITIONS) //
+                            MAX_ALLOWED_NUMBER_OF_PARTITIONS) //
                     .mitigation("Please set parameter {{param}} to a lower value.", NUMBER_OF_PARTITIONS) //
+                    .toString());
+        }
+    }
+
+    private void validateHasTable(final ExasolOptions options) {
+        if (!options.hasTable()) {
+            throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-26")
+                    .message("Missing 'table' option when writing into Exasol database.")
+                    .mitigation("Please set 'table' property with fully qualified "
+                            + "(e.g. 'schema_name.table_name') Exasol table name.")
                     .toString());
         }
     }
