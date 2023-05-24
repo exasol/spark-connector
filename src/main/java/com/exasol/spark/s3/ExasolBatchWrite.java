@@ -76,6 +76,7 @@ public class ExasolBatchWrite implements BatchWrite {
         final String query = new S3ImportQueryGenerator(options).generateQuery();
         try (final Connection connection = new ExasolConnectionFactory(this.options).getConnection();
                 final Statement stmt = connection.createStatement()) {
+            connection.setAutoCommit(false);
             final int rows = stmt.executeUpdate(query);
             connection.commit();
             final long time = System.currentTimeMillis() - start;
