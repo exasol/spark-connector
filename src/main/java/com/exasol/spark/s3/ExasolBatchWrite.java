@@ -72,23 +72,28 @@ public class ExasolBatchWrite implements BatchWrite {
     public void commit(final WriterCommitMessage[] messages) {
         LOGGER.info("Committing the file writing stage of the job.");
         delegate.commit(messages);
-        prepareIntermediateData();
+        importIntermediateDataIntoExasol();
     }
 
-    private void prepareIntermediateData() {
+    private void importIntermediateDataIntoExasol() {
         final long start = System.currentTimeMillis();
         final String table = this.options.getTable();
         final String query = new S3ImportQueryGenerator(options).generateQuery();
+        final int rows = executeImportQuery(query);
+        final long time = System.currentTimeMillis() - start;
+        LOGGER.info(() -> "Imported '" + rows + "' rows into the table '" + table + "' in '" + time + "' millis.");
+    }
+
+    private int executeImportQuery(final String query) {
         try (final Connection connection = new ExasolConnectionFactory(this.options).getConnection();
                 final Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
             final int rows = stmt.executeUpdate(query);
             connection.commit();
-            final long time = System.currentTimeMillis() - start;
-            LOGGER.info(() -> "Imported '" + rows + "' rows into the table '" + table + "' in '" + time + "' millis.");
+            return rows;
         } catch (final SQLException exception) {
             throw new ExasolConnectionException(ExaError.messageBuilder("E-SEC-24")
-                    .message("Failure running the import {{query}} query.", removeIdentifiedByPart(query))
+                    .message("Failure running the import {{query}} query.", removeCredentialsFromQuery(query))
                     .mitigation("Please check that connection address, username and password are correct.").toString(),
                     exception);
         } finally {
@@ -96,7 +101,7 @@ public class ExasolBatchWrite implements BatchWrite {
         }
     }
 
-    private static String removeIdentifiedByPart(final String input) {
+    private static String removeCredentialsFromQuery(final String input) {
         return Stream.of(input.split("\n")).filter(s -> !s.contains("IDENTIFIED BY")).collect(Collectors.joining("\n"));
     }
 
