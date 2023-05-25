@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.Container.ExecResult;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer.Service;
@@ -53,6 +55,23 @@ public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
     public static void createBucket(final String bucketName) {
         LOGGER.info(() -> "Creating S3 bucket '" + bucketName + "'.");
         s3Client.createBucket(b -> b.bucket(bucketName));
+    }
+
+    public Map<String, String> getSparkOptions() {
+        final String endpointOverride = DockerClientFactory.instance().dockerHostIpAddress() + ":"
+                + S3.getMappedPort(4566);
+        final Map<String, String> options = getOptionsMap();
+        options.put("awsAccessKeyId", S3.getAccessKey());
+        options.put("awsSecretAccessKey", S3.getSecretKey());
+        options.put("awsCredentialsProvider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider");
+        options.put("awsRegion", S3.getRegion());
+        options.put("s3Bucket", DEFAULT_BUCKET_NAME);
+        options.put("s3PathStyleAccess", "true");
+        options.put("awsEndpointOverride", endpointOverride);
+        options.put("useSsl", "false");
+        options.put("numPartitions", "3");
+        options.put("replaceLocalhostByDefaultS3Endpoint", "true");
+        return options;
     }
 
     private static void redirectIpAddress(final ExasolContainer<?> exasolContainer, final String original,

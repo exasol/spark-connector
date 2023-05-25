@@ -21,7 +21,6 @@ import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 import org.junit.jupiter.api.*;
-import org.testcontainers.DockerClientFactory;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.exasol.dbbuilder.dialects.Table;
@@ -43,23 +42,6 @@ class S3CleanupIT extends S3IntegrationTestSetup {
             .setAppName("S3CleanupTests") //
             .set("spark.ui.enabled", "false") //
             .set("spark.driver.host", "localhost");
-
-    private Map<String, String> getSparkOptions() {
-        final String endpointOverride = DockerClientFactory.instance().dockerHostIpAddress() + ":"
-                + S3.getMappedPort(4566);
-        final Map<String, String> options = getOptionsMap();
-        options.put("awsAccessKeyId", S3.getAccessKey());
-        options.put("awsSecretAccessKey", S3.getSecretKey());
-        options.put("awsCredentialsProvider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider");
-        options.put("awsRegion", S3.getRegion());
-        options.put("s3Bucket", DEFAULT_BUCKET_NAME);
-        options.put("s3PathStyleAccess", "true");
-        options.put("awsEndpointOverride", endpointOverride);
-        options.put("useSsl", "false");
-        options.put("numPartitions", "3");
-        options.put("replaceLocalhostByDefaultS3Endpoint", "true");
-        return options;
-    }
 
     @BeforeAll
     static void startAll() {
