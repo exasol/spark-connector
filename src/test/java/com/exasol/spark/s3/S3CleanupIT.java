@@ -224,7 +224,7 @@ class S3CleanupIT extends S3IntegrationTestSetup {
                 .options(getSparkOptions()) //
                 .option("table", "non_existent_table");
         final Exception exception = assertThrows(ExasolConnectionException.class, () -> df.save());
-        assertThat(exception.getMessage(), containsString("NON_EXISTENT_TABLE not found"));
+        assertThat(exception.getMessage(), containsString("Failure running the import"));
         assertThatBucketIsEmpty();
     }
 

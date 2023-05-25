@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.Container.ExecResult;
-import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer.Service;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
@@ -32,10 +31,8 @@ public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
     protected static final String DEFAULT_BUCKET_NAME = "csvtest";
 
     @Container
-    protected static final LocalStackContainer S3 = new LocalStackContainer(
-            DockerImageName.parse("localstack/localstack:2.0")) //
-            .withServices(Service.S3) //
-            .withReuse(true);
+    protected static final LocalstackS3WithReuse S3 = new LocalstackS3WithReuse(
+            DockerImageName.parse("localstack/localstack:2.0"));
 
     protected static S3Client s3Client;
 
