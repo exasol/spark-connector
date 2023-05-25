@@ -2,4 +2,4 @@ error-tags:
   SEC:
     packages:
       - com.exasol.spark
-    highest-index: 23
+    highest-index: 26
