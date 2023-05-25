@@ -14,7 +14,7 @@ public final class S3CleanupListener extends SparkListener {
     private final String bucketKey;
 
     /**
-     * Creates an instance of {@link S3CeanupListener}.
+     * Creates an instance of {@link S3CleanupListener}.
      *
      * @param options   user provided options
      * @param bucketKey bucketKey inside the user provided bucket
