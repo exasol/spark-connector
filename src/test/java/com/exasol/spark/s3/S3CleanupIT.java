@@ -53,11 +53,6 @@ class S3CleanupIT extends S3IntegrationTestSetup {
         spark = SparkSessionProvider.getSparkSession(this.conf);
     }
 
-    @AfterEach
-    void afterEach() {
-        TaskFailureStateCounter.clear();
-    }
-
     private boolean isBucketEmpty(final String bucketName) {
         final List<S3Object> objects = s3Client.listObjects(ListObjectsRequest.builder().bucket(bucketName).build())
                 .contents();
@@ -84,9 +79,10 @@ class S3CleanupIT extends S3IntegrationTestSetup {
 
     @Test
     void testSourceSingleMapTaskFailureJobEndCleanup() {
+        final FailMax fail = new FailMax(1);
         final MapFunction<Row, Integer> failOnValue1 = row -> {
             final int value = Integer.valueOf(row.getString(0));
-            Fail.max(1).on(value == 1).withMessage("The filter task value '" + value + "'.");
+            fail.on(value == 1, "The filter task value '" + value + "'.");
             return value;
         };
         final Dataset<Integer> df = spark.read() //
@@ -101,9 +97,10 @@ class S3CleanupIT extends S3IntegrationTestSetup {
 
     @Test
     void testSourceMultiStageMapWithCacheFailureJobEndCleanup() {
+        final FailMax fail = new FailMax(2);
         final FilterFunction<Row> failOn1And3 = row -> {
             final int value = Integer.valueOf(row.getString(0));
-            Fail.max(2).on((value == 1) || (value == 3)).withMessage("The filter task value '" + value + "'.");
+            fail.on((value == 1) || (value == 3), "The filter task value '" + value + "'.");
             return value == 3;
         };
         final Dataset<Row> cachedDF = spark.read() //
@@ -123,8 +120,9 @@ class S3CleanupIT extends S3IntegrationTestSetup {
 
     @Test
     void testSourceMapReduceFailureJobEndCleanup() {
+        final FailMax fail = new FailMax(1);
         final MapGroupsFunction<String, Long, String> failOnKeyEven = (key, values) -> {
-            Fail.max(1).on(key.equals("even")).withMessage("The reduce task with 'even' key.");
+            fail.on(key.equals("even"), "The reduce task with 'even' key.");
             final List<Long> longs = StreamSupport
                     .stream(Spliterators.spliteratorUnknownSize(values, Spliterator.ORDERED), false)
                     .collect(Collectors.toList());
@@ -206,41 +204,22 @@ class S3CleanupIT extends S3IntegrationTestSetup {
         assertThatBucketIsEmpty();
     }
 
-    private static class TaskFailureStateCounter {
-        private static int totalTaskFailures = 0;
-
-        public static synchronized void clear() {
-            totalTaskFailures = 0;
-        }
-    }
-
     /**
      * This class simulates a failure based on the specified {@link #condition} and for maximum number of times
      * according to value {@link #maxFailures}.
      */
-    static class Fail {
-        static Fail max(final int maxFailures) {
-            return new Fail(maxFailures);
-        }
-
+    static class FailMax {
         private final int maxFailures;
-        private boolean condition;
+        private int totalFailures = 0;
 
-        Fail(final int maxFailures) {
+        FailMax(final int maxFailures) {
             this.maxFailures = maxFailures;
         }
 
-        Fail on(final boolean condition) {
-            this.condition = condition;
-            return this;
-        }
-
-        void withMessage(final String message) {
-            synchronized (TaskFailureStateCounter.class) {
-                if (this.condition && (TaskFailureStateCounter.totalTaskFailures < this.maxFailures)) {
-                    TaskFailureStateCounter.totalTaskFailures += 1;
-                    throw new RuntimeException("Intentional failure, please ignore it. " + message);
-                }
+        synchronized void on(final boolean condition, final String message) {
+            if (condition && (this.totalFailures < this.maxFailures)) {
+                this.totalFailures += 1;
+                throw new RuntimeException("Intentional failure, please ignore it. " + message);
             }
         }
     }
