@@ -23,19 +23,19 @@ public final class S3FileSystem implements Closeable {
     /**
      * Creates a new instance of {@link S3FileSystem}.
      *
-     * @param options user provided options
-     */
-    public S3FileSystem(final ExasolOptions options) {
-        this.s3Client = new S3ClientFactory(options).getS3Client();
-    }
-
-    /**
-     * Creates a new instance of {@link S3FileSystem}.
-     *
      * @param s3Client s3 client object
      */
     public S3FileSystem(final S3Client s3Client) {
         this.s3Client = s3Client;
+    }
+
+    /**
+     * Creates a new instance of {@link S3FileSystem} from {@link ExasolOptions} options.
+     *
+     * @param options user provided options
+     */
+    public static S3FileSystem fromOptions(final ExasolOptions options) {
+        return new S3FileSystem(new S3ClientFactory(options).getS3Client());
     }
 
     /**

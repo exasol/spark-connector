@@ -33,7 +33,7 @@ public final class S3CleanupListener extends SparkListener {
     }
 
     private void deleteObjects() {
-        try (final S3FileSystem s3FileSystem = new S3FileSystem(this.options)) {
+        try (final S3FileSystem s3FileSystem = S3FileSystem.fromOptions(this.options)) {
             s3FileSystem.deleteKeys(this.options.getS3Bucket(), this.bucketKey);
         }
     }
