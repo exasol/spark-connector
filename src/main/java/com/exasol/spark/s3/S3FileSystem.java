@@ -42,7 +42,7 @@ public final class S3FileSystem implements Closeable {
      * Checks if a given bucket exists.
      *
      * @param bucketName name of a bucket
-     * @return {@code true} if path is a directory, {@code false} otherwise
+     * @return {@code true} if bucket exists, {@code false} otherwise
      */
     public boolean doesBucketExist(final String bucketName) {
         try {
@@ -54,7 +54,7 @@ public final class S3FileSystem implements Closeable {
     }
 
     /**
-     * Deletes a given bucket contents.
+     * Deletes a given bucket.
      *
      * @param bucketName name of a bucket
      */
@@ -64,13 +64,13 @@ public final class S3FileSystem implements Closeable {
     }
 
     /**
-     * Deletes a given bucket and its key contents.
+     * For a bucket with given name: delete all contents with the specified key.
      *
      * @param bucketName name of a bucket
      * @param bucketKey  bucket key value
      */
     public void deleteKeys(final String bucketName, final String bucketKey) {
-        LOGGER.info(() -> "Deleting S3 bucket '" + bucketName + "' with bucket key '" + bucketKey + "'.");
+        LOGGER.info(() -> "Deleting objects in S3 bucket '" + bucketName + "' with bucket key '" + bucketKey + "'.");
         deleteObjects(bucketName, Optional.of(bucketKey));
     }
 
@@ -90,7 +90,7 @@ public final class S3FileSystem implements Closeable {
                     exception);
         } catch (final S3Exception exception) {
             throw new ExasolConnectionException(ExaError.messageBuilder("E-SEC-28")
-                    .message("Failed to delete objects in {{BUCKET}} with key {{KEY}} because of unknown S3 exception.")
+                    .message("Failed to delete objects in {{BUCKET}} with key {{KEY}} because of unexpected S3 exception.")
                     .parameter("BUCKET", bucketName).parameter("KEY", bucketKey.orElse("emptyBucketKey"))
                     .ticketMitigation().toString(), exception);
         }
