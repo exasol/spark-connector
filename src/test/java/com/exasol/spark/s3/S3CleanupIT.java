@@ -54,6 +54,12 @@ class S3CleanupIT extends S3IntegrationTestSetup {
         spark = SparkSessionProvider.getSparkSession(this.conf);
     }
 
+    @AfterEach
+    void afterEach() {
+        TaskFailureStateCounter.clear();
+        spark = SparkSessionProvider.getSparkSession(this.conf);
+    }
+
     private boolean isBucketEmpty(final String bucketName) {
         final List<S3Object> objects = s3Client.listObjects(ListObjectsRequest.builder().bucket(bucketName).build())
                 .contents();
@@ -65,52 +71,54 @@ class S3CleanupIT extends S3IntegrationTestSetup {
         assertThat(isBucketEmpty(DEFAULT_BUCKET_NAME), equalTo(true));
     }
 
-    @Test
-    void testSourceSuccessJobEndCleanup() {
-        final MapFunction<Row, String> firstString = row -> row.getString(0);
-        final Dataset<String> df = spark.read() //
+    private Dataset<Row> getSparkDataset() {
+        return spark.read() //
                 .format("exasol-s3") //
                 .option("table", table.getFullyQualifiedName()) //
                 .options(getSparkOptions()) //
-                .load() //
-                .map(firstString, Encoders.STRING());
+                .load();
+    }
+
+    @Test
+    void testSourceSuccessJobEndCleanup() {
+        final MapFunction<Row, String> firstString = row -> row.getString(0);
+        final Dataset<String> df = getSparkDataset().map(firstString, Encoders.STRING());
         assertThat(df.collectAsList(), contains("1", "2", "3"));
         assertThatBucketIsEmpty();
     }
 
     @Test
     void testSourceSingleMapTaskFailureJobEndCleanup() {
-        final FailMax fail = new FailMax(1);
         final MapFunction<Row, Integer> failOnValue1 = row -> {
             final int value = Integer.valueOf(row.getString(0));
-            fail.on(value == 1, "The filter task value '" + value + "'.");
+            final String message = "The filter task value '" + value + "'.";
+            synchronized (TaskFailureStateCounter.class) {
+                if (value == 1 && TaskFailureStateCounter.totalTaskFailures == 0) {
+                    TaskFailureStateCounter.totalTaskFailures += 1;
+                    throw new RuntimeException("Intentional failure, please ignore it. " + message);
+                }
+            }
             return value;
         };
-        final Dataset<Integer> df = spark.read() //
-                .format("exasol-s3") //
-                .option("table", table.getFullyQualifiedName()) //
-                .options(getSparkOptions()) //
-                .load() //
-                .map(failOnValue1, Encoders.INT());
+        final Dataset<Integer> df = getSparkDataset().map(failOnValue1, Encoders.INT());
         assertThat(df.collectAsList(), contains(1, 2, 3));
         assertThatBucketIsEmpty();
     }
 
     @Test
     void testSourceMultiStageMapWithCacheFailureJobEndCleanup() {
-        final FailMax fail = new FailMax(2);
         final FilterFunction<Row> failOn1And3 = row -> {
             final int value = Integer.valueOf(row.getString(0));
-            fail.on((value == 1) || (value == 3), "The filter task value '" + value + "'.");
+            final String message = "The filter task value '" + value + "'.";
+            synchronized (TaskFailureStateCounter.class) {
+                if ((value == 1 || value == 3) && TaskFailureStateCounter.totalTaskFailures < 2) {
+                    TaskFailureStateCounter.totalTaskFailures += 1;
+                    throw new RuntimeException("Intentional failure, please ignore it. " + message);
+                }
+            }
             return value == 3;
         };
-        final Dataset<Row> cachedDF = spark.read() //
-                .format("exasol-s3") //
-                .option("table", table.getFullyQualifiedName()) //
-                .options(getSparkOptions()) //
-                .load() //
-                .filter(failOn1And3) //
-                .cache();
+        final Dataset<Row> cachedDF = getSparkDataset().filter(failOn1And3).cache();
         long size = cachedDF.count();
         assertThat(size, equalTo(1L));
         // Should stay the same size = cachedDF.count();
@@ -121,20 +129,21 @@ class S3CleanupIT extends S3IntegrationTestSetup {
 
     @Test
     void testSourceMapReduceFailureJobEndCleanup() {
-        final FailMax fail = new FailMax(1);
         final MapGroupsFunction<String, Long, String> failOnKeyEven = (key, values) -> {
-            fail.on(key.equals("even"), "The reduce task with 'even' key.");
+            final String message = "The reduce task with 'even' key.";
+            synchronized (TaskFailureStateCounter.class) {
+                if (key.equals("even") && TaskFailureStateCounter.totalTaskFailures == 0) {
+                    TaskFailureStateCounter.totalTaskFailures += 1;
+                    throw new RuntimeException("Intentional failure, please ignore it. " + message);
+                }
+            }
             final List<Long> longs = StreamSupport
                     .stream(Spliterators.spliteratorUnknownSize(values, Spliterator.ORDERED), false)
                     .collect(Collectors.toList());
             return key + ": " + longs.toString();
         };
         final MapFunction<Row, Long> convertToLong = row -> Integer.valueOf(row.getString(0)) * 1L;
-        final Dataset<String> df = spark.read() //
-                .format("exasol-s3") //
-                .option("table", table.getFullyQualifiedName()) //
-                .options(getSparkOptions()) //
-                .load() //
+        final Dataset<String> df = getSparkDataset() //
                 .map(convertToLong, Encoders.LONG()) //
                 .groupByKey((MapFunction<Long, String>) v -> (v % 2) == 0 ? "even" : "odd", Encoders.STRING()) //
                 .mapGroups(failOnKeyEven, Encoders.STRING());
@@ -147,12 +156,7 @@ class S3CleanupIT extends S3IntegrationTestSetup {
         final MapFunction<Row, Integer> failAlways = row -> {
             throw new RuntimeException("Intentional failure for all tasks. Please ignore it.");
         };
-        final Dataset<Integer> df = spark.read() //
-                .format("exasol-s3") //
-                .option("table", table.getFullyQualifiedName()) //
-                .options(getSparkOptions()) //
-                .load() //
-                .map(failAlways, Encoders.INT());
+        final Dataset<Integer> df = getSparkDataset().map(failAlways, Encoders.INT());
         final SparkException exception = assertThrows(SparkException.class, () -> df.collectAsList());
         assertThat(exception.getMessage(), containsString("Intentional failure for all tasks."));
         assertThatBucketIsEmpty();
@@ -206,22 +210,13 @@ class S3CleanupIT extends S3IntegrationTestSetup {
     }
 
     /**
-     * This class simulates a failure based on the specified {@link #condition} and for maximum number of times
-     * according to value {@link #maxFailures}.
+     * This class keeps count of failures among multiple Spark runner threads.
      */
-    static class FailMax {
-        private final int maxFailures;
-        private int totalFailures = 0;
+    private static class TaskFailureStateCounter {
+        private static int totalTaskFailures = 0;
 
-        FailMax(final int maxFailures) {
-            this.maxFailures = maxFailures;
-        }
-
-        synchronized void on(final boolean condition, final String message) {
-            if (condition && (this.totalFailures < this.maxFailures)) {
-                this.totalFailures += 1;
-                throw new RuntimeException("Intentional failure, please ignore it. " + message);
-            }
+        public static synchronized void clear() {
+            totalTaskFailures = 0;
         }
     }
 }
