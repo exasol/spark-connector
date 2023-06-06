@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 import org.apache.spark.scheduler.SparkListener;
 import org.apache.spark.scheduler.SparkListenerJobEnd;
 
+import com.exasol.spark.common.ExasolOptions;
+
 /**
  * A {@link SparkListener} class that cleans up {@code S3} intermediate location at the end of job run.
  */

@@ -12,6 +12,9 @@ import org.apache.spark.sql.execution.datasources.v2.csv.CSVTable;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
+import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.Option;
+
 import scala.collection.JavaConverters;
 import scala.collection.immutable.Seq;
 

@@ -2,6 +2,9 @@ package com.exasol.spark.s3;
 
 import java.net.URI;
 
+import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.Option;
+
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;

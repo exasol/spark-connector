@@ -12,8 +12,7 @@ import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
 import com.exasol.errorreporting.ExaError;
-import com.exasol.spark.common.ColumnDescription;
-import com.exasol.spark.common.SchemaConverter;
+import com.exasol.spark.common.*;
 import com.exasol.sql.StatementFactory;
 import com.exasol.sql.dql.select.Select;
 import com.exasol.sql.dql.select.rendering.SelectRenderer;

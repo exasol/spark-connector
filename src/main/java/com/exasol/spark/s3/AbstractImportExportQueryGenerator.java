@@ -1,5 +1,8 @@
 package com.exasol.spark.s3;
 
+import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.Option;
+
 /**
  * An common {@code CSV} query generator class.
  *

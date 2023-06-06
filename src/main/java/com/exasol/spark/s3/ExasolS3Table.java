@@ -17,6 +17,8 @@ import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
 import com.exasol.errorreporting.ExaError;
+import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.Option;
 
 /**
  * Represents an instance of {@link ExasolS3Table}.
