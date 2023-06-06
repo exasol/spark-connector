@@ -204,7 +204,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>32.0.0-jre</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -656,11 +656,11 @@
                         <exclude>sonatype-2022-5732</exclude>
                         <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') from jackson-core:2.13.4 -->
                         <exclude>sonatype-2022-6438</exclude>
-                        <!-- com.google.guava:guava:jar:31.1-jre: Currently no update available. Risk does not apply, as potential attackers cannot access the temp directory. -->
-                        <exclude>CVE-2020-8908</exclude>
                         <!-- org.apache.spark:spark-core_2.12:jar:3.3.2: CWE-269: Improper Privilege Management (6.4); https://ossindex.sonatype.org/vulnerability/CVE-2023-22946 -->
                         <!-- This from the spark-code_2.12 version, which we release using profiles below. -->
                         <exclude>CVE-2023-22946</exclude>
+                        <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') (7.5); from org.apache.spark:spark-sql_${spark.version} -->
+                        <exclude>CVE-2023-33546</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

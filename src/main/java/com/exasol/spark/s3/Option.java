@@ -25,7 +25,31 @@ public enum Option {
     /** Number of Spark job partitions. */
     NUMBER_OF_PARTITIONS("numPartitions", "Parameter name for setting number of Spark job partitions."), //
 
-    //
+    /** Default number of Spark job partitions. */
+    DEFAULT_NUMBER_OF_PARTITIONS("8", "Default number for Spark job partitions."), //
+
+    /** Maximum allowed number of Spark job partitions. */
+    MAX_ALLOWED_NUMBER_OF_PARTITIONS("1000", "Maximum allowed number for Spark job partitions."), //
+
+    /** Boolean parameter name to indicate local and CI environment. */
+    REPLACE_LOCALHOST_BY_DEFAULT_S3_ENDPOINT("replaceLocalhostByDefaultS3Endpoint",
+            "Boolean parameter name to indicate local and CI environment."), //
+
+    /**
+     * Parameter name for intermediate data location for writing.
+     *
+     * It is internal parameter, not required to be set by users.
+     */
+    INTERMEDIATE_DATA_PATH("PATH", "Parameter name for location for writing, to store intermediate data."), //
+
+    /**
+     * Parameter name for S3 bucket key inside intermediate data path.
+     *
+     * It is internal parameter, not required to be set by users.
+     */
+    WRITE_S3_BUCKET_KEY("writeS3BucketKey",
+            "Parameter name for bucket key that will be created in intermediate data path."), //
+
     /** AWS access key parameter name. */
     AWS_ACCESS_KEY_ID("awsAccessKeyId", "AWS access key parameter name."), //
 
@@ -34,6 +58,9 @@ public enum Option {
 
     /** AWS session token parameter name. */
     AWS_SESSION_TOKEN("awsSessionToken", "AWS session token parameter name."), //
+
+    /** AWS credentials provider name. */
+    AWS_CREDENTIALS_PROVIDER("awsCredentialsProvider", "AWS credentials provider parameter name."), //
 
     /** AWS region parameter name. */
     AWS_REGION("awsRegion", "AWS region parameter name."), //
@@ -45,7 +72,7 @@ public enum Option {
     AWS_USE_SSL("useSsl", "Boolean parameter to enable SSL."), //
 
     /** AWS bucket name parameter name. */
-    S3_BUCKET("s3Bucket", "AWS bucket name parameter name."), //
+    S3_BUCKET("s3Bucket", "Parameter name for user provided AWS bucket name."), //
 
     /** AWS endpoint override parameter name. */
     S3_ENDPOINT_OVERRIDE("awsEndpointOverride", "AWS endpoint override parameter name."), //

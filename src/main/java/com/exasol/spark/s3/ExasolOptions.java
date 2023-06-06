@@ -1,7 +1,5 @@
 package com.exasol.spark.s3;
 
-import static com.exasol.spark.s3.Constants.*;
-
 import java.util.*;
 
 import com.exasol.errorreporting.ExaError;
@@ -126,10 +124,10 @@ public final class ExasolOptions {
      * @return number of partitions
      */
     public int getNumberOfPartitions() {
-        if (!containsKey(NUMBER_OF_PARTITIONS)) {
-            return DEFAULT_NUMBER_OF_PARTITIONS;
+        if (!containsKey(Option.NUMBER_OF_PARTITIONS.key())) {
+            return Integer.parseInt(Option.DEFAULT_NUMBER_OF_PARTITIONS.key());
         } else {
-            return Integer.parseInt(get(NUMBER_OF_PARTITIONS));
+            return Integer.parseInt(get(Option.NUMBER_OF_PARTITIONS.key()));
         }
     }
 

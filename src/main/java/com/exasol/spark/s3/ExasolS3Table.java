@@ -1,7 +1,5 @@
 package com.exasol.spark.s3;
 
-import static com.exasol.spark.s3.Constants.*;
-
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -81,25 +79,26 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
         final ExasolOptions.Builder builder = ExasolOptions.builder() //
-                .jdbcUrl(options.get(JDBC_URL)) //
-                .username(options.get(USERNAME)) //
-                .password(options.get(PASSWORD)) //
-                .s3Bucket(options.get(S3_BUCKET));
-        if (options.containsKey(TABLE)) {
-            builder.table(options.get(TABLE));
-        } else if (options.containsKey(QUERY)) {
-            builder.query(options.get(QUERY));
+                .jdbcUrl(options.get(Option.JDBC_URL.key())) //
+                .username(options.get(Option.USERNAME.key())) //
+                .password(options.get(Option.PASSWORD.key())) //
+                .s3Bucket(options.get(Option.S3_BUCKET.key()));
+        if (options.containsKey(Option.TABLE.key())) {
+            builder.table(options.get(Option.TABLE.key()));
+        } else if (options.containsKey(Option.QUERY.key())) {
+            builder.query(options.get(Option.QUERY.key()));
         }
         return builder.withOptionsMap(options.asCaseSensitiveMap()).build();
     }
 
     private void validateNumberOfPartitions(final ExasolOptions options) {
         final int numberOfPartitions = options.getNumberOfPartitions();
-        if (numberOfPartitions > MAX_ALLOWED_NUMBER_OF_PARTITIONS) {
+        final int maxAllowedPartitions = Integer.parseInt(Option.MAX_ALLOWED_NUMBER_OF_PARTITIONS.key());
+        if (numberOfPartitions > maxAllowedPartitions) {
             throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-23") //
                     .message("The number of partitions exceeds the supported maximum of {{MAXPARTITIONS}}.",
-                            MAX_ALLOWED_NUMBER_OF_PARTITIONS) //
-                    .mitigation("Please set parameter {{param}} to a lower value.", NUMBER_OF_PARTITIONS) //
+                            maxAllowedPartitions) //
+                    .mitigation("Please set parameter {{param}} to a lower value.", Option.NUMBER_OF_PARTITIONS.key()) //
                     .toString());
         }
     }
@@ -118,15 +117,15 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
         final SparkSession sparkSession = SparkSession.active();
         synchronized (sparkSession.sparkContext().hadoopConfiguration()) {
             final Configuration conf = sparkSession.sparkContext().hadoopConfiguration();
-            if (options.containsKey(AWS_CREDENTIALS_PROVIDER)) {
-                conf.set("fs.s3a.aws.credentials.provider", options.get(AWS_CREDENTIALS_PROVIDER));
-                conf.set("fs.s3a.access.key", options.get(AWS_ACCESS_KEY_ID));
-                conf.set("fs.s3a.secret.key", options.get(AWS_SECRET_ACCESS_KEY));
+            if (options.containsKey(Option.AWS_CREDENTIALS_PROVIDER.key())) {
+                conf.set("fs.s3a.aws.credentials.provider", options.get(Option.AWS_CREDENTIALS_PROVIDER.key()));
+                conf.set("fs.s3a.access.key", options.get(Option.AWS_ACCESS_KEY_ID.key()));
+                conf.set("fs.s3a.secret.key", options.get(Option.AWS_SECRET_ACCESS_KEY.key()));
             }
-            if (options.containsKey(S3_ENDPOINT_OVERRIDE)) {
-                conf.set("fs.s3a.endpoint", "http://" + options.get(S3_ENDPOINT_OVERRIDE));
+            if (options.containsKey(Option.S3_ENDPOINT_OVERRIDE.key())) {
+                conf.set("fs.s3a.endpoint", "http://" + options.get(Option.S3_ENDPOINT_OVERRIDE.key()));
             }
-            if (options.hasEnabled(S3_PATH_STYLE_ACCESS)) {
+            if (options.hasEnabled(Option.S3_PATH_STYLE_ACCESS.key())) {
                 conf.set("fs.s3a.path.style.access", "true");
             }
         }

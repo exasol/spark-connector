@@ -1,8 +1,5 @@
 package com.exasol.spark.s3;
 
-import static com.exasol.spark.s3.Constants.INTERMEDIATE_DATA_PATH;
-import static com.exasol.spark.s3.Constants.WRITE_S3_BUCKET_KEY;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
@@ -61,10 +58,10 @@ public class ExasolBatchWrite implements BatchWrite {
     }
 
     private void cleanup() {
-        final String intermediateLocation = this.options.get(INTERMEDIATE_DATA_PATH);
+        final String intermediateLocation = this.options.get(Option.INTERMEDIATE_DATA_PATH.key());
         LOGGER.info(() -> "Running cleanup process for directory '" + intermediateLocation + "'.");
         try (final S3FileSystem s3FileSystem = S3FileSystem.fromOptions(this.options)) {
-            s3FileSystem.deleteKeys(this.options.getS3Bucket(), this.options.get(WRITE_S3_BUCKET_KEY));
+            s3FileSystem.deleteKeys(this.options.getS3Bucket(), this.options.get(Option.WRITE_S3_BUCKET_KEY.key()));
         }
     }
 
@@ -128,7 +125,7 @@ public class ExasolBatchWrite implements BatchWrite {
         }
 
         private String getFiles() {
-            final String path = this.options.get(INTERMEDIATE_DATA_PATH);
+            final String path = this.options.get(Option.INTERMEDIATE_DATA_PATH.key());
             final URI pathURI = getPathURI(path);
             final String bucketName = pathURI.getHost();
             final String bucketKey = pathURI.getPath().substring(1);

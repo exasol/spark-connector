@@ -1,7 +1,5 @@
 package com.exasol.spark.s3;
 
-import static com.exasol.spark.s3.Constants.*;
-
 import java.net.URI;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -40,36 +38,36 @@ public final class S3ClientFactory {
     }
 
     private void setRegionIfEnabled(final S3BaseClientBuilder<?, ?> builder) {
-        if (this.options.containsKey(AWS_REGION)) {
-            builder.region(Region.of(this.options.get(AWS_REGION)));
+        if (this.options.containsKey(Option.AWS_REGION.key())) {
+            builder.region(Region.of(this.options.get(Option.AWS_REGION.key())));
         }
     }
 
     private AwsCredentialsProvider getCredentialsProvider() {
-        final String awsAccessKeyId = this.options.get(AWS_ACCESS_KEY_ID);
-        final String awsSecretAccessKey = this.options.get(AWS_SECRET_ACCESS_KEY);
+        final String awsAccessKeyId = this.options.get(Option.AWS_ACCESS_KEY_ID.key());
+        final String awsSecretAccessKey = this.options.get(Option.AWS_SECRET_ACCESS_KEY.key());
         return StaticCredentialsProvider.create(AwsBasicCredentials.create(awsAccessKeyId, awsSecretAccessKey));
     }
 
     private void setPathStyleAccessIfEnabled(final S3BaseClientBuilder<?, ?> builder) {
-        if (this.options.hasEnabled(S3_PATH_STYLE_ACCESS)) {
+        if (this.options.hasEnabled(Option.S3_PATH_STYLE_ACCESS.key())) {
             builder.serviceConfiguration(S3Configuration.builder().pathStyleAccessEnabled(true).build());
         }
     }
 
     private void setEndpointOverrideIfEnabled(final S3BaseClientBuilder<?, ?> builder) {
-        if (this.options.containsKey(S3_ENDPOINT_OVERRIDE)) {
+        if (this.options.containsKey(Option.S3_ENDPOINT_OVERRIDE.key())) {
             builder.endpointOverride(URI.create(getEndpointOverride()));
         }
     }
 
     private String getEndpointOverride() {
         final String protocol = getProtocol();
-        return protocol + "://s3." + this.options.get(S3_ENDPOINT_OVERRIDE);
+        return protocol + "://s3." + this.options.get(Option.S3_ENDPOINT_OVERRIDE.key());
     }
 
     private String getProtocol() {
-        if (!this.options.containsKey(AWS_USE_SSL) || this.options.hasEnabled(AWS_USE_SSL)) {
+        if (!this.options.containsKey(Option.AWS_USE_SSL.key()) || this.options.hasEnabled(Option.AWS_USE_SSL.key())) {
             return "https";
         } else {
             return "http";

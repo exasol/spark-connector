@@ -1,7 +1,5 @@
 package com.exasol.spark.s3;
 
-import static com.exasol.spark.s3.Constants.*;
-
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -26,7 +24,8 @@ import com.exasol.sql.rendering.StringRendererConfig;
  */
 public class S3Source implements TableProvider, DataSourceRegister {
     private static final Logger LOGGER = Logger.getLogger(S3Source.class.getName());
-    private static final List<String> REQUIRED_OPTIONS = Arrays.asList(JDBC_URL, USERNAME, PASSWORD);
+    private static final List<String> REQUIRED_OPTIONS = Arrays.asList(Option.JDBC_URL.key(), Option.USERNAME.key(),
+            Option.PASSWORD.key());
 
     @Override
     public String shortName() {
@@ -53,12 +52,12 @@ public class S3Source implements TableProvider, DataSourceRegister {
 
     private void validateOptions(final CaseInsensitiveStringMap options) {
         LOGGER.finest(() -> "Validating options of the s3 source.");
-        if (!options.containsKey(TABLE) && !options.containsKey(QUERY)) {
+        if (!options.containsKey(Option.TABLE.key()) && !options.containsKey(Option.QUERY.key())) {
             throw new IllegalArgumentException(
                     ExaError.messageBuilder("E-SEC-12").message("Missing 'query' or 'table' option.")
                             .mitigation("Please provide either one of 'query' or 'table' options.").toString());
         }
-        if (options.containsKey(TABLE) && options.containsKey(QUERY)) {
+        if (options.containsKey(Option.TABLE.key()) && options.containsKey(Option.QUERY.key())) {
             throw new IllegalArgumentException(
                     ExaError.messageBuilder("E-SEC-13").message("Both 'query' and 'table' options are provided.")
                             .mitigation("Please use only either one of the options.").toString());
@@ -78,13 +77,13 @@ public class S3Source implements TableProvider, DataSourceRegister {
 
     private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
         final ExasolOptions.Builder builder = ExasolOptions.builder() //
-                .jdbcUrl(options.get(JDBC_URL)) //
-                .username(options.get(USERNAME)) //
-                .password(options.get(PASSWORD));
-        if (options.containsKey(TABLE)) {
-            builder.table(options.get(TABLE));
-        } else if (options.containsKey(QUERY)) {
-            builder.query(options.get(QUERY));
+                .jdbcUrl(options.get(Option.JDBC_URL.key())) //
+                .username(options.get(Option.USERNAME.key())) //
+                .password(options.get(Option.PASSWORD.key()));
+        if (options.containsKey(Option.TABLE.key())) {
+            builder.table(options.get(Option.TABLE.key()));
+        } else if (options.containsKey(Option.QUERY.key())) {
+            builder.query(options.get(Option.QUERY.key()));
         }
         return builder.build();
     }

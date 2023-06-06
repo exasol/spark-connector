@@ -1,6 +1,5 @@
 package com.exasol.spark.s3;
 
-import static com.exasol.spark.s3.Constants.NUMBER_OF_PARTITIONS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
@@ -88,7 +87,7 @@ class ExasolOptionsTest {
 
     @Test
     void testNumberOfPartitionsProvided() {
-        final Map<String, String> m = Stream.of(new String[][] { { NUMBER_OF_PARTITIONS + "", "3" } })
+        final Map<String, String> m = Stream.of(new String[][] { { Option.NUMBER_OF_PARTITIONS.key() + "", "3" } })
                 .collect(Collectors.toMap(e -> e[0], e -> e[1]));
         assertThat(ExasolOptions.builder().query("query").withOptionsMap(m).build().getNumberOfPartitions(),
                 equalTo(3));
