@@ -85,13 +85,13 @@ public final class S3FileSystem implements Closeable {
             deleteObjectIdentifiers(bucketName, objectIdentifiers);
         } catch (final SdkClientException exception) {
             throw new ExasolConnectionException(
-                    ExaError.messageBuilder("E-SEC-27")
+                    ExaError.messageBuilder("E-SEC-20")
                             .message("Failed to delete objects in {{BUCKET}} with key {{KEY}}.", bucketName,
                                     bucketKey.orElse("emptyBucketKey"))
                             .mitigation("Please check that credentials and bucket name are correct.").toString(),
                     exception);
         } catch (final S3Exception exception) {
-            throw new ExasolConnectionException(ExaError.messageBuilder("E-SEC-28")
+            throw new ExasolConnectionException(ExaError.messageBuilder("E-SEC-21")
                     .message("Failed to delete objects in {{BUCKET}} with key {{KEY}} because of unexpected S3 exception.")
                     .parameter("BUCKET", bucketName).parameter("KEY", bucketKey.orElse("emptyBucketKey"))
                     .ticketMitigation().toString(), exception);

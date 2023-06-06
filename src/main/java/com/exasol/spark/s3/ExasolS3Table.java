@@ -107,7 +107,7 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     private void validateHasTable(final ExasolOptions options) {
         if (!options.hasTable()) {
-            throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-26")
+            throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-19")
                     .message("Missing 'table' option when writing into Exasol database.")
                     .mitigation("Please set 'table' property with fully qualified "
                             + "(e.g. 'schema_name.table_name') Exasol table name.")
