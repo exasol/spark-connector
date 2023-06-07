@@ -25,11 +25,11 @@ jobs:
               profile: '-Pspark3.4',
               project-keeper-skip: false,
             },
-            {
-              name: 'Spark3.3',
-              profile: '-Pspark3.3',
-              project-keeper-skip: true,
-            },
+            # {
+            #   name: 'Spark3.3',
+            #   profile: '-Pspark3.3',
+            #   project-keeper-skip: true,
+            # },
             # {
             #   name: 'Spark3.3 Scala2.12',
             #   profile: '-Pspark3.3-scala2.12',
