@@ -81,7 +81,7 @@ class LoadIT extends BaseTableQueryIT {
     val thrown = intercept[java.sql.SQLException] {
       df.show(10, false)
     }
-    assert(thrown.getMessage().contains("""object "DATE_INFORMATION" not found"""))
+    assert(thrown.getMessage().contains("""object DATE_INFORMATION not found"""))
   }
 
   test("uses user provided SparkConf") {
