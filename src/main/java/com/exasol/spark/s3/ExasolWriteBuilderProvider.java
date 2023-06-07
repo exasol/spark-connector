@@ -49,7 +49,7 @@ public final class ExasolWriteBuilderProvider {
         final String intermediateDataPath = updatedOptions.get(Option.INTERMEDIATE_DATA_PATH.key());
         LOGGER.info(() -> "Writing intermediate data to the '" + intermediateDataPath + "' path for write job.");
         final CSVTable csvTable = new CSVTable("", sparkSession, info.options(), getS3WritePath(intermediateDataPath),
-                scala.Option.apply(schema), new CSVFileFormat().getClass());
+                scala.Option.apply(schema), CSVFileFormat.class);
         return new DelegatingWriteBuilder(updatedOptions, csvTable.newWriteBuilder(info));
     }
 
