@@ -61,7 +61,7 @@ class S3DataWritingIT extends S3IntegrationTestSetup {
                 .option("numPartitions", "1351") //
                 .option("table", table.getFullyQualifiedName());
         final ExasolValidationException exception = assertThrows(ExasolValidationException.class, () -> df.save());
-        assertThat(exception.getMessage(), startsWith("E-SEC-23"));
+        assertThat(exception.getMessage(), startsWith("E-SEC-19"));
     }
 
     @Test
