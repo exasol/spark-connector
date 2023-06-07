@@ -56,7 +56,7 @@ class S3CleanupIT extends S3IntegrationTestSetup {
 
     @AfterEach
     void afterEach() {
-        TaskFailureStateCounter.clear();
+        TaskFailureStateCounter.getInstance().clear();
         spark = SparkSessionProvider.getSparkSession(this.conf);
     }
 
@@ -92,11 +92,10 @@ class S3CleanupIT extends S3IntegrationTestSetup {
         final MapFunction<Row, Integer> failOnValue1 = row -> {
             final int value = Integer.valueOf(row.getString(0));
             final String message = "The filter task value '" + value + "'.";
-            synchronized (TaskFailureStateCounter.class) {
-                if (value == 1 && TaskFailureStateCounter.totalTaskFailures == 0) {
-                    TaskFailureStateCounter.totalTaskFailures += 1;
-                    throw new RuntimeException("Intentional failure, please ignore it. " + message);
-                }
+            final TaskFailureStateCounter counter = TaskFailureStateCounter.getInstance();
+            if (value == 1 && counter.getCount() == 0) {
+                counter.increment();
+                throw new RuntimeException("Intentional failure, please ignore it. " + message);
             }
             return value;
         };
@@ -110,11 +109,10 @@ class S3CleanupIT extends S3IntegrationTestSetup {
         final FilterFunction<Row> failOn1And3 = row -> {
             final int value = Integer.valueOf(row.getString(0));
             final String message = "The filter task value '" + value + "'.";
-            synchronized (TaskFailureStateCounter.class) {
-                if ((value == 1 || value == 3) && TaskFailureStateCounter.totalTaskFailures < 2) {
-                    TaskFailureStateCounter.totalTaskFailures += 1;
-                    throw new RuntimeException("Intentional failure, please ignore it. " + message);
-                }
+            final TaskFailureStateCounter counter = TaskFailureStateCounter.getInstance();
+            if ((value == 1 || value == 3) && counter.getCount() < 2) {
+                counter.increment();
+                throw new RuntimeException("Intentional failure, please ignore it. " + message);
             }
             return value == 3;
         };
@@ -131,11 +129,10 @@ class S3CleanupIT extends S3IntegrationTestSetup {
     void testSourceMapReduceFailureJobEndCleanup() {
         final MapGroupsFunction<String, Long, String> failOnKeyEven = (key, values) -> {
             final String message = "The reduce task with 'even' key.";
-            synchronized (TaskFailureStateCounter.class) {
-                if (key.equals("even") && TaskFailureStateCounter.totalTaskFailures == 0) {
-                    TaskFailureStateCounter.totalTaskFailures += 1;
-                    throw new RuntimeException("Intentional failure, please ignore it. " + message);
-                }
+            final TaskFailureStateCounter counter = TaskFailureStateCounter.getInstance();
+            if (key.equals("even") && counter.getCount() == 0) {
+                counter.increment();
+                throw new RuntimeException("Intentional failure, please ignore it. " + message);
             }
             final List<Long> longs = StreamSupport
                     .stream(Spliterators.spliteratorUnknownSize(values, Spliterator.ORDERED), false)
@@ -213,10 +210,30 @@ class S3CleanupIT extends S3IntegrationTestSetup {
      * This class keeps count of failures among multiple Spark runner threads.
      */
     private static class TaskFailureStateCounter {
-        private static int totalTaskFailures = 0;
+        private static volatile TaskFailureStateCounter instance;
+        private int totalTaskFailures = 0;
 
-        public static synchronized void clear() {
-            totalTaskFailures = 0;
+        public static TaskFailureStateCounter getInstance() {
+            if (instance == null) {
+                synchronized (TaskFailureStateCounter.class) {
+                    if (instance == null) {
+                        instance = new TaskFailureStateCounter();
+                    }
+                }
+            }
+            return instance;
+        }
+
+        public void increment() {
+            this.totalTaskFailures += 1;
+        }
+
+        public int getCount() {
+            return this.totalTaskFailures;
+        }
+
+        public void clear() {
+            this.totalTaskFailures = 0;
         }
     }
 }
