@@ -44,4 +44,3 @@ Code name:
 ### Plugin Dependency Updates
 
 * Updated `com.diffplug.spotless:spotless-maven-plugin:2.36.0` to `2.37.0`
-* Added `org.apache.maven.plugins:maven-toolchains-plugin:3.1.0`
