@@ -224,15 +224,15 @@ class S3CleanupIT extends S3IntegrationTestSetup {
             return instance;
         }
 
-        public void increment() {
+        public synchronized void increment() {
             this.totalTaskFailures += 1;
         }
 
-        public int getCount() {
+        public synchronized int getCount() {
             return this.totalTaskFailures;
         }
 
-        public void clear() {
+        public synchronized void clear() {
             this.totalTaskFailures = 0;
         }
     }
