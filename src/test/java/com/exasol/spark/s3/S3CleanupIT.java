@@ -31,9 +31,10 @@ import software.amazon.awssdk.services.s3.model.S3Object;
  * For that, we start Spark session with local mode {@code local[*]} with multiple threads for each test unit to force
  * the job end cleanup calls.
  *
- * We use helper {@link TaskFailureStateCounter} class which is a singleton because we will count the number of Spark task
- * failures concurrently from multiple threads. With this, singleton class variables are shared among {@code JVM}
- * threads.
+ * We use helper {@link TaskFailureStateCounter} class which is a singleton because we will count the number of Spark
+ * task failures concurrently from multiple threads. With this, singleton class variables are shared among {@code JVM}
+ * threads. On the other hand, using here instance object would not work because they will be serialized to Spark tasks
+ * and a copy of a instance would be created and they will be different for each thread.
  */
 @Tag("integration")
 @Testcontainers
