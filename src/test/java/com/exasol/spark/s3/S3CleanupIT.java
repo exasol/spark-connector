@@ -25,8 +25,16 @@ import com.exasol.spark.SparkSessionProvider;
 import software.amazon.awssdk.services.s3.model.ListObjectsRequest;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
-// For this test suite, we start Spark session with local mode {@code local[*]} with multiple threads for each test unit
-// to force the job end call.
+/**
+ * This suite tests for cleanup processes at the end of Spark jobs.
+ *
+ * For that, we start Spark session with local mode {@code local[*]} with multiple threads for each test unit to force
+ * the job end cleanup calls.
+ *
+ * We use helper {@link TaskFailureStateCounter} class whic is singleton because we will count the number of Spark task
+ * failures concurrently from multiple threads. With this, singleton class variables are shared amond {@code JVM}
+ * threads.
+ */
 @Tag("integration")
 @Testcontainers
 class S3CleanupIT extends S3IntegrationTestSetup {
