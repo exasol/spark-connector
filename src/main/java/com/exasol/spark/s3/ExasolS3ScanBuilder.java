@@ -18,8 +18,8 @@ import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
 import com.exasol.errorreporting.ExaError;
+import com.exasol.spark.common.ExasolOptions;
 
-import scala.Option;
 import scala.collection.JavaConverters;
 import scala.collection.immutable.Seq;
 
@@ -83,7 +83,7 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
         prepareIntermediateData(bucketKey);
         // Uses Spark `CSVTable` to read `CSV` files
         final Seq<String> csvFilesPaths = getCSVFiles(bucket, bucketKey);
-        return new CSVTable("", sparkSession, this.properties, csvFilesPaths, Option.apply(this.schema),
+        return new CSVTable("", sparkSession, this.properties, csvFilesPaths, scala.Option.apply(this.schema),
                 new CSVFileFormat().getClass()).newScanBuilder(getUpdatedMapWithCSVOptions(this.properties)).build();
     }
 

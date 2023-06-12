@@ -1,6 +1,7 @@
 package com.exasol.spark.s3;
 
-import static com.exasol.spark.s3.Constants.*;
+import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.Option;
 
 /**
  * An common {@code CSV} query generator class.
@@ -32,8 +33,8 @@ public abstract class AbstractImportExportQueryGenerator {
      * @return identifiedBy part of a query
      */
     public String getIdentifier() {
-        final String awsAccessKeyId = this.options.get(AWS_ACCESS_KEY_ID);
-        final String awsSecretAccessKey = this.options.get(AWS_SECRET_ACCESS_KEY);
+        final String awsAccessKeyId = this.options.get(Option.AWS_ACCESS_KEY_ID.key());
+        final String awsSecretAccessKey = this.options.get(Option.AWS_SECRET_ACCESS_KEY.key());
         return "AT '" + escapeStringLiteral(getBucketURL()) + "'\nUSER '" + escapeStringLiteral(awsAccessKeyId)
                 + "' IDENTIFIED BY '" + escapeStringLiteral(awsSecretAccessKey) + "'\n";
     }
@@ -47,11 +48,11 @@ public abstract class AbstractImportExportQueryGenerator {
     }
 
     private String getS3Endpoint() {
-        String override =  this.options.get(S3_ENDPOINT_OVERRIDE);
+        String override =  this.options.get(Option.S3_ENDPOINT_OVERRIDE.key());
         if (override == null) {
             return DEFAULT_S3_ENDPOINT;
         }
-        if (this.options.hasEnabled(REPLACE_LOCALHOST_BY_DEFAULT_S3_ENDPOINT)) {
+        if (this.options.hasEnabled(Option.REPLACE_LOCALHOST_BY_DEFAULT_S3_ENDPOINT.key())) {
             return override.replace("localhost", DEFAULT_S3_ENDPOINT);
         }
         return override;

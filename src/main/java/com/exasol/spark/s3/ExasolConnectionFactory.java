@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import com.exasol.errorreporting.ExaError;
+import com.exasol.spark.common.ExasolOptions;
 
 /**
  * A factory that creates JDBC connection to Exasol database.

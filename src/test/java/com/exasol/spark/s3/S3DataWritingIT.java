@@ -72,7 +72,7 @@ class S3DataWritingIT extends S3IntegrationTestSetup {
                 .format(this.format) //
                 .options(getSparkOptions());
         final ExasolValidationException exception = assertThrows(ExasolValidationException.class, () -> df.save());
-        assertThat(exception.getMessage(), startsWith("E-SEC-26"));
+        assertThat(exception.getMessage(), startsWith("E-SEC-19"));
     }
 
     @Test
