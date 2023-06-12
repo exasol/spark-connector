@@ -33,8 +33,8 @@ import software.amazon.awssdk.services.s3.model.S3Object;
  *
  * We use helper {@link TaskFailureStateCounter} class which is a singleton because we will count the number of Spark
  * task failures concurrently from multiple threads. With this, singleton class variables are shared among {@code JVM}
- * threads. On the other hand, using here instance object would not work because they will be serialized to Spark tasks
- * and a copy of a instance would be created and they will be different for each thread.
+ * threads. On the other hand, using here instance object would not work because it will be serialized to Spark tasks
+ * and a copy of an instance would be created on each thread and they will be different from each other.
  */
 @Tag("integration")
 @Testcontainers
