@@ -1,0 +1,5 @@
+error-tags:
+  SEC:
+    packages:
+      - com.exasol.spark.s3
+    highest-index: 26

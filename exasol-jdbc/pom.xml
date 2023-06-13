@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spark-connector</artifactId>
-    <version>1.5.0</version>
-    <name>The Spark Exasol Connector</name>
+    <packaging>jar</packaging>
+    <name>Spark Exasol Connector with JDBC</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
     <parent>
         <artifactId>spark-connector-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>1.5.0</version>
+        <version>${revision}</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
@@ -608,7 +608,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -683,18 +682,6 @@
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
                 <version>2.9.7</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.exasol</groupId>
-                <artifactId>artifact-reference-checker-maven-plugin</artifactId>
-                <version>0.4.2</version>
                 <executions>
                     <execution>
                         <goals>
