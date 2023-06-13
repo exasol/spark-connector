@@ -12,194 +12,52 @@
         <version>${revision}</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
+    <!--
     <properties>
         <java.version>8</java.version>
         <hadoop.version>3.3.5</hadoop.version>
         <log4j.version>2.20.0</log4j.version>
         <junit.version>5.9.3</junit.version>
         <mockito.version>5.3.1</mockito.version>
-        <!-- These lines are required for Sonar to find sources and to report coverage -->
         <sonar.sources>.</sonar.sources>
         <sonar.inclusions>src/main/**</sonar.inclusions>
     </properties>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+    -->
     <dependencies>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>${scala.version}</version>
-        </dependency>
+        <!-- <dependency> -->
+        <!--     <groupId>org.scala-lang</groupId> -->
+        <!--     <artifactId>scala-library</artifactId> -->
+        <!--     <version>${scala.version}</version> -->
+        <!-- </dependency> -->
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-jdbc</artifactId>
-            <version>7.1.20</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>sql-statement-builder-java8</artifactId>
-            <version>4.5.4</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>error-reporting-java8</artifactId>
-            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>spark-connector-common-java</artifactId>
-            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.spark</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.compat.version}</artifactId>
-            <version>${spark.version}</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.thrift</groupId>
-                    <artifactId>libthrift</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.thrift</groupId>
-                    <artifactId>libfb303</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.avro</groupId>
-                    <artifactId>avro</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.spark-project.spark</groupId>
-                    <artifactId>unused</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty-all</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>net.minidev</groupId>
-                    <artifactId>json-smart</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-client</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-mapreduce-client-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-client-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-client-runtime</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.zookeeper</groupId>
-                    <artifactId>zookeeper</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.codehaus.jackson</groupId>
-                    <artifactId>jackson-mapper-asl</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
-                <!-- excluded to fix vulnerabilities CVE-2021-0341 and sonatype-2018-0035 -->
-                <exclusion>
-                    <groupId>com.squareup.okhttp</groupId>
-                    <artifactId>okhttp</artifactId>
-                </exclusion>
-                <!-- excluded to fix vulnerability CVE-2021-28168 for profile spark3.1 -->
-                <exclusion>
-                    <groupId>org.glassfish.jersey.core</groupId>
-                    <artifactId>jersey-common</artifactId>
-                </exclusion>
-                <!-- excluded to fix vulnerability sonatype-2016-0687 for profile spark3.1 -->
-                <exclusion>
-                    <groupId>org.glassfish.jersey.media</groupId>
-                    <artifactId>jersey-media-jaxb</artifactId>
-                </exclusion>
-                <!-- excluded to fix vulnerability sonatype-2014-0257 in dependency org.javassist:javassist for profile spark2.4 -->
-                <exclusion>
-                    <groupId>org.glassfish.jersey.core</groupId>
-                    <artifactId>jersey-client</artifactId>
-                </exclusion>
-                <!-- excluded to fix vulnerability sonatype-2014-0257 in dependency org.javassist:javassist for profile spark2.4 -->
-                <exclusion>
-                    <groupId>org.glassfish.jersey.core</groupId>
-                    <artifactId>jersey-server</artifactId>
-                </exclusion>
-                <!-- exluded to fix CVEs: CVE-2022-37865 and CVE-2022-37866 -->
-                <exclusion>
-                    <groupId>org.apache.ivy</groupId>
-                    <artifactId>ivy</artifactId>
-                </exclusion>
-                <!-- exluded to fix CVE-2021-37533 -->
-                <exclusion>
-                    <groupId>commons-net</groupId>
-                    <artifactId>commons-net</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.activation</groupId>
-                    <artifactId>activation</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>jcl-over-slf4j</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_${scala.compat.version}</artifactId>
-            <version>${spark.version}</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.spark-project.spark</groupId>
-                    <artifactId>unused</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.codehaus.jackson</groupId>
-                    <artifactId>jackson-mapper-asl</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -681,32 +539,6 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>2.9.7</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.itsallcode</groupId>
-                <artifactId>openfasttrace-maven-plugin</artifactId>
-                <version>1.6.2</version>
-                <executions>
-                    <execution>
-                        <id>trace-requirements</id>
-                        <goals>
-                            <goal>trace</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <reportOutputFormat>html</reportOutputFormat>
-                    <reportVerbosity>ALL</reportVerbosity>
-                    <reportShowOrigin>true</reportShowOrigin>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
@@ -754,43 +586,4 @@
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>spark3.4</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <spark.version>3.4.0</spark.version>
-                <scala.version>2.13.10</scala.version>
-                <scala.compat.version>2.13</scala.compat.version>
-                <jackson.version>2.14.2</jackson.version>
-                <jersey.version>3.1.2</jersey.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>spark3.3</id>
-            <properties>
-                <spark.version>3.3.2</spark.version>
-                <scala.version>2.13.10</scala.version>
-                <scala.compat.version>2.13</scala.compat.version>
-                <!--
-                    Update this jackson version with new release of Spark
-                    Scala module 2.13.4 requires Jackson Databind version >= 2.13.0 and < 2.14.0
-                -->
-                <jackson.version>2.13.4.2</jackson.version>
-                <jersey.version>3.1.1</jersey.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>spark3.3-scala2.12</id>
-            <properties>
-                <spark.version>3.3.2</spark.version>
-                <scala.version>2.12.17</scala.version>
-                <scala.compat.version>2.12</scala.compat.version>
-                <jackson.version>2.13.4.2</jackson.version>
-                <jersey.version>3.1.1</jersey.version>
-            </properties>
-        </profile>
-    </profiles>
 </project>
