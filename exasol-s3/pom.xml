@@ -22,76 +22,28 @@
             <artifactId>spark-connector-common-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>s3</artifactId>
-            <version>2.20.79</version>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.compat.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.compat.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
             <scope>provided</scope>
             <exclusions>
-                <!-- <exclusion> -->
-                <!--     <groupId>net.minidev</groupId> -->
-                <!--     <artifactId>json-smart</artifactId> -->
-                <!-- </exclusion> -->
-                <!-- <exclusion> -->
-                <!--     <groupId>log4j</groupId> -->
-                <!--     <artifactId>log4j</artifactId> -->
-                <!-- </exclusion> -->
-                <!-- <exclusion> -->
-                <!--     <groupId>org.apache.commons</groupId> -->
-                <!--     <artifactId>commons-compress</artifactId> -->
-                <!-- </exclusion> -->
-                <!-- <exclusion> -->
-                <!--     <groupId>io.netty</groupId> -->
-                <!--     <artifactId>netty</artifactId> -->
-                <!-- </exclusion> -->
-                <!-- <exclusion> -->
-                <!--     <groupId>org.codehaus.jackson</groupId> -->
-                <!--     <artifactId>jackson-mapper-asl</artifactId> -->
-                <!--     </exclusion> -->
-                <!--     <exclusion> -->
-                <!--         <groupId>org.eclipse.jetty</groupId> -->
-                <!--         <artifactId>jetty-server</artifactId> -->
-                <!--     </exclusion> -->
-                <!--     <exclusion> -->
-                <!--         <groupId>org.eclipse.jetty</groupId> -->
-                <!--         <artifactId>jetty-http</artifactId> -->
-                <!--     </exclusion> -->
-                <!-- excluded to fix vulnerability CVE-2022-2047 -->
-                <!-- <exclusion> -->
-                <!--     <groupId>org.eclipse.jetty</groupId> -->
-                <!--     <artifactId>jetty-client</artifactId> -->
-                <!-- </exclusion> -->
-                <!-- excluded to fix vulnerabilities CVE-2023-26048 -->
-                <!-- <exclusion> -->
-                <!--     <groupId>org.eclipse.jetty</groupId> -->
-                <!--     <artifactId>jetty-util</artifactId> -->
-                <!-- </exclusion> -->
-                <!-- excluded to fix vulnerabilities CVE-2021-0341 and sonatype-2018-0035 -->
-                <!-- <exclusion> -->
-                <!--     <groupId>com.squareup.okhttp</groupId> -->
-                <!--     <artifactId>okhttp</artifactId> -->
-                <!-- </exclusion> -->
-                <!-- exluded to fix CVE-2021-37533 -->
-                <!-- <exclusion> -->
-                <!--     <groupId>commons-net</groupId> -->
-                <!--     <artifactId>commons-net</artifactId> -->
-                <!-- </exclusion> -->
                 <exclusion>
                     <groupId>javax.ws.rs</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
-                <!-- <exclusion> -->
-                <!--     <groupId>javax.xml.bind</groupId> -->
-                <!--     <artifactId>*</artifactId> -->
-                <!-- </exclusion> -->
-                <!-- <exclusion> -->
-                <!--     <groupId>org.slf4j</groupId> -->
-                <!--     <artifactId>slf4j-reload4j</artifactId> -->
-                <!-- </exclusion> -->
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.20.79</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -102,61 +54,36 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-1.2-api</artifactId>
-            <version>${log4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>test-db-builder-java</artifactId>
-            <version>3.4.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>hamcrest-resultset-matcher</artifactId>
-            <version>1.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-testcontainers</artifactId>
-            <version>6.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>1.18.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>localstack</artifactId>
-            <version>1.18.3</version>
             <scope>test</scope>
         </dependency>
         <!--
@@ -167,12 +94,6 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>1.12.482</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier</artifactId>
-            <version>3.14.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

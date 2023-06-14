@@ -223,35 +223,35 @@
                 <version>${jackson.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!--replace old version in org.apache.spark-core_2.12 with vulnerability CVE-2021-28168 -->
+            <!-- Replaces old version in org.apache.spark-core_2.12 with vulnerability CVE-2021-28168 -->
             <dependency>
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-common</artifactId>
                 <version>${jersey.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2016-0687 -->
+            <!-- Replaces old version in org.apache.spark-core_2.12 with vulnerability sonatype-2016-0687 -->
             <dependency>
                 <groupId>org.glassfish.jersey.media</groupId>
                 <artifactId>jersey-media-jaxb</artifactId>
                 <version>${jersey.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2014-0257 in dependency org.javassist:javassist -->
+            <!-- Replaces old version in org.apache.spark-core_2.12 with vulnerability sonatype-2014-0257 in dependency org.javassist:javassist -->
             <dependency>
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-server</artifactId>
                 <version>${jersey.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!--replace old version in org.apache.spark-core_2.12 with vulnerability sonatype-2014-0257 in dependency org.javassist:javassist -->
+            <!-- Replaces old version in org.apache.spark-core_2.12 with vulnerability sonatype-2014-0257 in dependency org.javassist:javassist -->
             <dependency>
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-client</artifactId>
                 <version>${jersey.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!--replace old version in org.apache.spark:spark-core_2.12 with vulnerability sonatype-2012-0050 in dependency commons-codec:commons-codec -->
+            <!-- Replaces old version in org.apache.spark:spark-core_2.12 with vulnerability sonatype-2012-0050 in dependency commons-codec:commons-codec -->
             <dependency>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-mapred</artifactId>
@@ -267,9 +267,9 @@
                         <artifactId>jetty-server</artifactId>
                     </exclusion>
                     <!--
-                    Excluded because of: [CVE-2023-26048] CWE-770: Allocation of Resources Without Limits or Throttling (5.3);
-                    https://ossindex.sonatype.org/vulnerability/CVE-2023-26048
-                -->
+                        Excluded because of: [CVE-2023-26048] CWE-770: Allocation of Resources Without Limits or Throttling (5.3);
+                        https://ossindex.sonatype.org/vulnerability/CVE-2023-26048
+                    -->
                     <exclusion>
                         <groupId>org.eclipse.jetty</groupId>
                         <artifactId>jetty-util</artifactId>
@@ -362,30 +362,6 @@
             </dependency>
             <!-- Test Dependencies -->
             <dependency>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest_${scala.compat.version}</artifactId>
-                <version>3.2.9</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.scalatestplus</groupId>
-                <artifactId>scalatestplus-mockito_${scala.compat.version}</artifactId>
-                <version>1.0.0-M2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-junit-jupiter</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
@@ -445,16 +421,6 @@
                 <version>1.18.3</version>
                 <scope>test</scope>
             </dependency>
-            <!--
-            Issue with Localstack S3
-            https://stackoverflow.com/questions/64017812/junit-awscredentials-noclassdeffounderror-with-localstackcontainer
-        -->
-            <dependency>
-                <groupId>com.amazonaws</groupId>
-                <artifactId>aws-java-sdk-s3</artifactId>
-                <version>1.12.482</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
@@ -481,21 +447,6 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!-- <plugin> -->
-                <!--     <groupId>org.apache.maven.plugins</groupId> -->
-                <!--     <artifactId>maven-compiler-plugin</artifactId> -->
-            <!--     <configuration> -->
-            <!--         <source>${java.version}</source> -->
-            <!--         <target>${java.version}</target> -->
-            <!--     </configuration> -->
-            <!-- </plugin> -->
-            <!-- <plugin> -->
-            <!--     <groupId>org.apache.maven.plugins</groupId> -->
-            <!--     <artifactId>maven-javadoc-plugin</artifactId> -->
-            <!--     <configuration> -->
-            <!--         <source>${java.version}</source> -->
-            <!--     </configuration> -->
-            <!-- </plugin> -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -544,13 +495,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- <plugin> -->
-            <!--     <groupId>org.apache.maven.plugins</groupId> -->
-            <!--     <artifactId>maven-failsafe-plugin</artifactId> -->
-            <!--     <configuration> -->
-            <!--         <useModulePath>false</useModulePath> -->
-            <!--     </configuration> -->
-            <!-- </plugin> -->
             <plugin>
                 <groupId>org.sonatype.ossindex.maven</groupId>
                 <artifactId>ossindex-maven-plugin</artifactId>
@@ -569,33 +513,6 @@
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
-            <!-- <plugin> -->
-            <!--     <groupId>org.basepom.maven</groupId> -->
-            <!--     <artifactId>duplicate-finder-maven-plugin</artifactId> -->
-            <!--     <configuration> -->
-            <!--         <printEqualFiles>false</printEqualFiles> -->
-            <!--         <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict> -->
-            <!--         <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict> -->
-            <!--         <ignoredResourcePatterns> -->
-            <!--             <ignoredResourcePattern>git.properties</ignoredResourcePattern> -->
-            <!--             <ignoredResourcePattern>arrow-git.properties</ignoredResourcePattern> -->
-            <!--             <ignoredResourcePattern>mime.types</ignoredResourcePattern> -->
-            <!--             <ignoredResourcePattern>.*\.proto$</ignoredResourcePattern> -->
-            <!--         </ignoredResourcePatterns> -->
-            <!--     </configuration> -->
-            <!-- </plugin> -->
-            <!-- <plugin> -->
-            <!--     <groupId>com.exasol</groupId> -->
-            <!--     <artifactId>project-keeper-maven-plugin</artifactId> -->
-            <!--     <version>2.9.7</version> -->
-            <!--     <executions> -->
-            <!--         <execution> -->
-            <!--             <goals> -->
-            <!--                 <goal>verify</goal> -->
-            <!--             </goals> -->
-            <!--         </execution> -->
-            <!--     </executions> -->
-            <!-- </plugin> -->
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>artifact-reference-checker-maven-plugin</artifactId>
@@ -625,6 +542,10 @@
                     <reportVerbosity>ALL</reportVerbosity>
                     <reportShowOrigin>true</reportShowOrigin>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.exasol</groupId>
+                <artifactId>project-keeper-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
