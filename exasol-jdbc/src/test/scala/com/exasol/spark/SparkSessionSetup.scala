@@ -6,8 +6,6 @@ import org.apache.spark.SparkContextHelper
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.SparkSession
 
-import com.exasol.spark.SparkSessionProvider
-
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.Suite
 

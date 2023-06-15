@@ -20,21 +20,22 @@ jobs:
         exasol-docker-version: [ 8.18.1 ]
         mvn:
           [
+            # default profile
             {
               name: 'Spark3.4',
               profile: '-Pspark3.4',
               project-keeper-skip: false,
             },
-            # {
-            #   name: 'Spark3.3',
-            #   profile: '-Pspark3.3',
-            #   project-keeper-skip: true,
-            # },
-            # {
-            #   name: 'Spark3.3 Scala2.12',
-            #   profile: '-Pspark3.3-scala2.12',
-            #   project-keeper-skip: true,
-            # },
+            {
+              name: 'Spark3.3',
+              profile: '-Pspark3.3',
+              project-keeper-skip: true,
+            },
+            {
+              name: 'Spark3.3 Scala2.12',
+              profile: '-Pspark3.3-scala2.12',
+              project-keeper-skip: true,
+            },
           ]
     steps:
       - name: Checkout the repository
@@ -57,17 +58,12 @@ jobs:
         run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
       - name: Pull docker Images
         run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
-      - name: Run scalafix linting
-        run: |
-          mvn --batch-mode clean compile test scalafix:scalafix ${{ matrix.mvn.profile }} \
-              -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-              -DtrimStackTrace=false
       - name: Run tests and build with Maven
         run: |
           mvn --batch-mode verify ${{ matrix.mvn.profile }} \
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
               -DtrimStackTrace=false \
-              -Dproject-keeper.skip=${{ matrix.mvn.project-keeper-skip }}
+              -Dproject-keeper.skip=true
         env:
           EXASOL_DOCKER_VERSION: ${{ matrix.exasol-docker-version }}
       - name: Publish Test Report
@@ -87,3 +83,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Run Project Keeper Separately
+        if: ${{ matrix.mvn.project-keeper-skip != true }}
+        run: mvn --batch-mode -DtrimStackTrace=false com.exasol:project-keeper-maven-plugin:verify --projects .
