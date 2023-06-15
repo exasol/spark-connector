@@ -58,11 +58,6 @@ jobs:
         run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
       - name: Pull docker Images
         run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
-      # - name: Run scalafix linting
-      #   run: |
-      #     mvn --batch-mode clean compile test scalafix:scalafix ${{ matrix.mvn.profile }} \
-      #         -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-      #         -DtrimStackTrace=false
       - name: Run tests and build with Maven
         run: |
           mvn --batch-mode verify ${{ matrix.mvn.profile }} \
