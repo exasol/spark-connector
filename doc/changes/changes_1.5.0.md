@@ -10,6 +10,7 @@ Code name:
 * #150: Added S3 intermediate storage layer
 * #159: Added cleanup process to remove intermediate data after job finish
 * #160: Add support for writing to Exasol database using S3 as intermediate storage
+* #168: Refactored to add module setup
 
 ## Security
 
@@ -60,7 +61,7 @@ Code name:
 
 * Added `com.exasol:error-reporting-java8:1.0.1`
 * Added `com.exasol:exasol-jdbc:7.1.20`
-* Added `com.exasol:spark-connector-common-java:1.0.0`
+* Added `com.exasol:spark-connector-common-java:1.0.1`
 * Added `com.exasol:sql-statement-builder-java8:4.5.4`
 
 #### Test Dependency Updates
@@ -113,7 +114,7 @@ Code name:
 
 #### Compile Dependency Updates
 
-* Added `com.exasol:spark-connector-common-java:1.0.0`
+* Added `com.exasol:spark-connector-common-java:1.0.1`
 * Added `org.apache.hadoop:hadoop-aws:3.3.5`
 * Added `org.scala-lang:scala-library:2.13.10`
 * Added `software.amazon.awssdk:s3:2.20.79`
