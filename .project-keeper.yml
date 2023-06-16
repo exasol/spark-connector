@@ -23,6 +23,15 @@ sources:
       artifactId: "spark-connector-parent"
       version: "${revision}"
       relativePath: "../pom.xml"
+  - type: maven
+    path: exasol-dist/pom.xml
+    modules:
+      - maven_central
+    parentPom:
+      groupId: "com.exasol"
+      artifactId: "spark-connector-parent"
+      version: "${revision}"
+      relativePath: "../pom.xml"
 version:
   fromSource: pom.xml
 excludes:

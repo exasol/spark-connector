@@ -505,6 +505,7 @@
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
+                <module>exasol-dist</module>
             </modules>
         </profile>
         <profile>
@@ -522,6 +523,7 @@
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
+                <module>exasol-dist</module>
             </modules>
         </profile>
         <profile>
@@ -539,6 +541,7 @@
             <modules>
                 <module>exasol-jdbc</module>
                 <module>exasol-s3</module>
+                <module>exasol-dist</module>
             </modules>
         </profile>
     </profiles>

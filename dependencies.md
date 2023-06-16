@@ -162,6 +162,43 @@
 | [Maven Install Plugin][32]                             | [The Apache Software License, Version 2.0][9] |
 | [Maven Site Plugin 3][33]                              | [The Apache Software License, Version 2.0][9] |
 
+## Spark Exasol Connector Distribution
+
+### Compile Dependencies
+
+| Dependency                                         | License              |
+| -------------------------------------------------- | -------------------- |
+| [Spark Exasol Connector with S3 Storage Layer][90] | [Apache License][91] |
+
+### Plugin Dependencies
+
+| Dependency                                             | License                                       |
+| ------------------------------------------------------ | --------------------------------------------- |
+| [SonarQube Scanner for Maven][0]                       | [GNU LGPL 3][1]                               |
+| [Apache Maven Compiler Plugin][2]                      | [Apache-2.0][3]                               |
+| [Apache Maven Enforcer Plugin][4]                      | [Apache-2.0][3]                               |
+| [Maven Flatten Plugin][5]                              | [Apache Software Licenese][3]                 |
+| [Apache Maven JAR Plugin][6]                           | [Apache License, Version 2.0][3]              |
+| [Apache Maven Shade Plugin][7]                         | [Apache License, Version 2.0][3]              |
+| [org.sonatype.ossindex.maven:ossindex-maven-plugin][8] | [ASL2][9]                                     |
+| [Maven Surefire Plugin][10]                            | [Apache-2.0][3]                               |
+| [Versions Maven Plugin][11]                            | [Apache License, Version 2.0][3]              |
+| [duplicate-finder-maven-plugin Maven Mojo][12]         | [Apache License 2.0][13]                      |
+| [Apache Maven Deploy Plugin][14]                       | [Apache-2.0][3]                               |
+| [Apache Maven GPG Plugin][15]                          | [Apache License, Version 2.0][3]              |
+| [Apache Maven Source Plugin][16]                       | [Apache License, Version 2.0][3]              |
+| [Apache Maven Javadoc Plugin][17]                      | [Apache-2.0][3]                               |
+| [Nexus Staging Maven Plugin][18]                       | [Eclipse Public License][19]                  |
+| [JaCoCo :: Maven Plugin][20]                           | [Eclipse Public License 2.0][21]              |
+| [error-code-crawler-maven-plugin][22]                  | [MIT License][23]                             |
+| [Reproducible Build Maven Plugin][24]                  | [Apache 2.0][9]                               |
+| [Artifact reference checker and unifier][25]           | [MIT License][26]                             |
+| [OpenFastTrace Maven Plugin][27]                       | [GNU General Public License v3.0][28]         |
+| [Project keeper maven plugin][29]                      | [The MIT License][30]                         |
+| [Maven Clean Plugin][31]                               | [The Apache Software License, Version 2.0][9] |
+| [Maven Install Plugin][32]                             | [The Apache Software License, Version 2.0][9] |
+| [Maven Site Plugin 3][33]                              | [The Apache Software License, Version 2.0][9] |
+
 [0]: http://sonarsource.github.io/sonar-scanner-maven/
 [1]: http://www.gnu.org/licenses/lgpl.txt
 [2]: https://maven.apache.org/plugins/maven-compiler-plugin/
@@ -252,3 +289,5 @@
 [87]: https://www.eclipse.org/legal/epl-v20.html
 [88]: https://testcontainers.org
 [89]: http://opensource.org/licenses/MIT
+[90]: https://github.com/exasol/spark-connector/
+[91]: https://github.com/exasol/spark-connector/blob/main/LICENSE

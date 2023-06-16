@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>spark-connector</artifactId>
+    <artifactId>spark-connector-jdbc</artifactId>
     <packaging>jar</packaging>
     <name>Spark Exasol Connector with JDBC</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
     <parent>
-        <artifactId>spark-connector-generated-parent</artifactId>
+        <artifactId>spark-connector-jdbc-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
         <version>${revision}</version>
         <relativePath>pk_generated_parent.pom</relativePath>
