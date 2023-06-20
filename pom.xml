@@ -2,18 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
-    <artifactId>spark-connector-parent</artifactId>
+    <artifactId>spark-connector-parent-pom</artifactId>
     <version>${revision}</version>
     <name>Spark Exasol Connector Parent Pom</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
     <packaging>pom</packaging>
-    <parent>
-        <artifactId>spark-connector-parent-generated-parent</artifactId>
-        <groupId>com.exasol</groupId>
-        <version>${revision}</version>
-        <relativePath>pk_generated_parent.pom</relativePath>
-    </parent>
     <properties>
         <revision>1.5.0</revision>
         <java.version>8</java.version>
@@ -433,13 +427,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <configuration>
-                    <finalName>${project.artifactId}-${project.version}-assembly</finalName>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.sonatype.ossindex.maven</groupId>
                 <artifactId>ossindex-maven-plugin</artifactId>
                 <configuration>
@@ -456,18 +443,6 @@
                         <exclude>CVE-2023-33546</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.exasol</groupId>
-                <artifactId>artifact-reference-checker-maven-plugin</artifactId>
-                <version>0.4.2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.itsallcode</groupId>

@@ -252,6 +252,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.5.0</version>
                 <configuration>
                     <source>${java.version}</source>
                 </configuration>
@@ -307,6 +308,14 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
@@ -353,6 +362,9 @@
                         <exclude>CVE-2023-22946</exclude>
                         <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') (7.5); from org.apache.spark:spark-sql_${spark.version} -->
                         <exclude>CVE-2023-33546</exclude>
+                        <!-- com.fasterxml.jackson.core:jackson-databind:jar:2.13.4.2:provided -->
+                        <!-- [CVE-2023-35116] CWE-121: Stack-based Buffer Overflow (7.5); https://ossindex.sonatype.org/vulnerability/CVE-2023-35116 -->
+                        <exclude>CVE-2023-35116</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

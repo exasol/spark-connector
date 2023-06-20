@@ -1,26 +1,20 @@
 sources:
   - type: maven
-    path: pom.xml
-    modules:
-      - maven_central
-  - type: maven
     path: exasol-jdbc/pom.xml
     modules:
-      - maven_central
       - integration_tests
     parentPom:
       groupId: "com.exasol"
-      artifactId: "spark-connector-parent"
+      artifactId: "spark-connector-parent-pom"
       version: "${revision}"
       relativePath: "../pom.xml"
   - type: maven
     path: exasol-s3/pom.xml
     modules:
-      - maven_central
       - integration_tests
     parentPom:
       groupId: "com.exasol"
-      artifactId: "spark-connector-parent"
+      artifactId: "spark-connector-parent-pom"
       version: "${revision}"
       relativePath: "../pom.xml"
   - type: maven
@@ -29,11 +23,11 @@ sources:
       - maven_central
     parentPom:
       groupId: "com.exasol"
-      artifactId: "spark-connector-parent"
+      artifactId: "spark-connector-parent-pom"
       version: "${revision}"
       relativePath: "../pom.xml"
 version:
-  fromSource: pom.xml
+  fromSource: exasol-dist/pom.xml
 excludes:
   - regex: "(?s)E-PK-CORE-62: The project's README.md does not contain a valid badges block. Please add or replace the following badges:.*"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build-next-java.yml'"
