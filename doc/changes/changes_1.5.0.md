@@ -100,7 +100,7 @@ Code name:
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.16`
 * Added `org.apache.maven.plugins:maven-clean-plugin:2.5`
 * Added `org.apache.maven.plugins:maven-compiler-plugin:3.11.0`
-* Added `org.apache.maven.plugins:maven-deploy-plugin:3.1.1`
+* Added `org.apache.maven.plugins:maven-deploy-plugin:2.7`
 * Added `org.apache.maven.plugins:maven-enforcer-plugin:3.3.0`
 * Added `org.apache.maven.plugins:maven-failsafe-plugin:3.0.0`
 * Added `org.apache.maven.plugins:maven-install-plugin:2.4`
