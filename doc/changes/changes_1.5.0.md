@@ -27,7 +27,6 @@ Code name:
 #### Plugin Dependency Updates
 
 * Added `com.exasol:error-code-crawler-maven-plugin:1.2.3`
-* Added `com.exasol:project-keeper-maven-plugin:2.9.7`
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.16`
 * Added `org.apache.maven.plugins:maven-clean-plugin:2.5`
 * Added `org.apache.maven.plugins:maven-compiler-plugin:3.11.0`
@@ -71,7 +70,6 @@ Code name:
 
 * Added `com.diffplug.spotless:spotless-maven-plugin:2.37.0`
 * Added `com.exasol:error-code-crawler-maven-plugin:1.2.3`
-* Added `com.exasol:project-keeper-maven-plugin:2.9.7`
 * Added `io.github.evis:scalafix-maven-plugin_2.13:0.1.4_0.9.31`
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.16`
 * Added `net.alchim31.maven:scala-maven-plugin:4.8.1`
@@ -120,7 +118,6 @@ Code name:
 #### Plugin Dependency Updates
 
 * Added `com.exasol:error-code-crawler-maven-plugin:1.2.3`
-* Added `com.exasol:project-keeper-maven-plugin:2.9.7`
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.16`
 * Added `org.apache.maven.plugins:maven-clean-plugin:2.5`
 * Added `org.apache.maven.plugins:maven-compiler-plugin:3.11.0`

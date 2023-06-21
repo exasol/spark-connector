@@ -149,10 +149,6 @@
                     </ignoredResourcePatterns>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.exasol</groupId>
-                <artifactId>project-keeper-maven-plugin</artifactId>
-            </plugin>
         </plugins>
     </build>
 </project>
