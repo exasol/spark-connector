@@ -19,6 +19,7 @@ Code name:
 ## Refactoring
 
 * #158: Refactored common options class
+* #171: Refactored artifact packaging and releasing for module setup
 
 ## Dependency Updates
 
