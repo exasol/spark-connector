@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>spark-connector-jdbc</artifactId>
+    <artifactId>spark-connector-jdbc_${scala.compat.version}</artifactId>
+    <version>${revision}-spark-${spark.version}</version>
     <packaging>jar</packaging>
     <name>Spark Exasol Connector with JDBC</name>
     <description>A connector for Apache Spark to access Exasol</description>
@@ -28,12 +29,6 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>spark-connector-common-java</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.spark</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
