@@ -97,7 +97,7 @@ Code name:
 * Added `org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184`
 * Added `org.sonatype.ossindex.maven:ossindex-maven-plugin:3.2.0`
 
-### Spark Exasol Connector With S3 Storage Layer
+### Spark Exasol Connector With S3
 
 #### Compile Dependency Updates
 

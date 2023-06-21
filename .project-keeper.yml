@@ -19,15 +19,6 @@ sources:
       artifactId: "spark-connector-parent-pom"
       version: "${revision}"
       relativePath: "../parent-pom/pom.xml"
-  # - type: maven
-  #   path: exasol-dist/pom.xml
-  #   modules:
-  #     - maven_central
-  #   parentPom:
-  #     groupId: "com.exasol"
-  #     artifactId: "spark-connector-parent-pom"
-  #     version: "${revision}"
-  #     relativePath: "../pom.xml"
 version:
   fromSource: parent-pom/pom.xml
 excludes:
@@ -39,9 +30,9 @@ excludes:
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_release_on_maven_central.yml'"
   - "E-PK-CORE-18: Outdated content: '.settings/org.eclipse.jdt.core.prefs'"
-  - "E-PK-CORE-18: Outdated content: 'exasol-dist/pk_generated_parent.pom'"
-  - regex: "(?s)E-PK-CORE-104: Invalid pom file 'exasol-dist/pom.xml':.*"
-  - regex: "(?s)E-PK-CORE-118: Invalid pom file 'exasol-dist/pom.xml':.*"
+  - regex: "(?s)E-PK-CORE-18: Outdated content: 'exasol-(jdbc|s3)/pk_generated_parent.pom'"
+  - regex: "(?s)E-PK-CORE-104: Invalid pom file 'exasol-(jdbc|s3)/pom.xml':.*"
+  - regex: "(?s)E-PK-CORE-118: Invalid pom file 'exasol-(jdbc|s3)/pom.xml':.*"
 linkReplacements:
   - https://netty.io/netty-all/|https://netty.io/index.html
   - http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin

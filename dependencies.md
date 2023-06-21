@@ -95,7 +95,7 @@
 | [Maven Install Plugin][24]                             | [The Apache Software License, Version 2.0][9] |
 | [Maven Site Plugin 3][25]                              | [The Apache Software License, Version 2.0][9] |
 
-## Spark Exasol Connector With s3 Storage Layer
+## Spark Exasol Connector With s3
 
 ### Compile Dependencies
 
