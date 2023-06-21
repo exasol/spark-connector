@@ -20,7 +20,7 @@
         <hadoop.version>3.3.5</hadoop.version>
         <log4j.version>2.20.0</log4j.version>
         <junit.version>5.9.3</junit.version>
-        <mockito.version>5.3.1</mockito.version>
+        <mockito.version>5.4.0</mockito.version>
         <!-- These lines are required for Sonar to find sources and to report coverage -->
         <sonar.sources>.</sonar.sources>
         <sonar.inclusions>src/main/**</sonar.inclusions>
@@ -81,10 +81,6 @@
                     <exclusion>
                         <groupId>log4j</groupId>
                         <artifactId>log4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.netty</groupId>
-                        <artifactId>netty-all</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>io.netty</groupId>
@@ -208,13 +204,13 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>32.0.0-jre</version>
+                <version>32.0.1-jre</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
-                <version>4.1.93.Final</version>
+                <version>4.1.94.Final</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -304,7 +300,7 @@
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>3.23.2</version>
+                <version>3.23.3</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -531,7 +527,7 @@
             </activation>
             <properties>
                 <spark.version>3.4.0</spark.version>
-                <scala.version>2.13.10</scala.version>
+                <scala.version>2.13.11</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
                 <jackson.version>2.14.2</jackson.version>
                 <jersey.version>3.1.2</jersey.version>

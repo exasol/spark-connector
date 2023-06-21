@@ -42,7 +42,7 @@
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
-            <version>2.20.79</version>
+            <version>2.20.90</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.482</version>
+            <version>1.12.493</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
