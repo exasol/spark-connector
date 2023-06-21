@@ -21,16 +21,13 @@ jobs:
           distribution: 'temurin'
           java-version: 11
           cache: 'maven'
-      - name: Install xmlstarlet
-        run: sudo apt install -y --no-install-recommends xmlstarlet
-      - name: Create release pom file
-        run: ./tools/createReleasePom.sh ${{ matrix.profile }}
+      # - name: Install xmlstarlet
+      #   run: sudo apt install -y --no-install-recommends xmlstarlet
+      # - name: Create release pom file
+      #   run: ./tools/createReleasePom.sh ${{ matrix.profile }}
       - name: Build with Maven skipping tests
-        run: |
-          mvn --batch-mode --file release.xml clean verify ${{ matrix.profile }} \
-              -DskipTests \
-              -Dproject-keeper.skip=true
-      - name: Remove release pom file
-        run: rm -rf release.xml
+        run: mvn --batch-mode clean verify ${{ matrix.profile }} -DskipTests
+      # - name: Remove release pom file
+      #   run: rm -rf release.xml
       - name: Print checksum
-        run: echo 'checksum_start==';find target -maxdepth 1 -name *.jar -exec sha256sum "{}" + | xargs;echo '==checksum_end'
+        run: echo 'checksum_start==';find */target -maxdepth 1 -name *.jar -exec sha256sum "{}" + | xargs;echo '==checksum_end'

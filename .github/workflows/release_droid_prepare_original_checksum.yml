@@ -23,18 +23,16 @@ jobs:
           cache: 'maven'
       - name: Enable testcontainer reuse
         run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
-      - name: Install xmlstarlet
-        run: sudo apt install -y --no-install-recommends xmlstarlet
-      - name: Create release pom file
-        run: ./tools/createReleasePom.sh ${{ matrix.profile }}
+      # - name: Install xmlstarlet
+      #   run: sudo apt install -y --no-install-recommends xmlstarlet
+      # - name: Create release pom file
+      #   run: ./tools/createReleasePom.sh ${{ matrix.profile }}
       - name: Run tests and build with Maven
-        run: |
-          mvn --batch-mode --file release.xml clean verify ${{ matrix.profile }} \
-              -Dproject-keeper.skip=true
-      - name: Remove release pom file
-        run: rm -rf release.xml
+        run: mvn --batch-mode clean verify ${{ matrix.profile }}
+      # - name: Remove release pom file
+      #   run: rm -rf release.xml
       - name: Prepare checksum
-        run: find target -maxdepth 1 -name *.jar -exec sha256sum "{}" + > original_checksum
+        run: find */target -maxdepth 1 -name *.jar -exec sha256sum "{}" + > original_checksum
       - name: Upload checksum to the artifactory
         uses: actions/upload-artifact@v3
         with:

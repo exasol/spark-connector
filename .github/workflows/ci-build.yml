@@ -12,31 +12,13 @@ concurrency:
 
 jobs:
   build:
-    name: Building with ${{ matrix.mvn.name }} and Exasol ${{ matrix.exasol-docker-version }}
+    name: Building with ${{ matrix.profile }} and Exasol ${{ matrix.exasol-docker-version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         exasol-docker-version: [ 8.18.1 ]
-        mvn:
-          [
-            # default profile
-            {
-              name: 'Spark3.4',
-              profile: '-Pspark3.4',
-              project-keeper-skip: false,
-            },
-            {
-              name: 'Spark3.3',
-              profile: '-Pspark3.3',
-              project-keeper-skip: true,
-            },
-            {
-              name: 'Spark3.3 Scala2.12',
-              profile: '-Pspark3.3-scala2.12',
-              project-keeper-skip: true,
-            },
-          ]
+        profile: [ '-Pspark3.4', '-Pspark3.3', '-Pspark3.3-scala2.12' ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -60,10 +42,9 @@ jobs:
         run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
       - name: Run tests and build with Maven
         run: |
-          mvn --batch-mode verify ${{ matrix.mvn.profile }} \
+          mvn --batch-mode verify ${{ matrix.profile }} \
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-              -DtrimStackTrace=false \
-              -Dproject-keeper.skip=true
+              -DtrimStackTrace=false
         env:
           EXASOL_DOCKER_VERSION: ${{ matrix.exasol-docker-version }}
       - name: Publish Test Report
@@ -72,7 +53,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Sonar analysis
-        if: ${{ env.SONAR_TOKEN != null && !matrix.mvn.project-keeper-skip }}
+        if: ${{ env.SONAR_TOKEN != null && matrix.profile == '-Pspark3.4' }}
         run: |
           mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
@@ -84,5 +65,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Run Project Keeper Separately
-        if: ${{ matrix.mvn.project-keeper-skip != true }}
         run: mvn --batch-mode -DtrimStackTrace=false com.exasol:project-keeper-maven-plugin:verify --projects .
