@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
-    <artifactId>spark-connector</artifactId>
-    <version>${revision}</version>
+    <artifactId>spark-connector_${scala.compat.version}</artifactId>
+    <version>${revision}-spark-${spark.version}</version>
     <name>Spark Exasol Connector Distribution</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
@@ -14,6 +14,70 @@
         <version>${revision}</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>exasol-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>sql-statement-builder-java8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>error-reporting-java8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>spark-connector-common-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.compat.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.compat.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.woodstox</groupId>
+            <artifactId>woodstox-core</artifactId>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
