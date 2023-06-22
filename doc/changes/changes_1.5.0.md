@@ -24,7 +24,7 @@ Code name:
 
 ## Dependency Updates
 
-### Spark Exasol Connector Parent Pom
+### Spark Exasol Connector Parent POM
 
 #### Plugin Dependency Updates
 
