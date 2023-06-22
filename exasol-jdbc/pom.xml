@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>spark-connector</artifactId>
+    <artifactId>spark-connector-jdbc_${scala.compat.version}</artifactId>
+    <version>${revision}-spark-${spark.version}</version>
     <packaging>jar</packaging>
     <name>Spark Exasol Connector with JDBC</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
     <parent>
-        <artifactId>spark-connector-generated-parent</artifactId>
+        <artifactId>spark-connector-jdbc-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
         <version>${revision}</version>
         <relativePath>pk_generated_parent.pom</relativePath>
@@ -28,12 +29,6 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>spark-connector-common-java</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.spark</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -109,6 +104,11 @@
                 <exclusion>
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-util</artifactId>
+                </exclusion>
+                <!-- Excluded to fix CVE-2023-34453 and CVE-2023-34455 -->
+                <exclusion>
+                    <groupId>org.xerial.snappy</groupId>
+                    <artifactId>snappy-java</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -236,7 +236,7 @@
                         <compilerPlugin>
                             <groupId>org.scalameta</groupId>
                             <artifactId>semanticdb-scalac_${scala.version}</artifactId>
-                            <version>4.5.11</version>
+                            <version>4.7.8</version>
                         </compilerPlugin>
                     </compilerPlugins>
                 </configuration>
@@ -252,6 +252,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.5.0</version>
                 <configuration>
                     <source>${java.version}</source>
                 </configuration>
@@ -307,6 +308,14 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
@@ -353,6 +362,9 @@
                         <exclude>CVE-2023-22946</exclude>
                         <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') (7.5); from org.apache.spark:spark-sql_${spark.version} -->
                         <exclude>CVE-2023-33546</exclude>
+                        <!-- com.fasterxml.jackson.core:jackson-databind:jar:2.13.4.2:provided -->
+                        <!-- [CVE-2023-35116] CWE-121: Stack-based Buffer Overflow (7.5); https://ossindex.sonatype.org/vulnerability/CVE-2023-35116 -->
+                        <exclude>CVE-2023-35116</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
@@ -370,10 +382,6 @@
                         <ignoredResourcePattern>.*\.proto$</ignoredResourcePattern>
                     </ignoredResourcePatterns>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.exasol</groupId>
-                <artifactId>project-keeper-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>

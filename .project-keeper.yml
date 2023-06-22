@@ -1,30 +1,26 @@
 sources:
   - type: maven
-    path: pom.xml
-    modules:
-      - maven_central
+    path: parent-pom/pom.xml
   - type: maven
     path: exasol-jdbc/pom.xml
     modules:
-      - maven_central
       - integration_tests
     parentPom:
       groupId: "com.exasol"
-      artifactId: "spark-connector-parent"
+      artifactId: "spark-connector-parent-pom"
       version: "${revision}"
-      relativePath: "../pom.xml"
+      relativePath: "../parent-pom/pom.xml"
   - type: maven
     path: exasol-s3/pom.xml
     modules:
-      - maven_central
       - integration_tests
     parentPom:
       groupId: "com.exasol"
-      artifactId: "spark-connector-parent"
+      artifactId: "spark-connector-parent-pom"
       version: "${revision}"
-      relativePath: "../pom.xml"
+      relativePath: "../parent-pom/pom.xml"
 version:
-  fromSource: pom.xml
+  fromSource: parent-pom/pom.xml
 excludes:
   - regex: "(?s)E-PK-CORE-62: The project's README.md does not contain a valid badges block. Please add or replace the following badges:.*"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build-next-java.yml'"
@@ -34,6 +30,11 @@ excludes:
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_release_on_maven_central.yml'"
   - "E-PK-CORE-18: Outdated content: '.settings/org.eclipse.jdt.core.prefs'"
+  - regex: "(?s)E-PK-CORE-18: Outdated content: 'exasol-(jdbc|s3)/pk_generated_parent.pom'"
+  - regex: "(?s)E-PK-CORE-104: Invalid pom file 'exasol-(jdbc|s3)/pom.xml':.*"
+  - regex: "(?s)E-PK-CORE-118: Invalid pom file 'exasol-(jdbc|s3)/pom.xml':.*"
+  - "E-PK-CORE-17: Missing required file: '.github/workflows/project-keeper-verify.yml'"
+  - "E-PK-CORE-17: Missing required file: '.github/workflows/project-keeper.sh'"
 linkReplacements:
   - https://netty.io/netty-all/|https://netty.io/index.html
   - http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
