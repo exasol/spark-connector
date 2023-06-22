@@ -19,6 +19,7 @@ Code name:
 ## Refactoring
 
 * #158: Refactored common options class
+* #174: Refactored Github `.github/workflow/` action files
 
 ## Dependency Updates
 
