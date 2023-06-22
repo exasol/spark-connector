@@ -4,7 +4,7 @@
     <groupId>com.exasol</groupId>
     <artifactId>spark-connector-parent-pom</artifactId>
     <version>${revision}</version>
-    <name>Spark Exasol Connector Parent Pom</name>
+    <name>Spark Exasol Connector Parent POM</name>
     <description>A connector for Apache Spark to access Exasol</description>
     <url>https://github.com/exasol/spark-connector/</url>
     <packaging>pom</packaging>

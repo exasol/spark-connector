@@ -33,6 +33,8 @@ excludes:
   - regex: "(?s)E-PK-CORE-18: Outdated content: 'exasol-(jdbc|s3)/pk_generated_parent.pom'"
   - regex: "(?s)E-PK-CORE-104: Invalid pom file 'exasol-(jdbc|s3)/pom.xml':.*"
   - regex: "(?s)E-PK-CORE-118: Invalid pom file 'exasol-(jdbc|s3)/pom.xml':.*"
+  - "E-PK-CORE-17: Missing required file: '.github/workflows/project-keeper-verify.yml'"
+  - "E-PK-CORE-17: Missing required file: '.github/workflows/project-keeper.sh'"
 linkReplacements:
   - https://netty.io/netty-all/|https://netty.io/index.html
   - http://nexus.sonatype.org/oss-repository-hosting.html/scalatest-maven-plugin|https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin

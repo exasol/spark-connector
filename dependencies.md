@@ -104,6 +104,7 @@
 | [Spark Project Core][32]                    | [Apache 2.0 License][13]          |
 | [Spark Project SQL][32]                     | [Apache 2.0 License][13]          |
 | Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][3]  |
+| [Netty/All-in-One][34]                      | [Apache License, Version 2.0][35] |
 | [AWS Java SDK :: Services :: Amazon S3][77] | [Apache License, Version 2.0][78] |
 | Apache Hadoop Amazon Web Services support   | [Apache License, Version 2.0][3]  |
 
