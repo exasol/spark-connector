@@ -62,8 +62,8 @@ Code name:
 * Added `org.apache.logging.log4j:log4j-1.2-api:2.20.0`
 * Added `org.apache.logging.log4j:log4j-api:2.20.0`
 * Added `org.apache.logging.log4j:log4j-core:2.20.0`
-* Added `org.mockito:mockito-core:5.3.1`
-* Added `org.mockito:mockito-junit-jupiter:5.3.1`
+* Added `org.mockito:mockito-core:5.4.0`
+* Added `org.mockito:mockito-junit-jupiter:5.4.0`
 * Added `org.scalatestplus:scalatestplus-mockito_2.13:1.0.0-M2`
 * Added `org.scalatest:scalatest_2.13:3.2.9`
 
@@ -102,12 +102,12 @@ Code name:
 
 * Added `com.exasol:spark-connector-common-java:1.0.1`
 * Added `org.apache.hadoop:hadoop-aws:3.3.5`
-* Added `org.scala-lang:scala-library:2.13.10`
-* Added `software.amazon.awssdk:s3:2.20.79`
+* Added `org.scala-lang:scala-library:2.13.11`
+* Added `software.amazon.awssdk:s3:2.20.90`
 
 #### Test Dependency Updates
 
-* Added `com.amazonaws:aws-java-sdk-s3:1.12.482`
+* Added `com.amazonaws:aws-java-sdk-s3:1.12.493`
 * Added `com.exasol:exasol-testcontainers:6.6.0`
 * Added `com.exasol:hamcrest-resultset-matcher:1.6.0`
 * Added `com.exasol:test-db-builder-java:3.4.2`
