@@ -20,10 +20,11 @@ Code name:
 
 * #158: Refactored common options class
 * #171: Refactored artifact packaging and releasing for module setup
+* #174: Refactored Github `.github/workflow/` action files
 
 ## Dependency Updates
 
-### Spark Exasol Connector Parent Pom
+### Spark Exasol Connector Parent POM
 
 #### Plugin Dependency Updates
 
