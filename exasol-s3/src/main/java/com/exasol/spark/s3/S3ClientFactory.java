@@ -66,7 +66,7 @@ public final class S3ClientFactory {
 
     private String getEndpointOverride() {
         final String protocol = getProtocol();
-        return protocol + "://s3." + this.options.get(Option.S3_ENDPOINT_OVERRIDE.key());
+        return protocol + "://" + this.options.get(Option.S3_ENDPOINT_OVERRIDE.key());
     }
 
     private String getProtocol() {

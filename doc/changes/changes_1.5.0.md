@@ -18,6 +18,7 @@ Code name:
 
 ## Refactoring
 
+* #155: Unified user options
 * #158: Refactored common options class
 * #171: Refactored artifact packaging and releasing for module setup
 * #174: Refactored Github `.github/workflow/` action files
@@ -52,7 +53,7 @@ Code name:
 
 * Added `com.exasol:error-reporting-java8:1.0.1`
 * Added `com.exasol:exasol-jdbc:7.1.20`
-* Added `com.exasol:spark-connector-common-java:1.0.1`
+* Added `com.exasol:spark-connector-common-java:1.0.2`
 * Added `com.exasol:sql-statement-builder-java8:4.5.4`
 
 #### Test Dependency Updates
@@ -101,7 +102,7 @@ Code name:
 
 #### Compile Dependency Updates
 
-* Added `com.exasol:spark-connector-common-java:1.0.1`
+* Added `com.exasol:spark-connector-common-java:1.0.2`
 * Added `org.apache.hadoop:hadoop-aws:3.3.5`
 * Added `org.scala-lang:scala-library:2.13.11`
 * Added `software.amazon.awssdk:s3:2.20.90`

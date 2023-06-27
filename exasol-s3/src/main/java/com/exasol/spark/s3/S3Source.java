@@ -23,7 +23,7 @@ import com.exasol.sql.rendering.StringRendererConfig;
  */
 public class S3Source implements TableProvider, DataSourceRegister {
     private static final Logger LOGGER = Logger.getLogger(S3Source.class.getName());
-    private static final List<String> REQUIRED_OPTIONS = Arrays.asList(Option.JDBC_URL.key(), Option.USERNAME.key(),
+    private static final List<String> REQUIRED_OPTIONS = Arrays.asList("host", "port", Option.USERNAME.key(),
             Option.PASSWORD.key());
 
     @Override
@@ -76,9 +76,14 @@ public class S3Source implements TableProvider, DataSourceRegister {
 
     private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
         final ExasolOptions.Builder builder = ExasolOptions.builder() //
-                .jdbcUrl(options.get(Option.JDBC_URL.key())) //
+                //.jdbcUrl(options.get(Option.JDBC_URL.key())) //
+                .host(options.get("host")) //
+                .port(options.get("port")) //
                 .username(options.get(Option.USERNAME.key())) //
                 .password(options.get(Option.PASSWORD.key()));
+        if (options.containsKey("fingerprint")) {
+            builder.fingerprint(options.get("fingerprint"));
+        }
         if (options.containsKey(Option.TABLE.key())) {
             builder.table(options.get(Option.TABLE.key()));
         } else if (options.containsKey(Option.QUERY.key())) {
