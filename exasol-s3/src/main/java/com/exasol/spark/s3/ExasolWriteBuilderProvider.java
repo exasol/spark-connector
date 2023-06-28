@@ -61,8 +61,8 @@ public final class ExasolWriteBuilderProvider {
                 .username(this.options.getUsername()) //
                 .password(this.options.getPassword()) //
                 .s3Bucket(this.options.getS3Bucket());
-        if (this.options.containsKey("fingerprint")) {
-            builder.fingerprint(this.options.get("fingerprint"));
+        if (this.options.containsKey(Option.FINGERPRINT.key())) {
+            builder.fingerprint(this.options.get(Option.FINGERPRINT.key()));
         }
         if (this.options.hasTable()) {
             builder.table(this.options.getTable());
