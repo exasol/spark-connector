@@ -85,17 +85,12 @@ class LoadIT extends BaseTableQueryIT {
   }
 
   test("uses user provided SparkConf") {
-    var sparkConf = new SparkConf()
+    val sparkConf = new SparkConf()
       .setMaster("local[*]")
       .set("spark.exasol.host", jdbcHost)
       .set("spark.exasol.port", jdbcPort)
+      .set("spark.exasol.fingerprint", getFingerprint())
       .set("spark.exasol.max_nodes", "20")
-
-    if (imageSupportsFingerprint()) {
-      sparkConf = sparkConf.set("spark.exasol.fingerprint", getFingerprint())
-    } else {
-      sparkConf = sparkConf.set("spark.exasol.jdbc_options", "validateservercertificate=0")
-    }
 
     val sparkSession = SparkSession
       .builder()

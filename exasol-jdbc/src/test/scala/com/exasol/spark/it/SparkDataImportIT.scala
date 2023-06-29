@@ -161,7 +161,7 @@ class SparkDataImportIT extends BaseTableQueryIT {
         .toDF("col_field")
         .write
         .mode("overwrite")
-        .options(getConfiguration() ++ Map("table" -> tableName, "drop_table" -> "true"))
+        .options(getDefaultOptions() ++ Map("table" -> tableName, "drop_table" -> "true"))
         .format("exasol")
         .save()
 

@@ -13,19 +13,11 @@ abstract class AbstractTableQueryIT extends BaseIntegrationTest with SparkSessio
   override def beforeEach(): Unit =
     createTable()
 
-  private[spark] def getDataFrameReader(query: String): DataFrameReader = {
-    val reader = spark.read
+  private[spark] def getDataFrameReader(query: String): DataFrameReader =
+    spark.read
       .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
+      .options(getDefaultOptions())
       .option("query", query)
-
-    if (imageSupportsFingerprint()) {
-      reader.option("fingerprint", getFingerprint())
-    } else {
-      reader.option("jdbc_options", "validateservercertificate=0")
-    }
-  }
 
   private[spark] def getDataFrame(queryOpt: Option[String] = None): DataFrame = {
     val query = queryOpt.fold(s"SELECT * FROM $tableName")(identity)

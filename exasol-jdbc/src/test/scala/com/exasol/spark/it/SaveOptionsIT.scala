@@ -14,7 +14,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    defaultOptions = getConfiguration() ++ Map("table" -> tableName)
+    defaultOptions = getDefaultOptions() ++ Map("table" -> tableName)
   }
 
   private[this] val dataframeTestData: Seq[(String, String, Date, String)] = Seq(

@@ -1,6 +1,7 @@
 package com.exasol.spark.util
 
 import com.exasol.jdbc.EXAConnection
+import com.exasol.spark.common.ExasolOptions
 
 import org.mockito.Mockito._
 import org.scalatest.funsuite.AnyFunSuite
@@ -9,11 +10,14 @@ import org.scalatestplus.mockito.MockitoSugar
 
 class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
-  def getManager(options: Map[String, String]): ExasolConnectionManager =
-    ExasolConnectionManager(ExasolConfiguration(options))
+  def getExasolOptions(map: Map[String, String]): ExasolOptions =
+    ExasolOptionsProvider(map)
 
-  def getJdbcUrl(options: Map[String, String]): String =
-    getManager(options).getJdbcConnectionString()
+  def getManager(map: Map[String, String]): ExasolConnectionManager =
+    ExasolConnectionManager(getExasolOptions(map))
+
+  def getJdbcUrl(map: Map[String, String]): String =
+    getManager(map).getJdbcConnectionString()
 
   @SuppressWarnings(Array("scala:S1313")) // Hardcoded IP addresses are safe in tests
   val requiredOptions: Map[String, String] = Map("host" -> "10.0.0.1", "port" -> "8888")
