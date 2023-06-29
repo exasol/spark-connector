@@ -5,8 +5,9 @@ import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 
 import com.exasol.errorreporting.ExaError
-import com.exasol.spark.util.ExasolConfiguration
+import com.exasol.spark.common.ExasolOptions
 import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.ExasolOptionsProvider
 import com.exasol.spark.util.Types
 import com.exasol.spark.writer.ExasolWriter
 import com.exasol.sql.StatementFactory
@@ -44,7 +45,7 @@ class DefaultSource
     parameters: Map[String, String]
   ): BaseRelation = {
     val queryString = getKeyValue("query", parameters)
-    val manager = createManager(parameters, sqlContext)
+    val manager = ExasolConnectionManager(createOptions(parameters, sqlContext))
     new ExasolRelation(sqlContext, queryString, None, manager)
   }
 
@@ -65,7 +66,7 @@ class DefaultSource
     schema: StructType
   ): BaseRelation = {
     val queryString = getKeyValue("query", parameters)
-    val manager = createManager(parameters, sqlContext)
+    val manager = ExasolConnectionManager(createOptions(parameters, sqlContext))
     new ExasolRelation(sqlContext, queryString, Option(schema), manager)
   }
 
@@ -88,8 +89,9 @@ class DefaultSource
     data: DataFrame
   ): BaseRelation = {
     val tableName = getKeyValue("table", parameters)
-    val manager = createManager(parameters, sqlContext)
-    if (manager.config.drop_table) {
+    val options = createOptions(parameters, sqlContext)
+    val manager = ExasolConnectionManager(options)
+    if (options.hasEnabled("drop_table")) {
       manager.dropTable(tableName)
     }
     val isTableExist = manager.tableExists(tableName)
@@ -97,16 +99,16 @@ class DefaultSource
     mode match {
       case SaveMode.Overwrite =>
         if (!isTableExist) {
-          createExasolTable(data, tableName, manager)
+          createExasolTable(data, tableName, options, manager)
         }
         manager.truncateTable(tableName)
-        saveDataFrame(sqlContext, data, tableName, manager)
+        saveDataFrame(sqlContext, data, tableName, options, manager)
 
       case SaveMode.Append =>
         if (!isTableExist) {
-          createExasolTable(data, tableName, manager)
+          createExasolTable(data, tableName, options, manager)
         }
-        saveDataFrame(sqlContext, data, tableName, manager)
+        saveDataFrame(sqlContext, data, tableName, options, manager)
 
       case SaveMode.ErrorIfExists =>
         if (isTableExist) {
@@ -123,13 +125,13 @@ class DefaultSource
               .toString()
           )
         }
-        createExasolTable(data, tableName, manager)
-        saveDataFrame(sqlContext, data, tableName, manager)
+        createExasolTable(data, tableName, options, manager)
+        saveDataFrame(sqlContext, data, tableName, options, manager)
 
       case SaveMode.Ignore =>
         if (!isTableExist) {
-          createExasolTable(data, tableName, manager)
-          saveDataFrame(sqlContext, data, tableName, manager)
+          createExasolTable(data, tableName, options, manager)
+          saveDataFrame(sqlContext, data, tableName, options, manager)
         }
     }
 
@@ -150,9 +152,10 @@ class DefaultSource
     sqlContext: SQLContext,
     df: DataFrame,
     tableName: String,
+    options: ExasolOptions,
     manager: ExasolConnectionManager
   ): Unit = {
-    val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, manager)
+    val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, options, manager)
     val exaNodesCnt = writer.startParallel()
     val newDF = repartitionPerNode(df, exaNodesCnt)
 
@@ -163,9 +166,10 @@ class DefaultSource
   private[this] def createExasolTable(
     df: DataFrame,
     tableName: String,
+    options: ExasolOptions,
     manager: ExasolConnectionManager
   ): Unit =
-    if (manager.config.create_table || manager.config.drop_table) {
+    if (options.hasEnabled("create_table") || options.hasEnabled("drop_table")) {
       manager.createTable(tableName, Types.createTableSchema(df.schema))
     } else {
       throw new UnsupportedOperationException(
@@ -224,14 +228,11 @@ class DefaultSource
         )
     }
 
-  // Creates an ExasolConnectionManager with merged configuration values.
-  private[this] def createManager(
+  private[this] def createOptions(
     parameters: Map[String, String],
     sqlContext: SQLContext
-  ): ExasolConnectionManager = {
-    val config = ExasolConfiguration(mergeConfigurations(parameters, sqlContext.getAllConfs))
-    ExasolConnectionManager(config)
-  }
+  ): ExasolOptions =
+    ExasolOptionsProvider(mergeConfigurations(parameters, sqlContext.getAllConfs))
 
   // Merges user provided parameters with `spark.exasol.*` runtime
   // configurations. If both of them define a key=value pair, then the one
