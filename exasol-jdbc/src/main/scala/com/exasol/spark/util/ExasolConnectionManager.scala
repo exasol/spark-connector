@@ -172,9 +172,6 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
   /**
    * Checks if table already exists, if so should return true otherwise false.
    *
-   * TODO: This should be changed to Exasol specific checks. For example, by
-   *       using EXA_USER_TABLES.
-   *
    * @param tableName A Exasol table name including schema, e.g.
    *        `schema.tableName`
    * @return `true` if table exists, otherwise return `false`
