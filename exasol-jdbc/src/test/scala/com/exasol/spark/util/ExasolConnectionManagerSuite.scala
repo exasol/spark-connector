@@ -1,5 +1,7 @@
 package com.exasol.spark.util
 
+import org.apache.spark.sql.util.CaseInsensitiveStringMap
+
 import com.exasol.jdbc.EXAConnection
 import com.exasol.spark.common.ExasolOptions
 
@@ -10,8 +12,11 @@ import org.scalatestplus.mockito.MockitoSugar
 
 class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
-  def getExasolOptions(map: Map[String, String]): ExasolOptions =
-    ExasolOptionsProvider(map)
+  def getExasolOptions(map: Map[String, String]): ExasolOptions = {
+    val javaMap = new java.util.HashMap[String, String]()
+    map.foreach { case (key, value) => javaMap.put(key, value) }
+    ExasolOptionsProvider(new CaseInsensitiveStringMap(javaMap))
+  }
 
   def getManager(map: Map[String, String]): ExasolConnectionManager =
     ExasolConnectionManager(getExasolOptions(map))
@@ -20,7 +25,8 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with Mockit
     getManager(map).getJdbcConnectionString()
 
   @SuppressWarnings(Array("scala:S1313")) // Hardcoded IP addresses are safe in tests
-  val requiredOptions: Map[String, String] = Map("host" -> "10.0.0.1", "port" -> "8888")
+  val requiredOptions: Map[String, String] =
+    Map("host" -> "10.0.0.1", "port" -> "8888", "query" -> "SELECT * FROM DUAL")
 
   test("check empty jdbc options returns correctly configured jdbc url") {
     assert(getJdbcUrl(requiredOptions) === "jdbc:exa:10.0.0.1:8888")

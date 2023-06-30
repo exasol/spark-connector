@@ -3,6 +3,7 @@ package com.exasol.spark
 import org.apache.spark.sql._
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.util.CaseInsensitiveStringMap
 
 import com.exasol.errorreporting.ExaError
 import com.exasol.spark.common.ExasolOptions
@@ -228,11 +229,13 @@ class DefaultSource
         )
     }
 
-  private[this] def createOptions(
-    parameters: Map[String, String],
-    sqlContext: SQLContext
-  ): ExasolOptions =
-    ExasolOptionsProvider(mergeConfigurations(parameters, sqlContext.getAllConfs))
+  private[this] def createOptions(parameters: Map[String, String], sqlContext: SQLContext): ExasolOptions = {
+    val hashMap = new java.util.HashMap[String, String]()
+    mergeConfigurations(parameters, sqlContext.getAllConfs).foreach { case (key, value) =>
+      hashMap.put(key, value)
+    }
+    ExasolOptionsProvider(new CaseInsensitiveStringMap(hashMap))
+  }
 
   // Merges user provided parameters with `spark.exasol.*` runtime
   // configurations. If both of them define a key=value pair, then the one
