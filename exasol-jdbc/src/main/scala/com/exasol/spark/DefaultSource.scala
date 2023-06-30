@@ -7,6 +7,7 @@ import org.apache.spark.sql.util.CaseInsensitiveStringMap
 
 import com.exasol.errorreporting.ExaError
 import com.exasol.spark.common.ExasolOptions
+import com.exasol.spark.util.Constants._
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.ExasolOptionsProvider
 import com.exasol.spark.util.Types
@@ -41,13 +42,10 @@ class DefaultSource
    *        required for read
    * @return An [[ExasolRelation]] relation
    */
-  override def createRelation(
-    sqlContext: SQLContext,
-    parameters: Map[String, String]
-  ): BaseRelation = {
-    val queryString = getKeyValue("query", parameters)
-    val manager = ExasolConnectionManager(createOptions(parameters, sqlContext))
-    new ExasolRelation(sqlContext, queryString, None, manager)
+  override def createRelation(sqlContext: SQLContext, parameters: Map[String, String]): BaseRelation = {
+    val options = createOptions(parameters, sqlContext)
+    val manager = ExasolConnectionManager(options)
+    new ExasolRelation(sqlContext, options.getQuery(), None, manager)
   }
 
   /**
@@ -66,9 +64,9 @@ class DefaultSource
     parameters: Map[String, String],
     schema: StructType
   ): BaseRelation = {
-    val queryString = getKeyValue("query", parameters)
-    val manager = ExasolConnectionManager(createOptions(parameters, sqlContext))
-    new ExasolRelation(sqlContext, queryString, Option(schema), manager)
+    val options = createOptions(parameters, sqlContext)
+    val manager = ExasolConnectionManager(options)
+    new ExasolRelation(sqlContext, options.getQuery(), Option(schema), manager)
   }
 
   /**
@@ -89,10 +87,10 @@ class DefaultSource
     parameters: Map[String, String],
     data: DataFrame
   ): BaseRelation = {
-    val tableName = getKeyValue("table", parameters)
     val options = createOptions(parameters, sqlContext)
+    val tableName = options.getTable()
     val manager = ExasolConnectionManager(options)
-    if (options.hasEnabled("drop_table")) {
+    if (options.hasEnabled(DROP_TABLE)) {
       manager.dropTable(tableName)
     }
     val isTableExist = manager.tableExists(tableName)
@@ -170,7 +168,7 @@ class DefaultSource
     options: ExasolOptions,
     manager: ExasolConnectionManager
   ): Unit =
-    if (options.hasEnabled("create_table") || options.hasEnabled("drop_table")) {
+    if (options.hasEnabled(CREATE_TABLE) || options.hasEnabled(DROP_TABLE)) {
       manager.createTable(tableName, Types.createTableSchema(df.schema))
     } else {
       throw new UnsupportedOperationException(
@@ -215,19 +213,6 @@ class DefaultSource
       df
     }
   }
-
-  private[this] def getKeyValue(key: String, parameters: Map[String, String]): String =
-    parameters.get(key) match {
-      case Some(str) => str
-      case None =>
-        throw new UnsupportedOperationException(
-          ExaError
-            .messageBuilder("E-SEC-1")
-            .message("Parameter {{PARAMETER}} is missing.", key)
-            .mitigation("Please provide required parameter.")
-            .toString()
-        )
-    }
 
   private[this] def createOptions(parameters: Map[String, String], sqlContext: SQLContext): ExasolOptions = {
     val hashMap = new java.util.HashMap[String, String]()

@@ -15,10 +15,11 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
   test("when reading should throw an Exception if no `query` parameter is provided") {
     val sqlContext = mock[SQLContext]
-    val thrown = intercept[UnsupportedOperationException] {
+    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+    val thrown = intercept[IllegalArgumentException] {
       new DefaultSource().createRelation(sqlContext, Map[String, String]())
     }
-    assertErrors(thrown.getMessage(), "E-SEC-1", "Parameter 'query' is missing")
+    assert(thrown.getMessage().startsWith("E-SCCJ-10"))
   }
 
   test("throws an Exception if host parameter is not an ip address") {
@@ -28,22 +29,18 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
     val thrown = intercept[IllegalArgumentException] {
       new DefaultSource().createRelation(sqlContext, parameters)
     }
-    assertErrors(thrown.getMessage(), "E-SEC-4", "host value should be an IPv4 address of the first Exasol datanode")
+    assert(thrown.getMessage().startsWith("E-SEC-4"))
+    assert(thrown.getMessage().contains("host value should be an IPv4 address of the first Exasol datanode"))
   }
 
   test("when saving should throw an Exception if no `table` parameter is provided") {
     val df = mock[DataFrame]
     val sqlContext = mock[SQLContext]
-    val thrown = intercept[UnsupportedOperationException] {
+    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+    val thrown = intercept[IllegalArgumentException] {
       new DefaultSource().createRelation(sqlContext, SaveMode.Append, Map[String, String](), df)
     }
-    assertErrors(thrown.getMessage(), "E-SEC-1", "Parameter 'table' is missing")
-  }
-
-  private[this] def assertErrors(message: String, errorCode: String, containedString: String): Unit = {
-    assert(message.startsWith(errorCode))
-    assert(message.contains(containedString))
-    ()
+    assert(thrown.getMessage().startsWith("E-SCCJ-10"))
   }
 
   test("`repartitionPerNode` should reduce dataframe partitions number") {

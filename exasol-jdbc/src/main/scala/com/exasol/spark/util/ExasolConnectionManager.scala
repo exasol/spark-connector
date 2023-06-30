@@ -13,6 +13,7 @@ import com.exasol.jdbc.EXAResultSet
 import com.exasol.jdbc.EXAStatement
 import com.exasol.spark.common.ExasolOptions
 import com.exasol.spark.common.Option
+import com.exasol.spark.util.Constants._
 
 /**
  * A class that provides and manages Exasol connections.
@@ -62,10 +63,7 @@ final case class ExasolConnectionManager(options: ExasolOptions) {
    * @return the number of parallel connections
    */
   def initParallel(mainConnection: EXAConnection): Int = {
-    var max_nodes = 200
-    if (options.containsKey("max_nodes")) {
-      max_nodes = options.get("max_nodes").toInt
-    }
+    val max_nodes = if (options.containsKey(MAX_NODES)) options.get(MAX_NODES).toInt else DEFAULT_MAX_NODES
     mainConnection.EnterParallel(max_nodes)
   }
 
