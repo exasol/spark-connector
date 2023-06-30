@@ -81,7 +81,6 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
         final ExasolOptions.Builder builder = ExasolOptions.builder() //
-                // .jdbcUrl(options.get(Option.JDBC_URL.key())) //
                 .host(options.get(Option.HOST.key())) //
                 .port(options.get(Option.PORT.key())) //
                 .username(options.get(Option.USERNAME.key())) //

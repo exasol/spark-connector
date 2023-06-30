@@ -23,8 +23,8 @@ import com.exasol.sql.rendering.StringRendererConfig;
  */
 public class S3Source implements TableProvider, DataSourceRegister {
     private static final Logger LOGGER = Logger.getLogger(S3Source.class.getName());
-    private static final List<String> REQUIRED_OPTIONS = Arrays.asList("host", "port", Option.USERNAME.key(),
-            Option.PASSWORD.key());
+    private static final List<String> REQUIRED_OPTIONS = Arrays.asList(Option.HOST.key(), Option.PORT.key(),
+            Option.USERNAME.key(), Option.PASSWORD.key());
 
     @Override
     public String shortName() {
@@ -76,7 +76,6 @@ public class S3Source implements TableProvider, DataSourceRegister {
 
     private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
         final ExasolOptions.Builder builder = ExasolOptions.builder() //
-                //.jdbcUrl(options.get(Option.JDBC_URL.key())) //
                 .host(options.get(Option.HOST.key())) //
                 .port(options.get(Option.PORT.key())) //
                 .username(options.get(Option.USERNAME.key())) //
