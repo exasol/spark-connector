@@ -37,10 +37,10 @@ public class S3Source implements TableProvider, DataSourceRegister {
     }
 
     @Override
-    public StructType inferSchema(final CaseInsensitiveStringMap options) {
+    public StructType inferSchema(final CaseInsensitiveStringMap map) {
         LOGGER.fine(() -> "Running schema inference for the S3 source.");
-        validateOptions(options);
-        return getSchema(getExasolOptions(options));
+        validateOptions(map);
+        return getSchema(ExasolOptions.from(map));
     }
 
     @Override
@@ -72,23 +72,6 @@ public class S3Source implements TableProvider, DataSourceRegister {
                         .mitigation("Please provide a value for the {{KEY}} option.").parameter("KEY", key).toString());
             }
         }
-    }
-
-    private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
-        final ExasolOptions.Builder builder = ExasolOptions.builder() //
-                .host(options.get(Option.HOST.key())) //
-                .port(options.get(Option.PORT.key())) //
-                .username(options.get(Option.USERNAME.key())) //
-                .password(options.get(Option.PASSWORD.key()));
-        if (options.containsKey(Option.FINGERPRINT.key())) {
-            builder.fingerprint(options.get(Option.FINGERPRINT.key()));
-        }
-        if (options.containsKey(Option.TABLE.key())) {
-            builder.table(options.get(Option.TABLE.key()));
-        } else if (options.containsKey(Option.QUERY.key())) {
-            builder.query(options.get(Option.QUERY.key()));
-        }
-        return builder.build();
     }
 
     private StructType getSchema(final ExasolOptions options) {

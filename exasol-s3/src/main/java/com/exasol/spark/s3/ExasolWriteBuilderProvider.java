@@ -59,10 +59,8 @@ public final class ExasolWriteBuilderProvider {
                 .port(this.options.getPort()) //
                 .username(this.options.getUsername()) //
                 .password(this.options.getPassword()) //
+                .fingerprint(this.options.getFingerprint()) //
                 .s3Bucket(this.options.getS3Bucket());
-        if (this.options.containsKey(Option.FINGERPRINT.key())) {
-            builder.fingerprint(this.options.get(Option.FINGERPRINT.key()));
-        }
         if (this.options.hasTable()) {
             builder.table(this.options.getTable());
         } else {

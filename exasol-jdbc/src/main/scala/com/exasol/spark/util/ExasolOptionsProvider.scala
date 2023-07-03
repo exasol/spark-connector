@@ -7,7 +7,6 @@ import scala.util.matching.Regex
 import com.exasol.errorreporting.ExaError
 import com.exasol.spark.common.ExasolOptions
 import com.exasol.spark.common.Option
-import com.exasol.spark.util.Constants._
 
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
@@ -66,23 +65,7 @@ object ExasolOptionsProvider {
     val jdbc_options = map.getOrDefault(Option.JDBC_OPTIONS.key(), "")
     checkHost(host)
     checkJdbcOptions(jdbc_options)
-
-    val exasolOptions = ExasolOptions.builder
-      .host(host)
-      .port(map.getOrDefault(Option.PORT.key(), DEFAULT_PORT))
-      .username(map.getOrDefault(Option.USERNAME.key(), DEFAULT_USERNAME))
-      .password(map.getOrDefault(Option.PASSWORD.key(), DEFAULT_PASSWORD))
-    if (map.containsKey(Option.FINGERPRINT.key())) {
-      exasolOptions.fingerprint(map.get(Option.FINGERPRINT.key()))
-    }
-    if (map.containsKey(Option.TABLE.key())) {
-      exasolOptions.table(map.get(Option.TABLE.key()));
-    } else if (map.containsKey(Option.QUERY.key())) {
-      exasolOptions.query(map.get(Option.QUERY.key()));
-    }
-    exasolOptions
-      .withOptionsMap(map.asCaseSensitiveMap())
-      .build()
+    ExasolOptions.from(map)
   }
 
   private[this] def getLocalHost(): String = InetAddress.getLocalHost().getHostAddress()

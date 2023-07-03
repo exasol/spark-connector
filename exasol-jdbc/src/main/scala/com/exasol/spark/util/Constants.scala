@@ -4,9 +4,6 @@ package com.exasol.spark.util
  * An object for providing contants.
  */
 object Constants {
-  val DEFAULT_PORT = "8563"
-  val DEFAULT_USERNAME = "sys"
-  val DEFAULT_PASSWORD = "exasol"
 
   /** Boolean {@code create_table} parameter for creating a table if it does not exist. */
   val CREATE_TABLE = "create_table"
