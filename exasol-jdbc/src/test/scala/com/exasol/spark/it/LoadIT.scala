@@ -45,15 +45,14 @@ class LoadIT extends BaseTableQueryIT {
   }
 
   test("throws if query parameter is not provided") {
-    val thrown = intercept[UnsupportedOperationException] {
+    val thrown = intercept[IllegalArgumentException] {
       spark.read
         .format("com.exasol.spark")
-        .option("host", jdbcHost)
-        .option("port", jdbcPort)
+        .option("host", container.getDockerNetworkInternalIpAddress())
+        .option("port", s"${container.getDefaultInternalDatabasePort()}")
         .load()
     }
-    assert(thrown.getMessage().startsWith("E-SEC-1"))
-    assert(thrown.getMessage().contains("Parameter 'query' is missing."))
+    assert(thrown.getMessage().startsWith("E-SCCJ-10"))
   }
 
   test("returns columns from user provided schema") {
@@ -87,10 +86,14 @@ class LoadIT extends BaseTableQueryIT {
   test("uses user provided SparkConf") {
     val sparkConf = new SparkConf()
       .setMaster("local[*]")
-      .set("spark.exasol.host", jdbcHost)
-      .set("spark.exasol.port", jdbcPort)
-      .set("spark.exasol.fingerprint", getFingerprint())
+      .set("spark.exasol.host", container.getDockerNetworkInternalIpAddress())
+      .set("spark.exasol.port", s"${container.getDefaultInternalDatabasePort()}")
       .set("spark.exasol.max_nodes", "20")
+
+    val fingerprintOpt = getFingerprint()
+    if (fingerprintOpt.isPresent()) {
+      sparkConf.set("spark.exasol.fingerprint", fingerprintOpt.get())
+    }
 
     val sparkSession = SparkSession
       .builder()

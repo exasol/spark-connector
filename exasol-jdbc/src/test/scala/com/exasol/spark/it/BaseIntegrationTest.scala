@@ -24,42 +24,39 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
     c
   }
 
-  var jdbcHost: String = _
-  var jdbcPort: String = _
   var exasolConnectionManager: ExasolConnectionManager = _
 
   override def beforeAll(): Unit =
-    prepareExasolDatabase()
+    container.start()
 
   override def afterAll(): Unit = {
     container.stop()
     network.close()
   }
 
-  def prepareExasolDatabase(): Unit = {
-    container.start()
-    jdbcHost = container.getDockerNetworkInternalIpAddress()
-    jdbcPort = s"${container.getDefaultInternalDatabasePort()}"
-    exasolConnectionManager = ExasolConnectionManager(getExasolOptions())
+  def getDefaultOptions(): Map[String, String] = {
+    val options = Map(
+      "host" -> container.getDockerNetworkInternalIpAddress(),
+      "port" -> s"${container.getDefaultInternalDatabasePort()}",
+      "username" -> container.getUsername(),
+      "password" -> container.getPassword(),
+      "max_nodes" -> "200"
+    )
+    if (getFingerprint().isPresent()) {
+      options ++ Map("fingerprint" -> getFingerprint().get())
+    } else {
+      options
+    }
   }
 
-  def getDefaultOptions(): Map[String, String] = Map(
-    "host" -> jdbcHost,
-    "port" -> jdbcPort,
-    "username" -> container.getUsername(),
-    "password" -> container.getPassword(),
-    "fingerprint" -> getFingerprint(),
-    "max_nodes" -> "200"
-  )
-
-  def getExasolOptions(): ExasolOptions = {
+  def getExasolOptions(map: Map[String, String]): ExasolOptions = {
     val javaMap = new java.util.HashMap[String, String]()
-    getDefaultOptions().foreach { case (key, value) => javaMap.put(key, value) }
+    map.foreach { case (key, value) => javaMap.put(key, value) }
     ExasolOptionsProvider(new CaseInsensitiveStringMap(javaMap))
   }
 
-  def getFingerprint(): String =
-    container.getTlsCertificateFingerprint().get()
+  def getFingerprint(): java.util.Optional[String] =
+    container.getTlsCertificateFingerprint()
 
   private[this] def getExasolDockerImageVersion(): String = {
     val dockerVersion = System.getenv("EXASOL_DOCKER_VERSION")

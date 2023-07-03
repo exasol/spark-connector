@@ -3,15 +3,21 @@ package com.exasol.spark
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.DataFrameReader
 
-import org.scalatest.BeforeAndAfterEach
+import com.exasol.spark.util.ExasolConnectionManager
 
-abstract class AbstractTableQueryIT extends BaseIntegrationTest with SparkSessionSetup with BeforeAndAfterEach {
+import org.scalatest.BeforeAndAfterAll
+
+abstract class AbstractTableQueryIT extends BaseIntegrationTest with BeforeAndAfterAll with SparkSessionSetup {
 
   val tableName: String
   def createTable(): Unit
 
-  override def beforeEach(): Unit =
+  override def beforeAll(): Unit = {
+    super.beforeAll()
+    val options = getExasolOptions(getDefaultOptions() ++ Map("table" -> tableName))
+    exasolConnectionManager = ExasolConnectionManager(options)
     createTable()
+  }
 
   private[spark] def getDataFrameReader(query: String): DataFrameReader =
     spark.read

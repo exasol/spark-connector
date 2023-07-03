@@ -67,7 +67,7 @@ object ExasolOptionsProvider {
     checkHost(host)
     checkJdbcOptions(jdbc_options)
 
-    val exasolOptions = ExasolOptions.builder //
+    val exasolOptions = ExasolOptions.builder
       .host(host)
       .port(map.getOrDefault(Option.PORT.key(), DEFAULT_PORT))
       .username(map.getOrDefault(Option.USERNAME.key(), DEFAULT_USERNAME))
