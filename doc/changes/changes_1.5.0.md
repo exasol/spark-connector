@@ -38,7 +38,6 @@ Code name:
 * Added `org.apache.maven.plugins:maven-install-plugin:2.4`
 * Added `org.apache.maven.plugins:maven-site-plugin:3.3`
 * Added `org.apache.maven.plugins:maven-surefire-plugin:3.0.0`
-* Added `org.apache.maven.plugins:maven-toolchains-plugin:3.1.0`
 * Added `org.basepom.maven:duplicate-finder-maven-plugin:1.5.1`
 * Added `org.codehaus.mojo:flatten-maven-plugin:1.4.1`
 * Added `org.codehaus.mojo:versions-maven-plugin:2.15.0`
@@ -53,7 +52,7 @@ Code name:
 
 * Added `com.exasol:error-reporting-java8:1.0.1`
 * Added `com.exasol:exasol-jdbc:7.1.20`
-* Added `com.exasol:spark-connector-common-java:1.0.2`
+* Added `com.exasol:spark-connector-common-java:1.1.1`
 * Added `com.exasol:sql-statement-builder-java8:4.5.4`
 
 #### Test Dependency Updates
@@ -88,7 +87,6 @@ Code name:
 * Added `org.apache.maven.plugins:maven-shade-plugin:3.4.1`
 * Added `org.apache.maven.plugins:maven-site-plugin:3.3`
 * Added `org.apache.maven.plugins:maven-surefire-plugin:3.0.0`
-* Added `org.apache.maven.plugins:maven-toolchains-plugin:3.1.0`
 * Added `org.basepom.maven:duplicate-finder-maven-plugin:1.5.1`
 * Added `org.codehaus.mojo:flatten-maven-plugin:1.4.1`
 * Added `org.codehaus.mojo:versions-maven-plugin:2.15.0`
@@ -102,7 +100,7 @@ Code name:
 
 #### Compile Dependency Updates
 
-* Added `com.exasol:spark-connector-common-java:1.0.2`
+* Added `com.exasol:spark-connector-common-java:1.1.1`
 * Added `org.apache.hadoop:hadoop-aws:3.3.5`
 * Added `org.scala-lang:scala-library:2.13.11`
 * Added `software.amazon.awssdk:s3:2.20.90`
@@ -133,7 +131,6 @@ Code name:
 * Added `org.apache.maven.plugins:maven-shade-plugin:3.4.1`
 * Added `org.apache.maven.plugins:maven-site-plugin:3.3`
 * Added `org.apache.maven.plugins:maven-surefire-plugin:3.0.0`
-* Added `org.apache.maven.plugins:maven-toolchains-plugin:3.1.0`
 * Added `org.basepom.maven:duplicate-finder-maven-plugin:1.5.1`
 * Added `org.codehaus.mojo:flatten-maven-plugin:1.4.1`
 * Added `org.codehaus.mojo:versions-maven-plugin:2.15.0`
