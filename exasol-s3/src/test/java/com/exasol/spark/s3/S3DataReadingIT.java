@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.exasol.dbbuilder.dialects.Table;
+import com.exasol.spark.common.ExasolValidationException;
 
 @Tag("integration")
 @Testcontainers

@@ -4,6 +4,8 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 
+import com.exasol.spark.common.ExasolValidationException
+
 /**
  * Tests for loading data from Exasol query as dataframes using short
  * and long source formats.
@@ -45,7 +47,7 @@ class LoadIT extends BaseTableQueryIT {
   }
 
   test("throws if query parameter is not provided") {
-    val thrown = intercept[IllegalArgumentException] {
+    val thrown = intercept[ExasolValidationException] {
       spark.read
         .format("com.exasol.spark")
         .option("host", container.getDockerNetworkInternalIpAddress())

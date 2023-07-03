@@ -15,6 +15,7 @@ import org.apache.spark.sql.connector.write.*;
 
 import com.exasol.errorreporting.ExaError;
 import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.ExasolValidationException;
 import com.exasol.spark.common.Option;
 
 import software.amazon.awssdk.services.s3.S3Client;

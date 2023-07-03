@@ -6,6 +6,8 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.SaveMode
 
+import com.exasol.spark.common.ExasolValidationException
+
 import org.mockito.Mockito.when
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -16,7 +18,7 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
   test("when reading should throw an Exception if no `query` parameter is provided") {
     val sqlContext = mock[SQLContext]
     when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
-    val thrown = intercept[IllegalArgumentException] {
+    val thrown = intercept[ExasolValidationException] {
       new DefaultSource().createRelation(sqlContext, Map[String, String]())
     }
     assert(thrown.getMessage().startsWith("E-SCCJ-10"))
@@ -37,7 +39,7 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
     val df = mock[DataFrame]
     val sqlContext = mock[SQLContext]
     when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
-    val thrown = intercept[IllegalArgumentException] {
+    val thrown = intercept[ExasolValidationException] {
       new DefaultSource().createRelation(sqlContext, SaveMode.Append, Map[String, String](), df)
     }
     assert(thrown.getMessage().startsWith("E-SCCJ-10"))
