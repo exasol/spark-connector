@@ -38,7 +38,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.inputs.upload_url }}
-          asset_path: '**/target/*.jar'
+          asset_path: '**/target/*.sha256'
       - name: Create a zip file from error code report JSON files
         run: zip -v error_code_report.zip */target/error_code_report.json
       - name: Upload error-code-report
