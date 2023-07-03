@@ -55,9 +55,21 @@ object ExasolOptionsProvider {
   /**
    * Returns {@link ExasolConfiguration} from key-value options.
    *
+   * @param map key value map
+   * @return an instance of {@link ExasolConfiguration}
+   */
+  def apply(map: Map[String, String]): ExasolOptions = {
+    val javaMap = new java.util.HashMap[String, String]()
+    map.foreach { case (key, value) => javaMap.put(key, value) }
+    ExasolOptionsProvider(new CaseInsensitiveStringMap(javaMap))
+  }
+
+  /**
+   * Returns {@link ExasolConfiguration} from key-value options.
+   *
    * It also validates key-value parameters.
    *
-   * @param options key value options
+   * @param map key value case-insensitive map
    * @return an instance of {@link ExasolConfiguration}
    */
   def apply(map: CaseInsensitiveStringMap): ExasolOptions = {

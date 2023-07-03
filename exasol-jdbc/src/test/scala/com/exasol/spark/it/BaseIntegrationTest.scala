@@ -1,7 +1,5 @@
 package com.exasol.spark
 
-import org.apache.spark.sql.util.CaseInsensitiveStringMap
-
 import com.exasol.containers.ExasolContainer
 import com.exasol.spark.common.ExasolOptions
 import com.exasol.spark.util.ExasolConnectionManager
@@ -49,11 +47,8 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
     }
   }
 
-  def getExasolOptions(map: Map[String, String]): ExasolOptions = {
-    val javaMap = new java.util.HashMap[String, String]()
-    map.foreach { case (key, value) => javaMap.put(key, value) }
-    ExasolOptionsProvider(new CaseInsensitiveStringMap(javaMap))
-  }
+  def getExasolOptions(map: Map[String, String]): ExasolOptions =
+    ExasolOptionsProvider(map)
 
   def getFingerprint(): java.util.Optional[String] =
     container.getTlsCertificateFingerprint()
