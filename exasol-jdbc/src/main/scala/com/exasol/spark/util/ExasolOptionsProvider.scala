@@ -25,7 +25,7 @@ import org.apache.spark.sql.util.CaseInsensitiveStringMap;
  *      .option("host", "127.0.0.1")
  *      .option("port", "8888")
  *      // ...
- *      .load
+ *      .load()
  * }}}
  *
  * From Spark configuration:
