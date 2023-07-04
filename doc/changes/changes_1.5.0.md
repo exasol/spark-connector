@@ -16,6 +16,10 @@ Code name:
 
 * #151: Fixed vulnerability `CVE-2023-26048` coming with `jetty-util` transitive dependency
 
+## Bugs
+
+* #176: Fixed artifact upload of `sha256sum` files
+
 ## Refactoring
 
 * #158: Refactored common options class
