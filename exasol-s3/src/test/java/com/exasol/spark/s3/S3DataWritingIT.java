@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.exasol.dbbuilder.dialects.Table;
+import com.exasol.spark.common.ExasolValidationException;
 
 @Tag("integration")
 @Testcontainers
@@ -72,7 +73,7 @@ class S3DataWritingIT extends S3IntegrationTestSetup {
                 .format(this.format) //
                 .options(getSparkOptions());
         final ExasolValidationException exception = assertThrows(ExasolValidationException.class, () -> df.save());
-        assertThat(exception.getMessage(), startsWith("E-SEC-19"));
+        assertThat(exception.getMessage(), startsWith("E-SCCJ-10"));
     }
 
     @Test

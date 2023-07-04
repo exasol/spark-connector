@@ -66,10 +66,9 @@ public class BaseIntegrationSetup {
     public Map<String, String> getOptionsMap() {
         final Map<String, String> map = Stream.of(new String[][] { //
                 { "host", EXASOL.getDockerNetworkInternalIpAddress() }, //
-                { "port", EXASOL.getDefaultInternalDatabasePort() + "" }, //
+                { "port", EXASOL.getMappedPort(8563) + "" }, //
                 { "username", EXASOL.getUsername() }, //
                 { "password", EXASOL.getPassword() }, //
-                { "jdbc_url", EXASOL.getJdbcUrl() }, //
                 { "fingerprint", getFingerprint() }, //
         }).collect(Collectors.toMap(e -> e[0], e -> e[1]));
         LOGGER.fine(() -> "Prepared options '" + map.toString() + "'.");

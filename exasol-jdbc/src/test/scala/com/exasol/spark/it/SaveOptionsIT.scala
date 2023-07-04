@@ -4,18 +4,18 @@ import java.sql.Date
 
 import com.exasol.spark.util.Types
 
+import org.scalatest.BeforeAndAfterEach
+
 /**
  * Integration tests for saving Spark DataFrames into Exasol tables.
  */
-class SaveOptionsIT extends BaseTableQueryIT {
+class SaveOptionsIT extends BaseTableQueryIT with BeforeAndAfterEach {
 
   private[this] val saveModes = Seq("append", "errorifexists", "ignore", "overwrite")
-  private[this] var defaultOptions: Map[String, String] = _
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    defaultOptions = getConfiguration() ++ Map("table" -> tableName)
-  }
+  // Required for save mode tests, since initial table can be deleted on other tests
+  override def beforeEach(): Unit =
+    createTable()
 
   private[this] val dataframeTestData: Seq[(String, String, Date, String)] = Seq(
     ("name1", "city1", Date.valueOf("2019-01-11"), "äpişge"),
@@ -96,7 +96,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
   }
 
   test("save with 'create_table' option creates a new table before saving dataframe") {
-    val newOptions = defaultOptions ++ Map("create_table" -> "true")
+    val newOptions = getOptions() ++ Map("create_table" -> "true")
     saveModes.foreach { case mode =>
       exasolConnectionManager.dropTable(tableName)
       assert(runDataFrameSave(mode, 2, newOptions) === dataframeTestData.size.toLong)
@@ -104,7 +104,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
   }
 
   test("save with 'drop_table' option drops and creates a new table before saving dataframe") {
-    val newOptions = defaultOptions ++ Map("drop_table" -> "true")
+    val newOptions = getOptions() ++ Map("drop_table" -> "true")
     saveModes.foreach { case mode =>
       createTable()
       assert(runDataFrameSave(mode, 3, newOptions) === dataframeTestData.size)
@@ -114,7 +114,7 @@ class SaveOptionsIT extends BaseTableQueryIT {
   private[this] def runDataFrameSave(
     mode: String,
     partitionCount: Int,
-    options: Map[String, String] = defaultOptions
+    options: Map[String, String] = getOptions()
   ): Long = {
     import sqlContext.implicits._
     val df = getSparkContext()
@@ -129,5 +129,8 @@ class SaveOptionsIT extends BaseTableQueryIT {
 
     exasolConnectionManager.withCountQuery(s"SELECT COUNT(*) FROM $tableName")
   }
+
+  // Lazily obtain options after the container is initialized
+  private[this] def getOptions(): Map[String, String] = getDefaultOptions() ++ Map("table" -> tableName)
 
 }

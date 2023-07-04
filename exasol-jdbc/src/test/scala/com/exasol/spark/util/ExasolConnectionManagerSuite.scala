@@ -9,17 +9,15 @@ import org.scalatestplus.mockito.MockitoSugar
 
 class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
-  def getManager(options: Map[String, String]): ExasolConnectionManager =
-    ExasolConnectionManager(ExasolConfiguration(options))
-
-  def getJdbcUrl(options: Map[String, String]): String =
-    getManager(options).getJdbcConnectionString()
+  private[this] def getManager(map: Map[String, String]): ExasolConnectionManager =
+    ExasolConnectionManager(ExasolOptionsProvider(map))
 
   @SuppressWarnings(Array("scala:S1313")) // Hardcoded IP addresses are safe in tests
-  val requiredOptions: Map[String, String] = Map("host" -> "10.0.0.1", "port" -> "8888")
+  private[this] val requiredOptions: Map[String, String] =
+    Map("host" -> "10.0.0.1", "port" -> "8888", "query" -> "SELECT * FROM DUAL")
 
   test("check empty jdbc options returns correctly configured jdbc url") {
-    assert(getJdbcUrl(requiredOptions) === "jdbc:exa:10.0.0.1:8888")
+    assert(ExasolOptionsProvider(requiredOptions).getJdbcUrl() === "jdbc:exa:10.0.0.1:8888")
   }
 
   test("check extra jdbc options are correctly configured for establishing connection") {
@@ -28,14 +26,14 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with Mockit
       "debug=1;encryption=0" -> "jdbc:exa:10.0.0.1:8888;debug=1;encryption=0"
     ).foreach { case (jdbc_options, expectedJdbcUrl) =>
       val options = requiredOptions ++ Map("jdbc_options" -> jdbc_options)
-      assert(getJdbcUrl(options) === expectedJdbcUrl)
+      assert(ExasolOptionsProvider(options).getJdbcUrl() === expectedJdbcUrl)
     }
   }
 
   test("throws when jdbc options have invalid key-value property format") {
     val incorrectOpt = requiredOptions ++ Map("jdbc_options" -> "debug==1;encryption=0")
     val thrown = intercept[IllegalArgumentException] {
-      getJdbcUrl(incorrectOpt)
+      ExasolOptionsProvider(incorrectOpt).getJdbcUrl()
     }
     val message = thrown.getMessage()
     assert(message.startsWith("E-SEC-6"))
@@ -46,7 +44,7 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with Mockit
     Seq(";debug=1;encryption=0", "encryption=1;").foreach { case options =>
       val incorrectOpt = requiredOptions ++ Map("jdbc_options" -> options)
       val thrown = intercept[IllegalArgumentException] {
-        getJdbcUrl(incorrectOpt)
+        ExasolOptionsProvider(incorrectOpt).getJdbcUrl()
       }
       val message = thrown.getMessage()
       assert(message.startsWith("E-SEC-5"))
@@ -69,7 +67,7 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with Mockit
 
   test("returns jdbc url with fingerprint") {
     val options = requiredOptions ++ Map("fingerprint" -> "dummy_fingerprint")
-    assert(getJdbcUrl(options) === "jdbc:exa:10.0.0.1/dummy_fingerprint:8888")
+    assert(ExasolOptionsProvider(options).getJdbcUrl() === "jdbc:exa:10.0.0.1/dummy_fingerprint:8888")
   }
 
   test("returns jdbc url without fingerprint if validateservercertificate=0") {
@@ -77,7 +75,7 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with Mockit
       "jdbc_options" -> "validateservercertificate=0",
       "fingerprint" -> "dummy_fingerprint"
     )
-    assert(getJdbcUrl(options) === "jdbc:exa:10.0.0.1:8888;validateservercertificate=0")
+    assert(ExasolOptionsProvider(options).getJdbcUrl() === "jdbc:exa:10.0.0.1:8888;validateservercertificate=0")
   }
 
   test("returns list of worker connections with fingerprint") {

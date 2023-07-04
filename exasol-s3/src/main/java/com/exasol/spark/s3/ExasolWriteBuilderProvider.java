@@ -55,9 +55,11 @@ public final class ExasolWriteBuilderProvider {
 
     private ExasolOptions getUpdatedOptions(final Map<String, String> map) {
         final ExasolOptions.Builder builder = ExasolOptions.builder() //
-                .jdbcUrl(this.options.getJdbcUrl()) //
+                .host(this.options.getHost()) //
+                .port(this.options.getPort()) //
                 .username(this.options.getUsername()) //
                 .password(this.options.getPassword()) //
+                .fingerprint(this.options.getFingerprint()) //
                 .s3Bucket(this.options.getS3Bucket());
         if (this.options.hasTable()) {
             builder.table(this.options.getTable());

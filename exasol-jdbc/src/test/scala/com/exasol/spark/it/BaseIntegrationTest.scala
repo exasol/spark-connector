@@ -1,8 +1,9 @@
 package com.exasol.spark
 
 import com.exasol.containers.ExasolContainer
-import com.exasol.spark.util.ExasolConfiguration
+import com.exasol.spark.common.ExasolOptions
 import com.exasol.spark.util.ExasolConnectionManager
+import com.exasol.spark.util.ExasolOptionsProvider
 
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funsuite.AnyFunSuite
@@ -21,47 +22,36 @@ trait BaseIntegrationTest extends AnyFunSuite with BeforeAndAfterAll {
     c
   }
 
-  var jdbcHost: String = _
-  var jdbcPort: String = _
   var exasolConnectionManager: ExasolConnectionManager = _
 
-  def prepareExasolDatabase(): Unit = {
-    container.start()
-    jdbcHost = container.getDockerNetworkInternalIpAddress()
-    jdbcPort = s"${container.getDefaultInternalDatabasePort()}"
-    exasolConnectionManager = ExasolConnectionManager(ExasolConfiguration(getConfiguration()))
-  }
-
-  def getConfiguration(): Map[String, String] = {
-    val defaultOptions = Map(
-      "host" -> jdbcHost,
-      "port" -> jdbcPort,
-      "username" -> container.getUsername(),
-      "password" -> container.getPassword(),
-      "max_nodes" -> "200"
-    )
-    if (imageSupportsFingerprint()) {
-      defaultOptions ++ Map("fingerprint" -> getFingerprint())
-    } else {
-      defaultOptions ++ Map("jdbc_options" -> "validateservercertificate=0")
-    }
-  }
-
-  def getFingerprint(): String =
-    container.getTlsCertificateFingerprint().get()
-
-  def imageSupportsFingerprint(): Boolean = {
-    val image = container.getDockerImageReference()
-    (image.getMajor() >= 7) && (image.getMinor() >= 1)
-  }
-
   override def beforeAll(): Unit =
-    prepareExasolDatabase()
+    container.start()
 
   override def afterAll(): Unit = {
     container.stop()
     network.close()
   }
+
+  def getDefaultOptions(): Map[String, String] = {
+    val options = Map(
+      "host" -> container.getDockerNetworkInternalIpAddress(),
+      "port" -> s"${container.getDefaultInternalDatabasePort()}",
+      "username" -> container.getUsername(),
+      "password" -> container.getPassword(),
+      "max_nodes" -> "200"
+    )
+    if (getFingerprint().isPresent()) {
+      options ++ Map("fingerprint" -> getFingerprint().get())
+    } else {
+      options
+    }
+  }
+
+  def getExasolOptions(map: Map[String, String]): ExasolOptions =
+    ExasolOptionsProvider(map)
+
+  def getFingerprint(): java.util.Optional[String] =
+    container.getTlsCertificateFingerprint()
 
   private[this] def getExasolDockerImageVersion(): String = {
     val dockerVersion = System.getenv("EXASOL_DOCKER_VERSION")

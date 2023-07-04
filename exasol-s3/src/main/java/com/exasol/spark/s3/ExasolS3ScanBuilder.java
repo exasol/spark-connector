@@ -19,6 +19,7 @@ import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
 import com.exasol.errorreporting.ExaError;
 import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.ExasolValidationException;
 
 import scala.collection.JavaConverters;
 import scala.collection.immutable.Seq;

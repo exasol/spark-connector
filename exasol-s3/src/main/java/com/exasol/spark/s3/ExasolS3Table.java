@@ -18,6 +18,7 @@ import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
 import com.exasol.errorreporting.ExaError;
 import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.ExasolValidationException;
 import com.exasol.spark.common.Option;
 
 /**
@@ -64,7 +65,7 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     @Override
     public ScanBuilder newScanBuilder(final CaseInsensitiveStringMap map) {
-        final ExasolOptions options = getExasolOptions(map);
+        final ExasolOptions options = ExasolOptions.from(map);
         validateNumberOfPartitions(options);
         updateSparkConfigurationForS3(options);
         return new ExasolS3ScanBuilder(options, this.schema, map);
@@ -72,25 +73,11 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     @Override
     public WriteBuilder newWriteBuilder(final LogicalWriteInfo defaultInfo) {
-        final ExasolOptions options = getExasolOptions(defaultInfo.options());
+        final ExasolOptions options = ExasolOptions.from(defaultInfo.options());
         validateHasTable(options);
         validateNumberOfPartitions(options);
         updateSparkConfigurationForS3(options);
         return new ExasolWriteBuilderProvider(options).createWriteBuilder(this.schema, defaultInfo);
-    }
-
-    private ExasolOptions getExasolOptions(final CaseInsensitiveStringMap options) {
-        final ExasolOptions.Builder builder = ExasolOptions.builder() //
-                .jdbcUrl(options.get(Option.JDBC_URL.key())) //
-                .username(options.get(Option.USERNAME.key())) //
-                .password(options.get(Option.PASSWORD.key())) //
-                .s3Bucket(options.get(Option.S3_BUCKET.key()));
-        if (options.containsKey(Option.TABLE.key())) {
-            builder.table(options.get(Option.TABLE.key()));
-        } else if (options.containsKey(Option.QUERY.key())) {
-            builder.query(options.get(Option.QUERY.key()));
-        }
-        return builder.withOptionsMap(options.asCaseSensitiveMap()).build();
     }
 
     private void validateNumberOfPartitions(final ExasolOptions options) {

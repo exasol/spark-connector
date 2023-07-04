@@ -3,29 +3,27 @@ package com.exasol.spark
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.DataFrameReader
 
-import org.scalatest.BeforeAndAfterEach
+import com.exasol.spark.util.ExasolConnectionManager
 
-abstract class AbstractTableQueryIT extends BaseIntegrationTest with SparkSessionSetup with BeforeAndAfterEach {
+import org.scalatest.BeforeAndAfterAll
+
+abstract class AbstractTableQueryIT extends BaseIntegrationTest with BeforeAndAfterAll with SparkSessionSetup {
 
   val tableName: String
   def createTable(): Unit
 
-  override def beforeEach(): Unit =
+  override def beforeAll(): Unit = {
+    super.beforeAll()
+    val options = getExasolOptions(getDefaultOptions() ++ Map("table" -> tableName))
+    exasolConnectionManager = ExasolConnectionManager(options)
     createTable()
-
-  private[spark] def getDataFrameReader(query: String): DataFrameReader = {
-    val reader = spark.read
-      .format("exasol")
-      .option("host", jdbcHost)
-      .option("port", jdbcPort)
-      .option("query", query)
-
-    if (imageSupportsFingerprint()) {
-      reader.option("fingerprint", getFingerprint())
-    } else {
-      reader.option("jdbc_options", "validateservercertificate=0")
-    }
   }
+
+  private[spark] def getDataFrameReader(query: String): DataFrameReader =
+    spark.read
+      .format("exasol")
+      .options(getDefaultOptions())
+      .option("query", query)
 
   private[spark] def getDataFrame(queryOpt: Option[String] = None): DataFrame = {
     val query = queryOpt.fold(s"SELECT * FROM $tableName")(identity)

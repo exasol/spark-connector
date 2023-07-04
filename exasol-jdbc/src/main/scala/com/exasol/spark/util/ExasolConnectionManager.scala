@@ -11,6 +11,9 @@ import com.exasol.errorreporting.ExaError
 import com.exasol.jdbc.EXAConnection
 import com.exasol.jdbc.EXAResultSet
 import com.exasol.jdbc.EXAStatement
+import com.exasol.spark.common.ExasolOptions
+import com.exasol.spark.common.Option
+import com.exasol.spark.util.Constants._
 
 /**
  * A class that provides and manages Exasol connections.
@@ -21,35 +24,28 @@ import com.exasol.jdbc.EXAStatement
  * @param config An [[ExasolConfiguration]] with user provided or runtime
  *        configuration parameters
  */
-final case class ExasolConnectionManager(config: ExasolConfiguration) {
+final case class ExasolConnectionManager(options: ExasolOptions) {
 
-  private[this] val DO_NOT_VALIDATE_CERTIFICATE = "validateservercertificate=0"
-  private[this] val MAIN_CONNECTION_PREFIX = "jdbc:exa"
   private[this] val WORKER_CONNECTION_PREFIX = "jdbc:exa-worker"
+  private[this] val USERNAME = options.getUsername()
+  private[this] val PASSWORD = options.getPassword()
 
   /** A regular Exasol jdbc connection string */
-  def getJdbcConnectionString(): String = {
-    val host = getHostWithFingerprint(config.host)
-    val url = s"$MAIN_CONNECTION_PREFIX:$host:${config.port}"
-    getConnectionStringWithOptions(url)
-  }
+  def getJdbcConnectionString(): String =
+    options.getJdbcUrl()
 
   private[this] def getHostWithFingerprint(host: String): String =
-    if (!config.fingerprint.isEmpty() && !config.jdbc_options.contains(DO_NOT_VALIDATE_CERTIFICATE)) {
-      host + "/" + config.fingerprint
+    if (options.hasFingerprint()) {
+      host + "/" + options.getFingerprint()
     } else {
       host
     }
 
   def mainConnection(): EXAConnection =
-    ExasolConnectionManager.makeConnection(getJdbcConnectionString(), config.username, config.password)
+    ExasolConnectionManager.makeConnection(getJdbcConnectionString(), USERNAME, PASSWORD)
 
   def writerMainConnection(): EXAConnection =
-    ExasolConnectionManager.makeConnection(
-      s"${getJdbcConnectionString()};autocommit=0",
-      config.username,
-      config.password
-    )
+    ExasolConnectionManager.makeConnection(s"${getJdbcConnectionString()};autocommit=0", USERNAME, PASSWORD)
 
   /**
    * A single non-pooled [[com.exasol.jdbc.EXAConnection]] connection.
@@ -58,7 +54,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    * the user.
    */
   def getConnection(): EXAConnection =
-    ExasolConnectionManager.createConnection(getJdbcConnectionString(), config.username, config.password)
+    ExasolConnectionManager.createConnection(getJdbcConnectionString(), USERNAME, PASSWORD)
 
   /**
    * Starts a parallel sub-connections from the main JDBC connection.
@@ -66,8 +62,10 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    * @param mainConnection the main connection
    * @return the number of parallel connections
    */
-  def initParallel(mainConnection: EXAConnection): Int =
-    mainConnection.EnterParallel(config.max_nodes)
+  def initParallel(mainConnection: EXAConnection): Int = {
+    val max_nodes = if (options.containsKey(MAX_NODES)) options.get(MAX_NODES).toInt else DEFAULT_MAX_NODES
+    mainConnection.EnterParallel(max_nodes)
+  }
 
   /**
    * Returns the list of all parallel sub-connection URLs.
@@ -98,7 +96,7 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
    * @return a JDBC connection on the separate parallel connection
    */
   def subConnection(subConnectionUrl: String): EXAConnection =
-    ExasolConnectionManager.makeConnection(subConnectionUrl, config.username, config.password)
+    ExasolConnectionManager.makeConnection(subConnectionUrl, USERNAME, PASSWORD)
 
   /**
    * A method to run with a new connection.
@@ -172,9 +170,6 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
   /**
    * Checks if table already exists, if so should return true otherwise false.
    *
-   * TODO: This should be changed to Exasol specific checks. For example, by
-   *       using EXA_USER_TABLES.
-   *
    * @param tableName A Exasol table name including schema, e.g.
    *        `schema.tableName`
    * @return `true` if table exists, otherwise return `false`
@@ -222,14 +217,12 @@ final case class ExasolConnectionManager(config: ExasolConfiguration) {
     ()
   }
 
-  private[this] def getConnectionStringWithOptions(url: String): String = {
-    val jdbcOptions = config.jdbc_options
-    if (jdbcOptions == null || jdbcOptions.isEmpty) {
+  private[this] def getConnectionStringWithOptions(url: String): String =
+    if (!options.containsKey(Option.JDBC_OPTIONS.key())) {
       url
     } else {
-      s"$url;$jdbcOptions"
+      s"$url;${options.get(Option.JDBC_OPTIONS.key())}"
     }
-  }
 
 }
 

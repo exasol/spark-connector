@@ -8,18 +8,29 @@ import java.sql.Timestamp
 
 import org.apache.spark.sql.Encoder
 
+import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.matcher.ResultSetStructureMatcher.table
 import com.exasol.matcher.TypeMatchMode._
 
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
+import org.scalatest.BeforeAndAfterAll
 
-class SparkDataImportIT extends BaseTableQueryIT {
+class SparkDataImportIT extends BaseTableQueryIT with BeforeAndAfterAll {
 
   private[this] val INT_MIN = -2147483648
   private[this] val INT_MAX = 2147483647
   private[this] val LONG_MIN = -9223372036854775808L
   private[this] val LONG_MAX = 9223372036854775807L
+
+  private[this] var defaultOptions: Map[String, String] = _
+
+  override def beforeAll(): Unit = {
+    super.beforeAll()
+    defaultOptions = getDefaultOptions() ++ Map("table" -> tableName, "drop_table" -> "true")
+    exasolConnectionManager = ExasolConnectionManager(getExasolOptions(defaultOptions))
+    createTable()
+  }
 
   import sqlContext.implicits._
 
@@ -161,7 +172,7 @@ class SparkDataImportIT extends BaseTableQueryIT {
         .toDF("col_field")
         .write
         .mode("overwrite")
-        .options(getConfiguration() ++ Map("table" -> tableName, "drop_table" -> "true"))
+        .options(defaultOptions)
         .format("exasol")
         .save()
 

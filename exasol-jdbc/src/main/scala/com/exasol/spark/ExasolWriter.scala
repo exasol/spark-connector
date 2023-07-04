@@ -11,6 +11,8 @@ import org.apache.spark.sql.types.StructType
 
 import com.exasol.errorreporting.ExaError
 import com.exasol.jdbc.EXAConnection
+import com.exasol.spark.common.ExasolOptions
+import com.exasol.spark.util.Constants._
 import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Types
@@ -21,6 +23,7 @@ class ExasolWriter(
   @transient val sc: SparkContext,
   tableName: String,
   rddSchema: StructType,
+  options: ExasolOptions,
   manager: ExasolConnectionManager
 ) extends Serializable {
 
@@ -77,7 +80,7 @@ class ExasolWriter(
     val nullTypes = rddSchema.fields.map(f => Types.jdbcTypeFromSparkDataType(f.dataType))
     val fieldCnt = rddSchema.fields.length
 
-    val batchSize = manager.config.batch_size
+    val batchSize = if (options.containsKey(BATCH_SIZE)) options.get(BATCH_SIZE).toInt else DEFAULT_BATCH_SIZE
 
     try {
       var rowCnt = 0
