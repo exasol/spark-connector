@@ -24,6 +24,7 @@ Code name:
 
 * #155: Unified user options
 * #158: Refactored common options class
+* #164: Validated that write directory is empty
 * #171: Refactored artifact packaging and releasing for module setup
 * #174: Refactored Github `.github/workflow/` action files
 

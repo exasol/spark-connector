@@ -13,6 +13,7 @@ import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
 import com.exasol.spark.common.ExasolOptions;
+import com.exasol.spark.common.ExasolValidationException;
 import com.exasol.spark.common.Option;
 
 import scala.collection.JavaConverters;
@@ -25,14 +26,17 @@ public final class ExasolWriteBuilderProvider {
     private static final Logger LOGGER = Logger.getLogger(ExasolWriteBuilderProvider.class.getName());
 
     private final ExasolOptions options;
+    private final S3BucketKeyPathProvider s3BucketKeyPathProvider;
 
     /**
      * Creates a new instance of {@link ExasolWriteBuilderProvider}.
      *
      * @param options user provided options
+     * @param s3BucketKeyPathProvider {@code S3} bucket key folder path provider class
      */
-    public ExasolWriteBuilderProvider(final ExasolOptions options) {
+    public ExasolWriteBuilderProvider(final ExasolOptions options, final S3BucketKeyPathProvider s3BucketKeyPathProvider) {
         this.options = options;
+        this.s3BucketKeyPathProvider = s3BucketKeyPathProvider;
     }
 
     /**
@@ -44,7 +48,23 @@ public final class ExasolWriteBuilderProvider {
      */
     public WriteBuilder createWriteBuilder(final StructType schema, final LogicalWriteInfo defaultInfo) {
         final SparkSession sparkSession = SparkSession.active();
-        final LogicalWriteInfo info = getUpdatedLogicalWriteInfo(defaultInfo, sparkSession);
+        final String s3Bucket = this.options.getS3Bucket();
+        final String s3BucketKey = this.s3BucketKeyPathProvider.getS3BucketKeyForWriteLocation(defaultInfo.queryId());
+        validateWritePathIsEmpty(s3Bucket, s3BucketKey);
+        final LogicalWriteInfo info = getUpdatedLogicalWriteInfo(defaultInfo, s3Bucket, s3BucketKey, sparkSession);
+        return createCSVWriteBuilder(sparkSession, schema, info);
+    }
+
+    private void validateWritePathIsEmpty(final String s3Bucket, final String s3BucketKey) {
+        try (final S3FileSystem s3FileSystem = S3FileSystem.fromOptions(this.options)) {
+            if (!s3FileSystem.isEmpty(s3Bucket, Optional.of(s3BucketKey))) {
+                throw new ExasolValidationException("bucketIs not empty");
+            }
+        }
+    }
+
+    private WriteBuilder createCSVWriteBuilder(final SparkSession sparkSession, final StructType schema,
+            final LogicalWriteInfo info) {
         final ExasolOptions updatedOptions = getUpdatedOptions(info.options());
         final String intermediateDataPath = updatedOptions.get(Option.INTERMEDIATE_DATA_PATH.key());
         LOGGER.info(() -> "Writing intermediate data to the '" + intermediateDataPath + "' path for write job.");
@@ -70,14 +90,12 @@ public final class ExasolWriteBuilderProvider {
         return builder.build();
     }
 
-    private LogicalWriteInfo getUpdatedLogicalWriteInfo(final LogicalWriteInfo defaultInfo,
-            final SparkSession sparkSession) {
+    private LogicalWriteInfo getUpdatedLogicalWriteInfo(final LogicalWriteInfo defaultInfo, final String s3Bucket,
+            final String s3BucketKey, final SparkSession sparkSession) {
         final Map<String, String> map = new HashMap<>(defaultInfo.options().asCaseSensitiveMap());
         map.put("header", "true");
         map.put("delimiter", ",");
         map.put("mapreduce.fileoutputcommitter.marksuccessfuljobs", "false");
-        final String s3Bucket = this.options.getS3Bucket();
-        final String s3BucketKey = getS3BucketKeyForWriteLocation(defaultInfo, sparkSession);
         map.put(Option.INTERMEDIATE_DATA_PATH.key(), "s3a://" + Paths.get(s3Bucket, s3BucketKey).toString());
         map.put(Option.WRITE_S3_BUCKET_KEY.key(), s3BucketKey);
 
@@ -97,13 +115,6 @@ public final class ExasolWriteBuilderProvider {
                 return new CaseInsensitiveStringMap(map);
             }
         };
-    }
-
-    private String getS3BucketKeyForWriteLocation(final LogicalWriteInfo defaultInfo, final SparkSession sparkSession) {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(UUID.randomUUID()).append("-").append(sparkSession.sparkContext().applicationId()).append("/")
-                .append(defaultInfo.queryId());
-        return builder.toString();
     }
 
     private Seq<String> getS3WritePath(final String path) {

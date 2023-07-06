@@ -13,6 +13,11 @@
         <version>${revision}</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
+    <properties>
+        <!-- These lines are required for Sonar to find sources and to report coverage -->
+        <sonar.sources>.</sonar.sources>
+        <sonar.inclusions>src/main/**</sonar.inclusions>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.exasol</groupId>
@@ -236,7 +241,7 @@
                         <compilerPlugin>
                             <groupId>org.scalameta</groupId>
                             <artifactId>semanticdb-scalac_${scala.version}</artifactId>
-                            <version>4.7.8</version>
+                            <version>4.8.0</version>
                         </compilerPlugin>
                     </compilerPlugins>
                 </configuration>

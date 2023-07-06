@@ -77,7 +77,10 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
         validateHasTable(options);
         validateNumberOfPartitions(options);
         updateSparkConfigurationForS3(options);
-        return new ExasolWriteBuilderProvider(options).createWriteBuilder(this.schema, defaultInfo);
+        final SparkSession sparkSession = SparkSession.active();
+        final String applicationId = sparkSession.sparkContext().applicationId();
+        final S3BucketKeyPathProvider prov = new UUIDS3BucketKeyPathProvider(applicationId);
+        return new ExasolWriteBuilderProvider(options, prov).createWriteBuilder(this.schema, defaultInfo);
     }
 
     private void validateNumberOfPartitions(final ExasolOptions options) {
