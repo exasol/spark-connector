@@ -12,6 +12,7 @@ import org.apache.spark.sql.execution.datasources.v2.csv.CSVTable;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
+import com.exasol.errorreporting.ExaError;
 import com.exasol.spark.common.ExasolOptions;
 import com.exasol.spark.common.ExasolValidationException;
 import com.exasol.spark.common.Option;
@@ -58,7 +59,10 @@ public final class ExasolWriteBuilderProvider {
     private void validateWritePathIsEmpty(final String s3Bucket, final String s3BucketKey) {
         try (final S3FileSystem s3FileSystem = S3FileSystem.fromOptions(this.options)) {
             if (!s3FileSystem.isEmpty(s3Bucket, Optional.of(s3BucketKey))) {
-                throw new ExasolValidationException("bucketIs not empty");
+                throw new ExasolValidationException(ExaError.messageBuilder("E-SEC-27") //
+                        .message("The intermediate write path is not empty.") //
+                        .mitigation("Please ensure that the intermediate write path is empty or cleaned up properly.") //
+                        .toString());
             }
         }
     }
