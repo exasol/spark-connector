@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.spark.sql.connector.write.LogicalWriteInfo;
 import org.apache.spark.sql.types.StructType;
@@ -29,7 +31,7 @@ class ExasolWriteBuilderProviderIT extends S3IntegrationTestSetup {
     final String applicationId = "spark-test-app-id";
 
     final S3BucketKeyPathProvider s3BucketKeyPathProvider = new TestS3BucketKeyPathProvider(applicationId);
-    final ExasolOptions options = ExasolOptions.builder().table("T1").withOptionsMap(getSparkOptions()).build();
+    final ExasolOptions options = ExasolOptions.from(new CaseInsensitiveStringMap(getMapWithTable()));
 
     @Mock
     private StructType schema;
@@ -58,6 +60,12 @@ class ExasolWriteBuilderProviderIT extends S3IntegrationTestSetup {
                 s3BucketKeyPathProvider);
         assertThrows(ExasolValidationException.class,
                 () -> writeBuilderProvider.createWriteBuilder(schema, getLogicalWriteInfo("queryIdTest")));
+    }
+
+    private Map<String, String> getMapWithTable() {
+        final Map<String, String> map = new HashMap<>(getSparkOptions());
+        map.put("table", "T1");
+        return map;
     }
 
     private static ByteBuffer getRandomByteBuffer(int size) throws IOException {
