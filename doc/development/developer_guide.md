@@ -8,11 +8,11 @@ The path layout:
 
 ```
 userProvidedS3Bucket/
-└── uuid-sparkApplicationId
-    └── queryId
+└── <UUID>-<SparkApplicationId>/
+    └── <SparkQueryId>/
 ```
 
-The generated intermediate write path `<UUID>-<SparkApplicationId>/<SparkQueryId>/` if validated that it is empty before write. And it is cleaned up after the write query finishes.
+The generated intermediate write path `<UUID>-<SparkApplicationId>/<SparkQueryId>/` is validated that it is empty before write. And it is cleaned up after the write query finishes.
 
 ## Integration Tests
 

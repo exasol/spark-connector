@@ -55,7 +55,7 @@ class ExasolWriteBuilderProviderIT extends S3IntegrationTestSetup {
         final String bucketKeyPrefix = s3BucketKey + "-" + applicationId + "/queryIdTest";
         PutObjectRequest objectRequest = PutObjectRequest.builder().bucket(DEFAULT_BUCKET_NAME)
                 .key(bucketKeyPrefix + "/hello.txt").build();
-        s3Client.putObject(objectRequest, RequestBody.fromByteBuffer(getRandomByteBuffer(10_000)));
+        s3Client.putObject(objectRequest, RequestBody.fromByteBuffer(getRandomByteBuffer(10)));
         final ExasolWriteBuilderProvider writeBuilderProvider = new ExasolWriteBuilderProvider(options,
                 s3BucketKeyPathProvider);
         assertThrows(ExasolValidationException.class,
