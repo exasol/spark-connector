@@ -35,7 +35,8 @@ public final class ExasolWriteBuilderProvider {
      * @param options user provided options
      * @param s3BucketKeyPathProvider {@code S3} bucket key folder path provider class
      */
-    public ExasolWriteBuilderProvider(final ExasolOptions options, final S3BucketKeyPathProvider s3BucketKeyPathProvider) {
+    public ExasolWriteBuilderProvider(final ExasolOptions options,
+            final S3BucketKeyPathProvider s3BucketKeyPathProvider) {
         this.options = options;
         this.s3BucketKeyPathProvider = s3BucketKeyPathProvider;
     }
@@ -52,8 +53,8 @@ public final class ExasolWriteBuilderProvider {
         final String s3Bucket = this.options.getS3Bucket();
         final String s3BucketKey = this.s3BucketKeyPathProvider.getS3BucketKeyForWriteLocation(defaultInfo.queryId());
         validateWritePathIsEmpty(s3Bucket, s3BucketKey);
-        final LogicalWriteInfo info = getUpdatedLogicalWriteInfo(defaultInfo, s3Bucket, s3BucketKey, sparkSession);
-        return createCSVWriteBuilder(sparkSession, schema, info);
+        return createCSVWriteBuilder(sparkSession, schema,
+                getUpdatedLogicalWriteInfo(defaultInfo, s3Bucket, s3BucketKey));
     }
 
     private void validateWritePathIsEmpty(final String s3Bucket, final String s3BucketKey) {
@@ -95,7 +96,7 @@ public final class ExasolWriteBuilderProvider {
     }
 
     private LogicalWriteInfo getUpdatedLogicalWriteInfo(final LogicalWriteInfo defaultInfo, final String s3Bucket,
-            final String s3BucketKey, final SparkSession sparkSession) {
+            final String s3BucketKey) {
         final Map<String, String> map = new HashMap<>(defaultInfo.options().asCaseSensitiveMap());
         map.put("header", "true");
         map.put("delimiter", ",");

@@ -58,8 +58,8 @@ class ExasolWriteBuilderProviderIT extends S3IntegrationTestSetup {
         s3Client.putObject(objectRequest, RequestBody.fromByteBuffer(getRandomByteBuffer(10)));
         final ExasolWriteBuilderProvider writeBuilderProvider = new ExasolWriteBuilderProvider(options,
                 s3BucketKeyPathProvider);
-        assertThrows(ExasolValidationException.class,
-                () -> writeBuilderProvider.createWriteBuilder(schema, getLogicalWriteInfo("queryIdTest")));
+        final LogicalWriteInfo info = getLogicalWriteInfo("queryIdTest");
+        assertThrows(ExasolValidationException.class, () -> writeBuilderProvider.createWriteBuilder(schema, info));
     }
 
     private Map<String, String> getMapWithTable() {
