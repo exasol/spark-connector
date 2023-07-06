@@ -118,6 +118,7 @@ Code name:
 * Added `com.exasol:test-db-builder-java:3.4.2`
 * Added `org.junit.jupiter:junit-jupiter-api:5.9.3`
 * Added `org.junit.jupiter:junit-jupiter:5.9.3`
+* Added `org.mockito:mockito-junit-jupiter:5.4.0`
 * Added `org.testcontainers:junit-jupiter:1.18.3`
 * Added `org.testcontainers:localstack:1.18.3`
 

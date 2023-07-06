@@ -116,6 +116,7 @@
 | [Matcher for SQL Result Sets][60]               | [MIT License][61]                 |
 | [Test containers for Exasol on Docker][62]      | [MIT License][63]                 |
 | [Testcontainers :: JUnit Jupiter Extension][80] | [MIT][81]                         |
+| [mockito-junit-jupiter][53]                     | [The MIT License][54]             |
 | [Testcontainers :: Localstack][80]              | [MIT][81]                         |
 | [AWS Java SDK for Amazon S3][76]                | [Apache License, Version 2.0][77] |
 
