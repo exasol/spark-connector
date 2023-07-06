@@ -98,28 +98,43 @@ public final class S3FileSystem implements Closeable {
         }
     }
 
-    private List<S3Object> listObjects(final String bucketName, final Optional<String> bucketKey) {
+    /**
+     * Lists objects in a given bucket with optional bucket key.
+     *
+     * @param bucketName name of a bucket
+     * @param bucketKey  optional bucket key
+     */
+    public List<S3Object> listObjects(final String bucketName, final Optional<String> bucketKey) {
         final List<S3Object> result = new ArrayList<>();
-        String continuationToken = null;
-        while (true) {
-            final ListObjectsV2Request.Builder builder = ListObjectsV2Request.builder().bucket(bucketName);
-            if (bucketKey.isPresent()) {
-                builder.prefix(bucketKey.get());
-            }
-            if (continuationToken != null) {
-                builder.continuationToken(continuationToken);
-            }
-            final ListObjectsV2Response response = s3Client.listObjectsV2(builder.build());
-            final boolean isTruncated = response.isTruncated();
-            for (final S3Object s3Object : response.contents()) {
+        final ListObjectsV2Request.Builder builder = ListObjectsV2Request.builder().bucket(bucketName);
+        if (bucketKey.isPresent()) {
+            builder.prefix(bucketKey.get());
+        }
+        for (final ListObjectsV2Response page: s3Client.listObjectsV2Paginator(builder.build())) {
+            for (final S3Object s3Object: page.contents()) {
                 result.add(s3Object);
             }
-            if (!isTruncated) {
-                break;
-            }
-            continuationToken = response.nextContinuationToken();
         }
         return result;
+    }
+
+    /**
+     * Checks if a given bucket with optional bucket key is empty.
+     *
+     * @param bucketName name of a bucket
+     * @param bucketKey  optional bucket key
+     */
+    public boolean isEmpty(final String bucketName, final Optional<String> bucketKey) {
+        final ListObjectsV2Request.Builder builder = ListObjectsV2Request.builder().bucket(bucketName);
+        if (bucketKey.isPresent()) {
+            builder.prefix(bucketKey.get());
+        }
+        for (final ListObjectsV2Response page: s3Client.listObjectsV2Paginator(builder.build())) {
+            if (!page.contents().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void deleteObjectIdentifiers(final String bucketName, final List<ObjectIdentifier> objectIdentifiers) {

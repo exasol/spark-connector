@@ -5,8 +5,8 @@ import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,9 +18,6 @@ import com.exasol.spark.common.ExasolOptions;
 import com.exasol.spark.common.ExasolValidationException;
 import com.exasol.spark.common.Option;
 
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
@@ -132,9 +129,8 @@ public class ExasolBatchWrite implements BatchWrite {
             final URI pathURI = getPathURI(path);
             final String bucketName = pathURI.getHost();
             final String bucketKey = pathURI.getPath().substring(1);
-            final S3ClientFactory s3ClientFactory = new S3ClientFactory(this.options);
-            try (final S3Client s3Client = s3ClientFactory.getS3Client()) {
-                final List<S3Object> objects = listObjects(s3Client, bucketName, bucketKey);
+            try (final S3FileSystem s3FileSystem = S3FileSystem.fromOptions(this.options)) {
+                final List<S3Object> objects = s3FileSystem.listObjects(bucketName, Optional.of(bucketKey));
                 final StringBuilder builder = new StringBuilder();
                 for (final S3Object object : objects) {
                     builder.append("FILE '").append(object.key()).append("'\n");
@@ -152,18 +148,6 @@ public class ExasolBatchWrite implements BatchWrite {
                         .mitigation("Please make sure the path is correct file system (hdfs, s3a, etc) path.")
                         .toString(), exception);
             }
-        }
-
-        private List<S3Object> listObjects(final S3Client s3Client, final String bucketName, final String bucketKey) {
-            final ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder().bucket(bucketName)
-                    .prefix(bucketKey).build();
-            final List<S3Object> result = new ArrayList<>();
-            for (final ListObjectsV2Response page: s3Client.listObjectsV2Paginator(listObjectsRequest)) {
-                for (final S3Object s3Object: page.contents()) {
-                    result.add(s3Object);
-                }
-            }
-            return result;
         }
 
         private String getFooter() {
