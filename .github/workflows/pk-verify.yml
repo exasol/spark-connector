@@ -32,4 +32,4 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Run Project Keeper Separately
-        run: mvn --batch-mode -DtrimStackTrace=false com.exasol:project-keeper-maven-plugin:verify --projects .
+        run: mvn --batch-mode -DtrimStackTrace=false com.exasol:project-keeper-maven-plugin:2.9.9:verify --projects .

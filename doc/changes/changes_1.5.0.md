@@ -34,7 +34,7 @@ Code name:
 
 #### Plugin Dependency Updates
 
-* Added `com.exasol:error-code-crawler-maven-plugin:1.2.3`
+* Added `com.exasol:error-code-crawler-maven-plugin:1.3.0`
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.16`
 * Added `org.apache.maven.plugins:maven-clean-plugin:2.5`
 * Added `org.apache.maven.plugins:maven-compiler-plugin:3.11.0`
@@ -42,12 +42,12 @@ Code name:
 * Added `org.apache.maven.plugins:maven-enforcer-plugin:3.3.0`
 * Added `org.apache.maven.plugins:maven-install-plugin:2.4`
 * Added `org.apache.maven.plugins:maven-site-plugin:3.3`
-* Added `org.apache.maven.plugins:maven-surefire-plugin:3.0.0`
-* Added `org.basepom.maven:duplicate-finder-maven-plugin:1.5.1`
-* Added `org.codehaus.mojo:flatten-maven-plugin:1.4.1`
-* Added `org.codehaus.mojo:versions-maven-plugin:2.15.0`
+* Added `org.apache.maven.plugins:maven-surefire-plugin:3.1.2`
+* Added `org.basepom.maven:duplicate-finder-maven-plugin:2.0.1`
+* Added `org.codehaus.mojo:flatten-maven-plugin:1.5.0`
+* Added `org.codehaus.mojo:versions-maven-plugin:2.16.0`
 * Added `org.itsallcode:openfasttrace-maven-plugin:1.6.2`
-* Added `org.jacoco:jacoco-maven-plugin:0.8.9`
+* Added `org.jacoco:jacoco-maven-plugin:0.8.10`
 * Added `org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184`
 * Added `org.sonatype.ossindex.maven:ossindex-maven-plugin:3.2.0`
 
