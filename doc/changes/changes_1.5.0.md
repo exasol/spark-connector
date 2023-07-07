@@ -62,7 +62,7 @@ Code name:
 
 #### Test Dependency Updates
 
-* Added `com.exasol:exasol-testcontainers:6.6.0`
+* Added `com.exasol:exasol-testcontainers:6.6.1`
 * Added `com.exasol:hamcrest-resultset-matcher:1.6.0`
 * Added `com.exasol:test-db-builder-java:3.4.2`
 * Added `org.apache.logging.log4j:log4j-1.2-api:2.20.0`
@@ -106,14 +106,14 @@ Code name:
 #### Compile Dependency Updates
 
 * Added `com.exasol:spark-connector-common-java:1.1.1`
-* Added `org.apache.hadoop:hadoop-aws:3.3.5`
+* Added `org.apache.hadoop:hadoop-aws:3.3.6`
 * Added `org.scala-lang:scala-library:2.13.11`
-* Added `software.amazon.awssdk:s3:2.20.90`
+* Added `software.amazon.awssdk:s3:2.20.100`
 
 #### Test Dependency Updates
 
-* Added `com.amazonaws:aws-java-sdk-s3:1.12.493`
-* Added `com.exasol:exasol-testcontainers:6.6.0`
+* Added `com.amazonaws:aws-java-sdk-s3:1.12.503`
+* Added `com.exasol:exasol-testcontainers:6.6.1`
 * Added `com.exasol:hamcrest-resultset-matcher:1.6.0`
 * Added `com.exasol:test-db-builder-java:3.4.2`
 * Added `org.junit.jupiter:junit-jupiter-api:5.9.3`

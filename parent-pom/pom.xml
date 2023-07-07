@@ -17,7 +17,7 @@
     <properties>
         <revision>1.5.0</revision>
         <java.version>8</java.version>
-        <hadoop.version>3.3.5</hadoop.version>
+        <hadoop.version>3.3.6</hadoop.version>
         <log4j.version>2.20.0</log4j.version>
         <junit.version>5.9.3</junit.version>
         <mockito.version>5.4.0</mockito.version>
@@ -201,7 +201,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>32.0.1-jre</version>
+                <version>32.1.1-jre</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -297,7 +297,7 @@
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>3.23.3</version>
+                <version>3.23.4</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -361,7 +361,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>exasol-testcontainers</artifactId>
-                <version>6.6.0</version>
+                <version>6.6.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -379,7 +379,7 @@
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
-                <version>3.14.2</version>
+                <version>3.14.3</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -509,7 +509,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <spark.version>3.4.0</spark.version>
+                <spark.version>3.4.1</spark.version>
                 <scala.version>2.13.11</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
                 <jackson.version>2.14.2</jackson.version>
