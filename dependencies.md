@@ -44,7 +44,7 @@
 | [jersey-media-jaxb][40]                     | [EPL 2.0][37]; [GPL2 w/ CPE][38]; [EDL 1.0][41]; [BSD 2-Clause][42]; [Apache License, 2.0][12]; [Public Domain][39]; [Modified BSD][43]; [jQuery license][44]; [MIT license][45]; [W3C license][46] |
 | [jersey-core-server][47]                    | [EPL 2.0][37]; [The GNU General Public License (GPL), Version 2, With Classpath Exception][38]; [Apache License, 2.0][12]; [Modified BSD][43]                                                       |
 | [jersey-core-client][48]                    | [EPL 2.0][37]; [GPL2 w/ CPE][38]; [EDL 1.0][41]; [BSD 2-Clause][42]; [Apache License, 2.0][12]; [Public Domain][39]; [Modified BSD][43]; [jQuery license][44]; [MIT license][45]; [W3C license][46] |
-| [Apache Avro Mapred API][49]                | [Apache License, Version 2.0][3]                                                                                                                                                                    |
+| [Apache Avro Mapred API][49]                | [Apache-2.0][3]                                                                                                                                                                                     |
 
 ### Test Dependencies
 
@@ -78,16 +78,16 @@
 | [org.sonatype.ossindex.maven:ossindex-maven-plugin][7] | [ASL2][8]                                     |
 | [Maven Surefire Plugin][9]                             | [Apache-2.0][3]                               |
 | [Versions Maven Plugin][10]                            | [Apache License, Version 2.0][3]              |
-| [duplicate-finder-maven-plugin Maven Mojo][11]         | [Apache License 2.0][12]                      |
-| [Maven Failsafe Plugin][70]                            | [Apache-2.0][3]                               |
+| [duplicate-finder-maven-plugin Maven Mojo][70]         | [Apache License 2.0][12]                      |
+| [Maven Failsafe Plugin][71]                            | [Apache-2.0][3]                               |
 | [JaCoCo :: Maven Plugin][13]                           | [Eclipse Public License 2.0][14]              |
 | [error-code-crawler-maven-plugin][15]                  | [MIT License][16]                             |
 | [Reproducible Build Maven Plugin][17]                  | [Apache 2.0][8]                               |
 | [OpenFastTrace Maven Plugin][18]                       | [GNU General Public License v3.0][19]         |
-| [spotless-maven-plugin][71]                            | [The Apache Software License, Version 2.0][3] |
-| [scalafix-maven-plugin][72]                            | [BSD-3-Clause][73]                            |
+| [spotless-maven-plugin][72]                            | [The Apache Software License, Version 2.0][3] |
+| [scalafix-maven-plugin][73]                            | [BSD-3-Clause][74]                            |
 | [Maven Clean Plugin][20]                               | [The Apache Software License, Version 2.0][8] |
-| [Maven Resources Plugin][74]                           | [The Apache Software License, Version 2.0][8] |
+| [Maven Resources Plugin][75]                           | [The Apache Software License, Version 2.0][8] |
 | [Maven Install Plugin][21]                             | [The Apache Software License, Version 2.0][8] |
 | [Maven Site Plugin 3][22]                              | [The Apache Software License, Version 2.0][8] |
 
@@ -97,27 +97,28 @@
 
 | Dependency                                  | License                           |
 | ------------------------------------------- | --------------------------------- |
-| [Scala Library][75]                         | [Apache-2.0][34]                  |
+| [Scala Library][76]                         | [Apache-2.0][34]                  |
 | [spark-connector-common-java][29]           | [MIT License][30]                 |
 | [Spark Project Core][31]                    | [Apache 2.0 License][12]          |
 | [Spark Project SQL][31]                     | [Apache 2.0 License][12]          |
 | Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][3]  |
 | [Netty/All-in-One][33]                      | [Apache License, Version 2.0][34] |
-| [AWS Java SDK :: Services :: Amazon S3][76] | [Apache License, Version 2.0][77] |
+| [AWS Java SDK :: Services :: Amazon S3][77] | [Apache License, Version 2.0][78] |
 | Apache Hadoop Amazon Web Services support   | [Apache License, Version 2.0][3]  |
 
 ### Test Dependencies
 
 | Dependency                                      | License                           |
 | ----------------------------------------------- | --------------------------------- |
-| [JUnit Jupiter (Aggregator)][78]                | [Eclipse Public License v2.0][79] |
-| [JUnit Jupiter API][78]                         | [Eclipse Public License v2.0][79] |
+| [JUnit Jupiter (Aggregator)][79]                | [Eclipse Public License v2.0][80] |
+| [JUnit Jupiter API][79]                         | [Eclipse Public License v2.0][80] |
 | [Test Database Builder for Java][58]            | [MIT License][59]                 |
 | [Matcher for SQL Result Sets][60]               | [MIT License][61]                 |
 | [Test containers for Exasol on Docker][62]      | [MIT License][63]                 |
-| [Testcontainers :: JUnit Jupiter Extension][80] | [MIT][81]                         |
-| [Testcontainers :: Localstack][80]              | [MIT][81]                         |
-| [AWS Java SDK for Amazon S3][76]                | [Apache License, Version 2.0][77] |
+| [Testcontainers :: JUnit Jupiter Extension][81] | [MIT][82]                         |
+| [mockito-junit-jupiter][53]                     | [The MIT License][54]             |
+| [Testcontainers :: Localstack][81]              | [MIT][82]                         |
+| [AWS Java SDK for Amazon S3][77]                | [Apache License, Version 2.0][78] |
 
 ### Plugin Dependencies
 
@@ -132,15 +133,15 @@
 | [Maven Surefire Plugin][9]                             | [Apache-2.0][3]                               |
 | [Versions Maven Plugin][10]                            | [Apache License, Version 2.0][3]              |
 | [Apache Maven Shade Plugin][69]                        | [Apache License, Version 2.0][3]              |
-| [duplicate-finder-maven-plugin Maven Mojo][11]         | [Apache License 2.0][12]                      |
-| [Maven Failsafe Plugin][70]                            | [Apache-2.0][3]                               |
+| [duplicate-finder-maven-plugin Maven Mojo][70]         | [Apache License 2.0][12]                      |
+| [Maven Failsafe Plugin][71]                            | [Apache-2.0][3]                               |
 | [JaCoCo :: Maven Plugin][13]                           | [Eclipse Public License 2.0][14]              |
 | [error-code-crawler-maven-plugin][15]                  | [MIT License][16]                             |
 | [Reproducible Build Maven Plugin][17]                  | [Apache 2.0][8]                               |
 | [OpenFastTrace Maven Plugin][18]                       | [GNU General Public License v3.0][19]         |
 | [Maven Clean Plugin][20]                               | [The Apache Software License, Version 2.0][8] |
-| [Maven Resources Plugin][74]                           | [The Apache Software License, Version 2.0][8] |
-| [Maven JAR Plugin][82]                                 | [The Apache Software License, Version 2.0][8] |
+| [Maven Resources Plugin][75]                           | [The Apache Software License, Version 2.0][8] |
+| [Maven JAR Plugin][83]                                 | [The Apache Software License, Version 2.0][8] |
 | [Maven Install Plugin][21]                             | [The Apache Software License, Version 2.0][8] |
 | [Maven Site Plugin 3][22]                              | [The Apache Software License, Version 2.0][8] |
 
@@ -155,7 +156,7 @@
 [8]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [9]: https://maven.apache.org/surefire/maven-surefire-plugin/
 [10]: https://www.mojohaus.org/versions/versions-maven-plugin/
-[11]: https://github.com/basepom/duplicate-finder-maven-plugin
+[11]: https://basepom.github.io/duplicate-finder-maven-plugin
 [12]: http://www.apache.org/licenses/LICENSE-2.0.html
 [13]: https://www.jacoco.org/jacoco/trunk/doc/maven.html
 [14]: https://www.eclipse.org/legal/epl-2.0/
@@ -214,16 +215,17 @@
 [67]: https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
 [68]: https://maven.apache.org/plugins/maven-jar-plugin/
 [69]: https://maven.apache.org/plugins/maven-shade-plugin/
-[70]: https://maven.apache.org/surefire/maven-failsafe-plugin/
-[71]: https://github.com/diffplug/spotless
-[72]: https://github.com/evis/scalafix-maven-plugin
-[73]: https://opensource.org/licenses/BSD-3-Clause
-[74]: http://maven.apache.org/plugins/maven-resources-plugin/
-[75]: https://www.scala-lang.org/
-[76]: https://aws.amazon.com/sdkforjava
-[77]: https://aws.amazon.com/apache2.0
-[78]: https://junit.org/junit5/
-[79]: https://www.eclipse.org/legal/epl-v20.html
-[80]: https://testcontainers.org
-[81]: http://opensource.org/licenses/MIT
-[82]: http://maven.apache.org/plugins/maven-jar-plugin/
+[70]: https://github.com/basepom/duplicate-finder-maven-plugin
+[71]: https://maven.apache.org/surefire/maven-failsafe-plugin/
+[72]: https://github.com/diffplug/spotless
+[73]: https://github.com/evis/scalafix-maven-plugin
+[74]: https://opensource.org/licenses/BSD-3-Clause
+[75]: http://maven.apache.org/plugins/maven-resources-plugin/
+[76]: https://www.scala-lang.org/
+[77]: https://aws.amazon.com/sdkforjava
+[78]: https://aws.amazon.com/apache2.0
+[79]: https://junit.org/junit5/
+[80]: https://www.eclipse.org/legal/epl-v20.html
+[81]: https://testcontainers.org
+[82]: http://opensource.org/licenses/MIT
+[83]: http://maven.apache.org/plugins/maven-jar-plugin/
