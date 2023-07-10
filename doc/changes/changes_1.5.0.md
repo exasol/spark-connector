@@ -27,6 +27,7 @@ Code name:
 * #164: Validated that write directory is empty
 * #171: Refactored artifact packaging and releasing for module setup
 * #174: Refactored Github `.github/workflow/` action files
+* #183: Updated user guide and prepared for release
 
 ## Dependency Updates
 
