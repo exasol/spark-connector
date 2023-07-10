@@ -7,7 +7,9 @@ Exasol tables.
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-- [Spark Exasol Connector as Dependency](#spark-exasol-connector-as-dependency)
+- [Prerequisite](#prerequisite)
+- [Versioning](#versioning)
+- [Using as Dependency](#using-as-dependency)
 - [Configuration Parameters](#configuration-options)
 - [Creating a Spark DataFrame From Exasol Query](#creating-a-spark-dataframe-from-exasol-query)
 - [Saving Spark DataFrame to an Exasol Table](#saving-spark-dataframe-to-an-exasol-table)
@@ -41,7 +43,7 @@ Each version has parts for Scala version, connector version and target Spark run
 
 For example, `spark-connector-s3_2.13:2.0.0-spark-3.4.1` artifact shows that it is for S3 variant, released with Scala 2.13 version, connector release version is `2.0.0` and it is released for Spark `3.4.1` runtime.
 
-## Spark Exasol Connector as Dependency
+## Using as Dependency
 
 We release the Spark Exasol Connector the Maven Central Repository. With that, you could include it as dependency to your Spark applications.
 
