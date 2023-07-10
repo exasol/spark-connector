@@ -395,6 +395,23 @@ Additionally, a Spark save operation takes optional `SaveMode` configurations.
 Please keep in mind that Spark Save Modes do not use any locking mechanisms,
 thus they are not atomic.
 
+## Using S3 Intermediate Layer
+
+You could also use AWS S3 as an intermediate storage layer together with the connector.
+
+For that you need to provide additional `AWS` related parameters.
+
+| Parameter             | Default            | Required | Description                                                         |
+|-----------------------|:------------------:|:--------:|-------------------------------------------------------------------- |
+| `s3Bucket`            |                    |    ✓     | A bucket name for intermediate storage                              |
+| `awsAccessKeyId`      |                    |    ✓     | AWS Access Key for accessing bucket                                 |
+| `awsSecretAccessKey`  |                    |    ✓     | AWS Secret Key for accessing bucket                                 |
+| `numPartitions`       | `8`                |          | Number of partitions that will match number of files in `S3` bucket |
+| `awsRegion`           | `us-east-1`        |          | AWS Region for provided bucket                                      |
+| `awsEndpointOverride` | (default endpoint) |          | AWS S3 Endpoint for bucket, set this value for custom endpoints     |
+| `s3PathStyleAccess`   | `false`            |          | Path style access for bucket, set this value for custom S3 buckets  |
+| `useSsl`              | `true`             |          | Enable HTTPS client access for S3 bucket                            |
+
 ## Troubleshooting
 
 In this section, we explain common issues and pitfalls when using Spark Exasol
