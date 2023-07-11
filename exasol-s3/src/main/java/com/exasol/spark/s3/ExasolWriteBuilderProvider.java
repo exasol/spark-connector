@@ -18,7 +18,6 @@ import com.exasol.spark.common.ExasolValidationException;
 import com.exasol.spark.common.Option;
 
 import scala.collection.JavaConverters;
-import scala.collection.immutable.Seq;
 
 /**
  * A class that provides {@link WriteBuilder} instance.
@@ -122,8 +121,8 @@ public final class ExasolWriteBuilderProvider {
         };
     }
 
-    private Seq<String> getS3WritePath(final String path) {
-        return JavaConverters.asScalaIteratorConverter(Arrays.asList(path).iterator()).asScala().toSeq();
+    private scala.collection.immutable.List<String> getS3WritePath(final String path) {
+        return JavaConverters.asScalaIteratorConverter(Arrays.asList(path).iterator()).asScala().toList();
     }
 
 }
