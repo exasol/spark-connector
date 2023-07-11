@@ -81,17 +81,19 @@ Please do not forget to update the `<VERSION>` placeholder with one of the lates
 
 ### Using as Databricks Cluster Dependency
 
-Similar to using maven, you should provide maven artifact coordinates to the [Databricks Workspace Library](https://docs.databricks.com/libraries/workspace-libraries.html#maven-libraries).
+You could upload assembled jar file or provide maven artifact coordinates to the [Databricks Workspace Library](https://docs.databricks.com/libraries/workspace-libraries.html#maven-libraries).
 
-Here as an example for S3 variant.
-
-<img alt="databricks-deployment" src="../images/databricks-deployment.png"/>
-
-Go to your cluster, then to `Libraries`, and click `Install New`:
-
+- Go to Azure &rarr; Databricks &rarr; Workspace &rarr; Clusters
+- Go to Libraries &rarr; and click Install New
 - Select Maven as a `Library Source`
-- In the `Coordinates` field, enter artifact coordinates `com.exasol:spark-connector-s3_2.13:<VERSION>`. Please note that we use the Scala version 2.13. Please refer to releases if you require Scala version 2.12.
+- In the `Coordinates` field, enter artifact coordinates `com.exasol:spark-connector-s3_2.13:<VERSION>`. Please note that we use the Scala version 2.13. Please refer to releases if you require Scala version 2.12. This should match the Spark cluster runtime Scala version.
 - Click `Install`
+
+Similar to above steps you could also upload assembled jar file.
+
+- Select Upload as `Library Source`
+- Jar as a `Library Type`
+- Drop the jar file and click to `Install`
 
 ### Using With Spark Shell
 
