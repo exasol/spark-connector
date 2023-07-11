@@ -43,6 +43,17 @@ Each version has parts for Scala version, connector version and target Spark run
 
 For example, `spark-connector-s3_2.13:2.0.0-spark-3.4.1` artifact shows that it is for S3 variant, released with Scala 2.13 version, connector release version is `2.0.0` and it is released for Spark `3.4.1` runtime.
 
+## Format
+
+For creating a Spark dataframe, you should provide the `format`.
+
+For example, when reading froma a source `spark.read.format(<FORMAT>)...`.
+
+Depending on the connector variant, use the following formats:
+
+- JDBC &mdash; `exasol-jdbc`
+- S3 &mdash; `exasol-s3`
+
 ## Using as Dependency
 
 We release the Spark Exasol Connector the Maven Central Repository. With that, you could include it as dependency to your Spark applications.
@@ -93,7 +104,8 @@ Similar to above steps you could also upload assembled jar file.
 
 - Select Upload as `Library Source`
 - Jar as a `Library Type`
-- Drop the jar file and click to `Install`
+- Drop the **assembled** jar (with `-assembly` suffix) file
+- Click to `Install`
 
 ### Using With Spark Shell
 
@@ -210,13 +222,12 @@ When using the `S3` variant of the connector you should provide the following ad
 
 These are required configuration parameters so that the connector can authenticate itself with the Exasol database.
 
-Provide the configuration options when creating a dataframe from an Exasol
-query:
+Provide the configuration options when creating a dataframe from an Exasol query:
 
 ```scala
 val exasolDF = sparkSession
   .read
-  .format("exasol")
+  .format("exasol-jdbc")
   .option("host", "10.0.0.11")
   .option("port", "8563")
   .option("username", "<USERNAME>")
@@ -274,7 +285,7 @@ Providing configurations parameters with `spark-submit` has a higher precedence 
 
 You can query the Exasol database and load the results of the query into a Spark dataframe.
 
-For that specify the data source format as `"exasol"` and provide the required configurations.
+For that specify the data source format and provide the required configurations.
 
 As an example we query two retail tables from the Exasol database:
 
@@ -295,7 +306,7 @@ Create a dataframe from the query result:
 ```scala
 val df = sparkSession
   .read
-  .format("exasol")
+  .format("exasol-jdbc")
   .option("host", "10.0.0.11")
   .option("port", "8563")
   .option("username", "<USERNAME>")
@@ -336,7 +347,7 @@ You can also save the Spark dataframe into an Exasol table:
 groupedDF
   .write
   .mode("overwrite")
-  .format("exasol")
+  .format("exasol-jdbc")
   .option("host", "10.0.0.11")
   .option("port", "8563")
   .option("username", "<USERNAME>")
