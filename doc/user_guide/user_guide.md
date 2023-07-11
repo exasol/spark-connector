@@ -9,6 +9,7 @@ Exasol tables.
 - [Getting Started](#getting-started)
 - [Prerequisite](#prerequisite)
 - [Versioning](#versioning)
+- [Format](#format)
 - [Using as Dependency](#using-as-dependency)
 - [Configuration Parameters](#configuration-options)
 - [Creating a Spark DataFrame From Exasol Query](#creating-a-spark-dataframe-from-exasol-query)
@@ -51,8 +52,8 @@ For example, when reading froma a source `spark.read.format(<FORMAT>)...`.
 
 Depending on the connector variant, use the following formats:
 
-- JDBC &mdash; `exasol-jdbc`
-- S3 &mdash; `exasol-s3`
+- JDBC &mdash; `"exasol-jdbc"`
+- S3 &mdash; `"exasol-s3"`
 
 ## Using as Dependency
 
