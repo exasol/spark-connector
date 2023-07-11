@@ -87,7 +87,7 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
                 this.properties, //
                 getCSVFiles(bucket, bucketKey), //
                 scala.Option.apply(this.schema), //
-                new CSVFileFormat().getClass() //
+                CSVFileFormat.class //
         ).newScanBuilder(getUpdatedMapWithCSVOptions(this.properties)).build();
     }
 
