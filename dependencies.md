@@ -74,10 +74,10 @@
 | [ScalaTest Maven Plugin][67]                           | [the Apache License, ASL Version 2.0][51]     |
 | [Apache Maven JAR Plugin][68]                          | [Apache License, Version 2.0][3]              |
 | [Apache Maven Deploy Plugin][6]                        | [Apache-2.0][3]                               |
-| [Apache Maven Shade Plugin][69]                        | [Apache License, Version 2.0][3]              |
 | [org.sonatype.ossindex.maven:ossindex-maven-plugin][7] | [ASL2][8]                                     |
 | [Maven Surefire Plugin][9]                             | [Apache-2.0][3]                               |
 | [Versions Maven Plugin][10]                            | [Apache License, Version 2.0][3]              |
+| [Apache Maven Shade Plugin][69]                        | [Apache License, Version 2.0][3]              |
 | [duplicate-finder-maven-plugin Maven Mojo][70]         | [Apache License 2.0][12]                      |
 | [Maven Failsafe Plugin][71]                            | [Apache-2.0][3]                               |
 | [JaCoCo :: Maven Plugin][13]                           | [Eclipse Public License 2.0][14]              |
@@ -105,19 +105,20 @@
 | [Netty/All-in-One][33]                      | [Apache License, Version 2.0][34] |
 | [AWS Java SDK :: Services :: Amazon S3][77] | [Apache License, Version 2.0][78] |
 | Apache Hadoop Amazon Web Services support   | [Apache License, Version 2.0][3]  |
+| [wildfly-openssl][79]                       | [Apache License 2.0][80]          |
 
 ### Test Dependencies
 
 | Dependency                                      | License                           |
 | ----------------------------------------------- | --------------------------------- |
-| [JUnit Jupiter (Aggregator)][79]                | [Eclipse Public License v2.0][80] |
-| [JUnit Jupiter API][79]                         | [Eclipse Public License v2.0][80] |
+| [JUnit Jupiter (Aggregator)][81]                | [Eclipse Public License v2.0][82] |
+| [JUnit Jupiter API][81]                         | [Eclipse Public License v2.0][82] |
 | [Test Database Builder for Java][58]            | [MIT License][59]                 |
 | [Matcher for SQL Result Sets][60]               | [MIT License][61]                 |
 | [Test containers for Exasol on Docker][62]      | [MIT License][63]                 |
-| [Testcontainers :: JUnit Jupiter Extension][81] | [MIT][82]                         |
+| [Testcontainers :: JUnit Jupiter Extension][83] | [MIT][84]                         |
 | [mockito-junit-jupiter][53]                     | [The MIT License][54]             |
-| [Testcontainers :: Localstack][81]              | [MIT][82]                         |
+| [Testcontainers :: Localstack][83]              | [MIT][84]                         |
 | [AWS Java SDK for Amazon S3][77]                | [Apache License, Version 2.0][78] |
 
 ### Plugin Dependencies
@@ -141,7 +142,7 @@
 | [OpenFastTrace Maven Plugin][18]                       | [GNU General Public License v3.0][19]         |
 | [Maven Clean Plugin][20]                               | [The Apache Software License, Version 2.0][8] |
 | [Maven Resources Plugin][75]                           | [The Apache Software License, Version 2.0][8] |
-| [Maven JAR Plugin][83]                                 | [The Apache Software License, Version 2.0][8] |
+| [Maven JAR Plugin][85]                                 | [The Apache Software License, Version 2.0][8] |
 | [Maven Install Plugin][21]                             | [The Apache Software License, Version 2.0][8] |
 | [Maven Site Plugin 3][22]                              | [The Apache Software License, Version 2.0][8] |
 
@@ -224,8 +225,10 @@
 [76]: https://www.scala-lang.org/
 [77]: https://aws.amazon.com/sdkforjava
 [78]: https://aws.amazon.com/apache2.0
-[79]: https://junit.org/junit5/
-[80]: https://www.eclipse.org/legal/epl-v20.html
-[81]: https://testcontainers.org
-[82]: http://opensource.org/licenses/MIT
-[83]: http://maven.apache.org/plugins/maven-jar-plugin/
+[79]: http://www.jboss.org/wildfly-openssl-parent/wildfly-openssl
+[80]: http://repository.jboss.org/licenses/apache-2.0.txt
+[81]: https://junit.org/junit5/
+[82]: https://www.eclipse.org/legal/epl-v20.html
+[83]: https://testcontainers.org
+[84]: http://opensource.org/licenses/MIT
+[85]: http://maven.apache.org/plugins/maven-jar-plugin/
