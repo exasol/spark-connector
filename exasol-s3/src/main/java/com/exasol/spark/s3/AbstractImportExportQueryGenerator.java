@@ -48,10 +48,10 @@ public abstract class AbstractImportExportQueryGenerator {
     }
 
     private String getS3Endpoint() {
-        String override =  this.options.get(Option.S3_ENDPOINT_OVERRIDE.key());
-        if (override == null) {
+        if (!this.options.containsKey(Option.S3_ENDPOINT_OVERRIDE.key())) {
             return DEFAULT_S3_ENDPOINT;
         }
+        final String override = this.options.get(Option.S3_ENDPOINT_OVERRIDE.key());
         if (this.options.hasEnabled(Option.REPLACE_LOCALHOST_BY_DEFAULT_S3_ENDPOINT.key())) {
             return override.replace("localhost", DEFAULT_S3_ENDPOINT);
         }
