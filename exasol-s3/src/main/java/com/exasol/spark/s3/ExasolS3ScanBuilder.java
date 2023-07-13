@@ -22,7 +22,6 @@ import com.exasol.spark.common.ExasolOptions;
 import com.exasol.spark.common.ExasolValidationException;
 
 import scala.collection.JavaConverters;
-import scala.collection.immutable.Seq;
 
 /**
  * A class that implements {@link ScanBuilder} interface for accessing {@code S3} intermediate storage.
@@ -83,9 +82,13 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
         addSparkCleanupJobListener(sparkSession, bucketKey);
         prepareIntermediateData(bucketKey);
         // Uses Spark `CSVTable` to read `CSV` files
-        final Seq<String> csvFilesPaths = getCSVFiles(bucket, bucketKey);
-        return new CSVTable("", sparkSession, this.properties, csvFilesPaths, scala.Option.apply(this.schema),
-                new CSVFileFormat().getClass()).newScanBuilder(getUpdatedMapWithCSVOptions(this.properties)).build();
+        return new CSVTable("", //
+                sparkSession, //
+                this.properties, //
+                getCSVFiles(bucket, bucketKey), //
+                scala.Option.apply(this.schema), //
+                CSVFileFormat.class //
+        ).newScanBuilder(getUpdatedMapWithCSVOptions(this.properties)).build();
     }
 
     private String generateRandomBucketKey(final SparkSession sparkSession) {
@@ -96,9 +99,9 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
         spark.sparkContext().addSparkListener(new S3CleanupListener(this.options, bucketKey));
     }
 
-    private Seq<String> getCSVFiles(final String bucket, final String bucketKey) {
+    private scala.collection.immutable.List<String> getCSVFiles(final String bucket, final String bucketKey) {
         final String path = "s3a://" + Paths.get(bucket, bucketKey, "*.csv").toString();
-        return JavaConverters.asScalaIteratorConverter(Arrays.asList(path).iterator()).asScala().toSeq();
+        return JavaConverters.collectionAsScalaIterableConverter(Arrays.asList(path)).asScala().toList();
     }
 
     private CaseInsensitiveStringMap getUpdatedMapWithCSVOptions(final CaseInsensitiveStringMap map) {

@@ -27,6 +27,7 @@ Code name:
 * #164: Validated that write directory is empty
 * #171: Refactored artifact packaging and releasing for module setup
 * #174: Refactored Github `.github/workflow/` action files
+* #183: Updated user guide and prepared for release
 
 ## Dependency Updates
 
@@ -106,8 +107,9 @@ Code name:
 #### Compile Dependency Updates
 
 * Added `com.exasol:spark-connector-common-java:1.1.1`
-* Added `org.apache.hadoop:hadoop-aws:3.3.6`
+* Added `org.apache.hadoop:hadoop-aws:3.3.4`
 * Added `org.scala-lang:scala-library:2.13.11`
+* Added `org.wildfly.openssl:wildfly-openssl:2.2.5.Final`
 * Added `software.amazon.awssdk:s3:2.20.100`
 
 #### Test Dependency Updates

@@ -6,10 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        profile: [ '-Pspark3.4', '-Pspark3.3', '-Pspark3.3-scala2.12' ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -24,7 +20,7 @@ jobs:
       - name: Enable testcontainer reuse
         run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
       - name: Run tests and build with Maven
-        run: mvn --batch-mode clean verify ${{ matrix.profile }}
+        run: mvn --batch-mode clean verify
       - name: Prepare checksum
         run: find */target -maxdepth 1 -name *.jar -exec sha256sum "{}" + > original_checksum
       - name: Upload checksum to the artifactory

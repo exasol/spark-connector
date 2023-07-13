@@ -353,27 +353,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.ossindex.maven</groupId>
-                <artifactId>ossindex-maven-plugin</artifactId>
-                <configuration>
-                    <excludeVulnerabilityIds>
-                        <!-- excluded vulnerabilities for profile spark 3.3 -->
-                        <!-- XXE attack in command line tool "hdfs ec"; not used by the connector -->
-                        <exclude>sonatype-2022-5732</exclude>
-                        <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') from jackson-core:2.13.4 -->
-                        <exclude>sonatype-2022-6438</exclude>
-                        <!-- org.apache.spark:spark-core_2.12:jar:3.3.2: CWE-269: Improper Privilege Management (6.4); https://ossindex.sonatype.org/vulnerability/CVE-2023-22946 -->
-                        <!-- This from the spark-code_2.12 version, which we release using profiles below. -->
-                        <exclude>CVE-2023-22946</exclude>
-                        <!-- CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion') (7.5); from org.apache.spark:spark-sql_${spark.version} -->
-                        <exclude>CVE-2023-33546</exclude>
-                        <!-- com.fasterxml.jackson.core:jackson-databind:jar:2.13.4.2:provided -->
-                        <!-- [CVE-2023-35116] CWE-121: Stack-based Buffer Overflow (7.5); https://ossindex.sonatype.org/vulnerability/CVE-2023-35116 -->
-                        <exclude>CVE-2023-35116</exclude>
-                    </excludeVulnerabilityIds>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.basepom.maven</groupId>
                 <artifactId>duplicate-finder-maven-plugin</artifactId>
                 <configuration>
