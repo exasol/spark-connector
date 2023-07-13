@@ -24,7 +24,7 @@ Depending on the variant you are using, some usage requirements may change.
 
 ## Prerequisite
 
-To use the connector, you will need running Exasol cluster with a version `7.1` or above. Similarly, you will need a Spark cluster running with a version `2.4.1` or later. We also support earlier versions of Spark runtime, for that please check out the releases page for corresponding connector version.
+To use the connector, you will need a running Exasol cluster with version `7.1` or above. Similarly, you will need a Spark cluster running with version `2.4.1` or later. We also support earlier versions of Spark runtime, for that please check out the releases page for corresponding connector version.
 
 ### JDBC
 
@@ -34,11 +34,11 @@ Additionally, please make sure that the Exasol nodes are reachable from the Spar
 
 ### S3
 
-When using with S3 intermediate storage please make sure that there is access to S3 bucket. And please prepare AWS access and secret keys with enough permissions for S3 bucket.
+When using with S3 intermediate storage please make sure that there is access to an S3 bucket. And please prepare AWS access and secret keys with enough permissions for the S3 bucket.
 
 ## Versioning
 
-The Spark Exasol connector is released for specific Spark version.
+The Spark Exasol connector is released for specific Spark versions.
 
 Each version has parts for Scala version, connector version and target Spark runtime version.
 
@@ -48,7 +48,7 @@ For example, `spark-connector-s3_2.13:2.0.0-spark-3.4.1` artifact shows that it 
 
 For creating a Spark dataframe, you should provide the `format`.
 
-For example, when reading froma a source `spark.read.format(<FORMAT>)...`.
+For example, when reading from a source `spark.read.format(<FORMAT>)...`.
 
 Depending on the connector variant, use the following formats:
 
@@ -57,7 +57,7 @@ Depending on the connector variant, use the following formats:
 
 ## Using as Dependency
 
-We release the Spark Exasol Connector the Maven Central Repository. With that, you could include it as dependency to your Spark applications.
+We publish the Spark Exasol Connector to the Maven Central Repository. With that, you could include it as a dependency in your Spark applications.
 
 Here we show `Maven` dependency as an example, but you can find other ways of using the artifact on the [Maven Central Release](https://mvnrepository.com/artifact/com.exasol/spark-connector) page.
 
@@ -89,11 +89,11 @@ You can provide the connector as a dependency to your Spark Java applications.
 </dependencies>
 ```
 
-Please do not forget to update the `<VERSION>` placeholder with one of the latest Spark Exasol Connector releases.
+Please do not forget to update the `<VERSION>` placeholder with the latest Spark Exasol Connector releases.
 
 ### Using as Databricks Cluster Dependency
 
-You could upload assembled jar file or provide maven artifact coordinates to the [Databricks Workspace Library](https://docs.databricks.com/libraries/workspace-libraries.html#maven-libraries).
+You can upload the assembled jar file or provide maven artifact coordinates to the [Databricks Workspace Library](https://docs.databricks.com/libraries/workspace-libraries.html#maven-libraries).
 
 - Go to Azure &rarr; Databricks &rarr; Workspace &rarr; Clusters
 - Go to Libraries &rarr; and click Install New
@@ -101,22 +101,22 @@ You could upload assembled jar file or provide maven artifact coordinates to the
 - In the `Coordinates` field, enter artifact coordinates `com.exasol:spark-connector-s3_2.13:<VERSION>`. Please note that we use the Scala version 2.13. Please refer to releases if you require Scala version 2.12. This should match the Spark cluster runtime Scala version.
 - Click `Install`
 
-Similar to above steps you could also upload assembled jar file.
+Similar to above steps you could also upload the assembled jar file.
 
 - Select Upload as `Library Source`
 - Jar as a `Library Type`
-- Drop the **assembled** jar (with `-assembly` suffix) file
+- Drop the **assembled** jar file with `-assembly` suffix
 - Click to `Install`
 
 ### Using With Spark Shell
 
-You can also integrate the Spark Exasol Connector to the Spark Shell. Provide the artifact coordinates `--packages` parameters:
+You can also integrate the Spark Exasol Connector to the Spark Shell. Provide the artifact coordinates using the `--packages` parameter:
 
 ```sh
 spark-shell --packages com.exasol:spark-connector-s3_2.13:<VERSION>
 ```
 
-The `spark-shell` provides Read-Eval-Print-Loop (REPL) to interactively learn and experiment with the API.
+The `spark-shell` provides a Read-Eval-Print-Loop (REPL) to interactively learn and experiment with the API.
 
 ### Using With Spark Submit
 
@@ -128,7 +128,7 @@ Use the `spark-submit` command:
 spark-submit \
   --master spark://spark-master-url:7077 \
   --packages com.exasol:spark-connector-jdbc_2.13:<VERSION> \
-  --class com.organization.SparkApplication \
+  --class com.example.SparkApplication \
   path/to/spark_application.jar
 ```
 
@@ -138,7 +138,7 @@ Like `spark-shell` and `spark-submit`, you can also use `pyspark` and `sparkR` c
 
 ### Using as JAR Dependency
 
-Please check out the [releases](https://github.com/exasol/spark-connector/releases) page for already assembled jar file. Each release contains a jar file with `-assembly` suffix to that respective version.
+Please check out the [releases](https://github.com/exasol/spark-connector/releases) page for already assembled jar file. Each release contains a jar file with `-assembly` suffix to that respective version. This jar file contains all required dependencies as a "shaded jar".
 
 Then you can use this jar file with `spark-submit`, `spark-shell` or `pyspark` commands.
 
@@ -163,7 +163,7 @@ List of common required and optional parameters:
 | `username`     | `sys`       | A username for connecting to the Exasol database                                                 |
 | `password`     | `exasol`    | A password for connecting to the Exasol database                                                 |
 | `fingerprint`  | `""`        | A Exasol connection certificate fingerprint value                                                |
-| `jdbc_options` | `""`        | A string to specify the list of Exasol JDBC options using a `key1=value1;key2=value2` format     |
+| `jdbc_options` | `""`        | A string to specify the list of Exasol JDBC options using format `key1=value1;key2=value2`       |
 
 The `query` parameter is required when you are reading data from Exasol database. Likewise, the `table` parameter is required when you are writing to an Exasol table.
 
@@ -183,7 +183,7 @@ For more JDBC options please check the [Exasol JDBC documentation](https://docs.
 
 ### JDBC Related Configuration Options
 
-When using the `JDBC` variants you could additionally set these parameters.
+When using the `JDBC` variant you can additionally set these parameters:
 
 | Configuration  | Default     | Description                                                                                      |
 | :------------- | :---------- | :----------------------------------------------------------------------------------------------- |
@@ -202,7 +202,7 @@ If you set the `create_table` configuration to `true`, the connector will eagerl
 
 Setting the `max_nodes` value to a large number does not increase the connector parallelism. The number of parallel connections is always limited to the number of Exasol data nodes.
 
-However, you can use this configuration to decrease the parallelism. This can be helpful when debugging an issue. For example, you can set it to one and check if the behavior changes.
+However, you can use this configuration to decrease the parallelism. This can be helpful when debugging an issue. For example, you can set it to `1` and check if the behavior changes.
 
 ### S3 Related Configuration Options
 
@@ -300,7 +300,7 @@ val exasolQueryString = """
 """
 ```
 
-Please combine your Exasol queries into a single query string and load the result into the Spark DataFrame. This helps to reduce the additional network overhead.
+Please combine your Exasol queries into a single query and load the result into the Spark DataFrame. This helps to reduce the additional network overhead.
 
 Create a dataframe from the query result:
 
@@ -389,7 +389,7 @@ For instance, an Exasol cluster has three data nodes, and a Spark cluster has on
 
 The spark dataframe `.show()` action is one of the operations that fails because of the problems described in the previous section.
 
-We recommend using the `collect()` operation with combination SQL `LIMIT` clause instead.
+We recommend using the `collect()` operation in combination with the SQL `LIMIT` clause instead.
 
 For example, add a limit clause to the Exasol query:
 
