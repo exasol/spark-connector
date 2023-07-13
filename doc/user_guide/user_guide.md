@@ -7,7 +7,6 @@ Exasol tables.
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-- [Prerequisite](#prerequisite)
 - [Versioning](#versioning)
 - [Format](#format)
 - [Using as Dependency](#using-as-dependency)
@@ -20,11 +19,9 @@ Exasol tables.
 
 The Spark Exasol connector has two variants, one for using with Exasol `JDBC` sub-connections and one for using with AWS `S3` as intermediate storage.
 
-Depending on the variant you are using, some usage requirements may change.
+We recommend to use the connector with `S3` storage layer, because this version improves several shortcomings of `JDBC` variant. The JDBC sub-connections version are not reliably working when Spark uses dynamic resource scheduling. In other words, when there are limited resource on Spark clusters, using S3 version of connector is better.
 
-## Prerequisite
-
-To use the connector, you will need a running Exasol cluster with version `7.1` or above. Similarly, you will need a Spark cluster running with version `2.4.1` or later. We also support earlier versions of Spark runtime, for that please check out the releases page for corresponding connector version.
+Depending on the variant you are using, some usage requirements may change. For example, for JDBC the `host` parameter should be the first datanode address.
 
 ### JDBC
 
