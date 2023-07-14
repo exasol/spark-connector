@@ -299,7 +299,7 @@ val exasolQueryString = """
 
 Please combine your Exasol queries into a single query and load the result into the Spark DataFrame. This helps to reduce the additional network overhead.
 
-Create a dataframe from the query result:
+Create a dataframe from the query result using JDBC variant:
 
 ```scala
 val df = sparkSession
@@ -310,6 +310,24 @@ val df = sparkSession
   .option("username", "<USERNAME>")
   .option("password", "<PASSWORD>")
   .option("query", exasolQueryString)
+  .load()
+```
+
+Using S3 variant:
+
+```scala
+val df = spark
+  .read
+  .format("exasol-s3")
+  .option("host", "10.10.0.2")
+  .option("port", "8563")
+  .option("username", "<USERNAME>")
+  .option("password", "<PASSWORD>")
+  .option("query", exasolQueryString)
+  .option("awsAccessKeyId", "<ACCESSKEY>")
+  .option("awsSecretAccessKey", "<SECRETKEY>")
+  .option("s3Bucket", "spark-s3-bucket")
+  .option("awsRegion", "eu-central-1")
   .load()
 ```
 
@@ -350,7 +368,6 @@ groupedDF
   .option("port", "8563")
   .option("username", "<USERNAME>")
   .option("password", "<PASSWORD>")
-  .option("create_table", "true")
   .option("table", "<schema>.<table>")
   .save()
 ```
