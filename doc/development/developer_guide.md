@@ -1,28 +1,37 @@
 # Developer Guide
 
-Please read the general [developer guide for the Scala projects][dev-guide].
+## S3 Write Path Validation
+
+When using S3 storage as intermediate layer, we generate a S3 bucket path for intermediate data. The generated path is checked that it is empty before writing data.
+
+The path layout:
+
+```
+userProvidedS3Bucket/
+└── <UUID>-<SparkApplicationId>/
+    └── <SparkQueryId>/
+```
+
+The generated intermediate write path `<UUID>-<SparkApplicationId>/<SparkQueryId>/` is validated that it is empty before write. And it is cleaned up after the write query finishes.
+
+## S3 Staging Commit Process
+
+The Spark job that writes data to Exasol uses an AWS S3 bucket as intermediate storage. In this process, the `ExasolS3Table` API implementation uses Spark [`CSVTable`](https://github.com/apache/spark/blob/master/sql/core/src/main/scala/org/apache/spark/sql/execution/datasources/v2/csv/CSVTable.scala) writer to create files in S3.
+
+The write process continues as following:
+
+1. We ask Spark's `CSVTable` to commit data into S3 bucket
+1. We commit to import this data into Exasol database using Exasol's `CSV` loader
+1. And finally we ask our `ExasolS3Table` API implementation to commit the write process
+
+If any failure occurs, each step will trigger the `abort` method and S3 bucket locations will be cleaned up. If job finishes successfully, the Spark job end listener will trigger the cleanup process.
+
+## S3 Maximum Number of Files
+
+For the write Spark jobs, we allow maximum of `1000` CSV files to be written as intermediate data into S3 bucket. The main reason for this is that S3 SDK `listObjects` command returns up to 1000 objects from a bucket path per each request.
+
+Even though we could improve it to list more objects from S3 bucket with multiple requests, we wanted to keep this threshold for now.
 
 ## Integration Tests
 
-The integration tests are run using [Docker][docker] containers. The tests use
-[exasol-testcontainers][exa-testcontainers] and
-[spark-testing-base][spark-testing-base].
-
-[docker]: https://www.docker.com/
-[exa-testcontainers]: https://github.com/exasol/exasol-testcontainers/
-[spark-testing-base]: https://github.com/holdenk/spark-testing-base
-[dev-guide]: https://github.com/exasol/import-export-udf-common-scala/blob/master/doc/development/developer_guide.md
-
-## Release
-
-Currently [release-droid](https://github.com/exasol/release-droid) has some troubles releasing the spark connector.
-
-* **Validation**: When using the local folder with `release-droid -l .` then validation failes with error message `NumberFormatException for input string: "v0"`.<br />
-Please validate spark-connector without option `-l .`.<br />
-See also [release-droid/issue/245](https://github.com/exasol/release-droid/issues/245).
-* **Language Java**: Although spark-connector contains scala code as well, there also is a pom file, though.<br />
-In order to publish spark-connector to maven central using language "Java" is correct.
-* For **releasing** spark-connector you should use
-```
-java -jar path/to/release-droid-*.jar" -n spark-connector -lg Java -g release
-```
+The integration tests are run using [Docker](https://www.docker.com) and [exasol-testcontainers](https://github.com/exasol/exasol-testcontainers/)
