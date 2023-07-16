@@ -116,11 +116,11 @@ Please refer to the user guide for updated usage instructions.
 * Added `org.apache.hadoop:hadoop-aws:3.3.4`
 * Added `org.scala-lang:scala-library:2.13.11`
 * Added `org.wildfly.openssl:wildfly-openssl:2.2.5.Final`
-* Added `software.amazon.awssdk:s3:2.20.100`
+* Added `software.amazon.awssdk:s3:2.20.103`
 
 #### Test Dependency Updates
 
-* Added `com.amazonaws:aws-java-sdk-s3:1.12.503`
+* Added `com.amazonaws:aws-java-sdk-s3:1.12.506`
 * Added `com.exasol:exasol-testcontainers:6.6.1`
 * Added `com.exasol:hamcrest-resultset-matcher:1.6.0`
 * Added `com.exasol:test-db-builder-java:3.4.2`
