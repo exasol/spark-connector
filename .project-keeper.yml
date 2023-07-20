@@ -4,6 +4,7 @@ sources:
   - type: maven
     path: exasol-jdbc/pom.xml
     modules:
+      - maven_central
       - integration_tests
     parentPom:
       groupId: "com.exasol"
@@ -13,6 +14,7 @@ sources:
   - type: maven
     path: exasol-s3/pom.xml
     modules:
+      - maven_central
       - integration_tests
     parentPom:
       groupId: "com.exasol"
