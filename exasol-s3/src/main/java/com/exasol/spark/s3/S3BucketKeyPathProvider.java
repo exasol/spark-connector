@@ -9,7 +9,7 @@ public interface S3BucketKeyPathProvider {
      * Returns an {@code S3} bucket key path for writing intermediate data.
      *
      * @param queryId Spark query identifier that started the write job
-     * return {@code S3} bucket key path for intermediate data
+     * @return {@code S3} bucket key path for intermediate data
      */
     public String getS3BucketKeyForWriteLocation(final String queryId);
 

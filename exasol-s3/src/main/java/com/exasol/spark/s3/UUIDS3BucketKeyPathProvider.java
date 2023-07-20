@@ -10,6 +10,11 @@ import java.util.UUID;
 public class UUIDS3BucketKeyPathProvider implements S3BucketKeyPathProvider {
     private final String applicationId;
 
+    /**
+     * Creates a new instance of {@link UUIDS3BucketKeyPathProvider}.
+     *
+     * @param applicationId Spark application identifier
+     */
     public UUIDS3BucketKeyPathProvider(final String applicationId) {
         this.applicationId = applicationId;
     }
