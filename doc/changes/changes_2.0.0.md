@@ -1,4 +1,4 @@
-# The Spark Exasol Connector 2.0.0, released 2023-07-18
+# The Spark Exasol Connector 2.0.0, released 2023-07-23
 
 Code name: Support S3 intermediate storage
 
@@ -8,7 +8,7 @@ In this release we added support to use AWS S3 bucket as an intermediate storage
 
 With this release, we separated the connector into two variants, `S3` and `JDBC`. We recommend to use this new S3 variant instead of JDBC variant. It improves the stability of the connector.
 
-Please refer to the user guide for updated usage instructions.
+Please refer to the user guide for updated API changes and usage instructions.
 
 ## Features
 
@@ -25,6 +25,7 @@ Please refer to the user guide for updated usage instructions.
 ## Bugs
 
 * #176: Fixed artifact upload of `sha256sum` files
+* #188: Fixed Maven Central deployment bug
 
 ## Refactoring
 
