@@ -1,4 +1,4 @@
-# The Spark Exasol Connector 2.0.0, released 2023-07-23
+# The Spark Exasol Connector 2.0.0, released 2023-07-20
 
 Code name: Support S3 intermediate storage
 
