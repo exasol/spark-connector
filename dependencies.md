@@ -70,24 +70,27 @@
 | [Apache Maven Compiler Plugin][2]                      | [Apache-2.0][3]                               |
 | [Apache Maven Enforcer Plugin][4]                      | [Apache-2.0][3]                               |
 | [Maven Flatten Plugin][5]                              | [Apache Software Licenese][3]                 |
-| [Apache Maven Javadoc Plugin][66]                      | [Apache-2.0][3]                               |
-| [ScalaTest Maven Plugin][67]                           | [the Apache License, ASL Version 2.0][51]     |
-| [Apache Maven JAR Plugin][68]                          | [Apache License, Version 2.0][3]              |
 | [Apache Maven Deploy Plugin][6]                        | [Apache-2.0][3]                               |
 | [org.sonatype.ossindex.maven:ossindex-maven-plugin][7] | [ASL2][8]                                     |
 | [Maven Surefire Plugin][9]                             | [Apache-2.0][3]                               |
 | [Versions Maven Plugin][10]                            | [Apache License, Version 2.0][3]              |
-| [Apache Maven Shade Plugin][69]                        | [Apache License, Version 2.0][3]              |
-| [duplicate-finder-maven-plugin Maven Mojo][70]         | [Apache License 2.0][12]                      |
-| [Maven Failsafe Plugin][71]                            | [Apache-2.0][3]                               |
+| [ScalaTest Maven Plugin][66]                           | [the Apache License, ASL Version 2.0][51]     |
+| [Apache Maven JAR Plugin][67]                          | [Apache License, Version 2.0][3]              |
+| [Apache Maven Shade Plugin][68]                        | [Apache License, Version 2.0][3]              |
+| [duplicate-finder-maven-plugin Maven Mojo][11]         | [Apache License 2.0][12]                      |
+| [Apache Maven GPG Plugin][69]                          | [Apache-2.0][3]                               |
+| [Apache Maven Source Plugin][70]                       | [Apache License, Version 2.0][3]              |
+| [Apache Maven Javadoc Plugin][71]                      | [Apache-2.0][3]                               |
+| [Nexus Staging Maven Plugin][72]                       | [Eclipse Public License][73]                  |
+| [Maven Failsafe Plugin][74]                            | [Apache-2.0][3]                               |
 | [JaCoCo :: Maven Plugin][13]                           | [Eclipse Public License 2.0][14]              |
 | [error-code-crawler-maven-plugin][15]                  | [MIT License][16]                             |
 | [Reproducible Build Maven Plugin][17]                  | [Apache 2.0][8]                               |
 | [OpenFastTrace Maven Plugin][18]                       | [GNU General Public License v3.0][19]         |
-| [spotless-maven-plugin][72]                            | [The Apache Software License, Version 2.0][3] |
-| [scalafix-maven-plugin][73]                            | [BSD-3-Clause][74]                            |
+| [spotless-maven-plugin][75]                            | [The Apache Software License, Version 2.0][3] |
+| [scalafix-maven-plugin][76]                            | [BSD-3-Clause][77]                            |
 | [Maven Clean Plugin][20]                               | [The Apache Software License, Version 2.0][8] |
-| [Maven Resources Plugin][75]                           | [The Apache Software License, Version 2.0][8] |
+| [Maven Resources Plugin][78]                           | [The Apache Software License, Version 2.0][8] |
 | [Maven Install Plugin][21]                             | [The Apache Software License, Version 2.0][8] |
 | [Maven Site Plugin 3][22]                              | [The Apache Software License, Version 2.0][8] |
 
@@ -97,29 +100,29 @@
 
 | Dependency                                  | License                           |
 | ------------------------------------------- | --------------------------------- |
-| [Scala Library][76]                         | [Apache-2.0][34]                  |
+| [Scala Library][79]                         | [Apache-2.0][34]                  |
 | [spark-connector-common-java][29]           | [MIT License][30]                 |
 | [Spark Project Core][31]                    | [Apache 2.0 License][12]          |
 | [Spark Project SQL][31]                     | [Apache 2.0 License][12]          |
 | Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][3]  |
 | [Netty/All-in-One][33]                      | [Apache License, Version 2.0][34] |
-| [AWS Java SDK :: Services :: Amazon S3][77] | [Apache License, Version 2.0][78] |
+| [AWS Java SDK :: Services :: Amazon S3][80] | [Apache License, Version 2.0][81] |
 | Apache Hadoop Amazon Web Services support   | [Apache License, Version 2.0][3]  |
-| [wildfly-openssl][79]                       | [Apache License 2.0][80]          |
+| [wildfly-openssl][82]                       | [Apache License 2.0][83]          |
 
 ### Test Dependencies
 
 | Dependency                                      | License                           |
 | ----------------------------------------------- | --------------------------------- |
-| [JUnit Jupiter (Aggregator)][81]                | [Eclipse Public License v2.0][82] |
-| [JUnit Jupiter API][81]                         | [Eclipse Public License v2.0][82] |
+| [JUnit Jupiter (Aggregator)][84]                | [Eclipse Public License v2.0][85] |
+| [JUnit Jupiter API][84]                         | [Eclipse Public License v2.0][85] |
 | [Test Database Builder for Java][58]            | [MIT License][59]                 |
 | [Matcher for SQL Result Sets][60]               | [MIT License][61]                 |
 | [Test containers for Exasol on Docker][62]      | [MIT License][63]                 |
-| [Testcontainers :: JUnit Jupiter Extension][83] | [MIT][84]                         |
+| [Testcontainers :: JUnit Jupiter Extension][86] | [MIT][87]                         |
 | [mockito-junit-jupiter][53]                     | [The MIT License][54]             |
-| [Testcontainers :: Localstack][83]              | [MIT][84]                         |
-| [AWS Java SDK for Amazon S3][77]                | [Apache License, Version 2.0][78] |
+| [Testcontainers :: Localstack][86]              | [MIT][87]                         |
+| [AWS Java SDK for Amazon S3][80]                | [Apache License, Version 2.0][81] |
 
 ### Plugin Dependencies
 
@@ -133,16 +136,20 @@
 | [org.sonatype.ossindex.maven:ossindex-maven-plugin][7] | [ASL2][8]                                     |
 | [Maven Surefire Plugin][9]                             | [Apache-2.0][3]                               |
 | [Versions Maven Plugin][10]                            | [Apache License, Version 2.0][3]              |
-| [Apache Maven Shade Plugin][69]                        | [Apache License, Version 2.0][3]              |
-| [duplicate-finder-maven-plugin Maven Mojo][70]         | [Apache License 2.0][12]                      |
-| [Maven Failsafe Plugin][71]                            | [Apache-2.0][3]                               |
+| [Apache Maven Shade Plugin][68]                        | [Apache License, Version 2.0][3]              |
+| [duplicate-finder-maven-plugin Maven Mojo][11]         | [Apache License 2.0][12]                      |
+| [Apache Maven GPG Plugin][69]                          | [Apache-2.0][3]                               |
+| [Apache Maven Source Plugin][70]                       | [Apache License, Version 2.0][3]              |
+| [Apache Maven Javadoc Plugin][71]                      | [Apache-2.0][3]                               |
+| [Nexus Staging Maven Plugin][72]                       | [Eclipse Public License][73]                  |
+| [Maven Failsafe Plugin][74]                            | [Apache-2.0][3]                               |
 | [JaCoCo :: Maven Plugin][13]                           | [Eclipse Public License 2.0][14]              |
 | [error-code-crawler-maven-plugin][15]                  | [MIT License][16]                             |
 | [Reproducible Build Maven Plugin][17]                  | [Apache 2.0][8]                               |
 | [OpenFastTrace Maven Plugin][18]                       | [GNU General Public License v3.0][19]         |
 | [Maven Clean Plugin][20]                               | [The Apache Software License, Version 2.0][8] |
-| [Maven Resources Plugin][75]                           | [The Apache Software License, Version 2.0][8] |
-| [Maven JAR Plugin][85]                                 | [The Apache Software License, Version 2.0][8] |
+| [Maven Resources Plugin][78]                           | [The Apache Software License, Version 2.0][8] |
+| [Maven JAR Plugin][88]                                 | [The Apache Software License, Version 2.0][8] |
 | [Maven Install Plugin][21]                             | [The Apache Software License, Version 2.0][8] |
 | [Maven Site Plugin 3][22]                              | [The Apache Software License, Version 2.0][8] |
 
@@ -212,23 +219,26 @@
 [63]: https://github.com/exasol/exasol-testcontainers/blob/main/LICENSE
 [64]: http://github.com/davidB/scala-maven-plugin
 [65]: http://unlicense.org/
-[66]: https://maven.apache.org/plugins/maven-javadoc-plugin/
-[67]: https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
-[68]: https://maven.apache.org/plugins/maven-jar-plugin/
-[69]: https://maven.apache.org/plugins/maven-shade-plugin/
-[70]: https://github.com/basepom/duplicate-finder-maven-plugin
-[71]: https://maven.apache.org/surefire/maven-failsafe-plugin/
-[72]: https://github.com/diffplug/spotless
-[73]: https://github.com/evis/scalafix-maven-plugin
-[74]: https://opensource.org/licenses/BSD-3-Clause
-[75]: http://maven.apache.org/plugins/maven-resources-plugin/
-[76]: https://www.scala-lang.org/
-[77]: https://aws.amazon.com/sdkforjava
-[78]: https://aws.amazon.com/apache2.0
-[79]: http://www.jboss.org/wildfly-openssl-parent/wildfly-openssl
-[80]: http://repository.jboss.org/licenses/apache-2.0.txt
-[81]: https://junit.org/junit5/
-[82]: https://www.eclipse.org/legal/epl-v20.html
-[83]: https://testcontainers.org
-[84]: http://opensource.org/licenses/MIT
-[85]: http://maven.apache.org/plugins/maven-jar-plugin/
+[66]: https://www.scalatest.org/user_guide/using_the_scalatest_maven_plugin
+[67]: https://maven.apache.org/plugins/maven-jar-plugin/
+[68]: https://maven.apache.org/plugins/maven-shade-plugin/
+[69]: https://maven.apache.org/plugins/maven-gpg-plugin/
+[70]: https://maven.apache.org/plugins/maven-source-plugin/
+[71]: https://maven.apache.org/plugins/maven-javadoc-plugin/
+[72]: http://www.sonatype.com/public-parent/nexus-maven-plugins/nexus-staging/nexus-staging-maven-plugin/
+[73]: http://www.eclipse.org/legal/epl-v10.html
+[74]: https://maven.apache.org/surefire/maven-failsafe-plugin/
+[75]: https://github.com/diffplug/spotless
+[76]: https://github.com/evis/scalafix-maven-plugin
+[77]: https://opensource.org/licenses/BSD-3-Clause
+[78]: http://maven.apache.org/plugins/maven-resources-plugin/
+[79]: https://www.scala-lang.org/
+[80]: https://aws.amazon.com/sdkforjava
+[81]: https://aws.amazon.com/apache2.0
+[82]: http://www.jboss.org/wildfly-openssl-parent/wildfly-openssl
+[83]: http://repository.jboss.org/licenses/apache-2.0.txt
+[84]: https://junit.org/junit5/
+[85]: https://www.eclipse.org/legal/epl-v20.html
+[86]: https://testcontainers.org
+[87]: http://opensource.org/licenses/MIT
+[88]: http://maven.apache.org/plugins/maven-jar-plugin/

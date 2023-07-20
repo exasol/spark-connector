@@ -1,4 +1,4 @@
-# The Spark Exasol Connector 2.0.0, released 2023-07-18
+# The Spark Exasol Connector 2.0.0, released 2023-07-20
 
 Code name: Support S3 intermediate storage
 
@@ -8,7 +8,7 @@ In this release we added support to use AWS S3 bucket as an intermediate storage
 
 With this release, we separated the connector into two variants, `S3` and `JDBC`. We recommend to use this new S3 variant instead of JDBC variant. It improves the stability of the connector.
 
-Please refer to the user guide for updated usage instructions.
+Please refer to the user guide for updated API changes and usage instructions.
 
 ## Features
 
@@ -25,6 +25,7 @@ Please refer to the user guide for updated usage instructions.
 ## Bugs
 
 * #176: Fixed artifact upload of `sha256sum` files
+* #188: Fixed Maven Central deployment bug
 
 ## Refactoring
 
@@ -83,7 +84,7 @@ Please refer to the user guide for updated usage instructions.
 #### Plugin Dependency Updates
 
 * Added `com.diffplug.spotless:spotless-maven-plugin:2.37.0`
-* Added `com.exasol:error-code-crawler-maven-plugin:1.2.3`
+* Added `com.exasol:error-code-crawler-maven-plugin:1.3.0`
 * Added `io.github.evis:scalafix-maven-plugin_2.13:0.1.4_0.9.31`
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.16`
 * Added `net.alchim31.maven:scala-maven-plugin:4.8.1`
@@ -91,22 +92,25 @@ Please refer to the user guide for updated usage instructions.
 * Added `org.apache.maven.plugins:maven-compiler-plugin:3.11.0`
 * Added `org.apache.maven.plugins:maven-deploy-plugin:3.1.1`
 * Added `org.apache.maven.plugins:maven-enforcer-plugin:3.3.0`
-* Added `org.apache.maven.plugins:maven-failsafe-plugin:3.0.0`
+* Added `org.apache.maven.plugins:maven-failsafe-plugin:3.1.2`
+* Added `org.apache.maven.plugins:maven-gpg-plugin:3.1.0`
 * Added `org.apache.maven.plugins:maven-install-plugin:2.4`
 * Added `org.apache.maven.plugins:maven-jar-plugin:3.3.0`
 * Added `org.apache.maven.plugins:maven-javadoc-plugin:3.5.0`
 * Added `org.apache.maven.plugins:maven-resources-plugin:2.6`
 * Added `org.apache.maven.plugins:maven-shade-plugin:3.4.1`
 * Added `org.apache.maven.plugins:maven-site-plugin:3.3`
-* Added `org.apache.maven.plugins:maven-surefire-plugin:3.0.0`
-* Added `org.basepom.maven:duplicate-finder-maven-plugin:1.5.1`
-* Added `org.codehaus.mojo:flatten-maven-plugin:1.4.1`
-* Added `org.codehaus.mojo:versions-maven-plugin:2.15.0`
+* Added `org.apache.maven.plugins:maven-source-plugin:3.2.1`
+* Added `org.apache.maven.plugins:maven-surefire-plugin:3.1.2`
+* Added `org.basepom.maven:duplicate-finder-maven-plugin:2.0.1`
+* Added `org.codehaus.mojo:flatten-maven-plugin:1.5.0`
+* Added `org.codehaus.mojo:versions-maven-plugin:2.16.0`
 * Added `org.itsallcode:openfasttrace-maven-plugin:1.6.2`
-* Added `org.jacoco:jacoco-maven-plugin:0.8.9`
+* Added `org.jacoco:jacoco-maven-plugin:0.8.10`
 * Added `org.scalatest:scalatest-maven-plugin:2.2.0`
 * Added `org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184`
 * Added `org.sonatype.ossindex.maven:ossindex-maven-plugin:3.2.0`
+* Added `org.sonatype.plugins:nexus-staging-maven-plugin:1.6.13`
 
 ### Spark Exasol Connector With S3
 
@@ -132,23 +136,27 @@ Please refer to the user guide for updated usage instructions.
 
 #### Plugin Dependency Updates
 
-* Added `com.exasol:error-code-crawler-maven-plugin:1.2.3`
+* Added `com.exasol:error-code-crawler-maven-plugin:1.3.0`
 * Added `io.github.zlika:reproducible-build-maven-plugin:0.16`
 * Added `org.apache.maven.plugins:maven-clean-plugin:2.5`
 * Added `org.apache.maven.plugins:maven-compiler-plugin:3.11.0`
 * Added `org.apache.maven.plugins:maven-deploy-plugin:3.1.1`
 * Added `org.apache.maven.plugins:maven-enforcer-plugin:3.3.0`
-* Added `org.apache.maven.plugins:maven-failsafe-plugin:3.0.0`
+* Added `org.apache.maven.plugins:maven-failsafe-plugin:3.1.2`
+* Added `org.apache.maven.plugins:maven-gpg-plugin:3.1.0`
 * Added `org.apache.maven.plugins:maven-install-plugin:2.4`
 * Added `org.apache.maven.plugins:maven-jar-plugin:2.4`
+* Added `org.apache.maven.plugins:maven-javadoc-plugin:3.5.0`
 * Added `org.apache.maven.plugins:maven-resources-plugin:2.6`
 * Added `org.apache.maven.plugins:maven-shade-plugin:3.4.1`
 * Added `org.apache.maven.plugins:maven-site-plugin:3.3`
-* Added `org.apache.maven.plugins:maven-surefire-plugin:3.0.0`
-* Added `org.basepom.maven:duplicate-finder-maven-plugin:1.5.1`
-* Added `org.codehaus.mojo:flatten-maven-plugin:1.4.1`
-* Added `org.codehaus.mojo:versions-maven-plugin:2.15.0`
+* Added `org.apache.maven.plugins:maven-source-plugin:3.2.1`
+* Added `org.apache.maven.plugins:maven-surefire-plugin:3.1.2`
+* Added `org.basepom.maven:duplicate-finder-maven-plugin:2.0.1`
+* Added `org.codehaus.mojo:flatten-maven-plugin:1.5.0`
+* Added `org.codehaus.mojo:versions-maven-plugin:2.16.0`
 * Added `org.itsallcode:openfasttrace-maven-plugin:1.6.2`
-* Added `org.jacoco:jacoco-maven-plugin:0.8.9`
+* Added `org.jacoco:jacoco-maven-plugin:0.8.10`
 * Added `org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184`
 * Added `org.sonatype.ossindex.maven:ossindex-maven-plugin:3.2.0`
+* Added `org.sonatype.plugins:nexus-staging-maven-plugin:1.6.13`

@@ -4,6 +4,7 @@ sources:
   - type: maven
     path: exasol-jdbc/pom.xml
     modules:
+      - maven_central
       - integration_tests
     parentPom:
       groupId: "com.exasol"
@@ -13,6 +14,7 @@ sources:
   - type: maven
     path: exasol-s3/pom.xml
     modules:
+      - maven_central
       - integration_tests
     parentPom:
       groupId: "com.exasol"
@@ -29,8 +31,8 @@ excludes:
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_release_on_maven_central.yml'"
   - "E-PK-CORE-18: Outdated content: '.settings/org.eclipse.jdt.core.prefs'"
   - regex: "(?s)E-PK-CORE-18: Outdated content: 'exasol-(jdbc|s3)/pk_generated_parent.pom'"
-  - regex: "(?s)E-PK-CORE-104: Invalid pom file 'exasol-(jdbc|s3)/pom.xml':.*"
-  - regex: "(?s)E-PK-CORE-118: Invalid pom file 'exasol-(jdbc|s3)/pom.xml':.*"
+  - regex: "(?s)E-PK-CORE-104: Invalid pom file 'exasol-(jdbc|s3)/pom.xml': Invalid /project/parent/artifactId.*"
+  - regex: "(?s)E-PK-CORE-118: Invalid pom file 'exasol-(jdbc|s3)/pom.xml': Invalid /project/parent/version.*"
   - "E-PK-CORE-17: Missing required file: '.github/workflows/project-keeper-verify.yml'"
   - "E-PK-CORE-17: Missing required file: '.github/workflows/project-keeper.sh'"
 linkReplacements:

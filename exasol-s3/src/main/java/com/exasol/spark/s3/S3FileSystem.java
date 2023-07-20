@@ -103,6 +103,7 @@ public final class S3FileSystem implements Closeable {
      *
      * @param bucketName name of a bucket
      * @param bucketKey  optional bucket key
+     * @return list of objects in a bucket
      */
     public List<S3Object> listObjects(final String bucketName, final Optional<String> bucketKey) {
         final List<S3Object> result = new ArrayList<>();
@@ -123,6 +124,7 @@ public final class S3FileSystem implements Closeable {
      *
      * @param bucketName name of a bucket
      * @param bucketKey  optional bucket key
+     * @return {@code true} if bucket is empty, {@code false} otherwise
      */
     public boolean isEmpty(final String bucketName, final Optional<String> bucketKey) {
         final ListObjectsV2Request.Builder builder = ListObjectsV2Request.builder().bucket(bucketName);
