@@ -14,12 +14,13 @@ import org.apache.spark.sql.connector.read.*;
 import org.apache.spark.sql.execution.datasources.csv.CSVFileFormat;
 import org.apache.spark.sql.execution.datasources.v2.csv.CSVTable;
 import org.apache.spark.sql.sources.Filter;
+import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
 import com.exasol.errorreporting.ExaError;
-import com.exasol.spark.common.ExasolOptions;
-import com.exasol.spark.common.ExasolValidationException;
+import com.exasol.spark.common.*;
+import com.exasol.sql.expression.BooleanExpression;
 
 import scala.collection.JavaConverters;
 
@@ -59,7 +60,9 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
     }
 
     private List<Filter> getUnsupportedFilters(final Filter[] filters) {
-        return Collections.emptyList();
+        final FilterConverter filterConverter = new FilterConverter();
+        return Arrays.asList(filters).stream().filter(f -> !filterConverter.isFilterSupported(f))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -120,7 +123,13 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
      * @return Enriched SQL query for the intermediate storage.
      */
     protected String getScanQuery() {
-        return "SELECT * FROM " + getTableOrQuery() + " ";
+        final Optional<BooleanExpression> predicate = new FilterConverter().convert(this.pushedFilters);
+        final SelectStatementGenerator stmtGenerator = StatementGeneratorFactory.getInstance()
+                .selectFrom(getTableOrQuery()).columns(getColumnNames());
+        if (predicate.isPresent()) {
+            stmtGenerator.where(predicate.get());
+        }
+        return stmtGenerator.render();
     }
 
     private String getTableOrQuery() {
@@ -131,8 +140,14 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
         }
     }
 
+    private String[] getColumnNames() {
+        return Stream.of(this.schema.fields()).map(StructField::name).toArray(String[]::new);
+    }
+
     private void prepareIntermediateData(final String bucketKey) {
-        final String exportQuery = new S3ExportQueryGenerator(this.options, bucketKey).generateQuery(getScanQuery());
+        final String selectQuery = getScanQuery();
+        LOGGER.info(() -> "Preparing data for query '" + selectQuery + "'.");
+        final String exportQuery = new S3ExportQueryGenerator(this.options, bucketKey).generateQuery(selectQuery);
         new S3DataExporter(this.options, bucketKey).exportData(exportQuery);
     }
 
