@@ -25,6 +25,10 @@
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
+            <artifactId>spark-connector-common-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
             <artifactId>sql-statement-builder-java8</artifactId>
         </dependency>
         <dependency>

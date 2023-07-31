@@ -30,7 +30,7 @@ class ExasolRelationSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
   test("buildScan returns empty RDD with empty columns (count pushdown)") {
     val userQuery = "SELECT FROM DUAL"
-    val countQuery = s"""SELECT COUNT('*') FROM ($userQuery) A"""
+    val countQuery = s"""SELECT COUNT('*') FROM ($userQuery)"""
     val expectedCount = 5L
     val manager = mock[ExasolConnectionManager]
     when(manager.withCountQuery(countQuery)).thenReturn(expectedCount)
