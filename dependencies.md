@@ -31,9 +31,9 @@
 | Dependency                                  | License                                                                                                                                                                                             |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [EXASolution JDBC Driver][23]               | [EXAClient License][24]                                                                                                                                                                             |
-| [Exasol SQL Statement Builder][25]          | [MIT License][26]                                                                                                                                                                                   |
-| [error-reporting-java8][27]                 | [MIT License][28]                                                                                                                                                                                   |
-| [spark-connector-common-java][29]           | [MIT License][30]                                                                                                                                                                                   |
+| [spark-connector-common-java][25]           | [MIT License][26]                                                                                                                                                                                   |
+| [Exasol SQL Statement Builder][27]          | [MIT License][28]                                                                                                                                                                                   |
+| [error-reporting-java8][29]                 | [MIT License][30]                                                                                                                                                                                   |
 | [Spark Project Core][31]                    | [Apache 2.0 License][12]                                                                                                                                                                            |
 | [Spark Project SQL][31]                     | [Apache 2.0 License][12]                                                                                                                                                                            |
 | [Guava: Google Core Libraries for Java][32] | [Apache License, Version 2.0][8]                                                                                                                                                                    |
@@ -101,7 +101,7 @@
 | Dependency                                  | License                           |
 | ------------------------------------------- | --------------------------------- |
 | [Scala Library][79]                         | [Apache-2.0][34]                  |
-| [spark-connector-common-java][29]           | [MIT License][30]                 |
+| [spark-connector-common-java][25]           | [MIT License][26]                 |
 | [Spark Project Core][31]                    | [Apache 2.0 License][12]          |
 | [Spark Project SQL][31]                     | [Apache 2.0 License][12]          |
 | Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][3]  |
@@ -117,11 +117,12 @@
 | [JUnit Jupiter (Aggregator)][84]                | [Eclipse Public License v2.0][85] |
 | [JUnit Jupiter API][84]                         | [Eclipse Public License v2.0][85] |
 | [Test Database Builder for Java][58]            | [MIT License][59]                 |
+| [Test utilities for `java.util.logging`][86]    | [MIT][87]                         |
 | [Matcher for SQL Result Sets][60]               | [MIT License][61]                 |
 | [Test containers for Exasol on Docker][62]      | [MIT License][63]                 |
-| [Testcontainers :: JUnit Jupiter Extension][86] | [MIT][87]                         |
+| [Testcontainers :: JUnit Jupiter Extension][88] | [MIT][89]                         |
 | [mockito-junit-jupiter][53]                     | [The MIT License][54]             |
-| [Testcontainers :: Localstack][86]              | [MIT][87]                         |
+| [Testcontainers :: Localstack][88]              | [MIT][89]                         |
 | [AWS Java SDK for Amazon S3][80]                | [Apache License, Version 2.0][81] |
 
 ### Plugin Dependencies
@@ -149,7 +150,7 @@
 | [OpenFastTrace Maven Plugin][18]                       | [GNU General Public License v3.0][19]         |
 | [Maven Clean Plugin][20]                               | [The Apache Software License, Version 2.0][8] |
 | [Maven Resources Plugin][78]                           | [The Apache Software License, Version 2.0][8] |
-| [Maven JAR Plugin][88]                                 | [The Apache Software License, Version 2.0][8] |
+| [Maven JAR Plugin][90]                                 | [The Apache Software License, Version 2.0][8] |
 | [Maven Install Plugin][21]                             | [The Apache Software License, Version 2.0][8] |
 | [Maven Site Plugin 3][22]                              | [The Apache Software License, Version 2.0][8] |
 
@@ -178,12 +179,12 @@
 [22]: http://maven.apache.org/plugins/maven-site-plugin/
 [23]: http://www.exasol.com
 [24]: https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/7.1.20/exasol-jdbc-7.1.20-license.txt
-[25]: https://github.com/exasol/sql-statement-builder/
-[26]: https://github.com/exasol/sql-statement-builder/blob/main/LICENSE
-[27]: https://github.com/exasol/error-reporting-java/
-[28]: https://github.com/exasol/error-reporting-java/blob/main/LICENSE
-[29]: https://github.com/exasol/spark-connector-common-java/
-[30]: https://github.com/exasol/spark-connector-common-java/blob/main/LICENSE
+[25]: https://github.com/exasol/spark-connector-common-java/
+[26]: https://github.com/exasol/spark-connector-common-java/blob/main/LICENSE
+[27]: https://github.com/exasol/sql-statement-builder/
+[28]: https://github.com/exasol/sql-statement-builder/blob/main/LICENSE
+[29]: https://github.com/exasol/error-reporting-java/
+[30]: https://github.com/exasol/error-reporting-java/blob/main/LICENSE
 [31]: https://spark.apache.org/
 [32]: https://github.com/google/guava
 [33]: https://netty.io/index.html
@@ -239,6 +240,8 @@
 [83]: http://repository.jboss.org/licenses/apache-2.0.txt
 [84]: https://junit.org/junit5/
 [85]: https://www.eclipse.org/legal/epl-v20.html
-[86]: https://testcontainers.org
-[87]: http://opensource.org/licenses/MIT
-[88]: http://maven.apache.org/plugins/maven-jar-plugin/
+[86]: https://github.com/exasol/java-util-logging-testing/
+[87]: https://opensource.org/licenses/MIT
+[88]: https://testcontainers.org
+[89]: http://opensource.org/licenses/MIT
+[90]: http://maven.apache.org/plugins/maven-jar-plugin/
