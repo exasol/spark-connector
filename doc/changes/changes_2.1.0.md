@@ -1,8 +1,10 @@
-# Spark Connector 2.1.0, released 2023-??-??
+# Spark Connector 2.1.0, released 2023-08-02
 
-Code name:
+Code name: Added filter pushdown and column selection for `S3` variant
 
 ## Summary
+
+This release adds predicate pushdown and column selection for the `S3` variant. Similarly, uses the latest API changes from the `spark-connector-common-java` library.
 
 ## Features
 
