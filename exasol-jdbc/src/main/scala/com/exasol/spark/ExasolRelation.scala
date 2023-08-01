@@ -1,5 +1,7 @@
 package com.exasol.spark
 
+import java.util.Optional
+
 import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
@@ -7,10 +9,12 @@ import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 
+import com.exasol.spark.common.FilterConverter
+import com.exasol.spark.common.StatementGeneratorFactory
 import com.exasol.spark.rdd.ExasolRDD
 import com.exasol.spark.util.ExasolConnectionManager
-import com.exasol.spark.util.Filters
 import com.exasol.spark.util.Types
+import com.exasol.sql.expression.BooleanExpression
 
 /**
  * The Exasol specific implementation of Spark
@@ -58,20 +62,21 @@ class ExasolRelation(
   override def buildScan(requiredColumns: Array[String]): RDD[Row] =
     buildScan(requiredColumns, Array.empty)
 
-  override def buildScan(requiredColumns: Array[String], filters: Array[Filter]): RDD[Row] =
+  override def buildScan(requiredColumns: Array[String], filters: Array[Filter]): RDD[Row] = {
+    val predicate = new FilterConverter().convert(filters)
     if (requiredColumns.isEmpty) {
-      makeEmptyRDD(filters)
+      makeEmptyRDD(predicate)
     } else {
-      new ExasolRDD(
-        sqlContext.sparkContext,
-        getEnrichedQuery(requiredColumns, filters),
-        Types.selectColumns(requiredColumns, schema),
-        manager
-      )
+      val query = getEnrichedQuery(requiredColumns, predicate)
+      logInfo("Creating Spark RDD from Exasol query '" + query + "'.")
+      new ExasolRDD(sqlContext.sparkContext, query, Types.selectColumns(requiredColumns, schema), manager)
     }
+  }
 
-  override def unhandledFilters(filters: Array[Filter]): Array[Filter] =
-    filters.filterNot(Filters.filterToBooleanExpression(_).isDefined)
+  override def unhandledFilters(filters: Array[Filter]): Array[Filter] = {
+    val filterConverter = new FilterConverter()
+    filters.filter(!filterConverter.isFilterSupported(_))
+  }
 
   /**
    * When a count action is run from Spark dataframe we do not have to read the
@@ -86,13 +91,23 @@ class ExasolRelation(
    * @return An RDD of empty Row-s which has as many elements as count(*) from
    *         enriched query
    */
-  private[this] def makeEmptyRDD(filters: Array[Filter]): RDD[Row] = {
-    val cntQuery = getEnrichedQuery(Array.empty[String], filters)
-    val cnt = manager.withCountQuery(cntQuery)
+  private[this] def makeEmptyRDD(predicate: Optional[BooleanExpression]): RDD[Row] = {
+    val stmtGenerator = StatementGeneratorFactory.countStarFrom(s"($queryString)")
+    if (predicate.isPresent()) {
+      stmtGenerator.where(predicate.get())
+    }
+    val countStarQuery = stmtGenerator.render()
+    logInfo("Running count star query '" + countStarQuery + "'.")
+    val cnt = manager.withCountQuery(countStarQuery)
     sqlContext.sparkContext.parallelize(1L to cnt, 4).map(_ => Row.empty)
   }
 
-  private[this] def getEnrichedQuery(columns: Array[String], filters: Array[Filter]): String =
-    ExasolQueryEnricher(queryString).enrichQuery(columns, filters)
+  private[this] def getEnrichedQuery(columns: Array[String], predicate: Optional[BooleanExpression]): String = {
+    val stmtGenerator = StatementGeneratorFactory.selectFrom(s"($queryString)").columns(columns: _*)
+    if (predicate.isPresent()) {
+      stmtGenerator.where(predicate.get())
+    }
+    return stmtGenerator.render()
+  }
 
 }
