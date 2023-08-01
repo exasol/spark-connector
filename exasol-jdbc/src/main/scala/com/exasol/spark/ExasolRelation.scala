@@ -92,7 +92,7 @@ class ExasolRelation(
    *         enriched query
    */
   private[this] def makeEmptyRDD(predicate: Optional[BooleanExpression]): RDD[Row] = {
-    val stmtGenerator = StatementGeneratorFactory.getInstance().countStarFrom(s"($queryString)")
+    val stmtGenerator = StatementGeneratorFactory.countStarFrom(s"($queryString)")
     if (predicate.isPresent()) {
       stmtGenerator.where(predicate.get())
     }
@@ -103,7 +103,7 @@ class ExasolRelation(
   }
 
   private[this] def getEnrichedQuery(columns: Array[String], predicate: Optional[BooleanExpression]): String = {
-    val stmtGenerator = StatementGeneratorFactory.getInstance().selectFrom(s"($queryString)").columns(columns: _*)
+    val stmtGenerator = StatementGeneratorFactory.selectFrom(s"($queryString)").columns(columns: _*)
     if (predicate.isPresent()) {
       stmtGenerator.where(predicate.get())
     }

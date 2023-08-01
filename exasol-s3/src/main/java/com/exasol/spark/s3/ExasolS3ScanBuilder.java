@@ -124,8 +124,8 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
      */
     protected String getScanQuery() {
         final Optional<BooleanExpression> predicate = new FilterConverter().convert(this.pushedFilters);
-        final SelectStatementGenerator stmtGenerator = StatementGeneratorFactory.getInstance()
-                .selectFrom(getTableOrQuery()).columns(getColumnNames());
+        final SelectStatementGenerator stmtGenerator = StatementGeneratorFactory.selectFrom(getTableOrQuery())
+                .columns(getColumnNames());
         if (predicate.isPresent()) {
             stmtGenerator.where(predicate.get());
         }
