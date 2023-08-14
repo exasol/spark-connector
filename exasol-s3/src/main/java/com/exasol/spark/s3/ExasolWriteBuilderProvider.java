@@ -99,7 +99,7 @@ public final class ExasolWriteBuilderProvider {
         final Map<String, String> map = new HashMap<>(defaultInfo.options().asCaseSensitiveMap());
         map.put("header", "true");
         map.put("delimiter", ",");
-        map.put("spark.hadoop.fs.s3a.bucket.all.committer.magic.enabled", "true");
+        map.put("fs.s3a.committer.name", "magic");
         map.put("mapreduce.fileoutputcommitter.marksuccessfuljobs", "false");
         map.put(Option.INTERMEDIATE_DATA_PATH.key(), "s3a://" + Paths.get(s3Bucket, s3BucketKey).toString());
         map.put(Option.WRITE_S3_BUCKET_KEY.key(), s3BucketKey);
