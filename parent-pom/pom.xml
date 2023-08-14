@@ -199,6 +199,12 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-hadoop-cloud_${scala.compat.version}</artifactId>
+                <version>${spark.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>32.1.1-jre</version>
