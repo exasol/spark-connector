@@ -6,12 +6,4 @@ Code name:
 
 ## Features
 
-* #163: Use Spark custom s3a output committer for intermediate s3 files
-
-## Dependency Updates
-
-### Spark Exasol Connector With S3
-
-#### Compile Dependency Updates
-
-* Added `org.apache.spark:spark-hadoop-cloud:3.4.1`
+* #163: Switched to `magic` hadoop committer for intermediate s3 files
