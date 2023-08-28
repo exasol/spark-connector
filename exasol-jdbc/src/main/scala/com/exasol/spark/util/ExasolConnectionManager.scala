@@ -1,7 +1,6 @@
 package com.exasol.spark.util
 
 import java.sql.DriverManager
-import java.util.concurrent.ConcurrentHashMap
 
 import scala.util.Try
 
@@ -230,11 +229,7 @@ final case class ExasolConnectionManager(options: ExasolOptions) {
  * The companion object to [[ExasolConnectionManager]].
  */
 object ExasolConnectionManager extends Logging {
-
   private[this] val JDBC_LOGIN_TIMEOUT: Int = 30
-
-  private[this] val connections: ConcurrentHashMap[String, EXAConnection] =
-    new ConcurrentHashMap()
 
   private[util] def createConnection(
     url: String,
@@ -247,21 +242,9 @@ object ExasolConnectionManager extends Logging {
     conn.asInstanceOf[EXAConnection]
   }
 
-  private[this] def removeIfClosed(url: String): Unit = {
-    val conn = connections.get(url)
-    if (conn != null && conn.isClosed) {
-      logInfo(s"Connection $url is closed, removing it from the pool")
-      val _ = connections.remove(url)
-    }
-  }
-
   def makeConnection(url: String, username: String, password: String): EXAConnection = {
     logDebug(s"Making a connection using url = $url")
-    removeIfClosed(url)
-    if (!connections.containsKey(url)) {
-      val _ = connections.put(url, createConnection(url, username, password))
-    }
-    connections.get(url)
+    createConnection(url, username, password)
   }
 
   def using[A <: AutoCloseable, T](resource: A)(fn: A => T): T =
@@ -270,5 +253,4 @@ object ExasolConnectionManager extends Logging {
     } finally {
       resource.close()
     }
-
 }
