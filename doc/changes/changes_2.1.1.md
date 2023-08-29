@@ -1,8 +1,10 @@
-# Spark Connector 2.1.1, released 2023-??-??
+# Spark Connector 2.1.1, released 2023-08-29
 
-Code name:
+Code name: JDBC connection cache drop, `magic` s3 hadoop committer
 
 ## Summary
+
+S3 connector uses faster hadoop committer, fix possible race condition in RDD operations
 
 ## Features
 
