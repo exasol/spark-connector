@@ -49,7 +49,7 @@ For example, when reading from a source `spark.read.format(<FORMAT>)...`.
 
 Depending on the connector variant, use the following formats:
 
-- JDBC &mdash; `"exasol-jdbc"`
+- JDBC &mdash; `"exasol"`
 - S3 &mdash; `"exasol-s3"`
 
 ## Using as Dependency
@@ -225,7 +225,7 @@ Provide the configuration options when creating a dataframe from an Exasol query
 ```scala
 val exasolDF = sparkSession
   .read
-  .format("exasol-jdbc")
+  .format("exasol")
   .option("host", "10.0.0.11")
   .option("port", "8563")
   .option("username", "<USERNAME>")
@@ -304,7 +304,7 @@ Create a dataframe from the query result using JDBC variant:
 ```scala
 val df = sparkSession
   .read
-  .format("exasol-jdbc")
+  .format("exasol")
   .option("host", "10.0.0.11")
   .option("port", "8563")
   .option("username", "<USERNAME>")
@@ -363,7 +363,7 @@ You can also save the Spark dataframe into an Exasol table:
 groupedDF
   .write
   .mode("overwrite")
-  .format("exasol-jdbc")
+  .format("exasol")
   .option("host", "10.0.0.11")
   .option("port", "8563")
   .option("username", "<USERNAME>")
