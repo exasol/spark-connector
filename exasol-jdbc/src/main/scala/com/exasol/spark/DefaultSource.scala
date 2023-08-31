@@ -4,7 +4,6 @@ import org.apache.spark.sql._
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.util.CaseInsensitiveStringMap
-
 import com.exasol.errorreporting.ExaError
 import com.exasol.spark.common.ExasolOptions
 import com.exasol.spark.util.Constants._
@@ -15,6 +14,7 @@ import com.exasol.spark.writer.ExasolWriter
 import com.exasol.sql.StatementFactory
 import com.exasol.sql.dql.select.rendering.SelectRenderer
 import com.exasol.sql.rendering.StringRendererConfig
+import org.apache.spark.internal.Logging
 
 /**
  * The default entry source for creating integration between Exasol and Spark.
@@ -26,7 +26,8 @@ class DefaultSource
     extends RelationProvider
     with DataSourceRegister
     with SchemaRelationProvider
-    with CreatableRelationProvider {
+    with CreatableRelationProvider
+    with Logging {
 
   override def shortName(): String = "exasol"
 
@@ -155,10 +156,17 @@ class DefaultSource
     manager: ExasolConnectionManager
   ): Unit = {
     val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, options, manager)
-    val exaNodesCnt = writer.startParallel()
-    val newDF = repartitionPerNode(df, exaNodesCnt)
 
-    newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
+    try {
+      val exaNodesCnt = writer.startParallel()
+      val newDF = repartitionPerNode(df, exaNodesCnt)
+
+      newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
+      logInfo(s"commit write operation with $exaNodesCnt")
+      writer.mainConnection.commit()
+    } finally {
+      writer.closeMainResources()
+    }
   }
 
   // Creates an Exasol table that match Spark dataframe

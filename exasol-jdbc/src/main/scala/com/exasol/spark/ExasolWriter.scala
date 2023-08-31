@@ -1,14 +1,11 @@
 package com.exasol.spark.writer
 
 import java.sql.SQLException
-
 import org.apache.spark.SparkContext
 import org.apache.spark.TaskContext
-import org.apache.spark.scheduler.SparkListener
-import org.apache.spark.scheduler.SparkListenerApplicationEnd
+import org.apache.spark.scheduler.{SparkListener, SparkListenerTaskEnd}
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
-
 import com.exasol.errorreporting.ExaError
 import com.exasol.jdbc.EXAConnection
 import com.exasol.spark.common.ExasolOptions
@@ -16,6 +13,8 @@ import com.exasol.spark.util.Constants._
 import com.exasol.spark.util.Converter
 import com.exasol.spark.util.ExasolConnectionManager
 import com.exasol.spark.util.Types
+
+import java.util.Calendar
 
 /**
  */
@@ -27,13 +26,33 @@ class ExasolWriter(
   manager: ExasolConnectionManager
 ) extends Serializable {
 
-  @transient private var mainConnection: EXAConnection = null
+  @transient var mainConnection: EXAConnection = null
   private var hosts: Seq[String] = null
+  private var subConnection: EXAConnection = null
 
-  def closeMainResources(): Unit =
+  def closeMainResources(): Unit = {
+    val time = Calendar.getInstance().getTime
+    println(s"closeMainResources: $time")
     if (mainConnection != null && !mainConnection.isClosed) {
+      println("main closed")
       mainConnection.close()
+      mainConnection = null
+    } else {
+      println("main already closed")
     }
+  }
+
+  def closeJobResources(): Unit = {
+    val time = Calendar.getInstance().getTime
+    println(s"closeJobResources: $time")
+    if (subConnection != null && !subConnection.isClosed) {
+      println("subconnection closed")
+      subConnection.close()
+      subConnection = null
+    } else {
+      println("already closed")
+    }
+  }
 
   def startParallel(): Int = {
     mainConnection = manager.writerMainConnection()
@@ -53,8 +72,8 @@ class ExasolWriter(
     // Close Exasol main connection when SparkContext finishes. This is a lifetime of a Spark
     // application.
     sc.addSparkListener(new SparkListener {
-      override def onApplicationEnd(appEnd: SparkListenerApplicationEnd): Unit =
-        closeMainResources()
+      override def onTaskEnd(taskEnd: SparkListenerTaskEnd): Unit =
+        closeJobResources()
     })
 
     // Populate hosts
@@ -72,9 +91,10 @@ class ExasolWriter(
   def insertPartition(iter: Iterator[Row]): Unit = {
     val partitionId = TaskContext.getPartitionId()
     val subConnectionUrl = hosts(partitionId)
-    val subConn = manager.subConnection(subConnectionUrl)
+    println(s"opening subconn for partition $partitionId, existing is_null=${subConnection == null}")
+    subConnection = manager.subConnection(subConnectionUrl)
 
-    val stmt = subConn.prepareStatement(insertStmt())
+    val stmt = subConnection.prepareStatement(insertStmt())
 
     val setters = rddSchema.fields.map(f => Converter.makeSetter(f.dataType))
     val nullTypes = rddSchema.fields.map(f => Types.jdbcTypeFromSparkDataType(f.dataType))
@@ -116,8 +136,8 @@ class ExasolWriter(
         throw ex
     } finally {
       stmt.close()
-      subConn.commit()
-      subConn.close()
+//      subConn.commit()
+//      subConn.close()
     }
 
   }
