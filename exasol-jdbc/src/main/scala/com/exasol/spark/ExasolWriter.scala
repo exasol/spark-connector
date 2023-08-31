@@ -28,7 +28,7 @@ class ExasolWriter(
 
   @transient var mainConnection: EXAConnection = null
   private var hosts: Seq[String] = null
-  private var subConnection: EXAConnection = null
+//  private var subConnection: EXAConnection = null
 
   def closeMainResources(): Unit = {
     val time = Calendar.getInstance().getTime
@@ -45,13 +45,13 @@ class ExasolWriter(
   def closeJobResources(): Unit = {
     val time = Calendar.getInstance().getTime
     println(s"closeJobResources: $time")
-    if (subConnection != null && !subConnection.isClosed) {
-      println("subconnection closed")
-      subConnection.close()
-      subConnection = null
-    } else {
-      println("already closed")
-    }
+//    if (subConnection != null && !subConnection.isClosed) {
+//      println("subconnection closed")
+////      subConnection.close()
+////      subConnection = null
+//    } else {
+//      println("already closed")
+//    }
   }
 
   def startParallel(): Int = {
@@ -91,8 +91,8 @@ class ExasolWriter(
   def insertPartition(iter: Iterator[Row]): Unit = {
     val partitionId = TaskContext.getPartitionId()
     val subConnectionUrl = hosts(partitionId)
-    println(s"opening subconn for partition $partitionId, existing is_null=${subConnection == null}")
-    subConnection = manager.subConnection(subConnectionUrl)
+    println(s"opening subconn for partition $partitionId")
+    val subConnection = manager.subConnection(subConnectionUrl)
 
     val stmt = subConnection.prepareStatement(insertStmt())
 
@@ -135,7 +135,7 @@ class ExasolWriter(
       case ex: SQLException =>
         throw ex
     } finally {
-      stmt.close()
+//      stmt.close()
 //      subConn.commit()
 //      subConn.close()
     }
