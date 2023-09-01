@@ -16,10 +16,17 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 
 class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar with PrivateMethodTester {
+  def mockedSqlContext(parallelism: Int = 1): SQLContext = {
+    val sqlContext = mock[SQLContext]
+    val sparkContext = mock[SparkContext]
+    when(sqlContext.sparkContext).thenReturn(sparkContext)
+    when(sparkContext.defaultParallelism).thenReturn(parallelism)
+    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+    sqlContext
+  }
 
   test("when reading should throw an Exception if no `query` parameter is provided") {
-    val sqlContext = mock[SQLContext]
-    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+    val sqlContext = mockedSqlContext()
     val thrown = intercept[ExasolValidationException] {
       new DefaultSource().createRelation(sqlContext, Map[String, String]())
     }
@@ -39,8 +46,7 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar wit
 
   test("when saving should throw an Exception if no `table` parameter is provided") {
     val df = mock[DataFrame]
-    val sqlContext = mock[SQLContext]
-    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+    val sqlContext = mockedSqlContext()
     val thrown = intercept[ExasolValidationException] {
       new DefaultSource().createRelation(sqlContext, SaveMode.Append, Map[String, String](), df)
     }
@@ -100,10 +106,7 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar wit
   }
 
   test("`saveDataFrame` should throw exception on null main connection") {
-    val sqlContext = mock[SQLContext]
-    val sparkContext = mock[SparkContext]
-    when(sqlContext.sparkContext).thenReturn(sparkContext)
-    when(sparkContext.defaultParallelism).thenReturn(1)
+    val sqlContext = mockedSqlContext()
     val manager = mock[ExasolConnectionManager]
     when(manager.writerMainConnection()).thenReturn(null)
 
@@ -119,11 +122,7 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar wit
   }
 
   test("`saveDataFrame` rolls back transaction on exception") {
-    val sqlContext = mock[SQLContext]
-    val sparkContext = mock[SparkContext]
-    when(sqlContext.sparkContext).thenReturn(sparkContext)
-    when(sparkContext.defaultParallelism).thenReturn(2)
-
+    val sqlContext = mockedSqlContext(2)
     val manager = mock[ExasolConnectionManager]
     val exaConn = mock[EXAConnection]
     when(manager.writerMainConnection()).thenReturn(exaConn)
