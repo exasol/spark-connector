@@ -134,7 +134,9 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar wit
 
     val saveDataFrame = PrivateMethod[Unit](Symbol("saveDataFrame"))
 
-    (new DefaultSource()).invokePrivate(saveDataFrame(sqlContext, df, "TEST", options, manager))
+    intercept[RuntimeException] {
+      (new DefaultSource()).invokePrivate(saveDataFrame(sqlContext, df, "TEST", options, manager))
+    }
     verify(exaConn, times(1)).rollback()
     verify(exaConn, times(0)).commit()
   }

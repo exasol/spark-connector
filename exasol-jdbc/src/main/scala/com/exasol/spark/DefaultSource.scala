@@ -182,6 +182,7 @@ class DefaultSource
       case ex: Exception => {
         logError("Exception during writing, roll back transaction", ex)
         mainConnection.rollback()
+        throw ex
       }
     } finally {
       mainConnection.close()
