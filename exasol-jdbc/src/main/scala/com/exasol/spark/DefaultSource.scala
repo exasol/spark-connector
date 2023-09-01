@@ -164,7 +164,7 @@ class DefaultSource
         ExaError
           .messageBuilder("F-SEC-7")
           .message("Could not create main JDBC connection to Exasol cluster.")
-          .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
+          .mitigation("Please make sure that there is a network connection between Spark and Exasol clusters.")
           .toString()
       )
     }
