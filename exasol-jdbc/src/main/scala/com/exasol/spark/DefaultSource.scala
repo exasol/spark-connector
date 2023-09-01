@@ -155,17 +155,27 @@ class DefaultSource
     options: ExasolOptions,
     manager: ExasolConnectionManager
   ): Unit = {
-    val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, options, manager)
-
+    val maxParallel = sqlContext.sparkContext.defaultParallelism
+    logInfo(s"saveDataFrame, maxParallellelism=$maxParallel")
+    val mainConnection = manager.writerMainConnection()
     try {
-      val exaNodesCnt = writer.startParallel()
+      val exaNodesCnt = manager.initParallel(mainConnection, maxParallel)
+      val hosts = manager.subConnections(mainConnection)
       val newDF = repartitionPerNode(df, exaNodesCnt)
+      val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, options, hosts, manager)
 
+      logInfo(s"save with nodes=$exaNodesCnt, hosts=$hosts")
       newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
       logInfo(s"commit write operation with $exaNodesCnt")
-      writer.mainConnection.commit()
+      mainConnection.commit()
+    } catch {
+      case ex: Exception => {
+        logError("Exception during writing, roll back transaction", ex)
+        mainConnection.rollback()
+      }
     } finally {
-      writer.closeMainResources()
+      logInfo("Finally block")
+      mainConnection.close()
     }
   }
 

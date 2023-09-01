@@ -64,7 +64,7 @@ class ExasolRDD(
       )
     }
 
-    val cnt = manager.initParallel(conn)
+    val cnt = manager.initParallel(conn, sc.defaultParallelism)
     logInfo(s"Initiated $cnt parallel exasol (sub) connections")
 
     // Close Exasol main connection when SparkContext finishes. This is a
