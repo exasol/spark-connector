@@ -1,6 +1,5 @@
 package com.exasol.spark.writer
 
-import java.sql.SQLException
 import org.apache.spark.SparkContext
 import org.apache.spark.TaskContext
 import org.apache.spark.sql.Row
