@@ -67,9 +67,6 @@ class ExasolWriter(
         totalCnt += rowCnt
       }
       ()
-    } catch {
-      case ex: SQLException =>
-        throw ex
     } finally {
       stmt.close()
       subConnection.close()
