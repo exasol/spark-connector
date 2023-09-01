@@ -5,15 +5,16 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.SaveMode
-
-import com.exasol.spark.common.ExasolValidationException
-
+import com.exasol.spark.common.{ExasolOptions, ExasolValidationException}
+import com.exasol.spark.util.ExasolConnectionManager
+import org.apache.spark.SparkContext
 import org.mockito.Mockito.when
+import org.scalatest.PrivateMethodTester
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 
-class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
+class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar with PrivateMethodTester {
 
   test("when reading should throw an Exception if no `query` parameter is provided") {
     val sqlContext = mock[SQLContext]
@@ -95,5 +96,24 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
     // should not contains irrelevant options for exasol
     assert(!newConf.contains("spark.other.options") && !newConf.contains("options"))
+  }
+
+  test("`saveDataFrame` should throw exception on null main connection") {
+    val sqlContext = mock[SQLContext]
+    val sparkContext = mock[SparkContext]
+    when(sqlContext.sparkContext).thenReturn(sparkContext)
+    when(sparkContext.defaultParallelism).thenReturn(1)
+    val manager = mock[ExasolConnectionManager]
+    when(manager.writerMainConnection()).thenReturn(null)
+
+    val df = mock[DataFrame]
+    val options = mock[ExasolOptions]
+
+    val saveDataFrame = PrivateMethod[Unit](Symbol("saveDataFrame"))
+
+    val thrown = intercept[RuntimeException] {
+      (new DefaultSource()).invokePrivate(saveDataFrame(sqlContext, df, "TEST", options, manager))
+    }
+    assert(thrown.getMessage().startsWith("F-SEC-7"))
   }
 }
