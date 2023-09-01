@@ -1,16 +1,9 @@
 package com.exasol.spark.writer
 
-import java.sql.SQLException
-
 import org.apache.spark.SparkContext
 import org.apache.spark.TaskContext
-import org.apache.spark.scheduler.SparkListener
-import org.apache.spark.scheduler.SparkListenerApplicationEnd
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
-
-import com.exasol.errorreporting.ExaError
-import com.exasol.jdbc.EXAConnection
 import com.exasol.spark.common.ExasolOptions
 import com.exasol.spark.util.Constants._
 import com.exasol.spark.util.Converter
@@ -24,45 +17,9 @@ class ExasolWriter(
   tableName: String,
   rddSchema: StructType,
   options: ExasolOptions,
+  hosts: Seq[String],
   manager: ExasolConnectionManager
 ) extends Serializable {
-
-  @transient private var mainConnection: EXAConnection = null
-  private var hosts: Seq[String] = null
-
-  def closeMainResources(): Unit =
-    if (mainConnection != null && !mainConnection.isClosed) {
-      mainConnection.close()
-    }
-
-  def startParallel(): Int = {
-    mainConnection = manager.writerMainConnection()
-
-    if (mainConnection == null) {
-      throw new RuntimeException(
-        ExaError
-          .messageBuilder("F-SEC-7")
-          .message("Could not create main JDBC connection to Exasol cluster.")
-          .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
-          .toString()
-      )
-    }
-
-    val cnt = manager.initParallel(mainConnection)
-
-    // Close Exasol main connection when SparkContext finishes. This is a lifetime of a Spark
-    // application.
-    sc.addSparkListener(new SparkListener {
-      override def onApplicationEnd(appEnd: SparkListenerApplicationEnd): Unit =
-        closeMainResources()
-    })
-
-    // Populate hosts
-    hosts = manager.subConnections(mainConnection)
-
-    cnt
-  }
-
   def insertStmt(): String = {
     val columns = rddSchema.fields.map(_.name).mkString(",")
     val placeholders = rddSchema.fields.map(_ => "?").mkString(",")
@@ -72,9 +29,8 @@ class ExasolWriter(
   def insertPartition(iter: Iterator[Row]): Unit = {
     val partitionId = TaskContext.getPartitionId()
     val subConnectionUrl = hosts(partitionId)
-    val subConn = manager.subConnection(subConnectionUrl)
-
-    val stmt = subConn.prepareStatement(insertStmt())
+    val subConnection = manager.subConnection(subConnectionUrl)
+    val stmt = subConnection.prepareStatement(insertStmt())
 
     val setters = rddSchema.fields.map(f => Converter.makeSetter(f.dataType))
     val nullTypes = rddSchema.fields.map(f => Types.jdbcTypeFromSparkDataType(f.dataType))
@@ -109,15 +65,10 @@ class ExasolWriter(
         val _ = stmt.executeBatch()
         totalCnt += rowCnt
       }
-
       ()
-    } catch {
-      case ex: SQLException =>
-        throw ex
     } finally {
       stmt.close()
-      subConn.commit()
-      subConn.close()
+      subConnection.close()
     }
 
   }

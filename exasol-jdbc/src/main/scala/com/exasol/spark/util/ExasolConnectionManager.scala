@@ -61,9 +61,9 @@ final case class ExasolConnectionManager(options: ExasolOptions) {
    * @param mainConnection the main connection
    * @return the number of parallel connections
    */
-  def initParallel(mainConnection: EXAConnection): Int = {
+  def initParallel(mainConnection: EXAConnection, maxParallelism: Int): Int = {
     val max_nodes = if (options.containsKey(MAX_NODES)) options.get(MAX_NODES).toInt else DEFAULT_MAX_NODES
-    mainConnection.EnterParallel(max_nodes)
+    mainConnection.EnterParallel(max_nodes.min(maxParallelism))
   }
 
   /**

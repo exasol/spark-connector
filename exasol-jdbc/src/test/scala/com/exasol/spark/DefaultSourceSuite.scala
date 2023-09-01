@@ -1,23 +1,32 @@
 package com.exasol.spark
 
+import com.exasol.jdbc.EXAConnection
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.SaveMode
-
-import com.exasol.spark.common.ExasolValidationException
-
-import org.mockito.Mockito.when
+import com.exasol.spark.common.{ExasolOptions, ExasolValidationException}
+import com.exasol.spark.util.ExasolConnectionManager
+import org.apache.spark.SparkContext
+import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.PrivateMethodTester
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 
-class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
+class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar with PrivateMethodTester {
+  def mockedSqlContext(parallelism: Int = 1): SQLContext = {
+    val sqlContext = mock[SQLContext]
+    val sparkContext = mock[SparkContext]
+    when(sqlContext.sparkContext).thenReturn(sparkContext)
+    when(sparkContext.defaultParallelism).thenReturn(parallelism)
+    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+    sqlContext
+  }
 
   test("when reading should throw an Exception if no `query` parameter is provided") {
-    val sqlContext = mock[SQLContext]
-    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+    val sqlContext = mockedSqlContext()
     val thrown = intercept[ExasolValidationException] {
       new DefaultSource().createRelation(sqlContext, Map[String, String]())
     }
@@ -37,8 +46,7 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
   test("when saving should throw an Exception if no `table` parameter is provided") {
     val df = mock[DataFrame]
-    val sqlContext = mock[SQLContext]
-    when(sqlContext.getAllConfs).thenReturn(Map.empty[String, String])
+    val sqlContext = mockedSqlContext()
     val thrown = intercept[ExasolValidationException] {
       new DefaultSource().createRelation(sqlContext, SaveMode.Append, Map[String, String](), df)
     }
@@ -95,5 +103,40 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar {
 
     // should not contains irrelevant options for exasol
     assert(!newConf.contains("spark.other.options") && !newConf.contains("options"))
+  }
+
+  test("`saveDataFrame` should throw exception on null main connection") {
+    val sqlContext = mockedSqlContext()
+    val manager = mock[ExasolConnectionManager]
+    when(manager.writerMainConnection()).thenReturn(null)
+
+    val df = mock[DataFrame]
+    val options = mock[ExasolOptions]
+
+    val saveDataFrame = PrivateMethod[Unit](Symbol("saveDataFrame"))
+
+    val thrown = intercept[RuntimeException] {
+      (new DefaultSource()).invokePrivate(saveDataFrame(sqlContext, df, "TEST", options, manager))
+    }
+    assert(thrown.getMessage().startsWith("F-SEC-7"))
+  }
+
+  test("`saveDataFrame` rolls back transaction on exception") {
+    val sqlContext = mockedSqlContext(2)
+    val manager = mock[ExasolConnectionManager]
+    val exaConn = mock[EXAConnection]
+    when(manager.writerMainConnection()).thenReturn(exaConn)
+    when(manager.initParallel(exaConn, 2)).thenThrow(new RuntimeException())
+
+    val df = mock[DataFrame]
+    val options = mock[ExasolOptions]
+
+    val saveDataFrame = PrivateMethod[Unit](Symbol("saveDataFrame"))
+
+    intercept[RuntimeException] {
+      (new DefaultSource()).invokePrivate(saveDataFrame(sqlContext, df, "TEST", options, manager))
+    }
+    verify(exaConn, times(1)).rollback()
+    verify(exaConn, times(0)).commit()
   }
 }

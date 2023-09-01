@@ -4,7 +4,6 @@ import org.apache.spark.sql._
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.util.CaseInsensitiveStringMap
-
 import com.exasol.errorreporting.ExaError
 import com.exasol.spark.common.ExasolOptions
 import com.exasol.spark.util.Constants._
@@ -15,6 +14,7 @@ import com.exasol.spark.writer.ExasolWriter
 import com.exasol.sql.StatementFactory
 import com.exasol.sql.dql.select.rendering.SelectRenderer
 import com.exasol.sql.rendering.StringRendererConfig
+import org.apache.spark.internal.Logging
 
 /**
  * The default entry source for creating integration between Exasol and Spark.
@@ -26,7 +26,8 @@ class DefaultSource
     extends RelationProvider
     with DataSourceRegister
     with SchemaRelationProvider
-    with CreatableRelationProvider {
+    with CreatableRelationProvider
+    with Logging {
 
   override def shortName(): String = "exasol"
 
@@ -154,11 +155,38 @@ class DefaultSource
     options: ExasolOptions,
     manager: ExasolConnectionManager
   ): Unit = {
-    val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, options, manager)
-    val exaNodesCnt = writer.startParallel()
-    val newDF = repartitionPerNode(df, exaNodesCnt)
+    val maxParallel = sqlContext.sparkContext.defaultParallelism
+    logInfo(s"saveDataFrame, maxParallellelism=$maxParallel")
+    val mainConnection = manager.writerMainConnection()
 
-    newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
+    if (mainConnection == null) {
+      throw new RuntimeException(
+        ExaError
+          .messageBuilder("F-SEC-7")
+          .message("Could not create main JDBC connection to Exasol cluster.")
+          .mitigation("Please make sure that there is a network connection between Spark and Exasol clusters.")
+          .toString()
+      )
+    }
+
+    try {
+      val exaNodesCnt = manager.initParallel(mainConnection, maxParallel)
+      val hosts = manager.subConnections(mainConnection)
+      val newDF = repartitionPerNode(df, exaNodesCnt)
+      val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, options, hosts, manager)
+
+      logInfo(s"save with nodes=$exaNodesCnt")
+      newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
+      mainConnection.commit()
+    } catch {
+      case ex: Exception => {
+        logError("Exception during writing, roll back transaction", ex)
+        mainConnection.rollback()
+        throw ex
+      }
+    } finally {
+      mainConnection.close()
+    }
   }
 
   // Creates an Exasol table that match Spark dataframe
