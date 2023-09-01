@@ -1,5 +1,6 @@
 package com.exasol.spark
 
+import com.exasol.jdbc.EXAConnection
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.Row
@@ -8,7 +9,7 @@ import org.apache.spark.sql.SaveMode
 import com.exasol.spark.common.{ExasolOptions, ExasolValidationException}
 import com.exasol.spark.util.ExasolConnectionManager
 import org.apache.spark.SparkContext
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.PrivateMethodTester
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -115,5 +116,26 @@ class DefaultSourceSuite extends AnyFunSuite with Matchers with MockitoSugar wit
       (new DefaultSource()).invokePrivate(saveDataFrame(sqlContext, df, "TEST", options, manager))
     }
     assert(thrown.getMessage().startsWith("F-SEC-7"))
+  }
+
+  test("`saveDataFrame` rolls back transaction on exception") {
+    val sqlContext = mock[SQLContext]
+    val sparkContext = mock[SparkContext]
+    when(sqlContext.sparkContext).thenReturn(sparkContext)
+    when(sparkContext.defaultParallelism).thenReturn(2)
+
+    val manager = mock[ExasolConnectionManager]
+    val exaConn = mock[EXAConnection]
+    when(manager.writerMainConnection()).thenReturn(exaConn)
+    when(manager.initParallel(exaConn, 2)).thenThrow(new RuntimeException())
+
+    val df = mock[DataFrame]
+    val options = mock[ExasolOptions]
+
+    val saveDataFrame = PrivateMethod[Unit](Symbol("saveDataFrame"))
+
+    (new DefaultSource()).invokePrivate(saveDataFrame(sqlContext, df, "TEST", options, manager))
+    verify(exaConn, times(1)).rollback()
+    verify(exaConn, times(0)).commit()
   }
 }
