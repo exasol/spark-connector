@@ -164,9 +164,8 @@ class DefaultSource
       val newDF = repartitionPerNode(df, exaNodesCnt)
       val writer = new ExasolWriter(sqlContext.sparkContext, tableName, df.schema, options, hosts, manager)
 
-      logInfo(s"save with nodes=$exaNodesCnt, hosts=$hosts")
+      logInfo(s"save with nodes=$exaNodesCnt")
       newDF.rdd.foreachPartition(iter => writer.insertPartition(iter))
-      logInfo(s"commit write operation with $exaNodesCnt")
       mainConnection.commit()
     } catch {
       case ex: Exception => {
@@ -174,7 +173,6 @@ class DefaultSource
         mainConnection.rollback()
       }
     } finally {
-      logInfo("Finally block")
       mainConnection.close()
     }
   }
