@@ -158,6 +158,17 @@ class DefaultSource
     val maxParallel = sqlContext.sparkContext.defaultParallelism
     logInfo(s"saveDataFrame, maxParallellelism=$maxParallel")
     val mainConnection = manager.writerMainConnection()
+
+    if (mainConnection == null) {
+      throw new RuntimeException(
+        ExaError
+          .messageBuilder("F-SEC-7")
+          .message("Could not create main JDBC connection to Exasol cluster.")
+          .mitigation("Please make sure that there network connection between Spark and Exasol clusters.")
+          .toString()
+      )
+    }
+
     try {
       val exaNodesCnt = manager.initParallel(mainConnection, maxParallel)
       val hosts = manager.subConnections(mainConnection)
