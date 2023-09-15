@@ -94,7 +94,6 @@ class ExasolRDD(
   override def compute(split: Partition, context: TaskContext): Iterator[Row] = {
     var closed = false
     var resultSet: ResultSet = null
-    val stmt: Statement = null
     var conn: EXAConnection = null
 
     def close(): Unit = {
@@ -108,14 +107,6 @@ class ExasolRDD(
         }
       } catch {
         case e: Exception => logWarning("Received an exception closing sub resultSet", e)
-      }
-
-      try {
-        if (stmt != null && !stmt.isClosed) {
-          stmt.close()
-        }
-      } catch {
-        case e: Exception => logWarning("Received an exception closing sub statement", e)
       }
 
       try {
@@ -156,5 +147,4 @@ class ExasolRDD(
 
     JdbcUtils.resultSetToRows(resultSet, querySchema)
   }
-
 }

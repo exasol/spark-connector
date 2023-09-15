@@ -8,6 +8,7 @@ Code name:
 
 * 194: Wrong name of Exasol JDBC format in documentation
 * 197: Committing transaction in the finally handler
+* 198: Remove unused `Statement` variable
 
 ## Dependency Updates
 
