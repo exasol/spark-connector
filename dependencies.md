@@ -242,6 +242,6 @@
 [85]: https://www.eclipse.org/legal/epl-v20.html
 [86]: https://github.com/exasol/java-util-logging-testing/
 [87]: https://opensource.org/licenses/MIT
-[88]: https://testcontainers.org
+[88]: https://java.testcontainers.org
 [89]: http://opensource.org/licenses/MIT
 [90]: http://maven.apache.org/plugins/maven-jar-plugin/
