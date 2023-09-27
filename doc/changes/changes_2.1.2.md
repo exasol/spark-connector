@@ -1,14 +1,18 @@
-# Spark Connector 2.1.2, released 2023-??-??
+# Spark Connector 2.1.2, released 2023-09-27
 
-Code name:
+Code name: Transaction commit fixes, security fixes in dependencies
 
 ## Summary
+
+Fixes CVE-2023-42503 in org.apache.commons:commons-compress.
+Fixes logic in transaction commit during the DB import.
 
 ## Features
 
 * 194: Wrong name of Exasol JDBC format in documentation
 * 197: Committing transaction in the finally handler
 * 198: Remove unused `Statement` variable
+* 206: Fix CVE-2023-42503 and update dependencies
 
 ## Dependency Updates
 
