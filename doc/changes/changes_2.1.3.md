@@ -8,10 +8,3 @@ Code name:
 
 * ISSUE_NUMBER: description
 
-## Dependency Updates
-
-### Spark Exasol Connector Parent POM
-
-#### Plugin Dependency Updates
-
-* Updated `org.apache.maven.plugins:maven-enforcer-plugin:3.4.0` to `3.3.0`
