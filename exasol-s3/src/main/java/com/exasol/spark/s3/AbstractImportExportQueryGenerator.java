@@ -3,6 +3,14 @@ package com.exasol.spark.s3;
 import com.exasol.spark.common.ExasolOptions;
 import com.exasol.spark.common.Option;
 
+import com.amazonaws.util.StringUtils;
+
+import java.util.AbstractMap;
+import java.util.Map;
+
+import static com.amazonaws.SDKGlobalConfiguration.ACCESS_KEY_ENV_VAR;
+import static com.amazonaws.SDKGlobalConfiguration.SECRET_KEY_ENV_VAR;
+
 /**
  * An common {@code CSV} query generator class.
  *
@@ -33,11 +41,27 @@ public abstract class AbstractImportExportQueryGenerator {
      * @return identifiedBy part of a query
      */
     public String getIdentifier() {
-        // TODO: get credentials from ENV variable or not pass USER and IDENTIFIED BY at all
-        final String awsAccessKeyId = this.options.get(Option.AWS_ACCESS_KEY_ID.key());
-        final String awsSecretAccessKey = this.options.get(Option.AWS_SECRET_ACCESS_KEY.key());
-        return "AT '" + escapeStringLiteral(getBucketURL()) + "'\nUSER '" + escapeStringLiteral(awsAccessKeyId)
-                + "' IDENTIFIED BY '" + escapeStringLiteral(awsSecretAccessKey) + "'\n";
+        Map.Entry<String, String> awsCreds = getAWSCredentials();
+
+        StringBuilder result = new StringBuilder("AT '");
+        result.append(escapeStringLiteral(getBucketURL()));
+        result.append('\'');
+
+        // no access key -> no user in the identifier, giving an option to use AWS EC2 Role Profiles
+        // https://exasol.my.site.com/s/article/Changelog-content-15155?language=en_US
+        if (!StringUtils.isNullOrEmpty(awsCreds.getKey())) {
+            result.append("USER '");
+            result.append(escapeStringLiteral(awsCreds.getKey()));
+            result.append('\'');
+        }
+
+        if (!StringUtils.isNullOrEmpty(awsCreds.getValue())) {
+            result.append(" IDENTIFIED BY '");
+            result.append(escapeStringLiteral(awsCreds.getValue()));
+            result.append('\'');
+        }
+        result.append('\n');
+        return result.toString();
     }
 
     private String escapeStringLiteral(final String input) {
@@ -59,4 +83,19 @@ public abstract class AbstractImportExportQueryGenerator {
         return override;
     }
 
+    private Map.Entry<String, String> getAWSCredentials() {
+        String awsAccessKeyId, awsSecretAccessKey;
+
+        if (this.options.containsKey(Option.AWS_ACCESS_KEY_ID.key())) {
+            awsAccessKeyId = this.options.get(Option.AWS_ACCESS_KEY_ID.key());
+            awsSecretAccessKey = this.options.get(Option.AWS_SECRET_ACCESS_KEY.key());
+        } else {
+            // Retrieve access key and secret access key from environment variables
+            awsAccessKeyId = System.getenv(ACCESS_KEY_ENV_VAR);
+            awsSecretAccessKey = System.getenv(SECRET_KEY_ENV_VAR);
+        }
+        awsAccessKeyId = StringUtils.trim(awsAccessKeyId);
+        awsSecretAccessKey = StringUtils.trim(awsSecretAccessKey);
+        return new AbstractMap.SimpleImmutableEntry<>(awsAccessKeyId, awsSecretAccessKey);
+    }
 }
