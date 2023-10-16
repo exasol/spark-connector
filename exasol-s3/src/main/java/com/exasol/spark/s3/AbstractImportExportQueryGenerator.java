@@ -33,6 +33,7 @@ public abstract class AbstractImportExportQueryGenerator {
      * @return identifiedBy part of a query
      */
     public String getIdentifier() {
+        // TODO: get credentials from ENV variable or not pass USER and IDENTIFIED BY at all
         final String awsAccessKeyId = this.options.get(Option.AWS_ACCESS_KEY_ID.key());
         final String awsSecretAccessKey = this.options.get(Option.AWS_SECRET_ACCESS_KEY.key());
         return "AT '" + escapeStringLiteral(getBucketURL()) + "'\nUSER '" + escapeStringLiteral(awsAccessKeyId)
