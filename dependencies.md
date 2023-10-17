@@ -45,6 +45,7 @@
 | [jersey-core-server][47]                    | [EPL 2.0][37]; [The GNU General Public License (GPL), Version 2, With Classpath Exception][38]; [Apache License, 2.0][12]; [Modified BSD][43]                                                       |
 | [jersey-core-client][48]                    | [EPL 2.0][37]; [GPL2 w/ CPE][38]; [EDL 1.0][41]; [BSD 2-Clause][42]; [Apache License, 2.0][12]; [Public Domain][39]; [Modified BSD][43]; [jQuery license][44]; [MIT license][45]; [W3C license][46] |
 | [Apache Avro Mapred API][49]                | [Apache-2.0][3]                                                                                                                                                                                     |
+| [Apache Avro][49]                           | [Apache-2.0][3]                                                                                                                                                                                     |
 
 ### Test Dependencies
 
@@ -109,6 +110,7 @@
 | [AWS Java SDK :: Services :: Amazon S3][80] | [Apache License, Version 2.0][81] |
 | Apache Hadoop Amazon Web Services support   | [Apache License, Version 2.0][3]  |
 | [wildfly-openssl][82]                       | [Apache License 2.0][83]          |
+| [Apache Avro][49]                           | [Apache-2.0][3]                   |
 
 ### Test Dependencies
 
