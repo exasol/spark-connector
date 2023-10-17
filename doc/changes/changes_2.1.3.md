@@ -3,7 +3,8 @@
 Code name:
 
 ## Summary
-Fixes CVE-2023-39410 in apache avro (transient dependency).
+
+Fixes CVE-2023-39410 in apache avro (transitive dependency).
 
 ## Features
 
