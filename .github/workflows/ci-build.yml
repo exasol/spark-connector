@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build:
     name: Building with ${{ matrix.profile }} and Exasol ${{ matrix.exasol-docker-version }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04 # UDFs fail with "VM error: Internal error: VM crashed" on ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
