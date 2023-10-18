@@ -23,3 +23,7 @@ Fixes CVE-2023-39410 in apache avro (transitive dependency).
 #### Compile Dependency Updates
 
 * Added `org.apache.avro:avro:1.11.3`
+
+#### Test Dependency Updates
+
+* Added `org.junit-pioneer:junit-pioneer:2.1.0`

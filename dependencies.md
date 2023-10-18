@@ -118,13 +118,14 @@
 | ----------------------------------------------- | --------------------------------- |
 | [JUnit Jupiter (Aggregator)][84]                | [Eclipse Public License v2.0][85] |
 | [JUnit Jupiter API][84]                         | [Eclipse Public License v2.0][85] |
+| [junit-pioneer][86]                             | [Eclipse Public License v2.0][85] |
 | [Test Database Builder for Java][58]            | [MIT License][59]                 |
-| [Test utilities for `java.util.logging`][86]    | [MIT][87]                         |
+| [Test utilities for `java.util.logging`][87]    | [MIT][88]                         |
 | [Matcher for SQL Result Sets][60]               | [MIT License][61]                 |
 | [Test containers for Exasol on Docker][62]      | [MIT License][63]                 |
-| [Testcontainers :: JUnit Jupiter Extension][88] | [MIT][89]                         |
+| [Testcontainers :: JUnit Jupiter Extension][89] | [MIT][90]                         |
 | [mockito-junit-jupiter][53]                     | [The MIT License][54]             |
-| [Testcontainers :: Localstack][88]              | [MIT][89]                         |
+| [Testcontainers :: Localstack][89]              | [MIT][90]                         |
 | [AWS Java SDK for Amazon S3][80]                | [Apache License, Version 2.0][81] |
 
 ### Plugin Dependencies
@@ -152,7 +153,7 @@
 | [OpenFastTrace Maven Plugin][18]                       | [GNU General Public License v3.0][19]         |
 | [Maven Clean Plugin][20]                               | [The Apache Software License, Version 2.0][8] |
 | [Maven Resources Plugin][78]                           | [The Apache Software License, Version 2.0][8] |
-| [Maven JAR Plugin][90]                                 | [The Apache Software License, Version 2.0][8] |
+| [Maven JAR Plugin][91]                                 | [The Apache Software License, Version 2.0][8] |
 | [Maven Install Plugin][21]                             | [The Apache Software License, Version 2.0][8] |
 | [Maven Site Plugin 3][22]                              | [The Apache Software License, Version 2.0][8] |
 
@@ -242,8 +243,9 @@
 [83]: http://repository.jboss.org/licenses/apache-2.0.txt
 [84]: https://junit.org/junit5/
 [85]: https://www.eclipse.org/legal/epl-v20.html
-[86]: https://github.com/exasol/java-util-logging-testing/
-[87]: https://opensource.org/licenses/MIT
-[88]: https://java.testcontainers.org
-[89]: http://opensource.org/licenses/MIT
-[90]: http://maven.apache.org/plugins/maven-jar-plugin/
+[86]: https://junit-pioneer.org/
+[87]: https://github.com/exasol/java-util-logging-testing/
+[88]: https://opensource.org/licenses/MIT
+[89]: https://java.testcontainers.org
+[90]: http://opensource.org/licenses/MIT
+[91]: http://maven.apache.org/plugins/maven-jar-plugin/
