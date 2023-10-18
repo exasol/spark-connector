@@ -20,18 +20,18 @@ import static com.amazonaws.SDKGlobalConfiguration.SECRET_KEY_ENV_VAR;
  * @see <a href="https://docs.exasol.com/db/latest/sql/import.htm">Exasol Import</a>
  * @see <a href="https://docs.exasol.com/db/latest/sql/export.htm">Exasol Export</a>
  */
-public abstract class AbstractImportExportQueryGenerator {
+public class BaseQueryGenerator {
     private static final String DEFAULT_S3_ENDPOINT = "amazonaws.com";
 
     /** Spark options for scenarios involving an Exasol database */
     protected final ExasolOptions options;
 
     /**
-     * Creates a new instance of {@link AbstractImportExportQueryGenerator}.
+     * Creates a new instance of {@link BaseQueryGenerator}.
      *
      * @param options user provided options
      */
-    public AbstractImportExportQueryGenerator(final ExasolOptions options) {
+    public BaseQueryGenerator(final ExasolOptions options) {
         this.options = options;
     }
 

@@ -154,7 +154,7 @@ public class ExasolS3ScanBuilder implements ScanBuilder, SupportsPushDownFilters
     /**
      * A class that generates {@code SQL} query for exporting data from Exasol database into {@code S3} location.
      */
-    private static class S3ExportQueryGenerator extends AbstractImportExportQueryGenerator {
+    private static class S3ExportQueryGenerator extends BaseQueryGenerator {
         private final String bucketKey;
         private final int numberOfFiles;
 

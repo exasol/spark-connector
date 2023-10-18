@@ -106,7 +106,7 @@ public class ExasolBatchWrite implements BatchWrite {
      * A class that generates {@code SQL} query for importing data from intermediate {@code S3} location into Exasol
      * database.
      */
-    private static class S3ImportQueryGenerator extends AbstractImportExportQueryGenerator {
+    private static class S3ImportQueryGenerator extends BaseQueryGenerator {
 
         public S3ImportQueryGenerator(final ExasolOptions options) {
             super(options);
