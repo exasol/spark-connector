@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        exasol-docker-version: [ 8.18.1 ]
+        exasol-docker-version: [ 7.1.23 ]
         profile: [ '-Pspark3.4', '-Pspark3.4-scala2.12', '-Pspark3.3', '-Pspark3.3-scala2.12' ]
     steps:
       - name: Checkout the repository
