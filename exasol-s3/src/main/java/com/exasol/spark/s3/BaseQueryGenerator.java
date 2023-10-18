@@ -50,7 +50,7 @@ public class BaseQueryGenerator {
         // no access key -> no user in the identifier, giving an option to use AWS EC2 Role Profiles
         // https://exasol.my.site.com/s/article/Changelog-content-15155?language=en_US
         if (!StringUtils.isNullOrEmpty(awsCreds.getKey())) {
-            result.append("USER '");
+            result.append(" USER '");
             result.append(escapeStringLiteral(awsCreds.getKey()));
             result.append('\'');
         }
@@ -83,12 +83,13 @@ public class BaseQueryGenerator {
         return override;
     }
 
-    private Map.Entry<String, String> getAWSCredentials() {
-        String awsAccessKeyId, awsSecretAccessKey;
+    protected Map.Entry<String, String> getAWSCredentials() {
+        String awsAccessKeyId, awsSecretAccessKey = null;
 
         if (this.options.containsKey(Option.AWS_ACCESS_KEY_ID.key())) {
             awsAccessKeyId = this.options.get(Option.AWS_ACCESS_KEY_ID.key());
-            awsSecretAccessKey = this.options.get(Option.AWS_SECRET_ACCESS_KEY.key());
+            if (this.options.containsKey(Option.AWS_SECRET_ACCESS_KEY.key()))
+                awsSecretAccessKey = this.options.get(Option.AWS_SECRET_ACCESS_KEY.key());
         } else {
             // Retrieve access key and secret access key from environment variables
             awsAccessKeyId = System.getenv(ACCESS_KEY_ENV_VAR);
