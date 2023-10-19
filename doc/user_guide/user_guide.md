@@ -157,7 +157,7 @@ There are several ways to provide AWS credentials and concrete method depends on
 
 ### Credential Providers
 
-The first option is `awsCredentialsProvider` with which you can specify list of ways credentials are retrieved from your spark environment. This parameter is not required and if not specified, default list of credentials providers are being used. At the moment of writing, this list includes the following credentials providers:
+The first option is `awsCredentialsProvider` with which you can specify list of ways credentials are retrieved from your spark environment. This parameter is not required and if not specified, the default list of credentials providers is being used. At the moment of writing, this list includes the following credentials providers:
 
 * `org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider`: credentials are explicitly set with options `awsAccessKeyId` and `awsSecretAccessKey`.
 * `com.amazonaws.auth.EnvironmentVariableCredentialsProvider`: credentials are retrieved from environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` (of Spark process).
