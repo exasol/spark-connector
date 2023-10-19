@@ -10,6 +10,7 @@ Exasol tables.
 - [Versioning](#versioning)
 - [Format](#format)
 - [Using as Dependency](#using-as-dependency)
+- [AWS Authentication](#aws-authentication)
 - [Configuration Parameters](#configuration-options)
 - [Creating a Spark DataFrame From Exasol Query](#creating-a-spark-dataframe-from-exasol-query)
 - [Saving Spark DataFrame to an Exasol Table](#saving-spark-dataframe-to-an-exasol-table)
@@ -145,6 +146,41 @@ For example, S3 variant with version `2.0.0-spark-3.4.1`:
 spark-shell --jars spark-connector-s3_2.13-2.0.0-spark-3.4.1-assembly.jar
 ```
 
+## AWS Authentication
+
+If S3 intermediate storage is used, proper AWS Authentication parameters has to be provided:
+
+* Spark has to be able to read and write into S3 (to export and import dataframe's data);
+* Database has to be able to read and write into S3 (to perform `IMPORT` and `EXPORT` statements).
+
+There are several ways to provide AWS credentials and concrete method depends on configuration of your cloud infrastructure. Here we cover main scenarios and configuration options you can tweak.
+
+### Credential Providers
+
+The first option is `awsCredentialsProvider` with which you can specify list of ways credentials are retrieved from your spark environment. This parameter is not required and if not specified, default list of credentials providers are being used. At the moment of writing, this list includes the following credentials providers:
+
+* `org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider`: credentials are explicitly set with options `awsAccessKeyId` and `awsSecretAccessKey`.
+* `com.amazonaws.auth.EnvironmentVariableCredentialsProvider`: credentials are retrieved from environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` (of Spark process).
+* `com.amazonaws.auth.InstanceProfileCredentialsProvider`: credentials are retrieved from EC2 instance IAM role.
+
+There are many more other credential providers in Amazon Hadoop library and 3rd party libraries. If you need to change default behaviour, you can set `awsCredentialsProvider` option to list of comma-separated classes.
+
+In details you can read about Credentials Providers in [this document](https://hadoop.apache.org/docs/stable/hadoop-aws/tools/hadoop-aws/index.html#Authenticating_with_S3).
+
+### Explicitly provided credentials
+If you want to specify Access Key ID and Secret Access Key explicitly you can set options `awsAccessKeyId` and `awsSecretAccessKey`.
+
+Alternatively, you can set environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in your Spark cluster configuration.
+
+In both cases, credentials will be used for S3 operations from Spark's side and forwarded to the database in `IMPORT` and `EXPORT` commands (as `USER 'key' IDENTIFIED BY 'secret_key'` parameters).
+
+### Using EC2 Instance Profile
+In AWS you can attach permissions to the role associated with EC2 instance your Spark cluster is working. In that case, S3 credentials are extracted from instance profile automatically by `InstanceProfileCredentialsProvider`, so you don't need to pass any options.
+
+In this scenario, no credentials are being put in `IMPORT` and `EXPORT` DB commands, so you need to make sure that DB has proper access to S3 bucket you're using for intermediate storage. 
+
+If database is running in EC2, it is possible to use EC2 Instance Profiles, but it has to be enabled explicitly, as described in [this document](https://exasol.my.site.com/s/article/Changelog-content-15155?language=en_US).
+
 ## Configuration Options
 
 In this section, we describe the common configuration parameters that are used for both JDBC and S3 variants to facilitate the integration between Spark and Exasol clusters.
@@ -208,8 +244,9 @@ When using the `S3` variant of the connector you should provide the following ad
 | Parameter             | Default            | Required | Description                                                         |
 |-----------------------|:------------------:|:--------:|-------------------------------------------------------------------- |
 | `s3Bucket`            |                    |    ✓     | A bucket name for intermediate storage                              |
-| `awsAccessKeyId`      |                    |    ✓     | AWS Access Key for accessing bucket                                 |
-| `awsSecretAccessKey`  |                    |    ✓     | AWS Secret Key for accessing bucket                                 |
+| `awsAccessKeyId`      |                    |          | AWS Access Key for accessing bucket                                 |
+| `awsSecretAccessKey`  |                    |          | AWS Secret Key for accessing bucket                                 |
+| `awsCredentialsProvider` | [default providers](https://hadoop.apache.org/docs/stable/hadoop-aws/tools/hadoop-aws/index.html#Authenticating_with_S3) | | List of classes used to extract credentials information from the runtime environment. |
 | `numPartitions`       | `8`                |          | Number of partitions that will match number of files in `S3` bucket |
 | `awsRegion`           | `us-east-1`        |          | AWS Region for provided bucket                                      |
 | `awsEndpointOverride` | (default endpoint) |          | AWS S3 Endpoint for bucket, set this value for custom endpoints     |
