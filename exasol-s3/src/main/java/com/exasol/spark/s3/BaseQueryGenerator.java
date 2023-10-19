@@ -88,8 +88,9 @@ public class BaseQueryGenerator {
 
         if (this.options.containsKey(Option.AWS_ACCESS_KEY_ID.key())) {
             awsAccessKeyId = this.options.get(Option.AWS_ACCESS_KEY_ID.key());
-            if (this.options.containsKey(Option.AWS_SECRET_ACCESS_KEY.key()))
+            if (this.options.containsKey(Option.AWS_SECRET_ACCESS_KEY.key())) {
                 awsSecretAccessKey = this.options.get(Option.AWS_SECRET_ACCESS_KEY.key());
+            }
         } else {
             // Retrieve access key and secret access key from environment variables
             awsAccessKeyId = System.getenv(ACCESS_KEY_ENV_VAR);
