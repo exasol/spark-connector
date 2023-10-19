@@ -43,7 +43,7 @@ class S3TableConfTest {
 
     @Test
     void testOptionsWithoutParams() {
-        final ExasolS3Table s3_table = new ExasolS3Table(schema);
+        final ExasolS3Table s3Table = new ExasolS3Table(schema);
         s3_table.buildOptions(new CaseInsensitiveStringMap(basic_params));
 
         final Configuration conf = spark.sparkContext().hadoopConfiguration();
