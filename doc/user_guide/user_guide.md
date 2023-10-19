@@ -32,7 +32,7 @@ Additionally, please make sure that the Exasol nodes are reachable from the Spar
 
 ### S3
 
-When using with S3 intermediate storage please make sure that there is access to an S3 bucket. And please prepare AWS access and secret keys with enough permissions for the S3 bucket.
+When using with S3 intermediate storage please make sure that there is access to an S3 bucket. In details, AWS Authentication is described in the [corresponding section of this document] (#aws-authentication).
 
 ## Versioning
 
