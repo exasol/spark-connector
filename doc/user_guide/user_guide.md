@@ -163,7 +163,7 @@ The first option is `awsCredentialsProvider` with which you can specify list of 
 * `com.amazonaws.auth.EnvironmentVariableCredentialsProvider`: credentials are retrieved from environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` (of Spark process).
 * `com.amazonaws.auth.InstanceProfileCredentialsProvider`: credentials are retrieved from EC2 instance IAM role.
 
-There are many more other credential providers in Amazon Hadoop library and 3rd party libraries. If you need to change default behaviour, you can set `awsCredentialsProvider` option to list of comma-separated classes.
+There are many other credential providers in Amazon Hadoop library and 3rd party libraries. If you need to change default behaviour, you can set `awsCredentialsProvider` option to list of comma-separated class names.
 
 In details you can read about Credentials Providers in [this document](https://hadoop.apache.org/docs/stable/hadoop-aws/tools/hadoop-aws/index.html#Authenticating_with_S3).
 
