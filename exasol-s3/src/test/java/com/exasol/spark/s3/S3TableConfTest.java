@@ -44,7 +44,7 @@ class S3TableConfTest {
     @Test
     void testOptionsWithoutParams() {
         final ExasolS3Table s3Table = new ExasolS3Table(schema);
-        s3_table.buildOptions(new CaseInsensitiveStringMap(basic_params));
+        s3Table.buildOptions(new CaseInsensitiveStringMap(basic_params));
 
         final Configuration conf = spark.sparkContext().hadoopConfiguration();
         assertThat(conf.get("fs.s3a.access.key"), nullValue());
@@ -53,11 +53,11 @@ class S3TableConfTest {
 
     @Test
     void testOptionsWithKeys() {
-        final ExasolS3Table s3_table = new ExasolS3Table(schema);
+        final ExasolS3Table s3Table = new ExasolS3Table(schema);
         final Map<String, String> params = new HashMap<>(basic_params);
         params.put(Option.AWS_ACCESS_KEY_ID.key(), "some-key");
         params.put(Option.AWS_SECRET_ACCESS_KEY.key(), "secret-key");
-        s3_table.buildOptions(new CaseInsensitiveStringMap(params));
+        s3Table.buildOptions(new CaseInsensitiveStringMap(params));
 
         final Configuration conf = spark.sparkContext().hadoopConfiguration();
         assertThat(conf.get("fs.s3a.access.key"), equalTo("some-key"));
@@ -66,8 +66,8 @@ class S3TableConfTest {
 
     @Test
     void testNoDefaultCredentialsProvider() {
-        final ExasolS3Table s3_table = new ExasolS3Table(schema);
-        s3_table.buildOptions(new CaseInsensitiveStringMap(basic_params));
+        final ExasolS3Table s3Table = new ExasolS3Table(schema);
+        s3Table.buildOptions(new CaseInsensitiveStringMap(basic_params));
 
         final Configuration conf = spark.sparkContext().hadoopConfiguration();
         final String val = conf.get("fs.s3a.aws.credentials.provider");
@@ -78,13 +78,13 @@ class S3TableConfTest {
 
     @Test
     void testExplicitCredentialsProvider() {
-        final ExasolS3Table s3_table = new ExasolS3Table(schema);
+        final ExasolS3Table s3Table = new ExasolS3Table(schema);
         final Map<String, String> params = new HashMap<>(basic_params);
-        final String provider_class = "my-fancy-credentials-provider";
-        params.put(Option.AWS_CREDENTIALS_PROVIDER.key(), provider_class);
-        s3_table.buildOptions(new CaseInsensitiveStringMap(params));
+        final String providerClass = "my-fancy-credentials-provider";
+        params.put(Option.AWS_CREDENTIALS_PROVIDER.key(), providerClass);
+        s3Table.buildOptions(new CaseInsensitiveStringMap(params));
 
         final Configuration conf = spark.sparkContext().hadoopConfiguration();
-        assertThat(conf.get("fs.s3a.aws.credentials.provider"), equalTo(provider_class));
+        assertThat(conf.get("fs.s3a.aws.credentials.provider"), equalTo(providerClass));
     }
 }
