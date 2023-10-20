@@ -20,7 +20,7 @@ import static com.amazonaws.SDKGlobalConfiguration.SECRET_KEY_ENV_VAR;
  * @see <a href="https://docs.exasol.com/db/latest/sql/import.htm">Exasol Import</a>
  * @see <a href="https://docs.exasol.com/db/latest/sql/export.htm">Exasol Export</a>
  */
-public class BaseQueryGenerator {
+class BaseQueryGenerator {
     protected static final String DEFAULT_S3_ENDPOINT = "amazonaws.com";
 
     /** Spark options for scenarios involving an Exasol database */
@@ -84,7 +84,8 @@ public class BaseQueryGenerator {
     }
 
     protected Map.Entry<String, String> getAWSCredentials() {
-        String awsAccessKeyId, awsSecretAccessKey = null;
+        String awsAccessKeyId;
+        String awsSecretAccessKey = null;
 
         if (this.options.containsKey(Option.AWS_ACCESS_KEY_ID.key())) {
             awsAccessKeyId = this.options.get(Option.AWS_ACCESS_KEY_ID.key());
