@@ -65,22 +65,24 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
 
     @Override
     public ScanBuilder newScanBuilder(final CaseInsensitiveStringMap map) {
-        final ExasolOptions options = ExasolOptions.from(map);
-        validateNumberOfPartitions(options);
-        updateSparkConfigurationForS3(options);
-        return new ExasolS3ScanBuilder(options, this.schema, map);
+        return new ExasolS3ScanBuilder(this.buildOptions(map), this.schema, map);
     }
 
     @Override
     public WriteBuilder newWriteBuilder(final LogicalWriteInfo defaultInfo) {
-        final ExasolOptions options = ExasolOptions.from(defaultInfo.options());
+        final ExasolOptions options = this.buildOptions(defaultInfo.options());
         validateHasTable(options);
-        validateNumberOfPartitions(options);
-        updateSparkConfigurationForS3(options);
         final SparkSession sparkSession = SparkSession.active();
         final String applicationId = sparkSession.sparkContext().applicationId();
         final S3BucketKeyPathProvider prov = new UUIDS3BucketKeyPathProvider(applicationId);
         return new ExasolWriteBuilderProvider(options, prov).createWriteBuilder(this.schema, defaultInfo);
+    }
+
+    protected ExasolOptions buildOptions(final CaseInsensitiveStringMap map) {
+        final ExasolOptions result = ExasolOptions.from(map);
+        validateNumberOfPartitions(result);
+        updateSparkConfigurationForS3(result);
+        return result;
     }
 
     private void validateNumberOfPartitions(final ExasolOptions options) {
@@ -109,12 +111,12 @@ public class ExasolS3Table implements SupportsRead, SupportsWrite {
         final SparkSession sparkSession = SparkSession.active();
         synchronized (sparkSession.sparkContext().hadoopConfiguration()) {
             final Configuration conf = sparkSession.sparkContext().hadoopConfiguration();
-            conf.set("fs.s3a.access.key", options.get(Option.AWS_ACCESS_KEY_ID.key()));
-            conf.set("fs.s3a.secret.key", options.get(Option.AWS_SECRET_ACCESS_KEY.key()));
+            if (options.containsKey(Option.AWS_ACCESS_KEY_ID.key())) {
+                conf.set("fs.s3a.access.key", options.get(Option.AWS_ACCESS_KEY_ID.key()));
+                conf.set("fs.s3a.secret.key", options.get(Option.AWS_SECRET_ACCESS_KEY.key()));
+            }
             if (options.containsKey(Option.AWS_CREDENTIALS_PROVIDER.key())) {
                 conf.set("fs.s3a.aws.credentials.provider", options.get(Option.AWS_CREDENTIALS_PROVIDER.key()));
-            } else {
-                conf.set("fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider");
             }
             if (options.containsKey(Option.S3_ENDPOINT_OVERRIDE.key())) {
                 conf.set("fs.s3a.endpoint", "http://" + options.get(Option.S3_ENDPOINT_OVERRIDE.key()));
