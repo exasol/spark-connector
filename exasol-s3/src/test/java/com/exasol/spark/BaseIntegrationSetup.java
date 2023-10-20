@@ -35,7 +35,8 @@ public class BaseIntegrationSetup {
 
     @BeforeAll
     public static void beforeAll() throws SQLException {
-        System.out.println(EXASOL.getClusterConfiguration());
+        //System.out.println(EXASOL.getClusterConfiguration());
+        EXASOL.start();
         EXASOL.purgeDatabase();
         connection = EXASOL.createConnection();
         factory = new ExasolObjectFactory(connection);
