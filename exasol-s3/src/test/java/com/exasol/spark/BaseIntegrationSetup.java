@@ -26,7 +26,7 @@ public class BaseIntegrationSetup {
 
     @Container
     protected static final ExasolContainer<? extends ExasolContainer<?>> EXASOL = new ExasolContainer<>(
-            getExasolDockerImage()).withReuse(true).withJdbcConnectionTimeout(5*60);
+            getExasolDockerImage()).withReuse(true);
 
     protected static Connection connection;
     protected static ExasolObjectFactory factory;
