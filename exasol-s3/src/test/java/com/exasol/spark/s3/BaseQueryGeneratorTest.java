@@ -18,7 +18,7 @@ import static com.amazonaws.SDKGlobalConfiguration.ACCESS_KEY_ENV_VAR;
 import static com.amazonaws.SDKGlobalConfiguration.SECRET_KEY_ENV_VAR;
 
 
-public class BaseQueryGeneratorTest {
+class BaseQueryGeneratorTest {
     private final Map<String, String> basic_params = Map.of(
             Option.TABLE.key(), "some_table",
             Option.S3_BUCKET.key(), "bucket");
