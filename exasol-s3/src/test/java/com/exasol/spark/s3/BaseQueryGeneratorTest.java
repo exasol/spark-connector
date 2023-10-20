@@ -107,4 +107,21 @@ public class BaseQueryGeneratorTest {
         assertThat(generator.getIdentifier(), equalTo("AT 'https://bucket.s3.amazonaws.com' USER 'key'" +
                 " IDENTIFIED BY 'secret'\n"));
     }
+
+    @Test
+    void testS3EndpointDefault() {
+        final ExasolOptions options = ExasolOptions.from(new CaseInsensitiveStringMap(basic_params));
+        final BaseQueryGenerator generator = new BaseQueryGenerator(options);
+        assertThat(generator.getS3Endpoint(), equalTo(BaseQueryGenerator.DEFAULT_S3_ENDPOINT));
+    }
+
+    @Test
+    void testS3EndpointWithOverride() {
+        final Map<String, String> params = new HashMap<>(basic_params);
+        params.put(Option.S3_ENDPOINT_OVERRIDE.key(), "my_endpoint");
+
+        final ExasolOptions options = ExasolOptions.from(new CaseInsensitiveStringMap(params));
+        final BaseQueryGenerator generator = new BaseQueryGenerator(options);
+        assertThat(generator.getS3Endpoint(), equalTo("my_endpoint"));
+    }
 }

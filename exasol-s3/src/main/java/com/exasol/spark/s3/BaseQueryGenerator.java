@@ -21,7 +21,7 @@ import static com.amazonaws.SDKGlobalConfiguration.SECRET_KEY_ENV_VAR;
  * @see <a href="https://docs.exasol.com/db/latest/sql/export.htm">Exasol Export</a>
  */
 public class BaseQueryGenerator {
-    private static final String DEFAULT_S3_ENDPOINT = "amazonaws.com";
+    protected static final String DEFAULT_S3_ENDPOINT = "amazonaws.com";
 
     /** Spark options for scenarios involving an Exasol database */
     protected final ExasolOptions options;
@@ -72,7 +72,7 @@ public class BaseQueryGenerator {
         return "https://" + this.options.getS3Bucket() + ".s3." + getS3Endpoint();
     }
 
-    private String getS3Endpoint() {
+    protected String getS3Endpoint() {
         if (!this.options.containsKey(Option.S3_ENDPOINT_OVERRIDE.key())) {
             return DEFAULT_S3_ENDPOINT;
         }
