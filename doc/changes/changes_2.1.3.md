@@ -1,4 +1,4 @@
-# Spark Connector 2.1.3, released 2023-??-??
+# Spark Connector 2.1.3, released 2023-10-20
 
 Code name: More flexibility for AWS Credentials specification in spark-connector-s3
 
