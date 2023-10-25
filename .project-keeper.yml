@@ -30,6 +30,7 @@ excludes:
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_release_on_maven_central.yml'"
   - "E-PK-CORE-18: Outdated content: '.settings/org.eclipse.jdt.core.prefs'"
+  - regex: ".*W-PK-CORE-151: Pom file '.*/pom.xml' contains no reference to project-keeper-maven-plugin."
   - regex: "(?s)E-PK-CORE-18: Outdated content: 'exasol-(jdbc|s3)/pk_generated_parent.pom'"
   - regex: "(?s)E-PK-CORE-104: Invalid pom file 'exasol-(jdbc|s3)/pom.xml': Invalid /project/parent/artifactId.*"
   - regex: "(?s)E-PK-CORE-118: Invalid pom file 'exasol-(jdbc|s3)/pom.xml': Invalid /project/parent/version.*"
