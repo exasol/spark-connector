@@ -22,10 +22,12 @@ import com.exasol.spark.common.ExasolOptions;
 import com.exasol.spark.common.ExasolValidationException;
 
 import io.netty.util.internal.ThreadLocalRandom;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @ExtendWith(MockitoExtension.class)
+@Testcontainers
 class ExasolWriteBuilderProviderIT extends S3IntegrationTestSetup {
     static final String s3BucketKey = "testS3BucketKey";
     final String applicationId = "spark-test-app-id";
