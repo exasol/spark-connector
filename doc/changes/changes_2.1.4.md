@@ -8,7 +8,7 @@ Project keeper added to Maven configuration.
 
 ## Features
 
-* #211: Bring PK plugin back to the maven config
+* #211: Brought PK plugin back to the Maven config
 
 ## Dependency Updates
 
