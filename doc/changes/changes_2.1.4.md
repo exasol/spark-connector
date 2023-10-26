@@ -4,7 +4,7 @@ Code name:
 
 ## Summary
 
-Project keeper added to maven configuration.
+Project keeper added to Maven configuration.
 
 ## Features
 
