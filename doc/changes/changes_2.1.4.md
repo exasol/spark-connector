@@ -4,9 +4,11 @@ Code name:
 
 ## Summary
 
+Project keeper added to maven configuration.
+
 ## Features
 
-* ISSUE_NUMBER: description
+* #211: Bring PK plugin back to the maven config
 
 ## Dependency Updates
 
