@@ -385,7 +385,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>exasol-testcontainers</artifactId>
-                <version>6.6.2</version>
+                <version>6.6.3</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
