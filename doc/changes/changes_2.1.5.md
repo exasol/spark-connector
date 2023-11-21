@@ -1,8 +1,9 @@
-# Spark Connector 2.1.5, released 2023-??-??
+# Spark Connector 2.1.5, released 2023-11-21
 
-Code name:
+Code name: Fix vulnerability in transitive dependencies
 
 ## Summary
+Vulnerability fixed in transitive dependency.
 
 ## Features
 
