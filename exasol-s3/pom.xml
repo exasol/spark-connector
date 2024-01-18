@@ -31,11 +31,6 @@
             <artifactId>spark-sql_${scala.compat.version}</artifactId>
         </dependency>
         <dependency>
-            <!-- Upgrade transitive dependency of spark-sql_ to fix CVE-2023-33546 -->
-            <groupId>org.codehaus.janino</groupId>
-            <artifactId>janino</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
         </dependency>

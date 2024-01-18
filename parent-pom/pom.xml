@@ -199,13 +199,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <!-- Upgrade transitive dependency of spark-sql_ to fix CVE-2023-33546 -->
-                <groupId>org.codehaus.janino</groupId>
-                <artifactId>janino</artifactId>
-                <version>3.1.11</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>32.1.2-jre</version>
@@ -482,10 +475,7 @@
                         <!-- CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8); -->
                         <!-- https://ossindex.sonatype.org/vulnerability/CVE-2022-26612 -->
                         <exclude>CVE-2022-26612</exclude>
-                        <!-- Transitive dependency io.netty:netty-handler used by software.amazon.awssdk:*.
-                                                Vulnerability still present in latest version 4.1.97.Final.
-                                                We assume that the AWS SDK's usage of netty is not affected. -->
-                        <exclude>CVE-2023-4586</exclude>
+
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
