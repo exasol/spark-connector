@@ -1,4 +1,4 @@
-# Spark Connector 2.1.5, released 2024-01-18
+# Spark Connector 2.1.5, released 2024-01-19
 
 Code name: Fix CVE-2024-21634 and CVE-2023-33546
 
