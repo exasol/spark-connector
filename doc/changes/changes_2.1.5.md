@@ -4,9 +4,7 @@ Code name: Fix CVE-2024-21634 and CVE-2023-33546
 
 ## Summary
 
-This release fixes the following vulnerabilities in transitive dependencies:
-* CVE-2023-33546 in provided dependency `org.codehaus.janino:janino`
-* CVE-2024-21634 in test dependency `software.amazon.ion:ion-java`
+This release fixes CVE-2024-21634 in transitive test dependency `software.amazon.ion:ion-java`.
 
 ## Security
 
