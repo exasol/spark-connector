@@ -464,6 +464,32 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.sonatype.ossindex.maven</groupId>
+                <artifactId>ossindex-maven-plugin</artifactId>
+                <configuration>
+                    <excludeVulnerabilityIds>
+                        <!-- Vulnerabilities from org.codehaus.janino:janino:jar:3.1.9 -->
+                        <!-- CWE-787: Out-of-bounds Write (5.5); https://ossindex.sonatype.org/vulnerability/CVE-2023-33546 -->
+                        <exclude>CVE-2023-33546</exclude>
+                        <!-- Vulnerabilities from org.apache.spark:spark-core_2.12:jar:3.3.2 -->
+                        <!-- CWE-269: Improper Privilege Management (6.4); https://ossindex.sonatype.org/vulnerability/CVE-2023-22946 -->
+                        <exclude>CVE-2023-22946</exclude>
+                        <!-- Vulnerabilities from org.apache.hadoop:hadoop-common:jar:3.3.2 -->
+                        <!-- CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection') (9.8); -->
+                        <!-- https://ossindex.sonatype.org/vulnerability/CVE-2022-25168 -->
+                        <exclude>CVE-2022-25168</exclude>
+                        <!-- Vulnerabilities from org.apache.hadoop:hadoop-common:jar:3.3.2 -->
+                        <!-- CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8); -->
+                        <!-- https://ossindex.sonatype.org/vulnerability/CVE-2022-26612 -->
+                        <exclude>CVE-2022-26612</exclude>
+                        <!-- Transitive dependency io.netty:netty-handler used by software.amazon.awssdk:*.
+                                                Vulnerability still present in latest version 4.1.97.Final.
+                                                We assume that the AWS SDK's usage of netty is not affected. -->
+                        <exclude>CVE-2023-4586</exclude>
+                    </excludeVulnerabilityIds>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-maven-plugin</artifactId>
                 <version>1.6.2</version>
