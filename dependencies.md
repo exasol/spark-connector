@@ -12,14 +12,14 @@
 | [Apache Maven Compiler Plugin][4]                      | [Apache-2.0][3]                       |
 | [Apache Maven Enforcer Plugin][5]                      | [Apache-2.0][3]                       |
 | [Maven Flatten Plugin][6]                              | [Apache Software Licenese][3]         |
-| [org.sonatype.ossindex.maven:ossindex-maven-plugin][7] | [ASL2][8]                             |
-| [Maven Surefire Plugin][9]                             | [Apache-2.0][3]                       |
-| [Versions Maven Plugin][10]                            | [Apache License, Version 2.0][3]      |
-| [duplicate-finder-maven-plugin Maven Mojo][11]         | [Apache License 2.0][12]              |
-| [JaCoCo :: Maven Plugin][13]                           | [Eclipse Public License 2.0][14]      |
-| [error-code-crawler-maven-plugin][15]                  | [MIT License][16]                     |
-| [Reproducible Build Maven Plugin][17]                  | [Apache 2.0][8]                       |
-| [Apache Maven Deploy Plugin][18]                       | [Apache-2.0][3]                       |
+| [Apache Maven Deploy Plugin][7]                        | [Apache-2.0][3]                       |
+| [org.sonatype.ossindex.maven:ossindex-maven-plugin][8] | [ASL2][9]                             |
+| [Maven Surefire Plugin][10]                            | [Apache-2.0][3]                       |
+| [Versions Maven Plugin][11]                            | [Apache License, Version 2.0][3]      |
+| [duplicate-finder-maven-plugin Maven Mojo][12]         | [Apache License 2.0][13]              |
+| [JaCoCo :: Maven Plugin][14]                           | [Eclipse Public License 2.0][15]      |
+| [error-code-crawler-maven-plugin][16]                  | [MIT License][17]                     |
+| [Reproducible Build Maven Plugin][18]                  | [Apache 2.0][9]                       |
 | [OpenFastTrace Maven Plugin][19]                       | [GNU General Public License v3.0][20] |
 
 ## Spark Exasol Connector With Jdbc
@@ -32,17 +32,17 @@
 | [spark-connector-common-java][23]           | [MIT License][24]                                                                                                                                                                                   |
 | [Exasol SQL Statement Builder][25]          | [MIT License][26]                                                                                                                                                                                   |
 | [error-reporting-java8][27]                 | [MIT License][28]                                                                                                                                                                                   |
-| [Spark Project Core][29]                    | [Apache 2.0 License][12]                                                                                                                                                                            |
-| [Spark Project SQL][29]                     | [Apache 2.0 License][12]                                                                                                                                                                            |
+| [Spark Project Core][29]                    | [Apache 2.0 License][13]                                                                                                                                                                            |
+| [Spark Project SQL][29]                     | [Apache 2.0 License][13]                                                                                                                                                                            |
 | [janino][30]                                | [BSD-3-Clause][31]                                                                                                                                                                                  |
-| [Guava: Google Core Libraries for Java][32] | [Apache License, Version 2.0][8]                                                                                                                                                                    |
+| [Guava: Google Core Libraries for Java][32] | [Apache License, Version 2.0][9]                                                                                                                                                                    |
 | [Netty/All-in-One][33]                      | [Apache License, Version 2.0][34]                                                                                                                                                                   |
 | [jackson-databind][35]                      | [The Apache Software License, Version 2.0][3]                                                                                                                                                       |
 | Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][3]                                                                                                                                                                    |
-| [jersey-core-common][36]                    | [EPL 2.0][37]; [The GNU General Public License (GPL), Version 2, With Classpath Exception][38]; [Apache License, 2.0][12]; [Public Domain][39]                                                      |
-| [jersey-media-jaxb][40]                     | [EPL 2.0][37]; [GPL2 w/ CPE][38]; [EDL 1.0][41]; [BSD 2-Clause][42]; [Apache License, 2.0][12]; [Public Domain][39]; [Modified BSD][43]; [jQuery license][44]; [MIT license][45]; [W3C license][46] |
-| [jersey-core-server][47]                    | [EPL 2.0][37]; [The GNU General Public License (GPL), Version 2, With Classpath Exception][38]; [Apache License, 2.0][12]; [Modified BSD][43]                                                       |
-| [jersey-core-client][48]                    | [EPL 2.0][37]; [GPL2 w/ CPE][38]; [EDL 1.0][41]; [BSD 2-Clause][42]; [Apache License, 2.0][12]; [Public Domain][39]; [Modified BSD][43]; [jQuery license][44]; [MIT license][45]; [W3C license][46] |
+| [jersey-core-common][36]                    | [EPL 2.0][37]; [The GNU General Public License (GPL), Version 2, With Classpath Exception][38]; [Apache License, 2.0][13]; [Public Domain][39]                                                      |
+| [jersey-media-jaxb][40]                     | [EPL 2.0][37]; [GPL2 w/ CPE][38]; [EDL 1.0][41]; [BSD 2-Clause][42]; [Apache License, 2.0][13]; [Public Domain][39]; [Modified BSD][43]; [jQuery license][44]; [MIT license][45]; [W3C license][46] |
+| [jersey-core-server][47]                    | [EPL 2.0][37]; [The GNU General Public License (GPL), Version 2, With Classpath Exception][38]; [Apache License, 2.0][13]; [Modified BSD][43]                                                       |
+| [jersey-core-client][48]                    | [EPL 2.0][37]; [GPL2 w/ CPE][38]; [EDL 1.0][41]; [BSD 2-Clause][42]; [Apache License, 2.0][13]; [Public Domain][39]; [Modified BSD][43]; [jQuery license][44]; [MIT license][45]; [W3C license][46] |
 | [Apache Avro Mapred API][49]                | [Apache-2.0][3]                                                                                                                                                                                     |
 | [Apache Avro][49]                           | [Apache-2.0][3]                                                                                                                                                                                     |
 
@@ -71,22 +71,22 @@
 | [Apache Maven Compiler Plugin][4]                      | [Apache-2.0][3]                               |
 | [Apache Maven Enforcer Plugin][5]                      | [Apache-2.0][3]                               |
 | [Maven Flatten Plugin][6]                              | [Apache Software Licenese][3]                 |
-| [org.sonatype.ossindex.maven:ossindex-maven-plugin][7] | [ASL2][8]                                     |
-| [Maven Surefire Plugin][9]                             | [Apache-2.0][3]                               |
-| [Versions Maven Plugin][10]                            | [Apache License, Version 2.0][3]              |
+| [Apache Maven Deploy Plugin][7]                        | [Apache-2.0][3]                               |
+| [org.sonatype.ossindex.maven:ossindex-maven-plugin][8] | [ASL2][9]                                     |
+| [Maven Surefire Plugin][10]                            | [Apache-2.0][3]                               |
+| [Versions Maven Plugin][11]                            | [Apache License, Version 2.0][3]              |
 | [ScalaTest Maven Plugin][66]                           | [the Apache License, ASL Version 2.0][51]     |
 | [Apache Maven JAR Plugin][67]                          | [Apache License, Version 2.0][3]              |
 | [Apache Maven Shade Plugin][68]                        | [Apache License, Version 2.0][3]              |
-| [duplicate-finder-maven-plugin Maven Mojo][11]         | [Apache License 2.0][12]                      |
+| [duplicate-finder-maven-plugin Maven Mojo][12]         | [Apache License 2.0][13]                      |
 | [Apache Maven GPG Plugin][69]                          | [Apache-2.0][3]                               |
 | [Apache Maven Source Plugin][70]                       | [Apache License, Version 2.0][3]              |
 | [Apache Maven Javadoc Plugin][71]                      | [Apache-2.0][3]                               |
 | [Nexus Staging Maven Plugin][72]                       | [Eclipse Public License][73]                  |
 | [Maven Failsafe Plugin][74]                            | [Apache-2.0][3]                               |
-| [JaCoCo :: Maven Plugin][13]                           | [Eclipse Public License 2.0][14]              |
-| [error-code-crawler-maven-plugin][15]                  | [MIT License][16]                             |
-| [Reproducible Build Maven Plugin][17]                  | [Apache 2.0][8]                               |
-| [Apache Maven Deploy Plugin][18]                       | [Apache-2.0][3]                               |
+| [JaCoCo :: Maven Plugin][14]                           | [Eclipse Public License 2.0][15]              |
+| [error-code-crawler-maven-plugin][16]                  | [MIT License][17]                             |
+| [Reproducible Build Maven Plugin][18]                  | [Apache 2.0][9]                               |
 | [OpenFastTrace Maven Plugin][19]                       | [GNU General Public License v3.0][20]         |
 | [spotless-maven-plugin][75]                            | [The Apache Software License, Version 2.0][3] |
 | [scalafix-maven-plugin][76]                            | [BSD-3-Clause][77]                            |
@@ -99,8 +99,8 @@
 | ------------------------------------------- | --------------------------------- |
 | [Scala Library][78]                         | [Apache-2.0][34]                  |
 | [spark-connector-common-java][23]           | [MIT License][24]                 |
-| [Spark Project Core][29]                    | [Apache 2.0 License][12]          |
-| [Spark Project SQL][29]                     | [Apache 2.0 License][12]          |
+| [Spark Project Core][29]                    | [Apache 2.0 License][13]          |
+| [Spark Project SQL][29]                     | [Apache 2.0 License][13]          |
 | [janino][30]                                | [BSD-3-Clause][31]                |
 | Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][3]  |
 | [Netty/All-in-One][33]                      | [Apache License, Version 2.0][34] |
@@ -134,20 +134,20 @@
 | [Apache Maven Compiler Plugin][4]                      | [Apache-2.0][3]                       |
 | [Apache Maven Enforcer Plugin][5]                      | [Apache-2.0][3]                       |
 | [Maven Flatten Plugin][6]                              | [Apache Software Licenese][3]         |
-| [org.sonatype.ossindex.maven:ossindex-maven-plugin][7] | [ASL2][8]                             |
-| [Maven Surefire Plugin][9]                             | [Apache-2.0][3]                       |
-| [Versions Maven Plugin][10]                            | [Apache License, Version 2.0][3]      |
+| [Apache Maven Deploy Plugin][7]                        | [Apache-2.0][3]                       |
+| [org.sonatype.ossindex.maven:ossindex-maven-plugin][8] | [ASL2][9]                             |
+| [Maven Surefire Plugin][10]                            | [Apache-2.0][3]                       |
+| [Versions Maven Plugin][11]                            | [Apache License, Version 2.0][3]      |
 | [Apache Maven Shade Plugin][68]                        | [Apache License, Version 2.0][3]      |
-| [duplicate-finder-maven-plugin Maven Mojo][11]         | [Apache License 2.0][12]              |
+| [duplicate-finder-maven-plugin Maven Mojo][12]         | [Apache License 2.0][13]              |
 | [Apache Maven GPG Plugin][69]                          | [Apache-2.0][3]                       |
 | [Apache Maven Source Plugin][70]                       | [Apache License, Version 2.0][3]      |
 | [Apache Maven Javadoc Plugin][71]                      | [Apache-2.0][3]                       |
 | [Nexus Staging Maven Plugin][72]                       | [Eclipse Public License][73]          |
 | [Maven Failsafe Plugin][74]                            | [Apache-2.0][3]                       |
-| [JaCoCo :: Maven Plugin][13]                           | [Eclipse Public License 2.0][14]      |
-| [error-code-crawler-maven-plugin][15]                  | [MIT License][16]                     |
-| [Reproducible Build Maven Plugin][17]                  | [Apache 2.0][8]                       |
-| [Apache Maven Deploy Plugin][18]                       | [Apache-2.0][3]                       |
+| [JaCoCo :: Maven Plugin][14]                           | [Eclipse Public License 2.0][15]      |
+| [error-code-crawler-maven-plugin][16]                  | [MIT License][17]                     |
+| [Reproducible Build Maven Plugin][18]                  | [Apache 2.0][9]                       |
 | [OpenFastTrace Maven Plugin][19]                       | [GNU General Public License v3.0][20] |
 
 [0]: http://sonarsource.github.io/sonar-scanner-maven/
@@ -157,18 +157,18 @@
 [4]: https://maven.apache.org/plugins/maven-compiler-plugin/
 [5]: https://maven.apache.org/enforcer/maven-enforcer-plugin/
 [6]: https://www.mojohaus.org/flatten-maven-plugin/
-[7]: https://sonatype.github.io/ossindex-maven/maven-plugin/
-[8]: http://www.apache.org/licenses/LICENSE-2.0.txt
-[9]: https://maven.apache.org/surefire/maven-surefire-plugin/
-[10]: https://www.mojohaus.org/versions/versions-maven-plugin/
-[11]: https://basepom.github.io/duplicate-finder-maven-plugin
-[12]: http://www.apache.org/licenses/LICENSE-2.0.html
-[13]: https://www.jacoco.org/jacoco/trunk/doc/maven.html
-[14]: https://www.eclipse.org/legal/epl-2.0/
-[15]: https://github.com/exasol/error-code-crawler-maven-plugin/
-[16]: https://github.com/exasol/error-code-crawler-maven-plugin/blob/main/LICENSE
-[17]: http://zlika.github.io/reproducible-build-maven-plugin
-[18]: https://maven.apache.org/plugins/maven-deploy-plugin/
+[7]: https://maven.apache.org/plugins/maven-deploy-plugin/
+[8]: https://sonatype.github.io/ossindex-maven/maven-plugin/
+[9]: http://www.apache.org/licenses/LICENSE-2.0.txt
+[10]: https://maven.apache.org/surefire/maven-surefire-plugin/
+[11]: https://www.mojohaus.org/versions/versions-maven-plugin/
+[12]: https://basepom.github.io/duplicate-finder-maven-plugin
+[13]: http://www.apache.org/licenses/LICENSE-2.0.html
+[14]: https://www.jacoco.org/jacoco/trunk/doc/maven.html
+[15]: https://www.eclipse.org/legal/epl-2.0/
+[16]: https://github.com/exasol/error-code-crawler-maven-plugin/
+[17]: https://github.com/exasol/error-code-crawler-maven-plugin/blob/main/LICENSE
+[18]: http://zlika.github.io/reproducible-build-maven-plugin
 [19]: https://github.com/itsallcode/openfasttrace-maven-plugin
 [20]: https://www.gnu.org/licenses/gpl-3.0.html
 [21]: http://www.exasol.com
