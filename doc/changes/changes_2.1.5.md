@@ -1,12 +1,14 @@
-# Spark Connector 2.1.5, released 2024-??-??
+# Spark Connector 2.1.5, released 2024-01-18
 
-Code name:
+Code name: Fix CVE-2024-21634 in `software.amazon.ion:ion-java`
 
 ## Summary
 
-## Features
+This release fixed vulnerability CVE-2024-21634 in test dependency `software.amazon.ion:ion-java`.
 
-* ISSUE_NUMBER: description
+## Security
+
+* #214: Fixed CVE-2024-21634 in `software.amazon.ion:ion-java`
 
 ## Dependency Updates
 
