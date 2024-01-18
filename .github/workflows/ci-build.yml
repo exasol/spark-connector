@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  matrix-build:
     name: Building with ${{ matrix.profile }} and Exasol ${{ matrix.exasol-docker-version }}
     runs-on: ubuntu-latest
     strategy:
@@ -66,3 +66,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build:
+    needs: matrix-build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Build successful"
