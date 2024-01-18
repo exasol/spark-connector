@@ -1,10 +1,12 @@
 # Spark Connector 2.1.5, released 2024-01-18
 
-Code name: Fix CVE-2024-21634 in `software.amazon.ion:ion-java`
+Code name: Fix CVE-2024-21634 and CVE-2023-33546
 
 ## Summary
 
-This release fixed vulnerability CVE-2024-21634 in test dependency `software.amazon.ion:ion-java`.
+This release fixes the following vulnerabilities in transitive dependencies:
+* CVE-2023-33546 in provided dependency `org.codehaus.janino:janino`
+* CVE-2024-21634 in test dependency `software.amazon.ion:ion-java`
 
 ## Security
 
@@ -27,6 +29,10 @@ This release fixed vulnerability CVE-2024-21634 in test dependency `software.ama
 * Added `org.apache.maven.plugins:maven-toolchains-plugin:3.1.0`
 
 ### Spark Exasol Connector With S3
+
+#### Test Dependency Updates
+
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.518` to `1.12.639`
 
 #### Plugin Dependency Updates
 
