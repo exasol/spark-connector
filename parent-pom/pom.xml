@@ -15,7 +15,7 @@
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
-        <revision>2.1.4</revision>
+        <revision>2.1.5</revision>
         <java.version>8</java.version>
         <log4j.version>2.20.0</log4j.version>
         <junit.version>5.10.0</junit.version>
@@ -475,10 +475,7 @@
                         <!-- CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8); -->
                         <!-- https://ossindex.sonatype.org/vulnerability/CVE-2022-26612 -->
                         <exclude>CVE-2022-26612</exclude>
-                        <!-- Transitive dependency io.netty:netty-handler used by software.amazon.awssdk:*.
-                                                Vulnerability still present in latest version 4.1.97.Final.
-                                                We assume that the AWS SDK's usage of netty is not affected. -->
-                        <exclude>CVE-2023-4586</exclude>
+
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
@@ -509,7 +506,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <spark.version>3.4.1</spark.version>
+                <spark.version>3.4.2</spark.version>
                 <scala.version>2.13.11</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
                 <hadoop.version>3.3.6</hadoop.version>
@@ -524,7 +521,7 @@
         <profile>
             <id>spark3.4-scala2.12</id>
             <properties>
-                <spark.version>3.4.1</spark.version>
+                <spark.version>3.4.2</spark.version>
                 <scala.version>2.12.17</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
                 <hadoop.version>3.3.4</hadoop.version>
