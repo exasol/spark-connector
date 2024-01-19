@@ -53,7 +53,7 @@ df = sparkSession
 ## Predicate Pushdown and Column Pruning
 
 The idea is even if user only reads an Exasol table, the Spark Query Optimizer
-(Catalyst) knows that we only need some columns and there are filters in overal
+(Catalyst) knows that we only need some columns and there are filters in overall
 query. Using these information, we should only send to Exasol a query string
 with required columns and filters.
 
