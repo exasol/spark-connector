@@ -15,7 +15,7 @@
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
-        <revision>2.1.5</revision>
+        <revision>2.1.6</revision>
         <java.version>8</java.version>
         <log4j.version>2.20.0</log4j.version>
         <junit.version>5.10.0</junit.version>
