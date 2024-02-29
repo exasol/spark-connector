@@ -480,7 +480,6 @@
                         <!-- CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8); -->
                         <!-- https://ossindex.sonatype.org/vulnerability/CVE-2022-26612 -->
                         <exclude>CVE-2022-26612</exclude>
-
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
@@ -505,6 +504,24 @@
         </plugins>
     </build>
     <profiles>
+        <profile>
+            <id>spark3.5</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spark.version>3.5.1</spark.version>
+                <scala.version>2.13.11</scala.version>
+                <scala.compat.version>2.13</scala.compat.version>
+                <hadoop.version>3.3.6</hadoop.version>
+                <jackson.version>2.14.2</jackson.version>
+            </properties>
+            <modules>
+                <module>exasol-jdbc</module>
+                <module>exasol-s3</module>
+                <module>exasol-dist</module>
+            </modules>
+        </profile>
         <profile>
             <id>spark3.4</id>
             <activation>
