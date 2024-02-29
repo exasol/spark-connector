@@ -313,7 +313,7 @@
                 <!-- Upgrade transitive dependency of org.apache.spark:spark-core_2.13 to fix CVE-2023-42503 -->
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.24.0</version>
+                <version>1.26.0</version>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.hadoop:hadoop-common to fix CVE-2023-39410 -->
