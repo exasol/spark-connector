@@ -68,6 +68,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build:
+    freeDiskSpace: true
     needs: matrix-build
     runs-on: ubuntu-latest
     steps:
