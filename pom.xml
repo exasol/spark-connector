@@ -109,7 +109,7 @@
                 <spark.version>3.5.1</spark.version>
                 <scala.version>2.13.10</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
-                <jackson.version>2.14.2</jackson.version>
+                <jackson.version>2.16.1</jackson.version>
                 <jersey.version>3.1.2</jersey.version>
             </properties>
             <modules>
