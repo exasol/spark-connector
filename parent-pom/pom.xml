@@ -514,7 +514,7 @@
                 <scala.version>2.13.11</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
                 <hadoop.version>3.3.6</hadoop.version>
-                <jackson.version>2.16.1</jackson.version>
+                <jackson.version>2.15.4</jackson.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
