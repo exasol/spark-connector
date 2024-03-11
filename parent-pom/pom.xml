@@ -217,6 +217,12 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <!-- Pinned to fix CVE-2023-52428 -->
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>9.37.3</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-client</artifactId>
                 <version>${hadoop.version}</version>
@@ -313,7 +319,7 @@
                 <!-- Upgrade transitive dependency of org.apache.spark:spark-core_2.13 to fix CVE-2023-42503 -->
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.24.0</version>
+                <version>1.26.0</version>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.hadoop:hadoop-common to fix CVE-2023-39410 -->
@@ -475,7 +481,6 @@
                         <!-- CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8); -->
                         <!-- https://ossindex.sonatype.org/vulnerability/CVE-2022-26612 -->
                         <exclude>CVE-2022-26612</exclude>
-
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
@@ -500,6 +505,24 @@
         </plugins>
     </build>
     <profiles>
+        <profile>
+            <id>spark3.5</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spark.version>3.5.1</spark.version>
+                <scala.version>2.13.11</scala.version>
+                <scala.compat.version>2.13</scala.compat.version>
+                <hadoop.version>3.3.6</hadoop.version>
+                <jackson.version>2.15.4</jackson.version>
+            </properties>
+            <modules>
+                <module>exasol-jdbc</module>
+                <module>exasol-s3</module>
+                <module>exasol-dist</module>
+            </modules>
+        </profile>
         <profile>
             <id>spark3.4</id>
             <activation>

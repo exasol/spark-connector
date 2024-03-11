@@ -21,6 +21,8 @@ sources:
       artifactId: "spark-connector-parent-pom"
       version: "${revision}"
       relativePath: "../parent-pom/pom.xml"
+build:
+  freeDiskSpace: true
 version:
   fromSource: parent-pom/pom.xml
 excludes:

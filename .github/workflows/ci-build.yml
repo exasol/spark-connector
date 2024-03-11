@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         exasol-docker-version: [ 8.24.0 ]
-        profile: [ '-Pspark3.4', '-Pspark3.4-scala2.12', '-Pspark3.3', '-Pspark3.3-scala2.12' ]
+        profile: [ '-Pspark3.5', '-Pspark3.4', '-Pspark3.4-scala2.12', '-Pspark3.3', '-Pspark3.3-scala2.12' ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -42,6 +42,10 @@ jobs:
         run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
       - name: Pull docker Images
         run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /usr/share/dotnet
       - name: Run tests and build with Maven
         run: |
           mvn --batch-mode verify ${{ matrix.profile }} \
