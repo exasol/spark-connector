@@ -1,4 +1,4 @@
-# Spark Connector 2.1.6, released 2024-??-??
+# Spark Connector 2.1.6, released 2024-03-11
 
 Code name: Spark 3.5 support
 
