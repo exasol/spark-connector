@@ -40,8 +40,9 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: Enable testcontainer reuse
         run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
-      - name: Pull docker Images
-        run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
+# commented as no integration tests are running
+#      - name: Pull docker Images
+#        run: docker pull exasol/docker-db:${{ matrix.exasol-docker-version }}
       - name: Free Disk Space
         run: |
           sudo rm -rf /usr/local/lib/android
