@@ -217,6 +217,7 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <!-- Pinned to fix CVE-2023-52428 -->
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
                 <version>9.37.3</version>
