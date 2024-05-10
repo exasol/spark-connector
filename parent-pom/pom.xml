@@ -15,7 +15,7 @@
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
-        <revision>2.1.6</revision>
+        <revision>2.1.7</revision>
         <java.version>8</java.version>
         <log4j.version>2.20.0</log4j.version>
         <junit.version>5.10.0</junit.version>
@@ -47,7 +47,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>spark-connector-common-java</artifactId>
-                <version>2.0.1</version>
+                <version>2.0.5</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.spark</groupId>
@@ -320,6 +320,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
                 <version>1.26.0</version>
+            </dependency>
+            <dependency>
+                <!-- Upgrade transitive dependency of  org.apache.hadoop:hadoop-client:jar:3.3.6 to fix CVE-2024-29131 & CVE-2024-29133 -->
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>2.10.1</version>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.hadoop:hadoop-common to fix CVE-2023-39410 -->
