@@ -49,14 +49,24 @@
             <exclusions>
                 <!-- To prevent java.lang.ClassNotFoundException: org.codehaus.janino.InternalCompilerException -->
                 <exclusion>
-                    <groupId>janino</groupId>
-                    <artifactId>org.codehaus.janino</artifactId>
+                    <groupId>org.codehaus.janino</groupId>
+                    <artifactId>janino</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>commons-compiler</groupId>
-                    <artifactId>org.codehaus.janino</artifactId>
+                    <groupId>org.codehaus.janino</groupId>
+                    <artifactId>commons-compiler</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>commons-compiler</artifactId>
+            <version>3.1.12</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
