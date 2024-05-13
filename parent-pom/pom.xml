@@ -217,6 +217,18 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>${janino.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>commons-compiler</artifactId>
+                <version>${janino.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <!-- Pinned to fix CVE-2023-52428 -->
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
