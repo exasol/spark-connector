@@ -522,6 +522,8 @@
                 <scala.compat.version>2.13</scala.compat.version>
                 <hadoop.version>3.3.6</hadoop.version>
                 <jackson.version>2.15.4</jackson.version>
+                <!-- spark-catalyst 3.3.x depends on old Codehaus Janino version, so we need explicit pin -->
+                <janino.version>3.1.12</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -540,6 +542,8 @@
                 <scala.compat.version>2.13</scala.compat.version>
                 <hadoop.version>3.3.6</hadoop.version>
                 <jackson.version>2.14.2</jackson.version>
+                <!-- spark-catalyst 3.3.x depends on old Codehaus Janino version, so we need explicit pin -->
+                <janino.version>3.1.12</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -555,6 +559,7 @@
                 <scala.compat.version>2.12</scala.compat.version>
                 <hadoop.version>3.3.4</hadoop.version>
                 <jackson.version>2.14.2</jackson.version>
+                <janino.version>3.1.12</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -574,6 +579,8 @@
                     Scala module 2.13.4 requires Jackson Databind version >= 2.13.0 and < 2.14.0
                 -->
                 <jackson.version>2.13.4.2</jackson.version>
+                <!-- spark-catalyst 3.3.x depends on old Codehaus Janino version -->
+                <janino.version>3.0.16</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -588,6 +595,7 @@
                 <scala.compat.version>2.12</scala.compat.version>
                 <hadoop.version>3.3.2</hadoop.version>
                 <jackson.version>2.13.4.2</jackson.version>
+                <janino.version>3.0.16</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
