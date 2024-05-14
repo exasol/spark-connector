@@ -15,7 +15,7 @@
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
-        <revision>2.1.6</revision>
+        <revision>2.1.7</revision>
         <java.version>8</java.version>
         <log4j.version>2.20.0</log4j.version>
         <junit.version>5.10.0</junit.version>
@@ -47,7 +47,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>spark-connector-common-java</artifactId>
-                <version>2.0.1</version>
+                <version>2.0.5</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.spark</groupId>
@@ -78,6 +78,10 @@
                     <exclusion>
                         <groupId>log4j</groupId>
                         <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-slf4j-impl</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>io.netty</groupId>
@@ -217,6 +221,18 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>${janino.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>commons-compiler</artifactId>
+                <version>${janino.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <!-- Pinned to fix CVE-2023-52428 -->
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
@@ -320,6 +336,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
                 <version>1.26.0</version>
+            </dependency>
+            <dependency>
+                <!-- Upgrade transitive dependency of  org.apache.hadoop:hadoop-client:jar:3.3.6 to fix CVE-2024-29131 & CVE-2024-29133 -->
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>2.10.1</version>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.hadoop:hadoop-common to fix CVE-2023-39410 -->
@@ -516,6 +538,8 @@
                 <scala.compat.version>2.13</scala.compat.version>
                 <hadoop.version>3.3.6</hadoop.version>
                 <jackson.version>2.15.4</jackson.version>
+                <!-- spark-catalyst 3.3.x depends on old Codehaus Janino version, so we need explicit pin -->
+                <janino.version>3.1.12</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -534,6 +558,8 @@
                 <scala.compat.version>2.13</scala.compat.version>
                 <hadoop.version>3.3.6</hadoop.version>
                 <jackson.version>2.14.2</jackson.version>
+                <!-- spark-catalyst 3.3.x depends on old Codehaus Janino version, so we need explicit pin -->
+                <janino.version>3.1.12</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -549,6 +575,7 @@
                 <scala.compat.version>2.12</scala.compat.version>
                 <hadoop.version>3.3.4</hadoop.version>
                 <jackson.version>2.14.2</jackson.version>
+                <janino.version>3.1.12</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -568,6 +595,8 @@
                     Scala module 2.13.4 requires Jackson Databind version >= 2.13.0 and < 2.14.0
                 -->
                 <jackson.version>2.13.4.2</jackson.version>
+                <!-- spark-catalyst 3.3.x depends on old Codehaus Janino version -->
+                <janino.version>3.0.16</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -582,6 +611,7 @@
                 <scala.compat.version>2.12</scala.compat.version>
                 <hadoop.version>3.3.2</hadoop.version>
                 <jackson.version>2.13.4.2</jackson.version>
+                <janino.version>3.0.16</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>

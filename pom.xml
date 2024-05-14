@@ -61,6 +61,7 @@
                 <scala.compat.version>2.12</scala.compat.version>
                 <jackson.version>2.13.4.2</jackson.version>
                 <jersey.version>3.1.1</jersey.version>
+                <janino.version>3.0.16</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -78,6 +79,7 @@
                 -->
                 <jackson.version>2.13.4.2</jackson.version>
                 <jersey.version>3.1.1</jersey.version>
+                <janino.version>3.0.16</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -94,6 +96,7 @@
                 <scala.compat.version>2.13</scala.compat.version>
                 <jackson.version>2.14.2</jackson.version>
                 <jersey.version>3.1.2</jersey.version>
+                <janino.version>3.1.12</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
@@ -111,6 +114,7 @@
                 <scala.compat.version>2.13</scala.compat.version>
                 <jackson.version>2.15.4</jackson.version>
                 <jersey.version>3.1.2</jersey.version>
+                <janino.version>3.1.12</janino.version>
             </properties>
             <modules>
                 <module>exasol-jdbc</module>
