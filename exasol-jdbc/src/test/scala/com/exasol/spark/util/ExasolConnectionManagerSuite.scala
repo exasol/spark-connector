@@ -89,5 +89,4 @@ class ExasolConnectionManagerSuite extends AnyFunSuite with Matchers with Mockit
 
   private[this] def getWorkerJdbcUrl(host: String, port: Int, id: Int, token: Long): String =
     s"jdbc:exa-worker:$host:$port;comment=$id;workertoken=$token"
-
-}``
+}
