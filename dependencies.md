@@ -28,7 +28,7 @@
 
 | Dependency                                  | License                                                                                                                                                                                             |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [EXASolution JDBC Driver][21]               | [EXAClient License][22]                                                                                                                                                                             |
+| [Exasol JDBC Driver][21]                    | [EXAClient License][22]                                                                                                                                                                             |
 | [spark-connector-common-java][23]           | [MIT License][24]                                                                                                                                                                                   |
 | [Exasol SQL Statement Builder][25]          | [MIT License][26]                                                                                                                                                                                   |
 | [error-reporting-java8][27]                 | [MIT License][28]                                                                                                                                                                                   |
@@ -169,8 +169,8 @@
 [18]: http://zlika.github.io/reproducible-build-maven-plugin
 [19]: https://github.com/itsallcode/openfasttrace-maven-plugin
 [20]: https://www.gnu.org/licenses/gpl-3.0.html
-[21]: http://www.exasol.com
-[22]: https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/7.1.20/exasol-jdbc-7.1.20-license.txt
+[21]: http://www.exasol.com/
+[22]: https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/24.1.2/exasol-jdbc-24.1.2-license.txt
 [23]: https://github.com/exasol/spark-connector-common-java/
 [24]: https://github.com/exasol/spark-connector-common-java/blob/main/LICENSE
 [25]: https://github.com/exasol/sql-statement-builder/
