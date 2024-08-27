@@ -32,7 +32,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>exasol-jdbc</artifactId>
-                <version>7.1.20</version>
+                <version>24.1.2</version>
             </dependency>
             <dependency>
                 <groupId>com.exasol</groupId>
