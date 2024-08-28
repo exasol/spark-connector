@@ -15,7 +15,7 @@
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
     <properties>
-        <revision>2.1.8</revision>
+        <revision>2.2.0</revision>
         <java.version>8</java.version>
         <log4j.version>2.20.0</log4j.version>
         <junit.version>5.10.0</junit.version>
@@ -32,7 +32,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>exasol-jdbc</artifactId>
-                <version>7.1.20</version>
+                <version>24.1.2</version>
             </dependency>
             <dependency>
                 <groupId>com.exasol</groupId>
@@ -341,6 +341,13 @@
                 <groupId>com.fasterxml.woodstox</groupId>
                 <artifactId>woodstox-core</artifactId>
                 <version>6.5.1</version>
+            </dependency>
+            <!-- Update transitive dependency of org.apache.hadoop:hadoop-client to fix CVE-2024-25638 -->
+            <dependency>
+                <groupId>dnsjava</groupId>
+                <artifactId>dnsjava</artifactId>
+                <version>3.6.1</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.spark:spark-core_2.13 to fix CVE-2023-42503 -->

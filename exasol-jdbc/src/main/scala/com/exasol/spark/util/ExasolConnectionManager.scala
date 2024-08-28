@@ -82,7 +82,7 @@ final case class ExasolConnectionManager(options: ExasolOptions) {
       .toSeq
       .map { case ((host, port), idx) =>
         val hostWithFingerprint = getHostWithFingerprint(host)
-        val url = s"$WORKER_CONNECTION_PREFIX:$hostWithFingerprint:$port;workerID=$idx;workertoken=$token"
+        val url = s"$WORKER_CONNECTION_PREFIX:$hostWithFingerprint:$port;comment=$idx;workertoken=$token"
         getConnectionStringWithOptions(url)
       }
   }
