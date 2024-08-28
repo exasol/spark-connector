@@ -347,10 +347,12 @@
                 <artifactId>woodstox-core</artifactId>
                 <version>6.5.1</version>
             </dependency>
+            <!-- Update transitive dependency of org.apache.hadoop:hadoop-client to fix CVE-2024-25638 -->
             <dependency>
                 <groupId>dnsjava</groupId>
                 <artifactId>dnsjava</artifactId>
                 <version>3.6.1</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.spark:spark-core_2.13 to fix CVE-2023-42503 -->
