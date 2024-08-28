@@ -1,12 +1,15 @@
-# Spark Connector 2.2.0, released 2024-??-??
+# Spark Connector 2.2.0, released 2024-08-28
 
-Code name:
+Code name: Fix Exasol-JDBC compatibility, CVE
 
 ## Summary
+Fixed issue with Exasol-JDBC parameter change.
+Fixed CVE-2024-25638 in dnsjava:dnsjava:jar:2.1.7:provided (hadoop-client dependency).
 
 ## Features
 
-* ISSUE_NUMBER: description
+* #227: Spark Connector is not compatible with exasol-jdbc V24+
+* #228: Fix vulnerabilitiy in dnsjava:dnsjava:jar:2.1.7:provided
 
 ## Dependency Updates
 
