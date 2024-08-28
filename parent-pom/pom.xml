@@ -324,11 +324,6 @@
                         <groupId>org.xerial.snappy</groupId>
                         <artifactId>snappy-java</artifactId>
                     </exclusion>
-                    <!-- Excluded to fix CVE-2024-25638 -->
-                    <exclusion>
-                        <groupId>dnsjava</groupId>
-                        <artifactId>dnsjava</artifactId>
-                    </exclusion>
                 </exclusions>
             </dependency>
             <!-- Dependencies that are forced higher to fix vulnerabilities -->
