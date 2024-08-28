@@ -6,10 +6,13 @@ Code name: Fix Exasol-JDBC compatibility, CVE CVE-2024-25638
 Fixed issue with Exasol-JDBC parameter change.
 Fixed CVE-2024-25638 in dnsjava:dnsjava:jar:2.1.7:provided (hadoop-client dependency).
 
-## Features
+## Security
+
+* #228: Fix vulnerability in dnsjava:dnsjava:jar:2.1.7:provided
+
+## Bugfixes
 
 * #227: Spark Connector is not compatible with exasol-jdbc V24+
-* #228: Fix vulnerabilitiy in dnsjava:dnsjava:jar:2.1.7:provided
 
 ## Dependency Updates
 
