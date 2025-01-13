@@ -33,4 +33,3 @@ This release fixes the following vulnerabilities in dependencies:
 
 * Updated `com.exasol:spark-connector-common-java:2.0.5` to `2.0.10`
 * Updated `org.apache.avro:avro:1.11.3` to `1.11.4`
-* Updated `org.apache.hadoop:hadoop-aws:3.3.6` to `3.4.1`
