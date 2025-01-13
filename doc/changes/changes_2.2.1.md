@@ -27,9 +27,17 @@ This release fixes the following vulnerabilities in dependencies:
 * Updated `com.exasol:spark-connector-common-java:2.0.5` to `2.0.10`
 * Updated `org.apache.avro:avro:1.11.3` to `1.11.4`
 
+#### Test Dependency Updates
+
+* Updated `com.exasol:test-db-builder-java:3.5.1` to `3.6.0`
+
 ### Spark Exasol Connector With S3
 
 #### Compile Dependency Updates
 
 * Updated `com.exasol:spark-connector-common-java:2.0.5` to `2.0.10`
 * Updated `org.apache.avro:avro:1.11.3` to `1.11.4`
+
+#### Test Dependency Updates
+
+* Updated `com.exasol:test-db-builder-java:3.5.1` to `3.6.0`

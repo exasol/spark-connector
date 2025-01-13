@@ -423,7 +423,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>test-db-builder-java</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
