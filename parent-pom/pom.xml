@@ -621,9 +621,9 @@
             <dependencies>
                 <dependency>
                     <!-- Fix NoClassDefFoundError: org/slf4j/impl/StaticLoggerBinder -->
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-jdk14</artifactId>
-                    <version>1.7.32</version>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <version>2.20.0</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -645,9 +645,9 @@
             <dependencies>
                 <dependency>
                     <!-- Fix NoClassDefFoundError: org/slf4j/impl/StaticLoggerBinder -->
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-jdk14</artifactId>
-                    <version>1.7.32</version>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <version>2.20.0</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
