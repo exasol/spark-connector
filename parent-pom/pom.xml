@@ -622,7 +622,7 @@
                 <dependency>
                     <!-- Fix NoClassDefFoundError: org/slf4j/impl/StaticLoggerBinder -->
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-reload4j</artifactId>
+                    <artifactId>slf4j-jdk14</artifactId>
                     <version>1.7.32</version>
                     <scope>test</scope>
                 </dependency>
@@ -646,7 +646,7 @@
                 <dependency>
                     <!-- Fix NoClassDefFoundError: org/slf4j/impl/StaticLoggerBinder -->
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-reload4j</artifactId>
+                    <artifactId>slf4j-jdk14</artifactId>
                     <version>1.7.32</version>
                     <scope>test</scope>
                 </dependency>
