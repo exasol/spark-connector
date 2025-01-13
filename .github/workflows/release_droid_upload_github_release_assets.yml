@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for uploading files to GitHub release
     strategy:
       fail-fast: false
       matrix:

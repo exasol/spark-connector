@@ -14,10 +14,12 @@ jobs:
   matrix-build:
     name: Building with ${{ matrix.profile }} and Exasol ${{ matrix.exasol-docker-version }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
-        exasol-docker-version: [ 8.24.0 ]
+        exasol-docker-version: [ 8.32.0 ]
         profile: [ '-Pspark3.5', '-Pspark3.4', '-Pspark3.4-scala2.12', '-Pspark3.3', '-Pspark3.3-scala2.12' ]
     steps:
       - name: Checkout the repository
@@ -53,11 +55,6 @@ jobs:
               -DtrimStackTrace=false
         env:
           EXASOL_DOCKER_VERSION: ${{ matrix.exasol-docker-version }}
-      - name: Publish Test Report
-        uses: scacap/action-surefire-report@v1
-        if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Sonar analysis
         if: ${{ env.SONAR_TOKEN != null && matrix.profile == '-Pspark3.4' }}
         run: |
@@ -74,5 +71,7 @@ jobs:
   build:
     needs: matrix-build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - run: echo "Build successful"

@@ -26,6 +26,7 @@ build:
 version:
   fromSource: parent-pom/pom.xml
 excludes:
+  # Project uses custom matrix build with Spark versions, Project Keeper 3.0.0 and release via release-droid
   - regex: "(?s)E-PK-CORE-62: The project's README.md does not contain a valid badges block. Please add or replace the following badges:.*"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build-next-java.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build.yml'"
