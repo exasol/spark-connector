@@ -17,6 +17,7 @@ This release fixes the following vulnerabilities in dependencies:
 ## Security
 
 * #230: Fixed vulnerabilities in dependencies
+
 ## Dependency Updates
 
 ### Spark Exasol Connector With JDBC
