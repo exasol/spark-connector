@@ -618,6 +618,15 @@
                 <module>exasol-jdbc</module>
                 <module>exasol-dist</module>
             </modules>
+            <dependencies>
+                <dependency>
+                    <!-- Fix NoClassDefFoundError: org/slf4j/impl/StaticLoggerBinder -->
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-reload4j</artifactId>
+                    <version>1.7.32</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
         </profile>
         <profile>
             <id>spark3.3-scala2.12</id>
@@ -633,6 +642,15 @@
                 <module>exasol-jdbc</module>
                 <module>exasol-dist</module>
             </modules>
+            <dependencies>
+                <dependency>
+                    <!-- Fix NoClassDefFoundError: org/slf4j/impl/StaticLoggerBinder -->
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-reload4j</artifactId>
+                    <version>1.7.32</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 </project>
