@@ -77,7 +77,7 @@ public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
                 "cp " + HOSTS_FILE + " /tmp/hosts", //
                 "sed --in-place '/amazonaws/d' /tmp/hosts", //
                 "echo '" + redirect + " " + original + "' >> /tmp/hosts", //
-                "cp /tmp/hosts " + HOSTS_FILE, //
+                "cp /tmp/hosts " + HOSTS_FILE);
         commands.forEach(command -> {
             try {
                 final ExecResult exitCode = exasolContainer.execInContainer("/bin/sh", "-c", command);
