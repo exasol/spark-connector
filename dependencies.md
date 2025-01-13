@@ -32,12 +32,12 @@
 | [spark-connector-common-java][23]           | [MIT License][24]                                                                                                                                                                                   |
 | [Exasol SQL Statement Builder][25]          | [MIT License][26]                                                                                                                                                                                   |
 | [error-reporting-java8][27]                 | [MIT License][28]                                                                                                                                                                                   |
-| [Spark Project Core][29]                    | [Apache 2.0 License][13]                                                                                                                                                                            |
-| [Spark Project SQL][29]                     | [Apache 2.0 License][13]                                                                                                                                                                            |
+| [Spark Project Core][29]                    | [Apache-2.0][13]                                                                                                                                                                                    |
+| [Spark Project SQL][29]                     | [Apache-2.0][13]                                                                                                                                                                                    |
 | [Guava: Google Core Libraries for Java][30] | [Apache License, Version 2.0][9]                                                                                                                                                                    |
 | [Netty/All-in-One][31]                      | [Apache License, Version 2.0][32]                                                                                                                                                                   |
 | [jackson-databind][33]                      | [The Apache Software License, Version 2.0][3]                                                                                                                                                       |
-| Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][3]                                                                                                                                                                    |
+| Apache Hadoop Client Aggregator             | [Apache-2.0][3]                                                                                                                                                                                     |
 | [jersey-core-common][34]                    | [EPL 2.0][35]; [The GNU General Public License (GPL), Version 2, With Classpath Exception][36]; [Apache License, 2.0][13]; [Public Domain][37]                                                      |
 | [jersey-media-jaxb][38]                     | [EPL 2.0][35]; [GPL2 w/ CPE][36]; [EDL 1.0][39]; [BSD 2-Clause][40]; [Apache License, 2.0][13]; [Public Domain][37]; [Modified BSD][41]; [jQuery license][42]; [MIT license][43]; [W3C license][44] |
 | [jersey-core-server][45]                    | [EPL 2.0][35]; [The GNU General Public License (GPL), Version 2, With Classpath Exception][36]; [Apache License, 2.0][13]; [Modified BSD][41]                                                       |
@@ -98,12 +98,12 @@
 | ------------------------------------------- | --------------------------------- |
 | [Scala Library][76]                         | [Apache-2.0][32]                  |
 | [spark-connector-common-java][23]           | [MIT License][24]                 |
-| [Spark Project Core][29]                    | [Apache 2.0 License][13]          |
-| [Spark Project SQL][29]                     | [Apache 2.0 License][13]          |
-| Apache Hadoop Client Aggregator             | [Apache License, Version 2.0][3]  |
+| [Spark Project Core][29]                    | [Apache-2.0][13]                  |
+| [Spark Project SQL][29]                     | [Apache-2.0][13]                  |
+| Apache Hadoop Client Aggregator             | [Apache-2.0][3]                   |
 | [Netty/All-in-One][31]                      | [Apache License, Version 2.0][32] |
 | [AWS Java SDK :: Services :: Amazon S3][77] | [Apache License, Version 2.0][78] |
-| Apache Hadoop Amazon Web Services support   | [Apache License, Version 2.0][3]  |
+| Apache Hadoop Amazon Web Services support   | [Apache-2.0][3]                   |
 | [wildfly-openssl][79]                       | [Apache License 2.0][80]          |
 | [Apache Avro][47]                           | [Apache-2.0][3]                   |
 

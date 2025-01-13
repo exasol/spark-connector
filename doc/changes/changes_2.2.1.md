@@ -17,3 +17,19 @@ This release fixes the following vulnerabilities in dependencies:
 ## Security
 
 * #230: Fixed vulnerabilities in dependencies
+## Dependency Updates
+
+### Spark Exasol Connector With JDBC
+
+#### Compile Dependency Updates
+
+* Updated `com.exasol:spark-connector-common-java:2.0.5` to `2.0.10`
+* Updated `org.apache.avro:avro:1.11.3` to `1.11.4`
+
+### Spark Exasol Connector With S3
+
+#### Compile Dependency Updates
+
+* Updated `com.exasol:spark-connector-common-java:2.0.5` to `2.0.10`
+* Updated `org.apache.avro:avro:1.11.3` to `1.11.4`
+* Updated `org.apache.hadoop:hadoop-aws:3.3.6` to `3.4.1`

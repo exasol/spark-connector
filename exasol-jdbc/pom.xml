@@ -52,10 +52,10 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <!-- Upgrade transitive dependency of  org.apache.hadoop:hadoop-client:jar:3.3.6 to fix CVE-2024-29025 -->
+            <!-- Upgrade transitive dependency of  org.apache.hadoop:hadoop-client:jar:3.3.6 to fix CVE-2024-29025 & CVE-2024-47535 -->
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.109.Final</version>
+            <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
