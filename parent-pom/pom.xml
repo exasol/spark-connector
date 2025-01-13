@@ -517,8 +517,24 @@
                 <artifactId>ossindex-maven-plugin</artifactId>
                 <configuration>
                     <excludeVulnerabilityIds>
-                        <!-- org.apache.hadoop:hadoop-common:jar:3.3.6:provided -->
+                        <!-- Excluded because of provided scope: org.apache.hadoop:hadoop-common:jar:3.3.6 -->
                         <exclude>CVE-2024-23454</exclude>
+
+                        <!-- Vulnerabilities from older Spark/Hadoop versions -->
+                        <!-- Vulnerabilities from org.codehaus.janino:janino:jar:3.1.9 -->
+                        <!-- CWE-787: Out-of-bounds Write (5.5); https://ossindex.sonatype.org/vulnerability/CVE-2023-33546 -->
+                        <exclude>CVE-2023-33546</exclude>
+                        <!-- Vulnerabilities from org.apache.spark:spark-core_2.12:jar:3.3.2 -->
+                        <!-- CWE-269: Improper Privilege Management (6.4); https://ossindex.sonatype.org/vulnerability/CVE-2023-22946 -->
+                        <exclude>CVE-2023-22946</exclude>
+                        <!-- Vulnerabilities from org.apache.hadoop:hadoop-common:jar:3.3.2 -->
+                        <!-- CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection') (9.8); -->
+                        <!-- https://ossindex.sonatype.org/vulnerability/CVE-2022-25168 -->
+                        <exclude>CVE-2022-25168</exclude>
+                        <!-- Vulnerabilities from org.apache.hadoop:hadoop-common:jar:3.3.2 -->
+                        <!-- CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8); -->
+                        <!-- https://ossindex.sonatype.org/vulnerability/CVE-2022-26612 -->
+                        <exclude>CVE-2022-26612</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
