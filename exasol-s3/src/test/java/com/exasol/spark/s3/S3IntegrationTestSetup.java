@@ -2,14 +2,13 @@ package com.exasol.spark.s3;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.Container.ExecResult;
+import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer.Service;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
@@ -73,8 +72,12 @@ public abstract class S3IntegrationTestSetup extends BaseIntegrationSetup {
     private static void redirectIpAddress(final ExasolContainer<?> exasolContainer, final String original,
             final String redirect) {
         final List<String> commands = Arrays.asList( //
-                "sed -i '/amazonaws/d' " + HOSTS_FILE, //
-                "echo '" + redirect + " " + original + "' >> " + HOSTS_FILE);
+                // Workaround for sed failing on 8.32.0 with
+                // sed: cannot rename /etc/sedipVlut: Device or resource busy
+                "cp " + HOSTS_FILE + " /tmp/hosts", //
+                "sed --in-place '/amazonaws/d' /tmp/hosts", //
+                "echo '" + redirect + " " + original + "' >> /tmp/hosts", //
+                "cp /tmp/hosts " + HOSTS_FILE, //
         commands.forEach(command -> {
             try {
                 final ExecResult exitCode = exasolContainer.execInContainer("/bin/sh", "-c", command);
