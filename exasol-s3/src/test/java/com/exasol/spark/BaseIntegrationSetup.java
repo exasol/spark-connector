@@ -35,7 +35,7 @@ public class BaseIntegrationSetup {
     protected static SparkSession spark;
 
     @BeforeAll
-    public static void beforeAll() throws SQLException {
+    public static void beforeAll() {
         EXASOL.purgeDatabase();
         connection = EXASOL.createConnection();
         factory = new ExasolObjectFactory(connection);
