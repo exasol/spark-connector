@@ -51,11 +51,11 @@
 | ------------------------------------------ | ----------------------------------------- |
 | [scalatest][48]                            | [the Apache License, ASL Version 2.0][49] |
 | [scalatestplus-mockito][50]                | [Apache-2.0][49]                          |
-| [mockito-core][51]                         | [The MIT License][52]                     |
-| [mockito-junit-jupiter][51]                | [The MIT License][52]                     |
-| [Apache Log4j API][53]                     | [Apache License, Version 2.0][3]          |
-| [Apache Log4j 1.x Compatibility API][54]   | [Apache License, Version 2.0][3]          |
-| [Apache Log4j Core][55]                    | [Apache License, Version 2.0][3]          |
+| [mockito-core][51]                         | [MIT][52]                                 |
+| [mockito-junit-jupiter][51]                | [MIT][52]                                 |
+| [Apache Log4j API][53]                     | [Apache-2.0][3]                           |
+| [Apache Log4j 1.x Compatibility API][54]   | [Apache-2.0][3]                           |
+| [Apache Log4j Core][55]                    | [Apache-2.0][3]                           |
 | [Test Database Builder for Java][56]       | [MIT License][57]                         |
 | [Matcher for SQL Result Sets][58]          | [MIT License][59]                         |
 | [Test containers for Exasol on Docker][60] | [MIT License][61]                         |
@@ -115,12 +115,12 @@
 | [JUnit Jupiter API][81]                         | [Eclipse Public License v2.0][82] |
 | [junit-pioneer][83]                             | [Eclipse Public License v2.0][82] |
 | [Test Database Builder for Java][56]            | [MIT License][57]                 |
-| [Test utilities for `java.util.logging`][84]    | [MIT][85]                         |
+| [Test utilities for `java.util.logging`][84]    | [MIT][52]                         |
 | [Matcher for SQL Result Sets][58]               | [MIT License][59]                 |
 | [Test containers for Exasol on Docker][60]      | [MIT License][61]                 |
-| [Testcontainers :: JUnit Jupiter Extension][86] | [MIT][87]                         |
-| [mockito-junit-jupiter][51]                     | [The MIT License][52]             |
-| [Testcontainers :: Localstack][86]              | [MIT][87]                         |
+| [Testcontainers :: JUnit Jupiter Extension][85] | [MIT][86]                         |
+| [mockito-junit-jupiter][51]                     | [MIT][52]                         |
+| [Testcontainers :: Localstack][85]              | [MIT][86]                         |
 | [AWS Java SDK for Amazon S3][77]                | [Apache License, Version 2.0][78] |
 
 ### Plugin Dependencies
@@ -170,7 +170,7 @@
 [19]: https://github.com/itsallcode/openfasttrace-maven-plugin
 [20]: https://www.gnu.org/licenses/gpl-3.0.html
 [21]: http://www.exasol.com/
-[22]: https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/24.1.2/exasol-jdbc-24.1.2-license.txt
+[22]: https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/24.2.1/exasol-jdbc-24.2.1-license.txt
 [23]: https://github.com/exasol/spark-connector-common-java/
 [24]: https://github.com/exasol/spark-connector-common-java/blob/main/LICENSE
 [25]: https://github.com/exasol/sql-statement-builder/
@@ -200,10 +200,10 @@
 [49]: http://www.apache.org/licenses/LICENSE-2.0
 [50]: https://github.com/scalatest/scalatestplus-mockito
 [51]: https://github.com/mockito/mockito
-[52]: https://github.com/mockito/mockito/blob/main/LICENSE
-[53]: https://logging.apache.org/log4j/2.x/log4j-api/
-[54]: https://logging.apache.org/log4j/2.x/
-[55]: https://logging.apache.org/log4j/2.x/log4j-core/
+[52]: https://opensource.org/licenses/MIT
+[53]: https://logging.apache.org/log4j/2.x/log4j/log4j-api/
+[54]: https://logging.apache.org/log4j/2.x/log4j/log4j-1.2-api/
+[55]: https://logging.apache.org/log4j/2.x/log4j/log4j-core/
 [56]: https://github.com/exasol/test-db-builder-java/
 [57]: https://github.com/exasol/test-db-builder-java/blob/main/LICENSE
 [58]: https://github.com/exasol/hamcrest-resultset-matcher/
@@ -233,6 +233,5 @@
 [82]: https://www.eclipse.org/legal/epl-v20.html
 [83]: https://junit-pioneer.org/
 [84]: https://github.com/exasol/java-util-logging-testing/
-[85]: https://opensource.org/licenses/MIT
-[86]: https://java.testcontainers.org
-[87]: http://opensource.org/licenses/MIT
+[85]: https://java.testcontainers.org
+[86]: http://opensource.org/licenses/MIT
