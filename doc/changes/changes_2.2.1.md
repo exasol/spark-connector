@@ -1,4 +1,4 @@
-# Spark Connector 2.2.1, released 2025-01-13
+# Spark Connector 2.2.1, released 2025-01-14
 
 Code name: Fix vulnerabilities in dependencies
 
