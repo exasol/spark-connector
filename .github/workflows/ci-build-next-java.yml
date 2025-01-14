@@ -9,6 +9,8 @@ on:
 jobs:
   java-17-compatibility:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -28,9 +30,3 @@ jobs:
         run: |
           mvn --batch-mode --update-snapshots clean package -DtrimStackTrace=false \
               -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
-      - name: Publish Test Report
-        uses: scacap/action-surefire-report@v1
-        if: ${{ false && always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          fail_if_no_tests: false
