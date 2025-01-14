@@ -1,5 +1,29 @@
 # Developer Guide
 
+## Running Tests
+
+The project must be built with Java 17. Running the build with Java 21 will cause tests to fail with the following exception in Spark:
+
+```
+  Cause: java.lang.NoSuchMethodException: java.nio.DirectByteBuffer.<init>(long,int)
+  at java.base/java.lang.Class.getConstructor0(Class.java:3761)
+  at java.base/java.lang.Class.getDeclaredConstructor(Class.java:2930)
+  at org.apache.spark.unsafe.Platform.<clinit>(Platform.java:71)
+  at org.apache.spark.unsafe.array.ByteArrayMethods.<clinit>(ByteArrayMethods.java:52)
+  at org.apache.spark.memory.MemoryManager.defaultPageSizeBytes$lzycompute(MemoryManager.scala:261)
+  at org.apache.spark.memory.MemoryManager.defaultPageSizeBytes(MemoryManager.scala:251)
+  at org.apache.spark.memory.MemoryManager.$anonfun$pageSizeBytes$1(MemoryManager.scala:270)
+  at scala.runtime.java8.JFunction0$mcJ$sp.apply(JFunction0$mcJ$sp.scala:17)
+  at scala.Option.getOrElse(Option.scala:201)
+  at org.apache.spark.memory.MemoryManager.<init>(MemoryManager.scala:270)
+```
+
+If your default Java version is newer, you can run the build by setting the `JAVA_HOME` environment variable to a JDK 17:
+
+```sh
+JAVA_HOME=$JAVA17_HOME mvn test
+```
+
 ## S3 Write Path Validation
 
 When using S3 storage as intermediate layer, we generate a S3 bucket path for intermediate data. The generated path is checked that it is empty before writing data.
