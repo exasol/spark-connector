@@ -1,23 +1,80 @@
-name: Dependencies Check
-
+name: Report Security Issues
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 2 * * *"
 
 jobs:
-  build:
+  report_security_issues:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: "bash"
     permissions:
       contents: read
+      issues: write
+    outputs:
+      created-issues: ${{ steps.create-security-issues.outputs.created-issues }}
+    concurrency:
+      group: ${{ github.workflow }}-report_security_issues
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v5
+
       - name: Set up JDKs
-        uses: actions/setup-java@v4
+        id: setup-jdks
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: |
             11
             17
           cache: "maven"
-      - name: Checking dependencies for vulnerabilities
-        run: mvn --batch-mode org.sonatype.ossindex.maven:ossindex-maven-plugin:audit -f pom.xml
+          server-id: ossindex
+          server-username: OSSINDEX_USERNAME
+          server-password: OSSINDEX_API_TOKEN
+
+      - name: Generate ossindex report
+        id: ossindex-report
+        run: |
+          mvn --batch-mode org.sonatype.ossindex.maven:ossindex-maven-plugin:audit \
+              org.sonatype.ossindex.maven:ossindex-maven-plugin:audit-aggregate \
+              -Dossindex.reportFile=$(pwd)/ossindex-report.json \
+              -Dossindex.fail=false
+        env:
+          OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
+          OSSINDEX_API_TOKEN: ${{ secrets.OSSINDEX_API_TOKEN }}
+
+      - name: Create GitHub Issues
+        id: create-security-issues
+        uses: exasol/python-toolbox/.github/actions/security-issues@1.9.0
+        with:
+          format: "maven"
+          command: "cat ossindex-report.json"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output security issues (Debugging)
+        id: debug-print-security-issues
+        run: |
+          echo "$CREATED_ISSUES" > test.jsonl
+          cat test.jsonl
+        env:
+          CREATED_ISSUES: ${{ steps.create-security-issues.outputs.created-issues }}
+
+  start_dependency_udpate:
+    needs: report_security_issues
+    # [impl->dsn~trigger-dependency-updates~1]
+    if: ${{ needs.report_security_issues.outputs.created-issues }}
+    concurrency:
+      group: ${{ github.workflow }}-start_dependency_update
+      cancel-in-progress: false
+    # Workflow needs secrets INTEGRATION_TEAM_SLACK_NOTIFICATION_WEBHOOK and INTEGRATION_TEAM_SECURITY_UPDATES_WEBHOOK
+    secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: ./.github/workflows/dependencies_update.yml
+    with:
+      vulnerability_issues: ${{ needs.report_security_issues.outputs.created-issues }}
