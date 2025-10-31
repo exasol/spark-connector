@@ -8,7 +8,7 @@
 | Dependency                                             | License                               |
 | ------------------------------------------------------ | ------------------------------------- |
 | [SonarQube Scanner for Maven][0]                       | [GNU LGPL 3][1]                       |
-| [Apache Maven Toolchains Plugin][2]                    | [Apache License, Version 2.0][3]      |
+| [Apache Maven Toolchains Plugin][2]                    | [Apache-2.0][3]                       |
 | [Apache Maven Compiler Plugin][4]                      | [Apache-2.0][3]                       |
 | [Apache Maven Enforcer Plugin][5]                      | [Apache-2.0][3]                       |
 | [Maven Flatten Plugin][6]                              | [Apache Software Licenese][3]         |
@@ -17,7 +17,7 @@
 | [Maven Surefire Plugin][10]                            | [Apache-2.0][3]                       |
 | [Versions Maven Plugin][11]                            | [Apache License, Version 2.0][3]      |
 | [duplicate-finder-maven-plugin Maven Mojo][12]         | [Apache License 2.0][13]              |
-| [JaCoCo :: Maven Plugin][14]                           | [Eclipse Public License 2.0][15]      |
+| [JaCoCo :: Maven Plugin][14]                           | [EPL-2.0][15]                         |
 | [error-code-crawler-maven-plugin][16]                  | [MIT License][17]                     |
 | [Reproducible Build Maven Plugin][18]                  | [Apache 2.0][9]                       |
 | [OpenFastTrace Maven Plugin][19]                       | [GNU General Public License v3.0][20] |
@@ -65,7 +65,7 @@
 | Dependency                                             | License                                       |
 | ------------------------------------------------------ | --------------------------------------------- |
 | [SonarQube Scanner for Maven][0]                       | [GNU LGPL 3][1]                               |
-| [Apache Maven Toolchains Plugin][2]                    | [Apache License, Version 2.0][3]              |
+| [Apache Maven Toolchains Plugin][2]                    | [Apache-2.0][3]                               |
 | [scala-maven-plugin][62]                               | [Public domain (Unlicense)][63]               |
 | [Apache Maven Compiler Plugin][4]                      | [Apache-2.0][3]                               |
 | [Apache Maven Enforcer Plugin][5]                      | [Apache-2.0][3]                               |
@@ -128,7 +128,7 @@
 | Dependency                                             | License                               |
 | ------------------------------------------------------ | ------------------------------------- |
 | [SonarQube Scanner for Maven][0]                       | [GNU LGPL 3][1]                       |
-| [Apache Maven Toolchains Plugin][2]                    | [Apache License, Version 2.0][3]      |
+| [Apache Maven Toolchains Plugin][2]                    | [Apache-2.0][3]                       |
 | [Apache Maven Compiler Plugin][4]                      | [Apache-2.0][3]                       |
 | [Apache Maven Enforcer Plugin][5]                      | [Apache-2.0][3]                       |
 | [Maven Flatten Plugin][6]                              | [Apache Software Licenese][3]         |

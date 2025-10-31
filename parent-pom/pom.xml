@@ -525,7 +525,6 @@
                     <excludeVulnerabilityIds>
                         <!-- Excluded because of provided scope: org.apache.hadoop:hadoop-common:jar:3.3.6 -->
                         <exclude>CVE-2024-23454</exclude>
-
                         <!-- Vulnerabilities from older Spark/Hadoop versions -->
                         <!-- Vulnerabilities from org.codehaus.janino:janino:jar:3.1.9 -->
                         <!-- CWE-787: Out-of-bounds Write (5.5); https://ossindex.sonatype.org/vulnerability/CVE-2023-33546 -->
