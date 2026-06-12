@@ -17,11 +17,11 @@
     <properties>
         <revision>2.2.1</revision>
         <java.version>8</java.version>
-        <log4j.version>2.24.3</log4j.version>
-        <junit.version>5.11.4</junit.version>
-        <mockito.version>5.15.2</mockito.version>
+        <log4j.version>2.26.0</log4j.version>
+        <junit.version>5.13.3</junit.version>
+        <mockito.version>5.23.0</mockito.version>
         <jersey.version>3.1.3</jersey.version>
-        <netty.version>4.1.116.Final</netty.version>
+        <netty.version>4.2.15.Final</netty.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -33,7 +33,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>exasol-jdbc</artifactId>
-                <version>24.2.1</version>
+                <version>26.2.7</version>
             </dependency>
             <dependency>
                 <groupId>com.exasol</groupId>
@@ -50,7 +50,7 @@
                 <!-- Upgrade to fix CVE-2024-51504 in org.apache.zookeeper:zookeeper -->
                 <groupId>com.exasol</groupId>
                 <artifactId>spark-connector-common-java</artifactId>
-                <version>2.0.10</version>
+                <version>2.0.16</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.spark</groupId>
@@ -212,7 +212,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>33.4.0-jre</version>
+                <version>33.6.0-jre</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -243,13 +243,13 @@
                 <!-- Pinned to fix CVE-2023-52428 -->
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
-                <version>9.37.3</version>
+                <version>10.9.1</version>
             </dependency>
             <dependency>
                 <!-- Fix CVE-2024-36114 in transitive dependency of spark-sql -->
                 <groupId>io.airlift</groupId>
                 <artifactId>aircompressor</artifactId>
-                <version>0.27</version>
+                <version>2.0.3</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -334,54 +334,54 @@
                 <!-- Upgrade to fix CVE-2024-7254 -->
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>3.25.5</version>
+                <version>4.35.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-text</artifactId>
-                <version>1.13.0</version>
+                <version>1.15.0</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.woodstox</groupId>
                 <artifactId>woodstox-core</artifactId>
-                <version>6.5.1</version>
+                <version>7.2.1</version>
             </dependency>
             <!-- Update transitive dependency of org.apache.hadoop:hadoop-client to fix CVE-2024-25638 -->
             <dependency>
                 <groupId>dnsjava</groupId>
                 <artifactId>dnsjava</artifactId>
-                <version>3.6.2</version>
+                <version>3.6.5</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.spark:spark-core_2.13 to fix CVE-2023-42503 -->
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.27.1</version>
+                <version>1.28.0</version>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.spark:spark-core_2.13 to fix CVE-2024-47554 -->
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.18.0</version>
+                <version>2.22.0</version>
             </dependency>
             <dependency>
                 <!-- Required for running integration tests -->
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.17.0</version>
+                <version>3.20.0</version>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of  org.apache.hadoop:hadoop-client:jar:3.3.6 to fix CVE-2024-29131 & CVE-2024-29133 -->
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-configuration2</artifactId>
-                <version>2.11.0</version>
+                <version>2.15.1</version>
             </dependency>
             <dependency>
                 <!-- Upgrade transitive dependency of org.apache.hadoop:hadoop-common to fix CVE-2023-39410 & CVE-2024-47561 -->
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro</artifactId>
-                <version>1.11.4</version>
+                <version>1.12.1</version>
             </dependency>
             <!-- Test Dependencies -->
             <dependency>
@@ -429,19 +429,19 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>test-db-builder-java</artifactId>
-                <version>3.6.0</version>
+                <version>4.0.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>java-util-logging-testing</artifactId>
-                <version>2.0.3</version>
+                <version>2.0.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>hamcrest-resultset-matcher</artifactId>
-                <version>1.7.0</version>
+                <version>1.7.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -453,19 +453,19 @@
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>junit-jupiter</artifactId>
-                <version>1.20.4</version>
+                <version>1.21.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>localstack</artifactId>
-                <version>1.20.4</version>
+                <version>1.21.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
-                <version>3.18.1</version>
+                <version>4.5</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -572,10 +572,10 @@
             </activation>
             <properties>
                 <spark.version>3.5.1</spark.version>
-                <scala.version>2.13.11</scala.version>
+                <scala.version>3.8.3</scala.version>
                 <scala.compat.version>2.13</scala.compat.version>
-                <hadoop.version>3.3.6</hadoop.version>
-                <jackson.version>2.15.4</jackson.version>
+                <hadoop.version>3.5.0</hadoop.version>
+                <jackson.version>2.22.0</jackson.version>
                 <!-- spark-catalyst 3.3.x depends on old Codehaus Janino version, so we need explicit pin -->
                 <janino.version>3.1.12</janino.version>
             </properties>
